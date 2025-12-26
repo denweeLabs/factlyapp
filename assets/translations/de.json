@@ -1,0 +1,315 @@
+{
+    "appTitle": "Denwee",
+
+
+    "welcome": {
+        "title": "Denwee",
+        "subtitle": "Entdecke jeden Tag kurze, leicht verständliche und einprägsame Fakten!",
+        "begin_cta": "Start",
+        "have_an_account": "Hast du ein Konto?"
+    },
+
+
+    "user_interest": {
+        "history": "Geschichte",
+        "tech_and_science": "Wissenschaft",
+        "space": "Weltraum",
+        "nature_animals": "Natur",
+        "geography": "Geografie",
+        "health_wellness": "Gesundheit",
+        "art_culture": "Kunst",
+        "movies_music": "Filme & Musik",
+        "psychology": "Psychologie",
+        "food_cooking": "Kochen",
+        "sports": "Sport",
+        "random_curiosities": "Zufällige Kuriositäten"
+    },
+
+
+    "onboarding": {
+        "select_interests": {
+            "title": "Wähle deine\nInteressen",
+            "subtitle": "Sag uns, was dich am meisten begeistert",
+            "cta": "Weiter"
+        },
+        "select_theme_colorations": {
+            "title": "Wähle dein\nThema",
+            "subtitle": "Personalisiere deine Erfahrung mit Farben",
+            "cta": "Fertig"
+        }
+    },
+
+
+    "account": {
+        "section": {
+            "profile": {
+                "title": "Profil"
+            },
+            "interests": {
+                "title": "Interessen"
+            },
+            "daily_facts": {
+                "title": "Tägliche Fakten",
+                "items": {
+                    "receive_notification": "Benachrichtigungen erhalten",
+                    "notification_time": "Benachrichtigungszeit",
+                    "archive": "Archiv"
+                }
+            },
+            "theme": {
+                "title": "Thema",
+                "items": {
+                    "system": "System",
+                    "light": "Hell",
+                    "dark": "Dunkel"
+                }
+            },
+            "coloration": {
+                "title": "Farbgestaltung"
+            },
+            "preferences": {
+                "title": "Einstellungen",
+                "items": {
+                    "language": "Sprache",
+                    "haptics": "Haptisches Feedback"
+                }
+            },
+            "more": {
+                "title": "Mehr",
+                "items": {
+                    "about_app": "Über die App",
+                    "privacy_terms": "Datenschutz & Bedingungen",
+                    "contact_support": "Support kontaktieren"
+                }
+            }
+        },
+        "statistics": {
+            "stars": {
+                "title": "Sterne",
+                "hint": "1 Anzeige = 1 Stern\nDu kannst 1 Stern verwenden, um einen Fakt sofort ohne Anzeige freizuschalten :)"
+            },
+            "streak": {
+                "title": "Serie",
+                "hint": "Deine Serie zeigt, wie viele Tage hintereinander du mindestens einen Fakt freigeschaltet hast - Verpasse keinen Tag, um sie aufrechtzuerhalten!"
+            },
+            "facts": {
+                "title": "Fakten",
+                "hint": "Die Anzahl der Fakten, die du bereits freigeschaltet hast - Sammle sie alle und erweitere dein Wissen!"
+            }
+        },
+        "profile": {
+            "default_username": "Denwee Benutzer",
+            "register_encourage_msg": "Synchronisiere dein Konto auf mehreren Geräten - Tippe zum Starten",
+            "logged_in_encourage_msg": "Du bist eingeloggt! Tippe, um dein Profil zu verwalten",
+            "personal": {
+                "title": "Persönlich"
+            },
+            "more": {
+                "title": "Mehr",
+                "change_password": "Passwort\nändern",
+                "contact_support": "Support\nkontaktieren"
+            }
+        }
+    },
+
+
+    "showcase": {
+        "title": "Deine täglichen Fakten werden hier angezeigt.",
+        "subtitle": "Wische nach links oder rechts, um zu erkunden!",
+        "button": "Ok :)"
+    },
+
+
+    "validation": {
+        "email": {
+            "empty": "Bitte gib eine E-Mail ein",
+            "invalid": "Die angegebene E-Mail sieht ungültig aus"
+        },
+        "password": {
+            "empty": "Bitte gib ein Passwort ein",
+            "short": "Das Passwort ist zu kurz",
+            "long": "Das Passwort ist zu lang"
+        },
+        "username": {
+            "empty": "Bitte gib einen Namen ein",
+            "short": "Der Name ist zu kurz",
+            "long": "Der Name ist zu lang"
+        },
+        "interests": {
+            "empty": "Bitte wähle mindestens ein Interesse aus"
+        }
+    },
+
+
+    "input_field": {
+        "hint": {
+            "email": "E-Mail",
+            "password": "Passwort",
+            "name": "Name",
+            "old_password": "Altes Passwort",
+            "new_password": "Neues Passwort",
+            "confirm_password": "Passwort bestätigen"
+        }
+    },
+
+
+    "fact_unlock_method": {
+        "ad": {
+            "title": "Werbung",
+            "subtitle": "Sie können 1 Stern verdienen und den Fakt freischalten, indem Sie eine Werbung ansehen"
+        },
+        "star": {
+            "title": "Stern",
+            "subtitle": "Sie können 1 Stern verwenden, um den Fakt ohne Werbung freizuschalten"
+        }
+    },
+
+
+    "label": {
+        "login": "Einloggen",
+        "register": "Registrieren",
+        "change_password": "Pass ändern",
+        "reset_password": "Pass zurücksetzen",
+        "create_an_account": "Konto erstellen",
+        "forgot_pass_question": "Passwort vergessen?",
+        "dont_have_an_account_question": "Noch kein Konto?",
+        "have_an_account_question": "Hast du ein Konto?",
+        "daily_facts": "Tägliche Fakten",
+        "oops": "Ups!"
+    },
+
+
+    "button": {
+        "login": "Einloggen",
+        "register": "Mitmachen",
+        "logout": "Ausloggen",
+        "delete_account": "Konto löschen",
+        "save": "Speichern",
+        "change": "Ändern",
+        "explain_fact": "Mehr erfahren"
+    },
+
+
+    "loading": {
+        "just_a_moment": "Einen Moment..."
+    },
+
+
+    "error_message": {
+        "login": {
+            "invalid_email": "Diese E-Mail sieht nicht richtig aus... Kannst du sie bitte überprüfen? 😉",
+            "weak_password": "Hmm, dieses Passwort ist zu leicht zu erraten... Versuche etwas Stärkeres 🔐",
+            "user_not_found": "Wir konnten kein Konto mit diesen Daten finden... Hast du dich registriert? 😉",
+            "user_banned": "Dieses Konto wurde eingeschränkt... Wenn du denkst, dass das ein Fehler ist, kontaktiere den Support 🙏",
+            "internal_server": "Ups! Auf unserer Seite ist etwas schiefgelaufen... Wir beheben es! 🔧",
+            "connection_timeout": "Verbindung nicht möglich... Überprüfe dein Internet und versuche es erneut 📶",
+            "unexpected": "Ein unerwartetes Problem ist aufgetreten... Wir prüfen es! 🚨"
+        },
+        "register": {
+            "invalid_email": "Diese E-Mail sieht nicht gültig aus... Kannst du sie bitte prüfen? ✉️",
+            "weak_password": "Ups, dieses Passwort ist zu schwach... Versuch es stärker zu machen 💪",
+            "user_already_exists": "Diese E-Mail ist anscheinend schon vergeben... Versuche dich einzuloggen 😉",
+            "disabled": "Registrierungen sind momentan geschlossen... Versuche es später 🕒",
+            "internal_server": "Auf unserer Seite ist etwas kaputt gegangen... Wir arbeiten daran 🔧",
+            "connection_timeout": "Keine Verbindung... Überprüfe dein Internet und versuche es erneut 📡",
+            "unexpected": "Ein unerwarteter Fehler ist aufgetreten... Wir kümmern uns darum! 🚨"
+        },
+        "update_profile": {
+            "internal_server": "Auf unserer Seite ist etwas kaputt gegangen... Wir arbeiten daran 🔧",
+            "connection_timeout": "Keine Verbindung... Überprüfe dein Internet und versuche es erneut 📡",
+            "unexpected": "Ein unerwarteter Fehler ist aufgetreten... Wir kümmern uns darum! 🚨"
+        },
+        "change_password": {
+            "weak_password": "Hmm, dieses Passwort ist zu schwach :( Versuch etwas Stärkeres 🔐",
+            "invalid_credentials": "Sieht so aus, als ob dein Passwort nicht korrekt ist... Bitte überprüfe es und versuche es erneut 😉",
+            "internal_server": "Ups! Auf unserer Seite ist etwas schiefgelaufen... Wir beheben es! ⚙️",
+            "connection_timeout": "Verbindung nicht möglich... Überprüfe dein Internet und versuche es erneut 📶",
+            "unexpected": "Ein unerwartetes Problem ist aufgetreten... Wir prüfen es! 🚨"
+        },
+        "facts": {
+            "explanation_reward_missing": "Ups! Etwas ist passiert... Wir konnten nicht bestätigen, dass die Anzeige abgeschlossen wurde. Bitte versuche es erneut 🙏",
+            "explanation_insufficient_stars": "Du hast nicht genug Sterne, um diesen Fakt freizuschalten... Sieh dir eine Anzeige an, um mehr zu bekommen 😔",
+            "archive_limit_reached": ":( Du hast das Limit an archivierten Fakten erreicht... Entferne ein paar, bevor du neue hinzufügst 📚",
+            "internal_server": "Ups! Auf unserer Seite ist etwas schiefgelaufen... Wir beheben es! ⚙️",
+            "connection_timeout": "Verbindung nicht möglich... Überprüfe dein Internet und versuche es erneut 📶",
+            "unexpected": "Ein unerwartetes Problem ist aufgetreten... Wir prüfen es! 🚨",
+            "no_ad_for_explanation": {
+                "title": "Entschuldigung 😔",
+                "subtitle": "Es tut uns leid, dass Sie warten müssen, aber im Moment sind keine Anzeigen verfügbar... Bitte versuchen Sie es in ein paar Minuten erneut :("
+            }
+        },
+        "common": {
+            "internal_server": "Auf unserer Seite ist etwas kaputt gegangen... Wir arbeiten daran 🔧",
+            "connection_timeout": "Keine Verbindung... Überprüfe dein Internet und versuche es erneut 📡",
+            "authorization": "Es scheint ein Problem mit der Autorisierung zu geben... Bitte logge dich aus und wieder ein 🔐",
+            "too_many_requests": "Anfragelimit erreicht... Warte kurz, bevor du es erneut versuchst 🔄",
+            "unexpected": "Oh! Ein unerwarteter Fehler ist aufgetreten... Wir kümmern uns darum! 🚨"
+        },
+        "email": {
+            "failed_to_open_support": "Ups! Wir konnten deine E-Mail-App nicht öffnen... Aber du kannst uns jederzeit eine Nachricht an {} senden 💌"
+        }
+    },
+
+
+    "info_message": {
+        "password_change_success": "Passwort erfolgreich geändert!",
+        "password_reset_success": "Passwort erfolgreich aktualisiert!",
+        "password_mismatch": "Ups! Die Passwörter stimmen nicht überein... Bitte überprüfe sie 🔂",
+        "signup_success": "Willkommen an Bord!",
+        "no_results": {
+            "title": "➡️ Ups, hier ist nichts ⬅️",
+            "daily_facts": "Noch keine täglichen Fakten... Schau später wieder vorbei für Neues!",
+            "facts_archive": "Dein Archiv ist leer — speichere ein paar Fakten und sie werden hier angezeigt!"
+        },
+        "agreeing_to_terms": "Wenn du fortfährst, akzeptierst du unsere\n<terms>AGB</terms> und den <privacy>Datenschutz</privacy>"
+    },
+
+
+    "dialog": {
+        "session_expired": {
+            "title": "Willkommen zurück!",
+            "subtitle": "Deine Sitzung hat ein kleines Nickerchen gemacht... Bitte melde dich erneut an, um sie aufzuwecken! 😴"
+        },
+        "account_delete": {
+            "title": "Lebewohl :(",
+            "subtitle": "Das Löschen deines Kontos entfernt dauerhaft deine Daten... Diese Aktion kann nicht rückgängig gemacht werden ⛔️"
+        },
+        "permission": {
+            "notifications": {
+                "title": "Erlaubnis",
+                "subtitle": {
+                    "basic": "Um Benachrichtigungen zu erhalten, erlaube den Zugriff für diese App",
+                    "in_settings": "Um Benachrichtigungen zu erhalten, erlaube den Zugriff für diese App in den Systemeinstellungen"
+                }
+            }
+        },
+        "ad_alert": {
+            "title": "Traurige Nachricht :(",
+            "subtitle": "Um diese Funktion für dich kostenlos zu halten, müssen wir eine Anzeige zeigen... Danke für dein Verständnis und deine Unterstützung!"
+        },
+        "reset_password_expired": {
+            "title": "Link abgelaufen ⏳",
+            "subtitle": "Dein Link zum Zurücksetzen des Passworts ist abgelaufen... Bitte fordere einen neuen an, um sicher fortzufahren"
+        },
+        "reset_password_email_sent": {
+            "title": "Überprüfe dein Postfach 📬",
+            "subtitle": "Wir haben einen Link zum Zurücksetzen des Passworts an deine E-Mail-Adresse gesendet... Folge den Anweisungen, um ein neues Passwort festzulegen 🔑"
+        },
+        "select_notification_time": {
+            "title": "Zeit auswählen",
+            "button": "Ok"
+        },
+        "reset_password_enter_email": {
+            "title": "Passwort zurücksetzen",
+            "subtitle": "Wir senden dir einen Link zum Zurücksetzen des Passworts an deine E-Mail... Falls nichts ankommt, warte 30 Sekunden und versuch es erneut :)"
+        }
+    },
+
+
+    "snackbar": {
+        "badConnection": {
+            "title": "Ups! Verbindung abgebrochen 📶",
+            "description": "Bitte überprüfe dein Netzwerk und versuche es erneut!"
+        }
+    }
+}

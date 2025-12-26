@@ -1,0 +1,20 @@
+# === Run to generate app icons ===========================================
+# dart run flutter_launcher_icons
+
+flutter_launcher_icons:
+
+  # === Android Setup =========================================================
+  android: true
+  image_path_android: 'assets/images/seal_background.png'
+  adaptive_icon_foreground: 'assets/images/seal_foreground.png'
+  adaptive_icon_background: '#f7fcff'
+  adaptive_icon_foreground_inset: 14
+
+
+  # === iOS Setup =========================================================
+  ios: true
+  remove_alpha_ios: true
+  desaturate_tinted_to_grayscale_ios: true
+  image_path_ios: 'assets/images/seal_background.png'
+  image_path_ios_dark_transparent: 'assets/images/seal_dark_background.png'
+  image_path_ios_tinted_grayscale: 'assets/images/seal_tinted_background.png'

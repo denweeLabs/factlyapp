@@ -1,0 +1,26 @@
+# === Run to generate native splash ===========================================
+# dart run flutter_native_splash:create
+
+flutter_native_splash:
+
+  # === Android Setup =========================================================
+  android: true
+  fullscreen: true
+  color_android: "#e8e8f0"
+  color_dark_android: "#070c13"
+  image_android: "assets/images/transparent_1024.png"
+  image_dark_android: "assets/images/transparent_1024.png"
+
+  android_12:
+    color: "#e8e8f0"
+    color_dark: "#070c13"
+    image: "assets/images/transparent_1024.png"
+    image_dark: "assets/images/transparent_1024.png"
+
+
+  # === iOS Setup =========================================================
+  ios: true
+  color_ios: "#e8e8f0"
+  color_dark_ios: "#070c13"
+  # image_ios: "assets/images/transparent_1024.png"
+  # image_dark_ios: "assets/images/transparent_1024.png"
