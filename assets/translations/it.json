@@ -1,0 +1,315 @@
+{
+    "appTitle": "Denwee",
+
+
+    "welcome": {
+        "title": "Denwee",
+        "subtitle": "Scopri fatti brevi, facili da capire e memorabili ogni giorno!",
+        "begin_cta": "Inizia",
+        "have_an_account": "Hai un account?"
+    },
+
+
+    "user_interest": {
+        "history": "Storia",
+        "tech_and_science": "Scienza",
+        "space": "Spazio",
+        "nature_animals": "Natura",
+        "geography": "Geografia",
+        "health_wellness": "Salute",
+        "art_culture": "Arte",
+        "movies_music": "Film & Musica",
+        "psychology": "Psicologia",
+        "food_cooking": "Cucina",
+        "sports": "Sport",
+        "random_curiosities": "Curiosità Casuali"
+    },
+
+
+    "onboarding": {
+        "select_interests": {
+            "title": "Scegli i tuoi\ninteressi",
+            "subtitle": "Dicci cosa ti entusiasma di più",
+            "cta": "Avanti"
+        },
+        "select_theme_colorations": {
+            "title": "Scegli il tuo\ntema",
+            "subtitle": "Personalizza la tua esperienza con i colori",
+            "cta": "Fatto"
+        }
+    },
+
+
+    "account": {
+        "section": {
+            "profile": {
+                "title": "Profilo"
+            },
+            "interests": {
+                "title": "Interessi"
+            },
+            "daily_facts": {
+                "title": "Fatti Giornalieri",
+                "items": {
+                    "receive_notification": "Ricevi notifiche",
+                    "notification_time": "Orario notifica",
+                    "archive": "Archivio"
+                }
+            },
+            "theme": {
+                "title": "Tema",
+                "items": {
+                    "system": "Sistema",
+                    "light": "Chiaro",
+                    "dark": "Scuro"
+                }
+            },
+            "coloration": {
+                "title": "Colorazioni"
+            },
+            "preferences": {
+                "title": "Preferenze",
+                "items": {
+                    "language": "Lingua",
+                    "haptics": "Feedback aptico"
+                }
+            },
+            "more": {
+                "title": "Altro",
+                "items": {
+                    "about_app": "Info sull'app",
+                    "privacy_terms": "Privacy & Termini",
+                    "contact_support": "Contatta supporto"
+                }
+            }
+        },
+        "statistics": {
+            "stars": {
+                "title": "Stelle",
+                "hint": "1 Annuncio = 1 Stella\n Puoi usare 1 stella per sbloccare istantaneamente un fatto senza guardare un annuncio :)"
+            },
+            "streak": {
+                "title": "Serie",
+                "hint": "La tua serie mostra quanti giorni consecutivi hai sbloccato almeno un fatto - Non saltare un giorno per mantenerla!"
+            },
+            "facts": {
+                "title": "Fatti",
+                "hint": "Il numero di fatti che hai già sbloccato - Collezionali tutti e amplia la tua conoscenza!"
+            }
+        },
+        "profile": {
+            "default_username": "Utente Denwee",
+            "register_encourage_msg": "Sincronizza il tuo account su più dispositivi - Tocca per iniziare",
+            "logged_in_encourage_msg": "Sei connesso! Tocca per gestire il tuo profilo",
+            "personal": {
+                "title": "Personale"
+            },
+            "more": {
+                "title": "Altro",
+                "change_password": "Cambia\npassword",
+                "contact_support": "Contatta\nsupporto"
+            }
+        }
+    },
+
+
+    "showcase": {
+        "title": "I tuoi fatti giornalieri verranno mostrati qui.",
+        "subtitle": "Scorri a sinistra o a destra per esplorare!",
+        "button": "Ok :)"
+    },
+
+
+    "validation": {
+        "email": {
+            "empty": "Per favore inserisci un'email",
+            "invalid": "Sembra che l'email fornita non sia valida"
+        },
+        "password": {
+            "empty": "Per favore inserisci una password",
+            "short": "La password è troppo corta",
+            "long": "La password è troppo lunga"
+        },
+        "username": {
+            "empty": "Per favore inserisci un nome",
+            "short": "Il nome è troppo corto",
+            "long": "Il nome è troppo lungo"
+        },
+        "interests": {
+            "empty": "Per favore seleziona almeno un interesse"
+        }
+    },
+
+
+    "input_field": {
+        "hint": {
+            "email": "Email",
+            "password": "Password",
+            "name": "Nome",
+            "old_password": "Vecchia password",
+            "new_password": "Nuova password",
+            "confirm_password": "Conferma password"
+        }
+    },
+
+
+    "fact_unlock_method": {
+        "ad": {
+            "title": "Pubblicità",
+            "subtitle": "Può guadagnare 1 Stella e sbloccare il fatto guardando una pubblicità"
+        },
+        "star": {
+            "title": "Stella",
+            "subtitle": "Può usare 1 Stella per sbloccare il fatto senza guardare una pubblicità"
+        }
+    },
+
+
+    "label": {
+        "login": "Accedi",
+        "register": "Registrati",
+        "change_password": "Cambia pass",
+        "reset_password": "Resetta pass",
+        "create_an_account": "Crea un account",
+        "forgot_pass_question": "Hai dimenticato la password?",
+        "dont_have_an_account_question": "Non hai un account?",
+        "have_an_account_question": "Hai un account?",
+        "daily_facts": "Fatti Giornalieri",
+        "oops": "Ops!"
+    },
+
+
+    "button": {
+        "login": "Accedi",
+        "register": "Unisciti",
+        "logout": "Esci",
+        "delete_account": "Elimina account",
+        "save": "Salva",
+        "change": "Cambia",
+        "explain_fact": "Scopri di più"
+    },
+
+
+    "loading": {
+        "just_a_moment": "Un attimo..."
+    },
+
+
+    "error_message": {
+        "login": {
+            "invalid_email": "Quell'email non sembra corretta... Puoi ricontrollarla? 😉",
+            "weak_password": "Hmm, quella password è troppo facile da indovinare... Prova con qualcosa di più sicuro 🔐",
+            "user_not_found": "Non abbiamo trovato un account con quei dati... Ti sei registrato? 😉",
+            "user_banned": "Questo account è stato limitato... Se pensi sia un errore, contatta il supporto 🙏",
+            "internal_server": "Ops! Qualcosa è andato storto da parte nostra... Stiamo sistemando! 🔧",
+            "connection_timeout": "Impossibile connettersi... Controlla la tua connessione e riprova 📶",
+            "unexpected": "Si è verificato un problema imprevisto... Lo stiamo controllando! 🚨"
+        },
+        "register": {
+            "invalid_email": "Quell'email non sembra valida... Puoi ricontrollarla? ✉️",
+            "weak_password": "Ops, quella password è troppo debole... Prova a renderla più sicura 💪",
+            "user_already_exists": "Sembra che questa email sia già in uso... Prova a effettuare il login 😉",
+            "disabled": "Le registrazioni sono attualmente chiuse... Riprova più tardi 🕒",
+            "internal_server": "Qualcosa si è rotto da parte nostra... Stiamo lavorando per sistemarlo 🔧",
+            "connection_timeout": "Nessuna connessione... Controlla la tua rete e riprova 📡",
+            "unexpected": "Si è verificato un errore imprevisto... Stiamo lavorando! 🚨"
+        },
+        "update_profile": {
+            "internal_server": "Qualcosa si è rotto da parte nostra... Stiamo lavorando per sistemarlo 🔧",
+            "connection_timeout": "Nessuna connessione... Controlla la tua rete e riprova 📡",
+            "unexpected": "Si è verificato un errore imprevisto... Stiamo lavorando! 🚨"
+        },
+        "change_password": {
+            "weak_password": "Hmm, quella password è troppo debole :( Prova qualcosa di più sicuro 🔐",
+            "invalid_credentials": "Sembra che la tua password non sia corretta... Ricontrolla e riprova 😉",
+            "internal_server": "Ops! Qualcosa è andato storto da parte nostra... Stiamo sistemando! ⚙️",
+            "connection_timeout": "Impossibile connettersi... Controlla la tua connessione e riprova 📶",
+            "unexpected": "Si è verificato un problema imprevisto... Lo stiamo controllando! 🚨"
+        },
+        "facts": {
+            "explanation_reward_missing": "Ops! Qualcosa è successo... Non siamo riusciti a verificare che l'annuncio sia stato completato. Riprova 🙏",
+            "explanation_insufficient_stars": "Non hai abbastanza stelle per sbloccare questo fatto... Guarda un annuncio per guadagnarne altre 😔",
+            "archive_limit_reached": ":( Hai raggiunto il limite di fatti archiviati... rimuovine qualcuno prima di aggiungerne di nuovi 📚",
+            "internal_server": "Ops! Qualcosa è andato storto da parte nostra... Stiamo sistemando! ⚙️",
+            "connection_timeout": "Non siamo riusciti a connetterci... Controlla la tua rete e riprova 📶",
+            "unexpected": "Si è verificato un problema imprevisto... Lo stiamo controllando! 🚨",
+            "no_ad_for_explanation": {
+                "title": "Le nostre scuse 😔",
+                "subtitle": "Ci dispiace di farti aspettare, ma al momento non ci sono annunci disponibili... Riprova tra qualche minuto :("
+            }
+        },
+        "common": {
+            "internal_server": "Qualcosa si è rotto da parte nostra... Stiamo lavorando per sistemarlo 🔧",
+            "connection_timeout": "Nessuna connessione... Controlla la tua rete e riprova 📡",
+            "authorization": "Sembra che ci sia stato un problema con l'autorizzazione... Prova a disconnetterti e riconnetterti 🔐",
+            "too_many_requests": "Limite di richieste raggiunto... Aspetta un attimo prima di riprovare 🔄",
+            "unexpected": "Oh! Si è verificato un errore imprevisto... Stiamo lavorando! 🚨"
+        },
+        "email": {
+            "failed_to_open_support": "Ops! Non siamo riusciti ad aprire l'app email... Ma puoi contattarci in qualsiasi momento scrivendo a {} 💌"
+        }
+    },
+
+
+    "info_message": {
+        "password_change_success": "Password cambiata con successo!",
+        "password_reset_success": "Password aggiornata con successo!",
+        "password_mismatch": "Ops! Le password non coincidono... Ricontrolla 🔂",
+        "signup_success": "Benvenuto a bordo!",
+        "no_results": {
+            "title": "➡️ Ops, niente qui ⬅️",
+            "daily_facts": "Ancora nessun fatto giornaliero... Riprova più tardi per qualcosa di nuovo!",
+            "facts_archive": "Il tuo archivio è vuoto — salva alcuni fatti e appariranno qui!"
+        },
+        "agreeing_to_terms": "Continuando, accetti i nostri\n<terms>Termini</terms> e la nostra <privacy>Privacy</privacy>"
+    },
+
+
+    "dialog": {
+        "session_expired": {
+            "title": "Bentornato!",
+            "subtitle": "La tua sessione ha fatto un piccolo pisolino... Accedi di nuovo per svegliarla! 😴"
+        },
+        "account_delete": {
+            "title": "Addio :(",
+            "subtitle": "Eliminare il tuo account rimuoverà permanentemente i tuoi dati... Questa azione non può essere annullata ⛔️"
+        },
+        "permission": {
+            "notifications": {
+                "title": "Permesso",
+                "subtitle": {
+                    "basic": "Per ricevere notifiche, assicurati di permettere l'accesso a questa app",
+                    "in_settings": "Per ricevere notifiche, assicurati di permettere l'accesso a questa app nelle impostazioni di sistema"
+                }
+            }
+        },
+        "ad_alert": {
+            "title": "Brutta notizia :(",
+            "subtitle": "Per mantenere questa funzione gratuita, dobbiamo mostrare un annuncio... Grazie per la comprensione e il supporto!"
+        },
+        "reset_password_expired": {
+            "title": "Link scaduto ⏳",
+            "subtitle": "Il link per reimpostare la password è scaduto... Richiedine uno nuovo per continuare in sicurezza"
+        },
+        "reset_password_email_sent": {
+            "title": "Controlla la tua casella 📬",
+            "subtitle": "Abbiamo inviato un link per reimpostare la password al tuo indirizzo email... Segui le istruzioni per impostarne una nuova 🔑"
+        },
+        "select_notification_time": {
+            "title": "Seleziona orario",
+            "button": "Ok"
+        },
+        "reset_password_enter_email": {
+            "title": "Reimposta la password",
+            "subtitle": "Ti invieremo un link per reimpostare la password alla tua email... Se non arriva nulla, aspetta 30 secondi e riprova :)"
+        }
+    },
+
+
+    "snackbar": {
+        "badConnection": {
+            "title": "Ops! Connessione interrotta 📶",
+            "description": "Controlla la tua rete e riprova!"
+        }
+    }
+}

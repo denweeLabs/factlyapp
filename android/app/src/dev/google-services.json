@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "665205452522",
+    "project_id": "factlyapp-dev",
+    "storage_bucket": "factlyapp-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665205452522:android:9b59beaf5bef9909df7193",
+        "android_client_info": {
+          "package_name": "app.denwee.factlyapp.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDHU_h2iD08QbpvRiFIm0ubZHMqqGMfgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
