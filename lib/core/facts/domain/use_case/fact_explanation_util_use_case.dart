@@ -15,8 +15,8 @@ class FactExplanationUtilUseCase {
   static const maxExplanationFetchAttempts = 3;
   static const explanationNextFetchDelay = Duration(milliseconds: 1000);
 
-  static const explanationStreamInterval = Duration(milliseconds: 110);
-  static const explanationStreamCharsPerUpdate = 30;
+  static const explanationStreamInterval = Duration(milliseconds: 140);
+  static const explanationStreamCharsPerUpdate = 35;
 
   Future<Either<FactsFailure, FactExplanation>> retryFetch(UniqueId id, {bool useStars = false}) async {
     late Either<FactsFailure, FactExplanation> failureOrSuccess;
