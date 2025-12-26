@@ -52,9 +52,9 @@ class _HomePageState extends State<HomePage> {
 
   void checkSystemHealth() {
     if (shouldCheckSystemHealth()) {
-      if (!widget.checkUserData) getIt<ProfileCubit>().checkProfile();
-      if (!widget.checkUserData) getIt<UserPreferencesCubit>().checkPreferences();
-      if (!widget.checkUserData) getIt<FactsArchiveCubit>().checkArchiveIds();
+      if (widget.checkUserData) getIt<ProfileCubit>().checkProfile();
+      if (widget.checkUserData) getIt<UserPreferencesCubit>().checkPreferences();
+      if (widget.checkUserData) getIt<FactsArchiveCubit>().checkArchiveIds();
       getIt<UserStatisticsCubit>().checkStatistics();
       lastSystemHealthCheck = DateTime.now();
     }
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
 
     if (state.bucket.isSome()) {
       return DailyFactsStoryView(
-        key: const ValueKey(2),
+        key: UniqueKey(),
         facts: state.bucket.toNullable()!.facts,
         goToAccount: () => _goToAccount(context),
       );
