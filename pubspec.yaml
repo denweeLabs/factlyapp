@@ -5,7 +5,7 @@ description: "Denwee mobile application"
 publish_to: 'none'
 
 # App version + build
-version: 1.0.2+51
+version: 1.1.0+56
 
 # Env
 environment:
