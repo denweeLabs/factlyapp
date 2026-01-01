@@ -54,6 +54,9 @@ dependencies:
   gma_mediation_unity: ^1.6.2
   # gma_mediation_ironsource: ^2.1.0
 
+  # Subscriptions
+  purchases_flutter: ^9.10.2
+
   # Functional programming
   dartz: ^0.10.1
 

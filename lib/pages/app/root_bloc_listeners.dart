@@ -2,10 +2,12 @@ import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
 import 'package:denwee/core/profile/domain/failure/profile_failure.dart';
 import 'package:denwee/core/statistics/domain/failure/statistics_failure.dart';
+import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
+import 'package:denwee/core/ui/bloc/subscriptions_cubit/subscription_offerings_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
@@ -72,6 +74,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
           listenWhen: _archiveListener,
           listener: (_, _) {},
         ),
+        BlocListener<SubscriptionOfferingsCubit, SubscriptionOfferingsState>(
+          listenWhen: _subscriptionOfferingsListener,
+          listener: (_, _) {},
+        ),
       ],
       child: widget.child,
     );
@@ -79,7 +85,9 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
   bool _authListener(AuthState p, AuthState c) {
     final isLoggedOut = p.isAuthenticated && c.isUnauthenticated;
+    final isAnyLoggedIn = p.isUnauthenticated && c.isAnonymousOrAuthenticated;
     if (isLoggedOut) onUserLoggedOut();
+    if (isAnyLoggedIn) onUserAnyLoggedIn();
     return false;
   }
 
@@ -161,6 +169,33 @@ class _RootBlocListenersState extends State<RootBlocListeners>
       AppDialogs.showErrorSnackbar(
         description: failure.errorMessage(context),
       );
+    }
+
+    return false;
+  }
+
+  bool _subscriptionOfferingsListener(SubscriptionOfferingsState p, SubscriptionOfferingsState c) {
+    final isFailure = p.failure != c.failure && c.failure.isSome();
+    final isSuccessPackagePurchase = p.purchasedPackage.isNone() && c.purchasedPackage.isSome();
+    final isSuccessPurchaseRestoration = p.isPurchaseRestoring && !c.isPurchaseRestoring && c.isPurchaseRestoreSuccess;
+
+    if (isFailure) {
+      final failure = c.failure.toNullable()!;
+      final context = getIt<RootRouterData>().context;
+      HapticUtil.medium();
+      AppDialogs.showErrorSnackbar(
+        description: failure.errorMessage(context),
+      );
+    }
+
+    /// check subscription status form backend when purchase was made
+    if (isSuccessPackagePurchase) {
+      onUserPurchasedPackage(c.purchasedPackage.toNullable()!);
+    }
+
+    /// check subscription status form backend when purchase successfully restored
+    if (isSuccessPurchaseRestoration) {
+      onSubscriptionRestored();
     }
 
     return false;

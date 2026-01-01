@@ -18,4 +18,6 @@ class _MemberEndpoints {
   final pushNotificationsSubscribe = '$_base/push_notifications/subscribe';
   final pushNotificationsUnsubscribe = '$_base/push_notifications/unsubscribe';
   final userStatistics = '$_base/statistics';
+  final userSubscription = '$_base/subscription';
+  final userIdentity = '$_base/identity';
 }

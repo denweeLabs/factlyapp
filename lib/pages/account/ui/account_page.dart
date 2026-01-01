@@ -22,6 +22,7 @@ import 'package:denwee/core/ui/widget/animations/animated_number_widget.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_scaffold_widget.dart';
+import 'package:denwee/pages/account/ui/widget/subscription/subscription_card_widget.dart';
 import 'package:denwee/pages/account/ui/widget/theme_colorations/coloration_overview_selector_widget.dart';
 import 'package:denwee/core/ui/widget/misc/fading_edge_widget.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
@@ -78,6 +79,8 @@ class _AccountPageState extends State<AccountPage> {
           children: [
             _buildProfileSection(context),
             48.verticalSpace,
+            _buildSubscriptionSection(context),
+            48.verticalSpace,
             _buildInterestsSections(context),
             48.verticalSpace,
             _buildDailyFactsSection(context),
@@ -110,6 +113,14 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSubscriptionSection(BuildContext context) {
+    return AccountSection(
+      title: context.tr(LocaleKeys.account_profile_subscription_title),
+      childrenPadding: EdgeInsets.symmetric(horizontal: 20.w),
+      children: const [SubscriptionCard()],
     );
   }
 

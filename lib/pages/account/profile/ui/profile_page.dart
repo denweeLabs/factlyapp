@@ -30,6 +30,7 @@ import 'package:denwee/pages/account/profile/ui/widget/personal_details_card_wid
 import 'package:denwee/pages/account/profile/ui/widget/profile_more_card_widget.dart';
 import 'package:denwee/pages/account/profile/ui/widget/profile_save_changes_button_widget.dart';
 import 'package:denwee/pages/account/profile/ui/widget/undercover_card_title_widget.dart';
+import 'package:denwee/pages/account/ui/widget/subscription/subscription_card_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -144,17 +145,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             _buildPersonalDetails(context),
                             28.verticalSpace,
-                            _buildMoreSection(context).fadeSlide(
+                            _buildMembershipPlan(context).fadeSlide(
                               fades: const BiPos(0.0, 1.0),
                               offsets:
                                   const BiPos(Offset(0.0, 0.1), Offset.zero),
                               delay: const Duration(milliseconds: 200),
                             ),
+                            28.verticalSpace,
+                            _buildMoreSection(context).fadeSlide(
+                              fades: const BiPos(0.0, 1.0),
+                              offsets:
+                                  const BiPos(Offset(0.0, 0.1), Offset.zero),
+                              delay: const Duration(milliseconds: 400),
+                            ),
                             58.verticalSpace,
                             _buildLogoutButton(context).fadeScale(
                               fades: const BiPos(0.0, 1.0),
                               scales: const BiPos(0.0, 1.0),
-                              delay: const Duration(milliseconds: 400),
+                              delay: const Duration(milliseconds: 600),
                             ),
                             24.verticalSpace,
                             _buildDeleteAccountButton(context).fade(
@@ -261,12 +269,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // Widget _buildMembershipPlan(BuildContext context) {
-  //   return UndercoverCardTitle(
-  //     title: context.tr(LocaleKeys.account_profile_membership_title),
-  //     child: const MembershipPlanCard(),
-  //   );
-  // }
+  Widget _buildMembershipPlan(BuildContext context) {
+    return UndercoverCardTitle(
+      title: context.tr(LocaleKeys.account_profile_subscription_title),
+      child: const SubscriptionCard(),
+    );
+  }
 
   // Align _buildAvatar() {
   //   return Align(

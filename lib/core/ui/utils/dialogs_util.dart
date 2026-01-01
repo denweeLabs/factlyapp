@@ -1,5 +1,6 @@
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
+import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/core/ui/router/page_routes_builders/fade_slideup_page_route_builder.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/dialogs/account_delete_confirmation_dialog_widget.dart';
@@ -11,6 +12,8 @@ import 'package:denwee/core/ui/widget/dialogs/reset_password_link_sent_dialog_wi
 import 'package:denwee/core/ui/widget/dialogs/reset_password_timeout_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/select_notification_time_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/session_expired_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/subscription_purchase_success_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/subscription_switch_warning_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/common_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/core_global_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/internet_connection_snackbar_widget.dart';
@@ -155,6 +158,24 @@ class AppDialogs {
       ResetPassEmailPromptDialog(initialEmail: initialEmail),
       barrierColor: AppDialogs.dialogBarrierColor,
       settings: const RouteSettings(name: ResetPassEmailPromptDialog.routeName),
+    );
+  }
+
+  static Future<void> showSubscriptionPurchaseSuccessDialog(BuildContext context, UserSubscription subscription) {
+    return showDialog<void>(
+      context,
+      SubscriptionPurchaseSuccessDialog(subscription: subscription),
+      barrierColor: AppDialogs.dialogBarrierColor,
+      settings: const RouteSettings(name: SubscriptionPurchaseSuccessDialog.routeName),
+    );
+  }
+
+  static Future<bool?> showSubscriptionSwitchWarningDialog(BuildContext context) {
+    return showDialog<bool?>(
+      context,
+      const SubscriptionSwitchWarningDialog(),
+      barrierColor: AppDialogs.dialogBarrierColor,
+      settings: const RouteSettings(name: SubscriptionSwitchWarningDialog.routeName),
     );
   }
 
