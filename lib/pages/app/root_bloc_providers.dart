@@ -6,6 +6,8 @@ import 'package:denwee/core/ui/bloc/notifications_cubit/notifications_cubit.dart
 import 'package:denwee/core/ui/bloc/permissions_cubit/permissions_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
 import 'package:denwee/core/ui/bloc/routes_cubit/routes_cubit.dart';
+import 'package:denwee/core/ui/bloc/subscriptions_cubit/subscription_offerings_cubit.dart';
+import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
 import 'package:denwee/di/di.dart';
@@ -35,6 +37,14 @@ class RootBlocProviders extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => getIt<AuthCubit>(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (_) => getIt<SubscriptionOfferingsCubit>(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (_) => getIt<UserSubscriptionCubit>(),
         ),
         BlocProvider(
           create: (_) => getIt<UserPreferencesCubit>(),

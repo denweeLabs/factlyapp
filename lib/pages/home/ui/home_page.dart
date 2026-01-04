@@ -2,6 +2,7 @@ import 'package:denwee/core/ads/domain/repo/ads_repo.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
+import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
@@ -55,6 +56,7 @@ class _HomePageState extends State<HomePage> {
       if (widget.checkUserData) getIt<ProfileCubit>().checkProfile();
       if (widget.checkUserData) getIt<UserPreferencesCubit>().checkPreferences();
       if (widget.checkUserData) getIt<FactsArchiveCubit>().checkArchiveIds();
+      if (widget.checkUserData) getIt<UserSubscriptionCubit>().checkSubscription();
       getIt<UserStatisticsCubit>().checkStatistics();
       lastSystemHealthCheck = DateTime.now();
     }

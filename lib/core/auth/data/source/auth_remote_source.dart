@@ -62,6 +62,12 @@ abstract class AuthRemoteSource {
   /// [ConnectionException]
   /// [GenericException]
   Future<void> deleteAccount();
+
+  /// Throws:
+  /// [AuthorizationException]
+  /// [ConnectionException]
+  /// [GenericException]
+  Future<String> getUserId();
 }
 
 @LazySingleton(as: AuthRemoteSource)
@@ -184,6 +190,20 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
     final response = await _requestExecutor.delete(Endpoints.member.account);
     if (!response.isSuccessful) {
       final data = response.data as Map<String, dynamic>;
+      final errorResponse = ServerErrorResponse.fromJson(data);
+      throw errorResponse.asGenericException;
+    }
+  }
+
+  @override
+  Future<String> getUserId() async {
+    final response = await _requestExecutor.get(Endpoints.member.userIdentity);
+    final data = response.data as Map<String, dynamic>;
+
+    if (response.isSuccessful) {
+      final userId = data['user_id'] as String;
+      return userId;
+    } else {
       final errorResponse = ServerErrorResponse.fromJson(data);
       throw errorResponse.asGenericException;
     }

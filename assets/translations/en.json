@@ -45,6 +45,9 @@
             "profile": {
                 "title": "Profile"
             },
+            "subscription": {
+                "title": "Subscription"
+            },
             "interests": {
                 "title": "Interests"
             },
@@ -104,11 +107,46 @@
             "personal": {
                 "title": "Personal"
             },
+            "subscription": {
+                "title": "Subscription"
+            },
             "more": {
                 "title": "More",
                 "change_password": "Change\npassword",
                 "contact_support": "Contact\nsupport"
             }
+        }
+    },
+
+
+    "subscription": {
+        "basic_plan": "Denwee Basic",
+        "premium_plan": "Premium",
+        "active_plan": "Active plan",
+        "upgrade_cta": "Upgrade",
+        "paywall": {
+            "title": "Get more from every fact & explore without limits",
+            "benefits": {
+                "line_1": "Instant fact explanations",
+                "line_2": "Unlimited archive access",
+                "line_3": "No ads — ever"
+            },
+            "package": {
+                "monthly": {
+                    "title": "Monthly Plan",
+                    "per_period": "month"
+                },
+                "yearly": {
+                    "title": "Annual Plan",
+                    "per_period": "year"
+                }
+            },
+            "footer": {
+                "restore": "Restore",
+                "privacy": "Privacy",
+                "terms": "Terms"
+            },
+            "expiry": "Expiry"
         }
     },
 
@@ -238,6 +276,19 @@
                 "subtitle": "We feel bad for keeping you waiting, but there are no ads available right now... Please try again in a few minutes :("
             }
         },
+        "subscriptions": {
+            "configuration": "Something went wrong while setting up your purchase... Please try again 🙏",
+            "purchase_not_allowed": "Oh... Looks like purchases are not allowed on this device or account 😕",
+            "purchase_cancelled": "Purchase was cancelled... No worries, you can try again anytime 🙂",
+            "payment_pending": "Your payment is still being processed... Please wait a moment ⏳",
+            "payment_failed": "Payment failed... Please check your payment method and try again 💳",
+            "already_subscribed": "You already have an active subscription 🎉",
+            "subscription_not_found": "No active subscription found... Try restoring again or check your account 🙂",
+            "insufficient_permissions": "We couldn't verify your purchase... Please restore or sign in again 🔐",
+            "internal_server": "Oops! Something went wrong on our end... We're fixing it! ⚙️",
+            "connection_timeout": "We couldn't connect... Please check your internet and try again 📶",
+            "unexpected": "An unexpected issue occurred... We're looking into it! 🚨"
+        },
         "common": {
             "internal_server": "Something broke on our side... We're working on it 🔧",
             "connection_timeout": "No connection... Please check your internet and try again 📡",
@@ -302,6 +353,14 @@
         "reset_password_enter_email": {
             "title": "Reset password",
             "subtitle": "We’ll send a password reset link to your email... If nothing shows up, wait 30 seconds and try once more :)"
+        },
+        "success_purchase": {
+            "title": "You’re all set!",
+            "subtitle": "Your Premium access is now active until {}. Thanks a ton for your support! 🫶"
+        },
+        "subscription_packages_switch": {
+            "title": "Just a heads up!",
+            "subtitle": "When you change your plan, your current subscription will be replaced and any remaining value will be applied to the new plan 😉"
         }
     },
 

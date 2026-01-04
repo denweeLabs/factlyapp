@@ -77,8 +77,8 @@ class _ConfigConstants {
     ),
     ThemeColoration(
       id: UniqueId.fromValue(3),
-      primary: const Color(0xFF6CC6BA),
-      secondary: const Color(0xFF267280),
+      primary: const Color(0xFF267280),
+      secondary: const Color(0xFF6CC6BA),
     ),
     ThemeColoration(
       id: UniqueId.fromValue(4),

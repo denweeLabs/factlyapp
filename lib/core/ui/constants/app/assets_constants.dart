@@ -87,4 +87,6 @@ class _AnimationsAssets {
   final seal = '${_folderPath}seal.json';
   final smilingStar = '${_folderPath}smiling_star.json';
   final swipeUp = '${_folderPath}swipe_up.json';
+  final confetti = '${_folderPath}confetti.json';
+  final sparkles = '${_folderPath}sparkles.json';
 }

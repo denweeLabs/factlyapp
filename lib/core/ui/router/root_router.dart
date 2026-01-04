@@ -27,6 +27,7 @@ import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_p
 import 'package:denwee/pages/onboarding/configuration/select_interests/cubit/select_interests_cubit.dart';
 import 'package:denwee/pages/onboarding/configuration/select_interests/select_interests_page.dart';
 import 'package:denwee/pages/onboarding/welcome/welcome_page.dart';
+import 'package:denwee/pages/premium_paywall/premium_paywall_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -50,6 +51,7 @@ class Routes {
   static const factDetails = FactDetailsPage.routeName;
   static const changePassword = ChangePasswordPage.routeName;
   static const resetPassword = ResetPasswordPage.routeName;
+  static const premiumPaywall = PremiumPaywallPage.routeName;
 }
 
 final RouteFactory rootRouteFactory = (RouteSettings settings) {
@@ -149,6 +151,12 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
           create: (_) => getIt<ChangePasswordCubit>(),
           child: const ChangePasswordPage(),
         ),
+      );
+
+    case Routes.premiumPaywall:
+      return FadeSlideupPageRouteBuilder(
+        settings: settings,
+        builder: (_) => const PremiumPaywallPage(),
       );
 
     default:

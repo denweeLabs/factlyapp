@@ -45,6 +45,9 @@
             "profile": {
                 "title": "Profil"
             },
+            "subscription": {
+                "title": "Abonnement"
+            },
             "interests": {
                 "title": "Centres d'intérêt"
             },
@@ -104,11 +107,46 @@
             "personal": {
                 "title": "Personnel"
             },
+            "subscription": {
+                "title": "Abonnement"
+            },
             "more": {
                 "title": "Plus",
                 "change_password": "Changer\nle mot de passe",
                 "contact_support": "Contacter\nle support"
             }
+        }
+    },
+
+
+    "subscription": {
+        "basic_plan": "Denwee Basic",
+        "premium_plan": "Premium",
+        "active_plan": "Forfait actif",
+        "upgrade_cta": "Passer",
+        "paywall": {
+            "title": "Profitez de chaque fait sans aucune limite",
+            "benefits": {
+                "line_1": "Explications instantanées",
+                "line_2": "Accès illimité aux archives",
+                "line_3": "Plus aucune publicité"
+            },
+            "package": {
+                "monthly": {
+                    "title": "Mensuel",
+                    "per_period": "mois"
+                },
+                "yearly": {
+                    "title": "Annuel",
+                    "per_period": "an"
+                }
+            },
+            "footer": {
+                "restore": "Restaurer",
+                "privacy": "Confidentialité",
+                "terms": "Conditions"
+            },
+            "expiry": "Expiration"
         }
     },
 
@@ -238,6 +276,19 @@
                 "subtitle": "Nous sommes désolés de vous faire attendre, mais il n'y a pas d'annonces disponibles pour le moment... Veuillez réessayer dans quelques minutes :("
             }
         },
+        "subscriptions": {
+            "configuration": "Un problème est survenu lors de la configuration de votre achat... Veuillez réessayer 🙏",
+            "purchase_not_allowed": "Oh... Il semble que les achats ne soient pas autorisés sur cet appareil ou ce compte 😕",
+            "purchase_cancelled": "Achat annulé... Pas d’inquiétude, vous pouvez réessayer quand vous voulez 🙂",
+            "payment_pending": "Votre paiement est en cours de traitement... Veuillez patienter ⏳",
+            "payment_failed": "Le paiement a échoué... Veuillez vérifier votre moyen de paiement 💳",
+            "already_subscribed": "Vous avez déjà un abonnement actif 🎉",
+            "subscription_not_found": "Aucun abonnement actif trouvé... Essayez de restaurer ou vérifiez votre compte 🙂",
+            "insufficient_permissions": "Impossible de vérifier l'achat... Veuillez restaurer ou vous reconnecter 🔐",
+            "internal_server": "Oups ! Un problème est survenu de notre côté... Nous y travaillons ⚙️",
+            "connection_timeout": "Impossible de se connecter... Vérifiez votre connexion 📶",
+            "unexpected": "Une erreur inattendue s'est produite... Nous enquêtons 🚨"
+        },
         "common": {
             "internal_server": "Quelque chose s'est mal passé de notre côté... Nous travaillons dessus 🔧",
             "connection_timeout": "Pas de connexion... Vérifiez votre Internet et réessayez 📡",
@@ -302,6 +353,14 @@
         "reset_password_enter_email": {
             "title": "Réinitialiser le mot de passe",
             "subtitle": "Nous t’enverrons un lien pour réinitialiser ton mot de passe par e-mail... Si rien n’arrive, attends 30 secondes et réessaie :)"
+        },
+        "success_purchase": {
+            "title": "C’est fait !",
+            "subtitle": "Votre accès Premium est actif jusqu’au {}. Merci beaucoup pour votre soutien ! 🫶"
+        },
+        "subscription_packages_switch": {
+            "title": "Petit rappel !",
+            "subtitle": "Lorsque vous changez de formule, votre abonnement actuel sera remplacé et la valeur restante sera appliquée au nouveau plan 😉"
         }
     },
 

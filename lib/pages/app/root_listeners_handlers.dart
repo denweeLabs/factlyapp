@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:denwee/core/auth/domain/use_case/on_logout_use_case.dart';
+import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
+import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
 import 'package:denwee/core/ui/bloc/permissions_cubit/permissions_cubit.dart';
+import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/utils/dialogs_util.dart';
 import 'package:denwee/core/ui/utils/haptic_util.dart';
@@ -24,6 +27,62 @@ mixin RootBlocListenersHandlers {
     getIt<OnLogoutUseCase>().execute();
     Navigator.of(getIt<RootRouterData>().context, rootNavigator: true)
         .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => true);
+  }
+
+  Future<void> onUserPurchasedPackage(PremiumPackage package) async {
+    final result = await getIt<UserSubscriptionCubit>().pollSubscription(
+      targetPackageType: package.type,
+    );
+    final context = getIt<RootRouterData>().context;
+
+    result.whenOrNull(
+      failure: (failure) {
+        HapticUtil.medium();
+        AppDialogs.showErrorSnackbar(
+          description: failure.errorMessage(context),
+        );
+      },
+      subscribed: (subscription) {
+        HapticUtil.light();
+        AppDialogs.showSubscriptionPurchaseSuccessDialog(
+          context,
+          subscription,
+        );
+      },
+      unsubscribed: () {
+        HapticUtil.medium();
+        AppDialogs.showErrorSnackbar(
+          description: SubscriptionsFailure.unexpected.errorMessage(context),
+        );
+      },
+    );
+  }
+
+  Future<void> onSubscriptionRestored() async {
+    final result = await getIt<UserSubscriptionCubit>().pollSubscription();
+    final context = getIt<RootRouterData>().context;
+
+    result.whenOrNull(
+      failure: (failure) {
+        HapticUtil.medium();
+        AppDialogs.showErrorSnackbar(
+          description: failure.errorMessage(context),
+        );
+      },
+      subscribed: (subscription) {
+        HapticUtil.light();
+        AppDialogs.showSubscriptionPurchaseSuccessDialog(
+          context,
+          subscription,
+        );
+      },
+      unsubscribed: () {
+        HapticUtil.medium();
+        AppDialogs.showErrorSnackbar(
+          description: SubscriptionsFailure.unexpected.errorMessage(context),
+        );
+      },
+    );
   }
 
   bool onUserSessionExpired() {
