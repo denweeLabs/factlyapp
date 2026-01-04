@@ -36,7 +36,7 @@ extension PremiumPackageTypeX on PremiumPackageType {
     final productIds = getIt<SubscriptionsRepo>().productIds;
     if (id == productIds.monthly) return PremiumPackageType.monthly;
     if (id == productIds.yearly) return PremiumPackageType.yearly;
-    throw UnsupportedError('Package is not supported');
+    return PremiumPackageType.monthly;
   }
 }
 
