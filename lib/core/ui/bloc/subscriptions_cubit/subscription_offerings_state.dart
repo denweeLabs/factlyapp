@@ -3,8 +3,6 @@ part of 'subscription_offerings_cubit.dart';
 @freezed
 abstract class SubscriptionOfferingsState with _$SubscriptionOfferingsState {
   const factory SubscriptionOfferingsState({
-    @Default(false) bool initSuccess,
-    @Default(false) bool initInProgress,
     @Default(false) bool isPurchaseInProgress,
     @Default(false) bool isGettingPackages,
     @Default(false) bool isPurchaseRestoring,

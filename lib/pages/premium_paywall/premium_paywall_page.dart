@@ -58,7 +58,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
         .toNullable();
 
     if (packages == null) {
-      getIt<SubscriptionOfferingsCubit>().init();
+      getIt<SubscriptionOfferingsCubit>().getPackages();
       selectedPackage = ValueNotifier(null);
       return;
     }
@@ -98,7 +98,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
   }
 
   Widget _buildBody(SubscriptionOfferingsState state) {
-    if (state.initInProgress) {
+    if (state.isGettingPackages) {
       return Center(
         key: const ValueKey(0),
         child: CommonLoading(color: context.lightIconColor),

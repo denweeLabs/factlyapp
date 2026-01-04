@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
       if (widget.checkUserData) getIt<ProfileCubit>().checkProfile();
       if (widget.checkUserData) getIt<UserPreferencesCubit>().checkPreferences();
       if (widget.checkUserData) getIt<FactsArchiveCubit>().checkArchiveIds();
-      getIt<UserSubscriptionCubit>().checkSubscription();
+      if (widget.checkUserData) getIt<UserSubscriptionCubit>().checkSubscription();
       getIt<UserStatisticsCubit>().checkStatistics();
       lastSystemHealthCheck = DateTime.now();
     }

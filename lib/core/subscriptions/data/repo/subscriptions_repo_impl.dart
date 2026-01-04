@@ -11,6 +11,7 @@ import 'package:denwee/core/subscriptions/domain/entity/premium_product_ids.dart
 import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
+import 'package:denwee/core/ui/constants/formatters/input_formatters.dart';
 import 'package:denwee/di/env.dart';
 import 'package:denwee/di/modules/server_module.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 /// Supported platforms
 enum SubscriptionsPlatform { ios, android, test }
 
-/// Primary repository for subscriptions handling.
+/// Primary repository for subscriptions handling by using RevenueCat [https://www.revenuecat.com]
 /// 
 /// Check how [SubscriptionOfferingsCubit] uses this repo
 /// to fetch and display [PremiumPaywallPage]
@@ -63,14 +64,17 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
       yearly: 'denwee_factlyapp_premium_year',
     ),
     SubscriptionsPlatform.android: PremiumProductIds(
-      monthly: 'denwee_factlyapp_premium_month:monthly-premium',
-      yearly: 'denwee_factlyapp_premium_year:yearly-premium',
+      monthly: 'denwee_factlyapp_premium_month',
+      yearly: 'denwee_factlyapp_premium_year',
     ),
     SubscriptionsPlatform.test: PremiumProductIds(
       monthly: 'denwee_factlyapp_premium_month',
       yearly: 'denwee_factlyapp_premium_year',
     ),
   };
+
+  /// All RevenueCat's auto-generated ids contain "anonymous" word inside
+  static const anonIdKeyword = 'anonymous';
 
   @override
   PremiumProductIds get productIds {
@@ -81,16 +85,26 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
   }
 
   @override
-  Future<Either<SubscriptionsFailure, Unit>> init({bool force = false}) async {
+  Future<String> get currentUserId {
+    return Purchases.appUserID;
+  }
+
+  /// All RevenueCat auto-generated IDs contain "anonymous" keyword.
+  /// A valid user ID must:
+  /// 1. NOT be anonymous
+  /// 2. Match any UUID format (backend-generated)
+  @override
+  Future<bool> get isCurrentUserIdValid async {
+    final id = await currentUserId;
+    final isAnonId = id.toLowerCase().contains(anonIdKeyword);
+    final isUuid = anyUUIDRegExp.hasMatch(id);
+    return !isAnonId && isUuid;
+  }
+
+  @override
+  Future<Either<SubscriptionsFailure, Unit>> init() async {
     try {
-      final failureOrSuccess = await (force
-          ? _userIdentityRepo.refresh()
-          : _userIdentityRepo.resolve());
-      final userId = failureOrSuccess.toOption().toNullable();
-      if (userId == null) {
-        return left(SubscriptionsFailure.configuration);
-      }
-      final config = PurchasesConfiguration(_publicApiKey)..appUserID = userId;
+      final config = PurchasesConfiguration(_publicApiKey);
       await Purchases.configure(config);
       return right(unit);
     } on PlatformException catch (error) {
@@ -126,12 +140,36 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
   @override
   Future<Either<SubscriptionsFailure, Unit>> purchase(PremiumPackage package) async {
     try {
+      if (!(await isCurrentUserIdValid)) await login();  // login in case ID is not valid
+      if (!(await isCurrentUserIdValid)) {
+        return left(SubscriptionsFailure.configuration); // ID still not valid so return an error
+      }
       final params = PurchaseParams.package(package.data);
       final result = await Purchases.purchase(params);
       if (result.customerInfo.entitlements.active.containsKey(_entitlementId)) {
         return right(unit);
       }
       return left(SubscriptionsFailure.purchaseCancelled);
+    } on PlatformException catch (error) {
+      final failure = SubscriptionsFailure.fromPurchasesError(
+        PurchasesErrorHelper.getErrorCode(error),
+      );
+      return left(failure);
+    } catch (error) {
+      return left(SubscriptionsFailure.unexpected);
+    }
+  }
+
+  @override
+  Future<Either<SubscriptionsFailure, Unit>> login() async {
+    final failureOrSuccess = await _userIdentityRepo.getUserIdRemote();
+    final userId = failureOrSuccess.toOption().toNullable();
+    if (userId == null) {
+      return left(SubscriptionsFailure.configuration);
+    }
+    try {
+      await Purchases.logIn(userId);
+      return right(unit);
     } on PlatformException catch (error) {
       final failure = SubscriptionsFailure.fromPurchasesError(
         PurchasesErrorHelper.getErrorCode(error),

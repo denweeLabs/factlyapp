@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:denwee/core/subscriptions/domain/use_case/get_user_subscription_use_case.dart';
@@ -31,7 +32,9 @@ class UserSubscriptionCubit extends Cubit<UserSubscriptionState> {
   }
 
   Future<void> checkSubscription() async {
-    if (!state.isSubscribed) emit(const UserSubscriptionState.checkingSubscription());
+    if (!state.isSubscribed) {
+      emit(const UserSubscriptionState.checkingSubscription());
+    }
     final failureOrSuccess = await _getUserSubscriptionUseCase.untilSuccess();
     emit(failureOrSuccess.fold(
       (failure) => UserSubscriptionState.failure(failure),
@@ -44,8 +47,13 @@ class UserSubscriptionCubit extends Cubit<UserSubscriptionState> {
 
   Future<UserSubscriptionState> pollSubscription({PremiumPackageType? targetPackageType}) async {
     emit(const UserSubscriptionState.checkingSubscription());
+
+    // delay in order for backend to sync latest webhook data
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
     final failureOrSuccess = await _getUserSubscriptionUseCase
         .untilSubscription(targetPackageType: targetPackageType);
+
     final newState = failureOrSuccess.fold(
       (failure) => UserSubscriptionState.failure(failure),
       (maybeSubscription) => maybeSubscription.fold(
@@ -53,6 +61,7 @@ class UserSubscriptionCubit extends Cubit<UserSubscriptionState> {
         (subscription) => UserSubscriptionState.subscribed(subscription),
       ),
     );
+
     emit(newState);
     return newState;
   }

@@ -1,5 +1,4 @@
 import 'package:denwee/core/auth/domain/repo/access_token_repo.dart';
-import 'package:denwee/core/auth/domain/repo/user_identity_repo.dart';
 import 'package:denwee/core/facts/domain/repo/daily_facts_repo.dart';
 import 'package:denwee/core/facts/domain/repo/fact_explanations_repo.dart';
 import 'package:denwee/core/facts/domain/repo/facts_archive_repo.dart';
@@ -31,7 +30,6 @@ class OnLogoutUseCase {
   final PushNotificationsRepo _pushNotificationsRepo;
   final AccessTokenRepo _accessTokenRepo;
   final SubscriptionsRepo _subscriptionsRepo;
-  final UserIdentityRepo _userIdentityRepo;
 
   // state
   final ProfileCubit _profileCubit;
@@ -52,7 +50,6 @@ class OnLogoutUseCase {
     this._pushNotificationsRepo,
     this._accessTokenRepo,
     this._subscriptionsRepo,
-    this._userIdentityRepo,
     this._profileCubit,
     this._preferencesCubit,
     this._userStatisticsCubit,
@@ -74,7 +71,6 @@ class OnLogoutUseCase {
     _subscriptionsRepo.logout();
     _accessTokenRepo.clearSession();
     _pushNotificationsRepo.unsubscribe();
-    _userIdentityRepo.clear();
 
     // wipe state
     _profileCubit.clearState();

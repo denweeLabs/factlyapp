@@ -85,9 +85,7 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
   bool _authListener(AuthState p, AuthState c) {
     final isLoggedOut = p.isAuthenticated && c.isUnauthenticated;
-    final isAnyLoggedIn = p.isUnauthenticated && c.isAnonymousOrAuthenticated;
     if (isLoggedOut) onUserLoggedOut();
-    if (isAnyLoggedIn) onUserAnyLoggedIn();
     return false;
   }
 

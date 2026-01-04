@@ -11,7 +11,7 @@ class GetUserSubscriptionUseCase {
 
   const GetUserSubscriptionUseCase(this._subscriptionsRepo);
 
-  static const retryDelay = Duration(milliseconds: 1000);
+  static const retryDelay = Duration(milliseconds: 1500);
 
   /// Waits until backend returns a successful response and **NON-null** subscription.
   ///

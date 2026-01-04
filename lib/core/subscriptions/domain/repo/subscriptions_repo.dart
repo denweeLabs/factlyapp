@@ -6,9 +6,12 @@ import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.d
 
 abstract class SubscriptionsRepo {
   PremiumProductIds get productIds;
-  Future<Either<SubscriptionsFailure, Unit>> init({bool force = false});
+  Future<String> get currentUserId;
+  Future<bool> get isCurrentUserIdValid;
+  Future<Either<SubscriptionsFailure, Unit>> init();
   Future<Either<SubscriptionsFailure, PremiumPackages>> getPackages();
   Future<Either<SubscriptionsFailure, Unit>> purchase(PremiumPackage package);
+  Future<Either<SubscriptionsFailure, Unit>> login();
   Future<Either<SubscriptionsFailure, Unit>> logout();
   Future<Either<SubscriptionsFailure, Unit>> restore();
 

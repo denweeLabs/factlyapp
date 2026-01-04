@@ -5,7 +5,6 @@ import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
 import 'package:denwee/core/ui/bloc/permissions_cubit/permissions_cubit.dart';
-import 'package:denwee/core/ui/bloc/subscriptions_cubit/subscription_offerings_cubit.dart';
 import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/utils/dialogs_util.dart';
@@ -28,10 +27,6 @@ mixin RootBlocListenersHandlers {
     getIt<OnLogoutUseCase>().execute();
     Navigator.of(getIt<RootRouterData>().context, rootNavigator: true)
         .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => true);
-  }
-
-  void onUserAnyLoggedIn() {
-    getIt<SubscriptionOfferingsCubit>().init(force: true);
   }
 
   Future<void> onUserPurchasedPackage(PremiumPackage package) async {

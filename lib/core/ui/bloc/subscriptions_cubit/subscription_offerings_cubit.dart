@@ -6,7 +6,6 @@ import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:utils/utils.dart';
 
 part 'subscription_offerings_state.dart';
 part 'subscription_offerings_cubit.freezed.dart';
@@ -20,60 +19,30 @@ class SubscriptionOfferingsCubit extends Cubit<SubscriptionOfferingsState> {
     this._subscriptionsRepo, 
     this._authCubit,
   ) : super(SubscriptionOfferingsState.initial()) {
-    autoInit();
+    getPackages();
+    checkLogin();
   }
 
-  /// If user is anonymous or authenticated on the app launch,
-  /// function will init subscription offerings right away.
-  /// For case when user was unauthenticated and then logged in - check [root_bloc_listeners.dart]
-  Future<void> autoInit() async {
-    if (_authCubit.state.isUnauthenticated) return;
-    return init();
-  }
-
-  Future<void> init({bool force = false}) async {
-    // Prevent race conditions
-    if (state.initInProgress) return;
-    
+  Future<void> getPackages() async {
+    if (state.isGettingPackages) {
+      return;
+    }
     emit(state.copyWith(
       failure: const None(),
       packages: const None(),
-      initInProgress: true,
       isGettingPackages: true,
     ));
-
-    SubscriptionsFailure? failure;
-    Option<PremiumPackages> packages = const None();
-
-    // init
-    final initResult = (await _subscriptionsRepo.init(force: force)).getEntries();
-    failure = initResult.$1;
-
-    // if success
-    if (initResult.$2 != null) {
-
-      // get packages
-      final packagesResult = (await _subscriptionsRepo.getPackages()).getEntries();
-      failure = packagesResult.$1;
-
-      // store packages if success
-      if (packagesResult.$2 != null) {
-        packages = Some(packagesResult.$2!);
-      }
-    }
-
-    emit(state.copyWith(
-      initInProgress: false,
-      isGettingPackages: false,
-      initSuccess: failure == null,
-      failure: optionOf(failure),
-      packages: packages,
+    final failureOrSuccess = await _subscriptionsRepo.getPackages();
+    return emit(failureOrSuccess.fold(
+      (failure) => state.copyWith(isGettingPackages: false, failure: Some(failure)),
+      (success) => state.copyWith(isGettingPackages: false, packages: Some(success)),
     ));
   }
 
   Future<void> purchase(PremiumPackage package) async {
-    if (state.isPurchaseInProgress) return;
-    
+    if (state.isPurchaseInProgress) {
+      return;
+    }
     emit(state.copyWith(
       isPurchaseInProgress: true,
       purchasedPackage: const None(),
@@ -87,8 +56,9 @@ class SubscriptionOfferingsCubit extends Cubit<SubscriptionOfferingsState> {
   }
 
   Future<void> restore() async {
-    if (state.isPurchaseRestoring || state.isPurchaseInProgress) return;
-    
+    if (state.isPurchaseRestoring || state.isPurchaseInProgress) {
+      return;
+    }
     emit(state.copyWith(
       isPurchaseRestoring: true,
       isPurchaseRestoreSuccess: false,
@@ -99,5 +69,15 @@ class SubscriptionOfferingsCubit extends Cubit<SubscriptionOfferingsState> {
       (failure) => state.copyWith(failure: Some(failure), isPurchaseRestoring: false),
       (success) => state.copyWith(isPurchaseRestoreSuccess: true, isPurchaseRestoring: false),
     ));
+  }
+
+  /// If user logged in to the app, RevenueCat must know "user_id" whose purchases will be linked to.
+  /// This function double-checks that RevenueCat knows this "user_id"
+  Future<void> checkLogin() async {
+    if (_authCubit.state.isUnauthenticated) {
+      return;
+    }
+    final isIdValid = await _subscriptionsRepo.isCurrentUserIdValid;
+    if (!isIdValid) await _subscriptionsRepo.login();
   }
 }
