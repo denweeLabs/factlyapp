@@ -2,6 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
+import 'package:denwee/core/subscriptions/domain/use_case/purchase_subscription_use_case.dart';
+import 'package:denwee/core/subscriptions/domain/use_case/restore_subscription_use_case.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,10 +15,14 @@ part 'subscription_offerings_cubit.freezed.dart';
 @LazySingleton()
 class SubscriptionOfferingsCubit extends Cubit<SubscriptionOfferingsState> {
   final SubscriptionsRepo _subscriptionsRepo;
+  final PurchaseSubscriptionUseCase _purchaseSubscriptionUseCase;
+  final RestoreSubscriptionUseCase _restoreSubscriptionUseCase;
   final AuthCubit _authCubit;
 
   SubscriptionOfferingsCubit(
     this._subscriptionsRepo, 
+    this._purchaseSubscriptionUseCase,
+    this._restoreSubscriptionUseCase,
     this._authCubit,
   ) : super(SubscriptionOfferingsState.initial()) {
     getPackages();
@@ -48,7 +54,7 @@ class SubscriptionOfferingsCubit extends Cubit<SubscriptionOfferingsState> {
       purchasedPackage: const None(),
       failure: const None(),
     ));
-    final failureOrSuccess = await _subscriptionsRepo.purchase(package);
+    final failureOrSuccess = await _purchaseSubscriptionUseCase.execute(package);
     return emit(failureOrSuccess.fold(
       (failure) => state.copyWith(failure: Some(failure), isPurchaseInProgress: false),
       (success) => state.copyWith(purchasedPackage: Some(package), isPurchaseInProgress: false),
@@ -64,7 +70,7 @@ class SubscriptionOfferingsCubit extends Cubit<SubscriptionOfferingsState> {
       isPurchaseRestoreSuccess: false,
       failure: const None(),
     ));
-    final failureOrSuccess = await _subscriptionsRepo.restore();
+    final failureOrSuccess = await _restoreSubscriptionUseCase.execute();
     return emit(failureOrSuccess.fold(
       (failure) => state.copyWith(failure: Some(failure), isPurchaseRestoring: false),
       (success) => state.copyWith(isPurchaseRestoreSuccess: true, isPurchaseRestoring: false),
