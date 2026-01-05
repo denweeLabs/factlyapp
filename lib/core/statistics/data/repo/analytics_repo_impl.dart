@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:denwee/core/statistics/domain/repo/analytics_repo.dart';
+import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -11,6 +12,8 @@ enum AnalyticsEvent {
   iosAdTrackingAllow,
   login,
   signUp,
+  subscriptionPurchase,
+  subscriptionRestore,
 }
 
 extension AnalyticsEventX on AnalyticsEvent {
@@ -26,6 +29,10 @@ extension AnalyticsEventX on AnalyticsEvent {
         return 'login';
       case AnalyticsEvent.signUp:
         return 'sign_up';
+      case AnalyticsEvent.subscriptionPurchase:
+        return 'purchase';
+      case AnalyticsEvent.subscriptionRestore:
+        return 'subscription_restore';
     }
   }
 }
@@ -59,6 +66,29 @@ class AnalyticsRepoImpl implements AnalyticsRepo {
   @override
   Future<void> logSignUp() {
     return _logEvent(AnalyticsEvent.signUp.eventName);
+  }
+
+  @override
+  Future<void> logSubscriptionRestore() {
+    return _logEvent(AnalyticsEvent.subscriptionRestore.eventName);
+  }
+
+  @override
+  Future<void> logSubscriptionPurchase(PremiumPackage package) async {
+    debugPrint(
+      'Analytics logEvent (${AnalyticsEvent.subscriptionPurchase.eventName}): ${package.type.packageId}/${package.data.storeProduct.price}${package.data.storeProduct.currencyCode}',
+    );
+    await _analytics.logPurchase(
+      value: package.data.storeProduct.price,
+      currency: package.data.storeProduct.currencyCode,
+      items: [
+        AnalyticsEventItem(
+          itemId: package.type.packageId,
+          itemName: package.type.metaTitle,
+          itemCategory: 'subscription',
+        ),
+      ],
+    );
   }
 
   Future<void> _logEvent(String name, {Map<String, Object>? params}) {

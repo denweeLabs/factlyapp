@@ -198,6 +198,10 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
   @override
   Future<Either<SubscriptionsFailure, Unit>> restore() async {
     try {
+      if (!(await isCurrentUserIdValid)) await login();  // login in case ID is not valid
+      if (!(await isCurrentUserIdValid)) {
+        return left(SubscriptionsFailure.configuration); // ID still not valid so return an error
+      }
       final result = await Purchases.restorePurchases();
       if (result.entitlements.active.containsKey(_entitlementId)) {
         return right(unit);

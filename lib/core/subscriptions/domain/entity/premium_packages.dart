@@ -24,6 +24,13 @@ extension PremiumPackageTypeX on PremiumPackageType {
       case PremiumPackageType.yearly: return context.tr(LocaleKeys.subscription_paywall_package_yearly_title);
     }
   }
+  
+  String get metaTitle {
+    switch (this) {
+      case PremiumPackageType.monthly: return 'Premium Subscription (Monthly)';
+      case PremiumPackageType.yearly: return 'Premium Subscription (Yearly)';
+    }
+  }
 
   String perPeriod(BuildContext context) {
     switch (this) {
