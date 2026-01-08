@@ -3,11 +3,13 @@ import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
+import 'package:denwee/core/ui/theme/app_colors.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/widget/animations/animated_icons/sparkles_animated_icon_widget.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/buttons/app_solid_button_widget.dart';
+import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -16,48 +18,79 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:utils/utils.dart';
 
 class SubscriptionCard extends StatelessWidget {
-  const SubscriptionCard({super.key});
+  const SubscriptionCard({super.key, this.onlyBody = false});
+
+  final bool onlyBody;
 
   @override
   Widget build(BuildContext context) {
+    if (onlyBody) return _buildBody();
+
     final decoration = ShapeDecoration(
       shape: RoundedSuperellipseBorder(
-        borderRadius: BorderRadius.all(AppConstants.style.radius.cardMedium),
-        side: BorderSide(color: context.theme.dividerColor),
+        borderRadius: BorderRadius.all(AppConstants.style.radius.cardSmall),
+        side: context.isLightTheme
+            ? const BorderSide(color: AppColors.black08)
+            : const BorderSide(color: AppColors.white06),
       ),
-      shadows: [AppConstants.style.colors.commonShadow],
       color: context.primaryContainer,
+      shadows: [
+        BoxShadow(
+          color: context.theme.colorScheme.primary.withValues(alpha: 0.5),
+          offset: const Offset(0.0, 25.0),
+          spreadRadius: -35,
+          blurRadius: 35,
+        ),
+      ],
     );
 
     return GestureDetector(
       onTap: () => _onTap(context),
       child: DecoratedBox(
         decoration: decoration,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(24.w, 24.h, 20.w, 24.h),
-          child: BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
-            builder: (context, userSubscriptionState) {
-              final activeSubscription = userSubscriptionState
-                  .activeSubscription
-                  .toNullable();
-
-              return AnimatedSwitcherPlus.flipX(
-                duration: CustomAnimationDurations.low,
-                switchOutCurve: const Interval(0.0, 0.5),
-                switchInCurve: const Interval(0.5, 1.0),
-                child: _buildBody(
-                  context: context,
-                  activeSubscription: activeSubscription,
-                ),
-              );
-            },
-          ),
+        child: Stack(
+          children: [
+            Positioned(
+              right: -28.w,
+              bottom: -32.h,
+              child: CommonAppIcon(
+                path: AppConstants.assets.icons.verifyLinear,
+                color: context.isLightTheme
+                    ? AppColors.black04
+                    : AppColors.white04,
+                size: 92.w,
+              ),
+            ),
+            _buildBody(),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildBody({
+  Widget _buildBody() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(24.w, 26.h, 20.w, 26.h),
+      child: BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
+        builder: (context, userSubscriptionState) {
+          final activeSubscription = userSubscriptionState.activeSubscription
+              .toNullable();
+
+          return AnimatedSwitcherPlus.flipX(
+            duration: CustomAnimationDurations.low,
+            switchOutCurve: const Interval(0.0, 0.5),
+            switchInCurve: const Interval(0.5, 1.0),
+            child: _buildContent(
+              context: context,
+              activeSubscription: activeSubscription,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildContent({
     required BuildContext context,
     required UserSubscription? activeSubscription,
   }) {
@@ -91,7 +124,8 @@ class SubscriptionCard extends StatelessWidget {
           isShimmering: true,
           buttonHeight: 34.h,
           hideShadow: true,
-          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          isBubbles: isSubscribed,
+          padding: EdgeInsets.symmetric(horizontal: 14.w),
         ),
       ],
     );

@@ -8,7 +8,7 @@ class AccountSection extends StatelessWidget {
     super.key,
     required this.title,
     required this.children,
-    this.verticalSpacing = 14,
+    this.verticalSpacing = 18,
     this.titlePadding,
     this.childrenPadding,
   });

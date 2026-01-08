@@ -143,15 +143,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         return ListView(
                           padding: listPadding,
                           children: [
-                            _buildPersonalDetails(context),
-                            28.verticalSpace,
-                            _buildMembershipPlan(context).fadeSlide(
+                            _buildPersonalDetails(context).fadeSlide(
                               fades: const BiPos(0.0, 1.0),
                               offsets:
                                   const BiPos(Offset(0.0, 0.1), Offset.zero),
                               delay: const Duration(milliseconds: 200),
                             ),
-                            28.verticalSpace,
+                            34.verticalSpace,
                             _buildMoreSection(context).fadeSlide(
                               fades: const BiPos(0.0, 1.0),
                               offsets:
@@ -224,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
         crossAxisSpacing: ProfilePage.hPadding.w / 1.7,
         mainAxisSpacing: ProfilePage.hPadding.w / 1.7,
         padding: EdgeInsets.zero,
-        childAspectRatio: 1.02,
+        childAspectRatio: 1.1,
         children: [
           ProfileMoreCard(
             icon: AppConstants.assets.icons.lockLinear,
@@ -242,37 +240,45 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildPersonalDetails(BuildContext context) {
+    final borderRadius = BorderRadius.all(AppConstants.style.radius.card);
+    final shape = RoundedSuperellipseBorder(borderRadius: borderRadius);
+    
     return UndercoverCardTitle(
       title: context.tr(LocaleKeys.account_profile_personal_title),
       child: RepaintBoundary(
-        child: BlocBuilder<EditProfileCubit, EditProfileState>(
-            builder: (context, state) {
-          return PersonalDetailsCard(
-            // name
-            nameController: nameController,
-            nameFocusNode: nameFocusNode,
-            onNameChanged: context.read<EditProfileCubit>().onNameChanged,
-            nameInError: state.name
-                .fold(() => false, (name) => !name.isPure && name.isNotValid),
-            nameErrorMessage: state.name.toNullable()?.error?.errorName(context),
-            // email
-            emailController: emailController,
-            emailFocusNode: emailFocusNode,
-            onEmailChanged: context.read<EditProfileCubit>().onEmailChanged,
-            emailInError: !state.email.isPure && state.email.isNotValid,
-            emailErrorMessage: state.email.error?.errorName(context),
-            // misc
-            isFormValid: state.isValid,
-          );
-        }),
+        child: DecoratedBox(
+          decoration: ShapeDecoration(
+            shape: shape,
+            color: context.primaryContainer,
+            shadows: [AppConstants.style.colors.commonShadow],
+          ),
+          child: Column(
+            children: [
+              BlocBuilder<EditProfileCubit, EditProfileState>(
+                  builder: (context, state) {
+                return PersonalDetailsCard(
+                  // name
+                  nameController: nameController,
+                  nameFocusNode: nameFocusNode,
+                  onNameChanged: context.read<EditProfileCubit>().onNameChanged,
+                  nameInError: state.name
+                      .fold(() => false, (name) => !name.isPure && name.isNotValid),
+                  nameErrorMessage: state.name.toNullable()?.error?.errorName(context),
+                  // email
+                  emailController: emailController,
+                  emailFocusNode: emailFocusNode,
+                  onEmailChanged: context.read<EditProfileCubit>().onEmailChanged,
+                  emailInError: !state.email.isPure && state.email.isNotValid,
+                  emailErrorMessage: state.email.error?.errorName(context),
+                  // misc
+                  isFormValid: state.isValid,
+                );
+              }),
+              const SubscriptionCard(onlyBody: true),
+            ],
+          ),
+        ),
       ),
-    );
-  }
-
-  Widget _buildMembershipPlan(BuildContext context) {
-    return UndercoverCardTitle(
-      title: context.tr(LocaleKeys.account_profile_subscription_title),
-      child: const SubscriptionCard(),
     );
   }
 

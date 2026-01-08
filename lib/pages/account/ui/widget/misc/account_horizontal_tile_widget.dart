@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
+import 'package:denwee/core/ui/theme/app_colors.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/animations/tap_animations/bounce_tap_fade_animation.dart';
@@ -15,6 +16,7 @@ enum _AccountHorizontalTileType {
   widget,
   sSwitch,
   column,
+  valueMore,
   more,
 }
 
@@ -102,6 +104,21 @@ class AccountHorizontalTile extends StatelessWidget {
           type: _AccountHorizontalTileType.column,
         );
 
+  const AccountHorizontalTile.valueMore({
+    Key? key,
+    required String iconPath,
+    required String title,
+    required String value,
+    required VoidCallback onTap,
+  }) : this._(
+          key: key,
+          iconPath: iconPath,
+          title: title,
+          value: value,
+          onTap: onTap,
+          type: _AccountHorizontalTileType.valueMore,
+        );
+
   const AccountHorizontalTile.more({
     Key? key,
     required String iconPath,
@@ -149,6 +166,7 @@ class AccountHorizontalTile extends StatelessWidget {
         BackdropSurfaceContainer.ellipse(
           color: Colors.grey.shade600.withValues(alpha: 0.1),
           borderRadius: const BorderRadius.all(Radius.circular(14)),
+          borderColor: context.isLightTheme ? Colors.black12 : AppColors.white08,
           size: Size.square(defaultIconSize + 20),
           child: CommonAppIcon(
             path: iconPath,
@@ -190,8 +208,24 @@ class AccountHorizontalTile extends StatelessWidget {
       case _AccountHorizontalTileType.more:
         return CommonAppIcon(
           path: AppConstants.assets.icons.arrowRightIos,
-          color: context.iconColorSecondary,
+          color: context.iconColorTernary,
           size: 20,
+        );
+
+      case _AccountHorizontalTileType.valueMore:
+        return Row(
+          children: [
+            Text(
+              value!,
+              style: bodyL.copyWith(color: context.theme.colorScheme.secondary),
+            ),
+            6.horizontalSpace,
+            CommonAppIcon(
+              path: AppConstants.assets.icons.arrowRightIos,
+              color: context.iconColorTernary,
+              size: 20,
+            ),
+          ],
         );
 
       default:
