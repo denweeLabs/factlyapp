@@ -1,4 +1,5 @@
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
+import 'package:denwee/core/ui/constants/app/user_interests.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
@@ -257,12 +258,12 @@ Widget buildFactHeader(BuildContext context, DailyFact fact) {
     mainAxisSize: MainAxisSize.min,
     children: [
       BackdropSurfaceContainer.ellipse(
-        size: Size.square(48.w),
+        size: Size.square(46.w),
         borderRadius: BorderRadius.all(Radius.circular(20)),
         color: Colors.white,
         child: Center(
           child: Text(
-            '?',
+            fact.interest.emoji ?? '?',
             style: TextStyle(fontSize: 20.sp, color: Colors.black),
           ),
         ),

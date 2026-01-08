@@ -4,6 +4,7 @@ import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/misc/domain/entity/i_entity.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/network/domain/entity/network_link.dart';
+import 'package:denwee/core/ui/constants/app/user_interests.dart';
 import 'package:denwee/core/ui/constants/formatters/common_formatters.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -58,5 +59,21 @@ extension DailyFactX on DailyFact {
     if (nullableDate == null) return null;
     final isFullDate = showFullHistoricalDate();
     return isFullDate ? fullDateText() : timeAgoDateText();
+  }
+}
+
+extension DailyFactListX on List<DailyFact> {
+  List<DailyFact> sortedByInterestOrder() {
+    final orderMap = UserInterestsOrderX.orderIndex;
+
+    final copy = List<DailyFact>.from(this);
+
+    copy.sort((a, b) {
+      final aIndex = orderMap[a.interest.id.value] ?? 9999;
+      final bIndex = orderMap[b.interest.id.value] ?? 9999;
+      return aIndex.compareTo(bIndex);
+    });
+
+    return copy;
   }
 }

@@ -83,7 +83,8 @@ class _PaddingConstants {
   const _PaddingConstants();
 
   double onboardingBottomCtaPadding(BuildContext context) {
-    return context.bottomPadding * 1.0 + 36.h;
+    final bottomPadding = context.bottomPadding;
+    return bottomPadding > 0 ? bottomPadding + 14.h : 24.h;
   }
   double bottomCtaPadding(BuildContext context) {
     return context.bottomPadding * 1.0 + 42.h;
