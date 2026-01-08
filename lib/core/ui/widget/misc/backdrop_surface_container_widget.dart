@@ -1,3 +1,4 @@
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/utils/widgets_util.dart';
 import 'package:denwee/core/ui/widget/animations/tap_animations/core_tap_bounce_animation.dart';
@@ -11,6 +12,8 @@ enum BackdropSurfaceContainerType {
 
 class BackdropSurfaceContainer extends StatelessWidget {
   static const defaultBackdropBlur = 0.0;
+  static const defaultUseShadow = false;
+  static final defaultBorderRadius = BorderRadius.all(Radius.circular(28.r));
   
   const BackdropSurfaceContainer._({
     required this.type,
@@ -23,6 +26,7 @@ class BackdropSurfaceContainer extends StatelessWidget {
     this.size,
     this.onTap,
     this.onLongTap,
+    this.useShadow = defaultUseShadow,
     super.key,
   });
 
@@ -35,6 +39,7 @@ class BackdropSurfaceContainer extends StatelessWidget {
     Color? hoverColor,
     Color? borderColor,
     Size? size,
+    bool useShadow = defaultUseShadow,
     required Widget child,
   }) : this._(
           key: key,
@@ -46,6 +51,7 @@ class BackdropSurfaceContainer extends StatelessWidget {
           hoverColor: hoverColor,
           borderColor: borderColor,
           size: size,
+          useShadow: useShadow,
           child: child,
         );
 
@@ -59,6 +65,7 @@ class BackdropSurfaceContainer extends StatelessWidget {
     Color? borderColor,
     Size? size,
     double blur = defaultBackdropBlur,
+    bool useShadow = defaultUseShadow,
     required Widget child,
   }) : this._(
           key: key,
@@ -71,6 +78,7 @@ class BackdropSurfaceContainer extends StatelessWidget {
           borderColor: borderColor,
           size: size,
           blur: blur,
+          useShadow: useShadow,
           child: child,
         );
 
@@ -84,8 +92,7 @@ class BackdropSurfaceContainer extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongTap;
   final double blur;
-
-  static final defaultBorderRadius = BorderRadius.all(Radius.circular(28.r));
+  final bool useShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +120,9 @@ class BackdropSurfaceContainer extends StatelessWidget {
         final thisShape = borderColor == null
             ? const OvalBorder(side: BorderSide(color: Colors.black12))
             : OvalBorder(side: BorderSide(color: borderColor!));
+        final thisShadow = useShadow
+            ? [AppConstants.style.colors.commonShadow]
+            : null;
 
         return SizedBox.fromSize(
           size: size,
@@ -127,7 +137,11 @@ class BackdropSurfaceContainer extends StatelessWidget {
               curve: CoreTapBounceAnimation.curve,
               duration: CoreTapBounceAnimation.duration,
               builder: (_, color, child) => DecoratedBox(
-                decoration: ShapeDecoration(color: color, shape: thisShape),
+                decoration: ShapeDecoration(
+                  color: color,
+                  shape: thisShape,
+                  shadows: thisShadow,
+                ),
                 child: child,
               ),
               child: child,
@@ -145,6 +159,9 @@ class BackdropSurfaceContainer extends StatelessWidget {
             : RoundedSuperellipseBorder(
                 borderRadius: thisBorderRadius,
                 side: BorderSide(color: borderColor!));
+        final thisShadow = useShadow
+            ? [AppConstants.style.colors.commonShadow]
+            : null;
 
         return SizedBox.fromSize(
           size: size,
@@ -160,7 +177,11 @@ class BackdropSurfaceContainer extends StatelessWidget {
               curve: CoreTapBounceAnimation.curve,
               duration: CoreTapBounceAnimation.duration,
               builder: (_, color, child) => DecoratedBox(
-                decoration: ShapeDecoration(color: color, shape: thisShape),
+                decoration: ShapeDecoration(
+                  color: color,
+                  shape: thisShape,
+                  shadows: thisShadow,
+                ),
                 child: child,
               ),
               child: child,
