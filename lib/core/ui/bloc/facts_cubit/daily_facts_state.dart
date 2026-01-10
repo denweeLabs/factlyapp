@@ -10,7 +10,9 @@ abstract class DailyFactsState with _$DailyFactsState {
   }) = _DailyFactsState;
 
   factory DailyFactsState.initial(Option<DailyFactsBucket> initialBucket) {
-    return DailyFactsState(bucket: initialBucket);
+    return DailyFactsState(
+      bucket: optionOf(initialBucket.toNullable()?.normalized()),
+    );
   }
 
   bool get isEmptyBucket =>

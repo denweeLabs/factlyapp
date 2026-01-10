@@ -10,3 +10,11 @@ abstract class DailyFactsBucket with _$DailyFactsBucket {
     required List<DailyFact> facts,
   }) = _DailyFactsBucket;
 }
+
+extension DailyFactsBucketX on DailyFactsBucket {
+  DailyFactsBucket normalized() {
+    return copyWith(
+      facts: facts.sortedByInterestOrder(),
+    );
+  }
+}
