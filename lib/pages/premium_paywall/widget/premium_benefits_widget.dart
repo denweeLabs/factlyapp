@@ -15,6 +15,7 @@ import 'package:denwee/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:el_tooltip/el_tooltip.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:utils/utils.dart';
 
@@ -35,8 +36,8 @@ class _PremiumBenefitsState extends State<PremiumBenefits> {
   /// How many minutes a user spent just by viewing ads
   int? minSpentOnAds;
 
-  bool get showAdsTooltip {
-    return minSpentOnAds != null;
+  bool showAdsTooltip(UserSubscriptionState state) {
+    return minSpentOnAds != null && !state.isSubscribed;
   }
 
   @override
@@ -81,18 +82,20 @@ class _PremiumBenefitsState extends State<PremiumBenefits> {
           iconPath: AppConstants.assets.icons.archiveTickLinear,
           text: context.tr(LocaleKeys.subscription_paywall_benefits_line_2),
         ),
-        _Benefit(
-          iconPath: AppConstants.assets.icons.videoPlayLinear,
-          text: context.tr(LocaleKeys.subscription_paywall_benefits_line_3),
-          tooltipBuilder: _buildAdTooltip,
-          useRippleEffect: showAdsTooltip,
+        BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
+          builder: (context, state) => _Benefit(
+            iconPath: AppConstants.assets.icons.videoPlayLinear,
+            text: context.tr(LocaleKeys.subscription_paywall_benefits_line_3),
+            tooltipBuilder: (child) => _buildAdTooltip(child, state),
+            useRippleEffect: showAdsTooltip(state),
+          ),
         ),
       ].insertBetween(14.verticalSpace),
     );
   }
 
-  Widget _buildAdTooltip(Widget child) {
-    if (!showAdsTooltip) return child;
+  Widget _buildAdTooltip(Widget child, UserSubscriptionState state) {
+    if (!showAdsTooltip(state)) return child;
 
     return ElTooltip(
       content: SizedBox(
