@@ -49,7 +49,7 @@ class InterestPickTile extends StatelessWidget {
                   size: 20,
                 ),
                 secondChild: Text(
-                  interest.emoji(context) ?? '',
+                  interest.emoji ?? '',
                   style: bodyL.copyWith(fontSize: 16.sp),
                 ),
               ),

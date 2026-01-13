@@ -12,17 +12,19 @@
 
     "user_interest": {
         "history": "历史",
-        "tech_and_science": "科学",
+        "science": "科学",
         "space": "太空",
-        "nature_animals": "自然",
-        "geography": "地理",
-        "health_wellness": "健康",
-        "art_culture": "艺术",
-        "movies_music": "电影 & 音乐",
-        "psychology": "心理学",
-        "food_cooking": "烹饪",
-        "sports": "运动",
-        "random_curiosities": "随机趣闻"
+        "nature": "自然",
+        "society": "社会",
+        "human_body": "人体",
+        "art": "艺术",
+        "movies_music": "电影与音乐",
+        "mind": "心智",
+        "food": "食物",
+        "technology": "科技",
+        "money": "金钱",
+        "habits": "习惯",
+        "random_curiosities": "随机事实"
     },
 
 

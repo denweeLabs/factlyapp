@@ -31,7 +31,7 @@ class FactBackgroundImage extends StatelessWidget {
             valueListenable: scrollOffset,
             builder: (context, scrollOffset, child) {
               final fraction = (scrollOffset / pageHeight).clamp(0.0, 1.0);
-              final opacity = lerpDouble(0.65, 0.9, fraction)!;
+              final opacity = lerpDouble(0.77, 0.94, fraction)!;
 
               return DecoratedBox(
                 position: DecorationPosition.foreground,

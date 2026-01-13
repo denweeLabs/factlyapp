@@ -12,17 +12,19 @@
 
     "user_interest": {
         "history": "History",
-        "tech_and_science": "Science",
+        "science": "Science",
         "space": "Space",
-        "nature_animals": "Nature",
-        "geography": "Geography",
-        "health_wellness": "Health",
-        "art_culture": "Art",
+        "nature": "Nature",
+        "society": "Society",
+        "human_body": "Human Body",
+        "art": "Art",
         "movies_music": "Movies & Music",
-        "psychology": "Psychology",
-        "food_cooking": "Cooking",
-        "sports": "Sports",
-        "random_curiosities": "Random Curiosities"
+        "mind": "Mind",
+        "food": "Food",
+        "technology": "Technology",
+        "money": "Money",
+        "habits": "Habits",
+        "random_curiosities": "Random Facts"
     },
 
 
