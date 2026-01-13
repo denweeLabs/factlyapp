@@ -131,7 +131,11 @@
             "benefits": {
                 "line_1": "Instant fact explanations",
                 "line_2": "Unlimited archive access",
-                "line_3": "No ads — ever"
+                "line_3": "No ads — ever",
+                "ads_encourage_msg": {
+                    "one": "You’ve spent ~{} minute on ads. Save more time with Premium 🫶",
+                    "other": "You’ve spent ~{} minutes on ads. Save more time with Premium 🫶"
+                }
             },
             "package": {
                 "monthly": {

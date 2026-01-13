@@ -131,7 +131,11 @@
             "benefits": {
                 "line_1": "Explications instantanées",
                 "line_2": "Accès illimité aux archives",
-                "line_3": "Plus aucune publicité"
+                "line_3": "Plus aucune publicité",
+                "ads_encourage_msg": {
+                    "one": "Vous avez passé ~{} minute sur les pubs. Gagnez plus de temps avec Premium 🫶",
+                    "other": "Vous avez passé ~{} minutes sur les pubs. Gagnez plus de temps avec Premium 🫶"
+                }
             },
             "package": {
                 "monthly": {
