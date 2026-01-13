@@ -59,7 +59,7 @@ class DailyFactsCubit extends Cubit<DailyFactsState> {
 
     emit(state.copyWith(
       isFetching: false,
-      bucket: bucket.$2 != null ? Some(bucket.$2!) : state.bucket,
+      bucket: bucket.$2 == null ? state.bucket : optionOf(bucket.$2?.normalized()),
       bucketFailure: optionOf(bucket.$1),
     ));
   }

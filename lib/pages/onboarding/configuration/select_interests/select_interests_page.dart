@@ -50,8 +50,8 @@ class SelectInterestsPage extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                  left: 24.w,
-                  right: 24.w,
+                  left: 20.w,
+                  right: 20.w,
                   top: topPadding,
                   bottom: bottomPadding,
                 ),
@@ -93,7 +93,7 @@ class SelectInterestsPage extends StatelessWidget {
                       flipForward: false,
                     ),
                     child: SealInCircle(
-                      size: 28,
+                      size: 32,
                       padding: EdgeInsets.all(12.w).copyWith(left: 14.w),
                     ),
                   ),
@@ -106,7 +106,7 @@ class SelectInterestsPage extends StatelessWidget {
     }
 
     final buttonBottomPadding = context.bottomPadding * 0.8 + 34.h;
-    final contentBottomPadding = buttonBottomPadding + AppActionButton.defaultSize + 32.h;
+    final contentBottomPadding = buttonBottomPadding + AppActionButton.defaultSize / 2;
 
     return CommonPopScope(
       onWillPop: Navigator.of(context).pop,
@@ -116,8 +116,8 @@ class SelectInterestsPage extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                left: 24.w,
-                right: 24.w,
+                left: 20.w,
+                right: 20.w,
                 top: topPadding,
                 bottom: contentBottomPadding,
               ),

@@ -70,7 +70,7 @@ class InterestsContent extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 24.h, bottom: 32.h),
                 child: Wrap(
-                  spacing: 10.w,
+                  spacing: 8.w,
                   runSpacing: 18.h,
                   children: List.generate(
                     UserInterests.list.length,

@@ -36,7 +36,7 @@ class UserPreferencesCubit extends Cubit<UserPreferencesState> {
 
   static UserPreferencesState _initialState(Option<UserPreferences> localData) {
     return UserPreferencesState(
-      preferences: localData.fold(UserPreferences.initial, (data) => data),
+      preferences: localData.fold(UserPreferences.initial, (preferences) => preferences.normalized()),
     );
   }
 
@@ -49,8 +49,7 @@ class UserPreferencesCubit extends Cubit<UserPreferencesState> {
   }
 
   void changeInterests(List<UserInterest> interests) {
-    final orderedInterests = [...interests]..sort((a, b) => a.id.value.compareTo(b.id.value));
-    final newPreferences = state.preferences.copyWith(interests: orderedInterests);
+    final newPreferences = state.preferences.copyWith(interests: interests);
     emitPreservePreferences(newPreferences);
   }
 
@@ -129,13 +128,15 @@ class UserPreferencesCubit extends Cubit<UserPreferencesState> {
     bool localPreserve = true,
     bool remotePreserve = true,
   }) async {
+    final normalizedPref = data.normalized();
+    
     emit(state.copyWith(
-      preferences: data,
+      preferences: normalizedPref,
       failure: const None(),
     ));
 
     if (localPreserve) {
-      _preferencesRepo.storePrefrencesLocal(data);
+      _preferencesRepo.storePrefrencesLocal(normalizedPref);
     }
 
     if (remotePreserve) {
@@ -143,7 +144,7 @@ class UserPreferencesCubit extends Cubit<UserPreferencesState> {
 
       _uploadTimer?.cancel();
       _uploadTimer = Timer(uploadThresholdDuration, () {
-        _preferencesRepo.storePreferencesRemote(data).then((failureOrSuccess) {
+        _preferencesRepo.storePreferencesRemote(normalizedPref).then((failureOrSuccess) {
           final result = failureOrSuccess.getEntries();
           if (result.$1 != null) {
             emit(state.copyWith(failure: Some(result.$1!)));

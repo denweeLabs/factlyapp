@@ -12,17 +12,19 @@
 
     "user_interest": {
         "history": "История",
-        "tech_and_science": "Наука",
+        "science": "Наука",
         "space": "Космос",
-        "nature_animals": "Природа",
-        "geography": "География",
-        "health_wellness": "Здоровье",
-        "art_culture": "Искусство",
-        "movies_music": "Кино и Музыка",
-        "psychology": "Психология",
-        "food_cooking": "Кулинария",
-        "sports": "Спорт",
-        "random_curiosities": "Случайные любопытные факты"
+        "nature": "Природа",
+        "society": "Общество",
+        "human_body": "Тело",
+        "art": "Искусство",
+        "movies_music": "Кино и музыка",
+        "mind": "Разум",
+        "food": "Еда",
+        "technology": "Технологии",
+        "money": "Деньги",
+        "habits": "Привычки",
+        "random_curiosities": "Случайные факты"
     },
 
 

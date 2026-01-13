@@ -172,7 +172,7 @@ class AppMarkdownText extends StatelessWidget {
   final String data;
   final TextStyle? textStyle;
 
-  static const _textColor = Color.fromARGB(255, 230, 224, 224);
+  static const _textColor = /*Color.fromARGB(255, 230, 224, 224)*/ Colors.white;
 
   @override
   Widget build(BuildContext context) {
