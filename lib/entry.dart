@@ -76,6 +76,7 @@ void run(String env) {
           useOnlyLangCode: true,
           saveLocale: false,
           startLocale: startLocale,
+          ignorePluralRules: false,
           supportedLocales: AppConstants.config.supportedLocales,
           fallbackLocale: AppConstants.config.fallbackLocale,
           path: AppConstants.config.localesPath,

@@ -16,11 +16,19 @@ abstract class UserPreferencesState with _$UserPreferencesState {
 
   T whenLanguage<T>({
     required T Function() en,
-    required T Function() ru,
+    T Function()? ru,
+    T Function()? it,
+    T Function()? fr,
+    T Function()? de,
+    T Function()? zh,
   }) {
     switch (preferences.language.languageCode) {
       case 'en': return en();
-      case 'ru': return ru();
+      case 'ru': return ru?.call() ?? en();
+      case 'it': return it?.call() ?? en();
+      case 'fr': return fr?.call() ?? en();
+      case 'de': return de?.call() ?? en();
+      case 'zh': return zh?.call() ?? en();
       default: return en();
     }
   }

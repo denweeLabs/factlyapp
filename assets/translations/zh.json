@@ -131,7 +131,10 @@
             "benefits": {
                 "line_1": "即时解析",
                 "line_2": "无限访问存档",
-                "line_3": "不再有广告"
+                "line_3": "不再有广告",
+                "ads_encourage_msg": {
+                    "other": "你已花费约 {} 分钟在广告上。使用 Premium 节省更多时间 🫶"
+                }
             },
             "package": {
                 "monthly": {
