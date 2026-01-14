@@ -5,8 +5,8 @@ import 'package:denwee/core/ui/widget/misc/backdrop_surface_container_widget.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class FactScrollBackButton extends StatelessWidget {
-  const FactScrollBackButton({super.key, required this.onTap});
+class StoriesScrollupButton extends StatelessWidget {
+  const StoriesScrollupButton({super.key, required this.onTap});
 
   final VoidCallback onTap;
 

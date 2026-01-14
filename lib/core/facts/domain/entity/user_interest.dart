@@ -1,5 +1,6 @@
 import 'package:denwee/core/misc/domain/entity/i_entity.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/constants/app/user_interests.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -18,4 +19,8 @@ abstract class UserInterest with _$UserInterest implements IEntity {
 
 extension ListOfUserInterestX on List<UserInterest> {
   List<String> get ids => map((interest) => interest.id.stringValue).toList();
+}
+
+extension UserInterestX on UserInterest {
+  String get imagePath => AppConstants.assets.images.interest(id.value);
 }

@@ -7,7 +7,7 @@ extension _AxisX on Axis {
       this == Axis.horizontal ? Alignment.centerRight : Alignment.bottomCenter;
 }
 
-class FadingEdge extends StatelessWidget {
+class FadingEdge extends StatefulWidget {
   const FadingEdge({
     super.key,
     required this.child,
@@ -32,25 +32,30 @@ class FadingEdge extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    if (!enabled) return child;
+  State<FadingEdge> createState() => _FadingEdgeState();
+}
 
-    final gradient = LinearGradient(
-      begin: axis.alignmentBegin,
-      end: axis.alignmentEnd,
-      colors: colors,
-      stops: stops,
-    );
+class _FadingEdgeState extends State<FadingEdge> {
+  late final gradient = LinearGradient(
+    begin: widget.axis.alignmentBegin,
+    end: widget.axis.alignmentEnd,
+    colors: widget.colors,
+    stops: widget.stops,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.enabled) return widget.child;
 
     return ShaderMask(
       shaderCallback: gradient.createShader,
       blendMode: BlendMode.dstOut,
-      child: child,
+      child: widget.child,
     );
   }
 }
 
-class FadingSingleEdge extends StatelessWidget {
+class FadingSingleEdge extends StatefulWidget {
   const FadingSingleEdge({
     super.key,
     required this.child,
@@ -64,25 +69,27 @@ class FadingSingleEdge extends StatelessWidget {
   final List<Color> colors;
   final bool enabled;
 
-  static const kDefaultFadeColors = [
-    Colors.black,
-    Colors.transparent,
-  ];
+  static const kDefaultFadeColors = [Colors.black, Colors.transparent];
+
+  @override
+  State<FadingSingleEdge> createState() => _FadingSingleEdgeState();
+}
+
+class _FadingSingleEdgeState extends State<FadingSingleEdge> {
+  late final gradient = LinearGradient(
+    begin: widget.axis.alignmentBegin,
+    end: widget.axis.alignmentEnd,
+    colors: widget.colors,
+  );
 
   @override
   Widget build(BuildContext context) {
-    if (!enabled) return child;
-
-    final gradient = LinearGradient(
-      begin: axis.alignmentBegin,
-      end: axis.alignmentEnd,
-      colors: colors,
-    );
+    if (!widget.enabled) return widget.child;
 
     return ShaderMask(
       shaderCallback: gradient.createShader,
       blendMode: BlendMode.dstIn,
-      child: child,
+      child: widget.child,
     );
   }
 }

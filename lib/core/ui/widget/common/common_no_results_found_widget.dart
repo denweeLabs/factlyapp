@@ -26,10 +26,14 @@ class CommonNoResultsFound extends StatelessWidget {
     super.key,
     required this.of,
     this.padding = EdgeInsets.zero,
+    this.titleColor,
+    this.subtitleColor,
   });
 
   final NoResultsFoundOf of;
   final EdgeInsets padding;
+  final Color? titleColor;
+  final Color? subtitleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class CommonNoResultsFound extends StatelessWidget {
         children: [
           Text(
             context.tr(LocaleKeys.info_message_no_results_title),
-            style: h3.copyWith(color: context.textColor),
+            style: h3.copyWith(color: titleColor ?? context.textColor),
           ),
           14.verticalSpace,
           Padding(
@@ -48,7 +52,7 @@ class CommonNoResultsFound extends StatelessWidget {
             child: Text(
               of.subTitle(context),
               style: bodyM.copyWith(
-                color: context.textColorSecondary,
+                color: subtitleColor ?? context.textColorSecondary,
               ),
               textAlign: TextAlign.center,
             ),

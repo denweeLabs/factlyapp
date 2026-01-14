@@ -10,7 +10,7 @@ library;
 
 import 'dart:async';
 
-import 'package:denwee/pages/home/ui/widget/story_view/story_controller.dart';
+import 'package:denwee/core/facts/ui/stories_components/src/controller/story_controller.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 
@@ -66,7 +66,7 @@ class StoryItem {
   });
 }
 
-class FactsStoryView extends StatefulWidget {
+class StoryItemsView extends StatefulWidget {
   final List<StoryItem?> storyItems;
   final VoidCallback? onComplete;
   final void Function(StoryItem storyItem, int index)? onStoryShow;
@@ -77,7 +77,7 @@ class FactsStoryView extends StatefulWidget {
   final IndicatorHeight indicatorHeight;
   final EdgeInsetsGeometry indicatorOuterPadding;
 
-  const FactsStoryView({
+  const StoryItemsView({
     super.key,
     required this.storyItems,
     required this.controller,
@@ -91,10 +91,10 @@ class FactsStoryView extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => FactsStoryViewState();
+  State<StatefulWidget> createState() => StoryItemsViewState();
 }
 
-class FactsStoryViewState extends State<FactsStoryView> with TickerProviderStateMixin {
+class StoryItemsViewState extends State<StoryItemsView> with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _currentAnimation;
   StreamSubscription<PlaybackState>? _playbackSubscription;
