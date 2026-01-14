@@ -31,7 +31,7 @@ class _StreamedMarkdownTextState extends State<StreamedMarkdownText> {
 
   StreamSubscription<String>? _subscription;
 
-  var key = UniqueKey();
+  var key = ValueKey<int>(0);
 
   @override
   void initState() {
@@ -99,7 +99,7 @@ class _StreamedMarkdownTextState extends State<StreamedMarkdownText> {
         ..clear()
         ..write(remainder);
 
-      key = UniqueKey();
+      key = ValueKey(_current.length);
 
       setState(() {});
     }

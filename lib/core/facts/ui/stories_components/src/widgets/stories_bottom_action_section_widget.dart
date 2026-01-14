@@ -8,17 +8,21 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BottomSection extends StatelessWidget {
-  const BottomSection({
+class StoriesBottomActionSection extends StatelessWidget {
+  const StoriesBottomActionSection({
     required this.onAccountTap,
     required this.onReadMoreTap,
     required this.isLoading,
+    this.isShimmering = true,
+    this.ignoreCtaPointer = false,
     super.key,
   });
 
   final VoidCallback onAccountTap;
   final VoidCallback onReadMoreTap;
   final bool isLoading;
+  final bool isShimmering;
+  final bool ignoreCtaPointer;
 
   static final buttonsHeight = 62.h;
   static final containerHeight = buttonsHeight + (24.h * 2);
@@ -29,7 +33,7 @@ class BottomSection extends StatelessWidget {
       child: BackdropSurfaceContainer.ellipse(
         color: context.lightSurfaceContainer,
         borderRadius: BorderRadius.all(Radius.circular(38.r)),
-        size: Size.fromHeight(BottomSection.containerHeight),
+        size: Size.fromHeight(StoriesBottomActionSection.containerHeight),
         borderColor: Colors.white10,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 12.h),
@@ -39,7 +43,7 @@ class BottomSection extends StatelessWidget {
                 child: BackdropSurfaceContainer.circle(
                   onTap: onAccountTap,
                   borderColor: Colors.white30,
-                  size: Size.square(BottomSection.buttonsHeight),
+                  size: Size.square(StoriesBottomActionSection.buttonsHeight),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
@@ -55,14 +59,17 @@ class BottomSection extends StatelessWidget {
               18.horizontalSpace,
               Expanded(
                 child: RepaintBoundary(
-                  child: AppSolidButton(
-                    isBubbles: true,
-                    isShimmering: true,
-                    text: context.tr(LocaleKeys.button_explain_fact),
-                    buttonHeight: BottomSection.buttonsHeight,
-                    isBusy: isLoading,
-                    onTap: onReadMoreTap,
-                    hideShadow: true,
+                  child: IgnorePointer(
+                    ignoring: ignoreCtaPointer,
+                    child: AppSolidButton(
+                      isBubbles: true,
+                      isShimmering: isShimmering,
+                      text: context.tr(LocaleKeys.button_explain_fact),
+                      buttonHeight: StoriesBottomActionSection.buttonsHeight,
+                      isBusy: isLoading,
+                      onTap: onReadMoreTap,
+                      hideShadow: true,
+                    ),
                   ),
                 ),
               ),

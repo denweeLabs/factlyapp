@@ -7,11 +7,10 @@ import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/core/ui/widget/misc/backdrop_surface_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:snap_scroll_physics/snap_scroll_physics.dart';
 import 'package:utils/utils.dart';
 
-class FactTagsList extends StatelessWidget {
-  const FactTagsList({
+class StoriesFactTagsList extends StatelessWidget {
+  const StoriesFactTagsList({
     super.key,
     required this.fact,
     required this.padding,
@@ -21,20 +20,14 @@ class FactTagsList extends StatelessWidget {
   final EdgeInsets padding;
 
   static final listHeight = 40.h;
+  static final tilesSpacing = 6.w;
 
   @override
   Widget build(BuildContext context) {
-    final tilesSpacing = 6.w;
-
-    final physics = SnapScrollPhysics(
-      snaps: [Snap(0.0, trailingDistance: 80.w)],
-    );
-
     return SizedBox(
       height: listHeight,
       width: double.infinity,
       child: ListView(
-        physics: physics,
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(left: padding.left, right: padding.right),
         children: [
