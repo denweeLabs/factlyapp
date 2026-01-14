@@ -42,7 +42,7 @@ class CommonLoading extends StatelessWidget {
       case LoadingType.rotatingDots:
         return RepaintBoundary(
           child: FourRotatingDots(
-            color: color ?? context.iconColor,
+            color: color ?? context.theme.colorScheme.secondary,
             size: size.w,
           ),
         );

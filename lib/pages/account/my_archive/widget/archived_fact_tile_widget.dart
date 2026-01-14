@@ -35,7 +35,7 @@ class ArchivedFactTile extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(16.r)),
               child: Center(
                 child: Text(
-                  '?',
+                  fact.interest.emoji ?? '?',
                   style: h4.copyWith(color: context.iconColor),
                 ),
               ),

@@ -104,6 +104,7 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   el_tooltip: ^2.2.1
   avatar_glow: ^3.0.1
+  skeletonizer: ^2.1.2
 
   # Utils
   rxdart: ^0.28.0
