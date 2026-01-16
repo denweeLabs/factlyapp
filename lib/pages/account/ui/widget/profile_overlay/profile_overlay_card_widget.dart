@@ -124,7 +124,10 @@ class ProfileOverlayCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: h4.copyWith(color: context.lightTextColor),
+                    style: h4.copyWith(
+                      color: context.lightTextColor,
+                      fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+                    ),
                     maxLines: 1,
                   ),
                   3.verticalSpace,
@@ -132,6 +135,7 @@ class ProfileOverlayCard extends StatelessWidget {
                     subtitle,
                     style: bodyS.copyWith(
                       color: AppColors.text[ThemeType.dark]!.withValues(alpha: 0.8),
+                      fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,

@@ -12,8 +12,8 @@ class _StyleConstants {
 class _TextStylesConstants {
   const _TextStylesConstants();
 
-  final primaryFontFamily = 'Manrope';
-  final secondaryFontFamiliy = 'Quicksand';
+  final primaryFontFamily = 'Quicksand';
+  final secondaryFontFamiliy = 'Manrope';
 }
 
 class _ColorsConstants {
@@ -84,7 +84,7 @@ class _PaddingConstants {
 
   double onboardingBottomCtaPadding(BuildContext context) {
     final bottomPadding = context.bottomPadding;
-    return bottomPadding > 0 ? bottomPadding + 14.h : 24.h;
+    return bottomPadding > 0 ? bottomPadding + 18.h : 24.h;
   }
   double bottomCtaPadding(BuildContext context) {
     return context.bottomPadding * 1.0 + 42.h;

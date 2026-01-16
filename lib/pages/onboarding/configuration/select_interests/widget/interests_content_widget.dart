@@ -6,7 +6,6 @@ import 'package:denwee/core/ui/widget/animations/common_animations/common_animat
 import 'package:denwee/core/ui/widget/animations/constants/animated_switchers.dart';
 import 'package:denwee/core/ui/widget/animations/constants/animation_bipos.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
-import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/core/ui/widget/misc/fading_edge_widget.dart';
 import 'package:denwee/localization/locale_keys.g.dart';
 import 'package:denwee/pages/onboarding/configuration/select_interests/cubit/select_interests_cubit.dart';
@@ -31,7 +30,7 @@ class InterestsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         titleWrapper(
           Text(
@@ -41,18 +40,24 @@ class InterestsContent extends StatelessWidget {
               letterSpacing: -0.6,
               color: context.textColor,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
-        18.verticalSpace,
+        20.verticalSpace,
         AnimatedSize(
           curve: CustomAnimationCurves.fasterEaseInToSlowEaseOut,
           duration: CustomAnimationDurations.lowMedium,
-          child: subtitleWrapper(BlocBuilder<SelectInterestsCubit, SelectInterestsState>(
+          child: subtitleWrapper(
+            BlocBuilder<SelectInterestsCubit, SelectInterestsState>(
               builder: (context, state) {
                 return AnimatedSwitcher(
                   transitionBuilder: AnimatedSwitchers.fadeBlurXTransition,
                   duration: CustomAnimationDurations.low,
-                  switchInCurve: const Interval(0.2, 1.0, curve: Curves.fastEaseInToSlowEaseOut),
+                  switchInCurve: const Interval(
+                    0.2,
+                    1.0,
+                    curve: Curves.fastEaseInToSlowEaseOut,
+                  ),
                   switchOutCurve: const Interval(0.5, 1.0, curve: Curves.ease),
                   child: state.isValidationError
                       ? _buildValidationError(context)
@@ -64,34 +69,36 @@ class InterestsContent extends StatelessWidget {
         ),
         24.verticalSpace,
         Expanded(
-          child: tilesWrapper(FadingEdge(
+          child: tilesWrapper(
+            FadingEdge(
               axis: Axis.vertical,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.only(top: 24.h, bottom: 32.h),
-                child: Wrap(
-                  spacing: 8.w,
-                  runSpacing: 18.h,
-                  children: List.generate(
-                    UserInterests.list.length,
-                    (index) {
-                      final interest = UserInterests.list[index];
-                      return BlocSelector<SelectInterestsCubit,
-                          SelectInterestsState, bool>(
-                        selector: (state) =>
-                            state.selectedInterests.contains(interest),
-                        builder: (context, isSelected) => InterestPickTile(
-                          index: index,
-                          interest: interest,
-                          isSelected: isSelected,
-                          onTap: context
-                              .read<SelectInterestsCubit>()
-                              .selectInterest,
-                        ),
-                      );
-                    },
-                  ),
-                ),
+              stops: const [0.0, 0.06, 0.8, 1.0],
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.w,
+                  vertical: 24.h,
+                ).copyWith(bottom: 48.h),
+                itemCount: UserInterests.list.length,
+                separatorBuilder: (_, __) => 12.verticalSpace,
+                itemBuilder: (context, index) {
+                  final interest = UserInterests.list[index];
+                  return BlocSelector<
+                    SelectInterestsCubit,
+                    SelectInterestsState,
+                    bool
+                  >(
+                    selector: (state) =>
+                        state.selectedInterests.contains(interest),
+                    builder: (context, isSelected) => InterestPickTile(
+                      index: index,
+                      interest: interest,
+                      isSelected: isSelected,
+                      onTap: context
+                          .read<SelectInterestsCubit>()
+                          .selectInterest,
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -105,24 +112,16 @@ class InterestsContent extends StatelessWidget {
       key: const ValueKey(false),
       children: [
         Expanded(
-          child: Row(
-            children: [
-              CommonAppIcon(
-                path: AppConstants.assets.icons.alertLinear,
-                color: context.theme.colorScheme.error,
-                size: 18,
-              ),
-              10.horizontalSpace,
-              Expanded(
-                child: Text(
-                  context.tr(LocaleKeys.validation_interests_empty),
-                  style: bodyL.copyWith(
-                    color: context.theme.colorScheme.error,
-                    height: 1.6,
-                  ),
-                ),
-              ),
-            ],
+          child: Text(
+            context.tr(
+              LocaleKeys.validation_interests_not_enough,
+              args: [AppConstants.config.interestsMinCount.toString()],
+            ),
+            style: bodyL.copyWith(
+              color: context.theme.colorScheme.error,
+              height: 1.6,
+            ),
+            textAlign: TextAlign.center,
           ),
         ),
       ],
@@ -141,6 +140,7 @@ class InterestsContent extends StatelessWidget {
           child: Text(
             context.tr(LocaleKeys.onboarding_select_interests_subtitle),
             style: bodyL.copyWith(color: context.textColorTernary),
+            textAlign: TextAlign.center,
           ),
         ),
       ],

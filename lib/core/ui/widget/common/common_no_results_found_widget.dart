@@ -1,3 +1,4 @@
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/localization/locale_keys.g.dart';
@@ -44,7 +45,10 @@ class CommonNoResultsFound extends StatelessWidget {
         children: [
           Text(
             context.tr(LocaleKeys.info_message_no_results_title),
-            style: h3.copyWith(color: titleColor ?? context.textColor),
+            style: h3.copyWith(
+              color: titleColor ?? context.textColor,
+              fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+            ),
           ),
           14.verticalSpace,
           Padding(

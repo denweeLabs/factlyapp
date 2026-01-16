@@ -5,7 +5,7 @@
     "welcome": {
         "title": "Denwee",
         "subtitle": "Découvrez chaque jour des faits courts, faciles à comprendre et mémorables !",
-        "begin_cta": "Commencer",
+        "begin_cta": "Explorer",
         "have_an_account": "Vous avez un compte ?"
     },
 
@@ -30,14 +30,34 @@
 
     "onboarding": {
         "select_interests": {
-            "title": "Choisissez vos\ncentres d'intérêt",
-            "subtitle": "Dites-nous ce qui vous passionne le plus",
-            "cta": "Suivant"
+            "title": "Qu’est-ce qui éveille ta curiosité ?",
+            "subtitle": "Dis-nous ce qui t’intéresse le plus",
+            "cta": "Choisir"
+        },
+        "select_notification_time": {
+            "title": "Un rappel quotidien pour rester curieux",
+            "subtitle": "Un fait envoyé chaque jour",
+            "time_selection_title": "Heure",
+            "dummy_notification": {
+                "title": "🌙  Bonsoir !",
+                "body": "Le cœur d’une baleine bleue peut peser plus de 180 kg et est de la taille d’une petite voiture, battant seulement 8–10 fois par minute !",
+                "time_ago": "maintenant"
+            },
+            "cta": "Activer"
         },
         "select_theme_colorations": {
-            "title": "Choisissez votre\nthème",
-            "subtitle": "Personnalisez votre expérience avec des couleurs",
-            "cta": "Terminé"
+            "title": "Choisis des couleurs qui te ressemblent",
+            "subtitle": "Personnalise ton expérience",
+            "cta": "Appliquer"
+        },
+        "value_primer": {
+            "title": "Transformer la curiosité en savoir",
+            "bullets": {
+                "line_1": "Découvre un fait court",
+                "line_2": "Appuie sur «{}»",
+                "line_3": "Découvre l’histoire"
+            },
+            "cta": "Explorer"
         }
     },
 
@@ -180,7 +200,7 @@
             "long": "Le nom est trop long"
         },
         "interests": {
-            "empty": "Veuillez sélectionner au moins un centre d'intérêt"
+            "not_enough": "Choisissez au moins {} centres d’intérêt pour une meilleure expérience"
         }
     },
 

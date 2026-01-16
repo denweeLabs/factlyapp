@@ -15,6 +15,9 @@ abstract class SelectInterestsState with _$SelectInterestsState {
   }
 
   bool get isValidationError {
-    return validate && selectedInterests.isEmpty;
+    return validate && !isValid;
   }
+
+  bool get isValid =>
+      selectedInterests.length >= AppConstants.config.interestsMinCount;
 }

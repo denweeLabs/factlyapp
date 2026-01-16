@@ -19,6 +19,8 @@ class OnboardingConfigurationListener extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<OnboardingConfigurationCubit, OnboardingConfigurationState>(
       listener: (context, state) {
+        if (!state.isSubmissionVisibilityForced) return;
+        
         final submissionFailure = state.submissionFailureOrSuccess
             .toNullable()!
             .fold((failure) => failure, (_) => null);

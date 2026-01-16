@@ -20,7 +20,7 @@ class AgreeToTermsHint extends StatelessWidget {
       fontSize: 12.sp,
       letterSpacing: 0.1,
       color: context.lightTextColor.withValues(alpha: 0.45),
-      fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+      fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
       fontWeight: FontWeight.w600,
     );
 
@@ -28,7 +28,7 @@ class AgreeToTermsHint extends StatelessWidget {
       fontSize: 12.sp,
       letterSpacing: 0.1,
       color: context.lightTextColor,
-      fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+      fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
       fontWeight: FontWeight.w700,
     );
 

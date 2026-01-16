@@ -31,12 +31,13 @@ abstract class UserPreferences with _$UserPreferences {
 
   factory UserPreferences.fromOnboarding({
     required List<UserInterest> selectedInterests,
+    required NotificationsPreferences notificationPreferences,
     required ThemePreferences selectedTheme,
     required Locale selectedLocale,
   }) {
     return UserPreferences(
       interests: selectedInterests,
-      notifications: NotificationsPreferences.initial(),
+      notifications: notificationPreferences,
       language: selectedLocale,
       theme: selectedTheme,
       misc: MiscPreferences.initial(),

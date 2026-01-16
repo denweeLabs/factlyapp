@@ -5,7 +5,7 @@
     "welcome": {
         "title": "Denwee",
         "subtitle": "Entdecke jeden Tag kurze, leicht verständliche und einprägsame Fakten!",
-        "begin_cta": "Start",
+        "begin_cta": "Entdecken",
         "have_an_account": "Hast du ein Konto?"
     },
 
@@ -30,14 +30,34 @@
 
     "onboarding": {
         "select_interests": {
-            "title": "Wähle deine\nInteressen",
-            "subtitle": "Sag uns, was dich am meisten begeistert",
-            "cta": "Weiter"
+            "title": "Was weckt deine Neugier am meisten?",
+            "subtitle": "Sag uns, was dich interessiert",
+            "cta": "Wählen"
+        },
+        "select_notification_time": {
+            "title": "Tägliche Erinnerung für deine Neugier",
+            "subtitle": "Wir senden dir jeden Tag einen Fakt",
+            "time_selection_title": "Zeit",
+            "dummy_notification": {
+                "title": "🌙  Guten Abend!",
+                "body": "Das Herz eines Blauwals ist so riesig, dass es über 180 kg wiegen kann, etwa so groß wie ein kleines Auto ist und nur 8–10 Mal pro Minute schlägt!",
+                "time_ago": "jetzt"
+            },
+            "cta": "Aktivieren"
         },
         "select_theme_colorations": {
-            "title": "Wähle dein\nThema",
-            "subtitle": "Personalisiere deine Erfahrung mit Farben",
-            "cta": "Fertig"
+            "title": "Finde Farben, die sich richtig anfühlen",
+            "subtitle": "Gestalte dein Erlebnis mit Farben",
+            "cta": "Anwenden"
+        },
+        "value_primer": {
+            "title": "Neugier in echtes Wissen verwandeln",
+            "bullets": {
+                "line_1": "Entdecke einen kurzen Fakt",
+                "line_2": "Tippe auf „{}“",
+                "line_3": "Lerne die Geschichte dahinter"
+            },
+            "cta": "Entdecken"
         }
     },
 
@@ -180,7 +200,7 @@
             "long": "Der Name ist zu lang"
         },
         "interests": {
-            "empty": "Bitte wähle mindestens ein Interesse aus"
+            "not_enough": "Wähle mindestens {} Interessen für das beste Erlebnis"
         }
     },
 

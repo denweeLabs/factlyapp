@@ -60,7 +60,7 @@
 
 - **Static icons** from [Iconsax](https://iconsax.io)  
 - **Animated emojis** from [Noto Animated Emojis](https://googlefonts.github.io/noto-emoji-animation/) — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)  
-- **Fonts:** [Manrope](https://fonts.google.com/specimen/Manrope) (Primary), [Quicksand](https://fonts.google.com/specimen/Quicksand) (Secondary)
+- **Fonts:** [Quicksand](https://fonts.google.com/specimen/Quicksand) (Primary), [Manrope](https://fonts.google.com/specimen/Manrope) (Secondary)
 
 
 ## 🚀 How To Run

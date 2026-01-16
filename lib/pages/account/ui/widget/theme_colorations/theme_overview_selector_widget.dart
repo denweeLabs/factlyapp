@@ -1,4 +1,5 @@
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_colors.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
@@ -115,7 +116,10 @@ Widget _buildModeBubble({
         6.verticalSpace,
         Text(
           mode.displayName(context),
-          style: bodyS.copyWith(color: context.textColorSecondary),
+          style: bodyS.copyWith(
+            color: context.textColorSecondary,
+            fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+          ),
         ),
       ],
     ),

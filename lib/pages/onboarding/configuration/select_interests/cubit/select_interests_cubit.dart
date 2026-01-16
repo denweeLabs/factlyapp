@@ -1,4 +1,5 @@
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';

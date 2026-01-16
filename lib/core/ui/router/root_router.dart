@@ -26,6 +26,7 @@ import 'package:denwee/pages/onboarding/configuration/cubit/onboarding_configura
 import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_page.dart';
 import 'package:denwee/pages/onboarding/configuration/select_interests/cubit/select_interests_cubit.dart';
 import 'package:denwee/pages/onboarding/configuration/select_interests/select_interests_page.dart';
+import 'package:denwee/pages/onboarding/configuration/select_notification_time/cubit/select_notification_time_cubit.dart';
 import 'package:denwee/pages/onboarding/welcome/welcome_page.dart';
 import 'package:denwee/pages/premium_paywall/premium_paywall_page.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
           providers: [
             BlocProvider(create: (_) => getIt<OnboardingConfigurationCubit>()),
             BlocProvider(create: (_) => getIt<SelectInterestsCubit>()),
+            BlocProvider(create: (_) => getIt<SelectNotificationTimeCubit>()),
           ],
           child: const OnboardingConfigurationPage(),
         ),

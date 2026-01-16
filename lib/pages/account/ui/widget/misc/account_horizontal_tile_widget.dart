@@ -178,7 +178,10 @@ class AccountHorizontalTile extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: bodyL.copyWith(color: context.textColor),
+            style: bodyL.copyWith(
+              color: context.textColor,
+              fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+            ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
