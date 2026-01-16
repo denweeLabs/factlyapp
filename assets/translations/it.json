@@ -5,7 +5,7 @@
     "welcome": {
         "title": "Denwee",
         "subtitle": "Scopri fatti brevi, facili da capire e memorabili ogni giorno!",
-        "begin_cta": "Inizia",
+        "begin_cta": "Esplora",
         "have_an_account": "Hai un account?"
     },
 
@@ -30,14 +30,34 @@
 
     "onboarding": {
         "select_interests": {
-            "title": "Scegli i tuoi\ninteressi",
+            "title": "Cosa accende la tua curiosità?",
             "subtitle": "Dicci cosa ti entusiasma di più",
-            "cta": "Avanti"
+            "cta": "Scegli"
+        },
+        "select_notification_time": {
+            "title": "Un promemoria per restare curioso",
+            "subtitle": "Ti invieremo un fatto ogni giorno",
+            "time_selection_title": "Ora",
+            "dummy_notification": {
+                "title": "🌙  Buona sera!",
+                "body": "Il cuore di una balena blu può pesare oltre 180 kg ed è delle dimensioni di un’auto piccola, battendo solo 8–10 volte al minuto!",
+                "time_ago": "ora"
+            },
+            "cta": "Attiva"
         },
         "select_theme_colorations": {
-            "title": "Scegli il tuo\ntema",
-            "subtitle": "Personalizza la tua esperienza con i colori",
-            "cta": "Fatto"
+            "title": "Trova i colori che fanno per te",
+            "subtitle": "Personalizza l’esperienza con i colori",
+            "cta": "Applica"
+        },
+        "value_primer": {
+            "title": "Trasforma la curiosità in conoscenza",
+            "bullets": {
+                "line_1": "Scopri un fatto breve",
+                "line_2": "Tocca «{}»",
+                "line_3": "Scopri la storia dietro al fatto"
+            },
+            "cta": "Esplora"
         }
     },
 
@@ -138,7 +158,7 @@
             "long": "Il nome è troppo lungo"
         },
         "interests": {
-            "empty": "Per favore seleziona almeno un interesse"
+            "not_enough": "Scegli almeno {} interessi per un'esperienza migliore"
         }
     },
 

@@ -99,6 +99,7 @@ dependencies:
   animate_do: ^4.2.0
   email_validator: ^3.0.0
   flutter_inappwebview: ^6.1.5
+  avatar_glow: ^3.0.1
 
   # Utils
   rxdart: ^0.28.0

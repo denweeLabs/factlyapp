@@ -17,7 +17,6 @@ class _ConfigConstants {
     hourAndMin(20, 30),
     hourAndMin(21, 00),
     hourAndMin(21, 30),
-    hourAndMin(22, 00),
   ];
 
   /// Notifications are enabled by default
@@ -111,6 +110,9 @@ class _ConfigConstants {
       secondary: const Color(0xFFFF9980),
     ),
   ];
+
+  /// Users must select at least 'n' interests
+  final interestsMinCount = 3;
 
 
   // ---------------------------------------------------------------------------

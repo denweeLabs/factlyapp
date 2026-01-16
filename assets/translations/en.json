@@ -5,7 +5,7 @@
     "welcome": {
         "title": "Denwee",
         "subtitle": "Discover short, easy-to-understand, memorable facts every day!",
-        "begin_cta": "Start",
+        "begin_cta": "Explore",
         "have_an_account": "Have an account?"
     },
 
@@ -30,14 +30,34 @@
 
     "onboarding": {
         "select_interests": {
-            "title": "Choose your\ninterests",
+            "title": "What usually sparks your curiosity?",
             "subtitle": "Tell us what excites you the most",
-            "cta": "Next"
+            "cta": "Choose"
+        },
+        "select_notification_time": {
+            "title": "A daily reminder to stay curious",
+            "subtitle": "We’ll send you one fact every day",
+            "time_selection_title": "Time",
+            "dummy_notification": {
+                "title": "🌙  Good evening!",
+                "body": "The heart of a blue whale is so massive it can weigh over 180 kg and is about the size of a small car, beating only 8-10 times a minute!",
+                "time_ago": "now"
+            },
+            "cta": "Enable"
         },
         "select_theme_colorations": {
-            "title": "Choose your\ntheme",
+            "title": "Find colors that feel right to you",
             "subtitle": "Personalize your experience with colors",
-            "cta": "Done"
+            "cta": "Apply"
+        },
+        "value_primer": {
+            "title": "Turn curiosity into knowledge",
+            "bullets": {
+                "line_1": "Discover a short fact",
+                "line_2": "Tap “{}” to go deeper",
+                "line_3": "Learn the story behind the fact"
+            },
+            "cta": "Explore"
         }
     },
 
@@ -138,7 +158,7 @@
             "long": "Name is too long"
         },
         "interests": {
-            "empty": "Please select at least one interest"
+            "not_enough": "Pick at least {} interests for the best experience"
         }
     },
 

@@ -69,13 +69,13 @@ class _ResetPassEmailPromptDialogState extends State<ResetPassEmailPromptDialog>
           children: [
             Text(
               context.tr(LocaleKeys.dialog_reset_password_enter_email_title),
-              style: h3.copyWith(color: context.textColor),
+              style: dialogTitle.copyWith(color: context.textColor),
               textAlign: TextAlign.center,
             ),
             18.verticalSpace,
             Text(
               context.tr(LocaleKeys.dialog_reset_password_enter_email_subtitle),
-              style: bodyM.copyWith(color: context.textColorTernary),
+              style: dialogSubtitle.copyWith(color: context.textColorSecondary),
               textAlign: TextAlign.left,
             ),
             24.verticalSpace,

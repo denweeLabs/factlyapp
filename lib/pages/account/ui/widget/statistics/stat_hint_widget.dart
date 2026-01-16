@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
@@ -71,7 +69,10 @@ class _StatHintState extends State<StatHint> {
                       24.verticalSpace,
                       Text(
                         widget.item.title(context),
-                        style: h1.copyWith(color: context.textColor),
+                        style: h1.copyWith(
+                          color: context.textColor,
+                          fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+                        ),
                       ).autoFadeIn(sequencePos: 0),
                       12.verticalSpace,
                       Padding(

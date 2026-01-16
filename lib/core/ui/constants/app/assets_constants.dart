@@ -73,6 +73,10 @@ class _ImagesAssets {
   static const _folderPath = 'assets/images/';
 
   String interest(int id) => '${_folderPath}interest_$id.jpg';
+  final appBackgroundIcon = '${_folderPath}seal_background.png';
+  final appForegroundIcon = '${_folderPath}seal_foreground.png';
+  final interestShortFact = '${_folderPath}interest_short_fact.webp';
+  final interestDetailedFact = '${_folderPath}interest_detailed_fact.webp';
 }
 
 class _AnimationsAssets {

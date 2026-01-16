@@ -5,7 +5,7 @@
     "welcome": {
         "title": "Denwee",
         "subtitle": "每天发现简短、易懂、令人难忘的趣味知识！",
-        "begin_cta": "开始",
+        "begin_cta": "探索",
         "have_an_account": "已有账户？"
     },
 
@@ -30,14 +30,34 @@
 
     "onboarding": {
         "select_interests": {
-            "title": "选择你的\n兴趣",
-            "subtitle": "告诉我们最让你兴奋的内容",
-            "cta": "下一步"
+            "title": "什么最能激发你的好奇心？",
+            "subtitle": "告诉我们你最感兴趣的内容",
+            "cta": "选择"
+        },
+        "select_notification_time": {
+            "title": "每天提醒你保持好奇",
+            "subtitle": "我们每天会发送一个事实",
+            "time_selection_title": "时间",
+            "dummy_notification": {
+                "title": "🌙  晚上好！",
+                "body": "蓝鲸的心脏重达**400磅**，大小相当于小汽车，每分钟仅跳动**8-10次**！",
+                "time_ago": "现在"
+            },
+            "cta": "启用"
         },
         "select_theme_colorations": {
-            "title": "选择你的\n主题",
+            "title": "选择让你感觉舒适的颜色",
             "subtitle": "用颜色个性化你的体验",
-            "cta": "完成"
+            "cta": "应用"
+        },
+        "value_primer": {
+            "title": "将好奇转化为知识",
+            "bullets": {
+                "line_1": "发现一个简短的事实",
+                "line_2": "点击“{}”深入了解",
+                "line_3": "了解事实背后的故事"
+            },
+            "cta": "探索"
         }
     },
 
@@ -138,7 +158,7 @@
             "long": "名字太长"
         },
         "interests": {
-            "empty": "请选择至少一个兴趣"
+            "not_enough": "请选择至少 {} 个兴趣，以获得最佳体验"
         }
     },
 

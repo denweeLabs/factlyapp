@@ -196,6 +196,7 @@ class FactExplanationUnlockMethodDialog extends StatelessWidget {
                       style: h5.copyWith(
                         color: context.lightTextColor,
                         fontWeight: FontWeight.bold,
+                        fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
                       ),
                     ),
                   ],
@@ -248,6 +249,7 @@ class FactExplanationUnlockMethodDialog extends StatelessWidget {
                       '${context.tr(LocaleKeys.account_statistics_stars_title)}: ${state.statistics.stars}',
                       style: bodyS.copyWith(
                         color: context.theme.colorScheme.primary,
+                        fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

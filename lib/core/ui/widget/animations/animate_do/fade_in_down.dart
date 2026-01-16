@@ -4,8 +4,8 @@ import 'package:denwee/core/ui/widget/animations/animate_do/core/core_fade_slide
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:flutter/material.dart';
 
-extension FadeInRightExtension on Widget {
-  Widget autoFadeInRight({
+extension FadeInDownExtension on Widget {
+  Widget autoFadeInDown({
     Duration? delay,
     Duration? duration,
     Duration? reverseDuration,
@@ -17,7 +17,6 @@ extension FadeInRightExtension on Widget {
     Function(AnimationController)? controllerProvider,
     bool manualTrigger = false,
     bool animate = true,
-    bool forceComplete = true,
     Function(AnimateDoDirection direction)? onFinish,
     int? sequencePos,
   }) {
@@ -29,11 +28,10 @@ extension FadeInRightExtension on Widget {
       slideReverseCurve: slideReverseCurve ?? AutomatedAnimationValues.defaultSlideCurve[AnimateDoDirection.backward]!,
       fadeCurve: fadeCurve ?? AutomatedAnimationValues.defaultFadeCurve[AnimateDoDirection.forward]!,
       fadeReverseCurve: fadeReverseCurve ?? AutomatedAnimationValues.defaultFadeCurve[AnimateDoDirection.backward]!,
-      slideFrom: Offset(-(slideFrom ?? AutomatedAnimationValues.defaultSlideOffsets[SlideDirection.left2Right]!), 0.0),
+      slideFrom: Offset(0.0, (slideFrom ?? -AutomatedAnimationValues.defaultSlideOffsets[SlideDirection.top2Down]!)),
       slideTo: Offset.zero,
       fadeFrom: 0.0,
       fadeTo: 1.0,
-      forceComplete: forceComplete,
       controllerProvider: controllerProvider,
       manualTrigger: manualTrigger,
       animate: animate,
