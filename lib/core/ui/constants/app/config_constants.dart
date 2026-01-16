@@ -36,8 +36,8 @@ class _ConfigConstants {
   final usernameMinLength = 2;
   final usernameMaxLength = 25;
 
-  /// Request authentication every 7 app entries
-  final promptAuthenticationEachEnter = 7;
+  /// Request authentication on every 'n'th app enter
+  final promptAuthenticationEachEnter = 20;
 
   /// Password constraints
   final passwordMinLength = 8;
