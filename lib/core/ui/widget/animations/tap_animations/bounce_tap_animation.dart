@@ -6,6 +6,7 @@ class BounceTapAnimation extends StatelessWidget {
     super.key,
     this.child,
     this.onTap,
+    this.onLongTap,
     this.minScale = CoreTapBounceAnimation.defaultMinScale,
     this.isHaptics = true,
     this.alignment = Alignment.center,
@@ -13,6 +14,7 @@ class BounceTapAnimation extends StatelessWidget {
 
   final Widget? child;
   final VoidCallback? onTap;
+  final VoidCallback? onLongTap;
   final double minScale;
   final bool isHaptics;
   final Alignment alignment;
@@ -22,6 +24,7 @@ class BounceTapAnimation extends StatelessWidget {
     return CoreTapBounceAnimation(
       minScale: minScale,
       onTap: onTap,
+      onLongTap: onLongTap,
       ignoreScale: onTap == null,
       isHaptics: isHaptics,
       alignment: alignment,

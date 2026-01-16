@@ -67,6 +67,9 @@
             "profile": {
                 "title": "Profil"
             },
+            "subscription": {
+                "title": "Abonnement"
+            },
             "interests": {
                 "title": "Interessen"
             },
@@ -126,11 +129,50 @@
             "personal": {
                 "title": "Persönlich"
             },
+            "subscription": {
+                "title": "Abonnement"
+            },
             "more": {
                 "title": "Mehr",
                 "change_password": "Passwort\nändern",
                 "contact_support": "Support\nkontaktieren"
             }
+        }
+    },
+
+
+    "subscription": {
+        "basic_plan": "Denwee Basic",
+        "premium_plan": "Premium",
+        "active_plan": "Aktiver Tarif",
+        "upgrade_cta": "Upgrade",
+        "paywall": {
+            "title": "Mehr aus jedem Fakt herausholen – ohne Grenzen",
+            "benefits": {
+                "line_1": "Sofortige Erklärungen",
+                "line_2": "Unbegrenzter Archivzugang",
+                "line_3": "Keine Werbung mehr",
+                "ads_encourage_msg": {
+                    "one": "Du hast ~{} Minute mit Werbung verbracht. Spare mehr Zeit mit Premium 🫶",
+                    "other": "Du hast ~{} Minuten mit Werbung verbracht. Spare mehr Zeit mit Premium 🫶"
+                }
+            },
+            "package": {
+                "monthly": {
+                    "title": "Monatlich",
+                    "per_period": "Monat"
+                },
+                "yearly": {
+                    "title": "Jährlich",
+                    "per_period": "Jahr"
+                }
+            },
+            "footer": {
+                "restore": "Wiederherstellen",
+                "privacy": "Datenschutz",
+                "terms": "Bedingungen"
+            },
+            "expiry": "Ablauf"
         }
     },
 
@@ -260,6 +302,19 @@
                 "subtitle": "Es tut uns leid, dass Sie warten müssen, aber im Moment sind keine Anzeigen verfügbar... Bitte versuchen Sie es in ein paar Minuten erneut :("
             }
         },
+        "subscriptions": {
+            "configuration": "Beim Einrichten deines Kaufs ist etwas schiefgelaufen... Bitte versuche es erneut 🙏",
+            "purchase_not_allowed": "Oh... Käufe sind auf diesem Gerät oder Konto nicht erlaubt 😕",
+            "purchase_cancelled": "Kauf abgebrochen... Kein Problem, du kannst es jederzeit erneut versuchen 🙂",
+            "payment_pending": "Deine Zahlung wird noch verarbeitet... Bitte warte einen Moment ⏳",
+            "payment_failed": "Zahlung fehlgeschlagen... Bitte überprüfe deine Zahlungsmethode 💳",
+            "already_subscribed": "Du hast bereits ein aktives Abonnement 🎉",
+            "subscription_not_found": "Kein aktives Abonnement gefunden... Versuche es erneut oder überprüfe dein Konto 🙂",
+            "insufficient_permissions": "Der Kauf konnte nicht überprüft werden... Bitte melde dich erneut an 🔐",
+            "internal_server": "Ups! Auf unserer Seite ist etwas schiefgelaufen... Wir kümmern uns darum ⚙️",
+            "connection_timeout": "Verbindung fehlgeschlagen... Bitte überprüfe deine Internetverbindung 📶",
+            "unexpected": "Ein unerwarteter Fehler ist aufgetreten... Wir untersuchen das 🚨"
+        },
         "common": {
             "internal_server": "Auf unserer Seite ist etwas kaputt gegangen... Wir arbeiten daran 🔧",
             "connection_timeout": "Keine Verbindung... Überprüfe dein Internet und versuche es erneut 📡",
@@ -324,6 +379,14 @@
         "reset_password_enter_email": {
             "title": "Passwort zurücksetzen",
             "subtitle": "Wir senden dir einen Link zum Zurücksetzen des Passworts an deine E-Mail... Falls nichts ankommt, warte 30 Sekunden und versuch es erneut :)"
+        },
+        "success_purchase": {
+            "title": "Alles bereit!",
+            "subtitle": "Dein Premium-Zugang ist bis zum {} aktiv. Vielen Dank für deine Unterstützung! 🫶"
+        },
+        "subscription_packages_switch": {
+            "title": "Kleiner Hinweis!",
+            "subtitle": "Wenn du deinen Tarif änderst, wird dein aktuelles Abonnement ersetzt und der verbleibende Wert auf den neuen Tarif angewendet 😉"
         }
     },
 

@@ -22,6 +22,7 @@ import 'package:denwee/core/ui/widget/animations/animated_number_widget.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_scaffold_widget.dart';
+import 'package:denwee/pages/account/ui/widget/subscription/subscription_card_widget.dart';
 import 'package:denwee/pages/account/ui/widget/theme_colorations/coloration_overview_selector_widget.dart';
 import 'package:denwee/core/ui/widget/misc/fading_edge_widget.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
@@ -78,10 +79,10 @@ class _AccountPageState extends State<AccountPage> {
           children: [
             _buildProfileSection(context),
             48.verticalSpace,
-            _buildInterestsSections(context),
-            48.verticalSpace,
             _buildDailyFactsSection(context),
-            38.verticalSpace,
+            42.verticalSpace,
+            _buildSubscriptionSection(context),
+            48.verticalSpace,
             _buildThemeModeSection(context),
             44.verticalSpace,
             _buildThemeColorationSection(context),
@@ -113,28 +114,26 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget _buildInterestsSections(BuildContext context) {
+  Widget _buildSubscriptionSection(BuildContext context) {
     return AccountSection(
-      title: context.tr(LocaleKeys.account_section_interests_title),
+      title: context.tr(LocaleKeys.account_profile_subscription_title),
       childrenPadding: EdgeInsets.symmetric(horizontal: 20.w),
+      children: const [SubscriptionCard()],
+    );
+  }
+
+  Widget _buildDailyFactsSection(BuildContext context) {
+    return AccountSection(
+      title: context.tr(LocaleKeys.account_section_daily_facts_title),
       children: [
-        BlocSelector<UserPreferencesCubit, UserPreferencesState,
-            List<UserInterest>>(
+        BlocSelector<UserPreferencesCubit, UserPreferencesState, List<UserInterest>>(
           selector: (state) => state.preferences.interests,
           builder: (context, interests) => SelectedInterestsList(
             interests: interests,
             onEdit: () => _onEditInterests(context),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildDailyFactsSection(BuildContext context) {
-    return AccountSection(
-      verticalSpacing: 10,
-      title: context.tr(LocaleKeys.account_section_daily_facts_title),
-      children: [
+        20.verticalSpace,
         BlocSelector<UserPreferencesCubit, UserPreferencesState, bool>(
           selector: (state) => state.preferences.notifications.isEnabled,
           builder: (context, isNotificationsEnabled) => AccountHorizontalTile.sSwitch(
@@ -144,6 +143,7 @@ class _AccountPageState extends State<AccountPage> {
             onTap: () => _onToggleNotificationsEnabled(context),
           ),
         ),
+        const AccountItemsDivider(),
         AccountHorizontalTile.widget(
           onTap: _onChangeNotificationTime,
           iconPath: AppConstants.assets.icons.clockLinear,
@@ -170,7 +170,7 @@ class _AccountPageState extends State<AccountPage> {
                   6.horizontalSpace,
                   CommonAppIcon(
                     path: AppConstants.assets.icons.arrowRightIos,
-                    color: context.iconColorSecondary,
+                    color: context.iconColorTernary,
                     size: 20,
                   ),
                 ],
@@ -178,18 +178,18 @@ class _AccountPageState extends State<AccountPage> {
             },
           ),
         ),
+        const AccountItemsDivider(),
         AccountHorizontalTile.more(
           iconPath: AppConstants.assets.icons.archiveTickLinear,
           title: context.tr(LocaleKeys.account_section_daily_facts_items_archive),
           onTap: () => context.restorablePushNamedArgs(AccountRoutes.myArchive),
         ),
-      ].insertBetween(const AccountItemsDivider()),
+      ],
     );
   }
 
   Widget _buildThemeModeSection(BuildContext context) {
     return AccountSection(
-      verticalSpacing: 24,
       title: context.tr(LocaleKeys.account_section_theme_title),
       children: const [ThemeModeOverviewSelector()],
     );
@@ -197,7 +197,6 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget _buildThemeColorationSection(BuildContext context) {
     return AccountSection(
-      verticalSpacing: 24,
       title: context.tr(LocaleKeys.account_section_coloration_title),
       children: const [ColorationOverviewSelector()],
     );
@@ -209,28 +208,14 @@ class _AccountPageState extends State<AccountPage> {
         ?.nativeName;
 
     return AccountSection(
-      verticalSpacing: 10,
+      verticalSpacing: 12,
       title: context.tr(LocaleKeys.account_section_preferences_title),
       children: [
-        AccountHorizontalTile.widget(
+        AccountHorizontalTile.valueMore(
           iconPath: AppConstants.assets.icons.globeLinear,
           title: context.tr(LocaleKeys.account_section_preferences_items_language),
           onTap: () => _onChangeLanguageTap(context),
-          widget: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                selectedLanguageName ?? context.locale.toString(),
-                style: bodyL.copyWith(color: context.theme.colorScheme.secondary),
-              ),
-              6.horizontalSpace,
-              CommonAppIcon(
-                path: AppConstants.assets.icons.arrowRightIos,
-                color: context.iconColorSecondary,
-                size: 20,
-              ),
-            ],
-          ),
+          value: selectedLanguageName ?? context.locale.toString(),
         ),
         BlocSelector<UserPreferencesCubit, UserPreferencesState, bool>(
           selector: (state) => state.preferences.misc.isHapticsEnabled,
@@ -248,7 +233,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget _buildMoreSection(BuildContext context) {
     return AccountSection(
-      verticalSpacing: 10,
+      verticalSpacing: 12,
       title: context.tr(LocaleKeys.account_section_more_title),
       children: [
         AccountHorizontalTile.more(

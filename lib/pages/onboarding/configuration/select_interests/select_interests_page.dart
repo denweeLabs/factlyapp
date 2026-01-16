@@ -85,6 +85,7 @@ class SelectInterestsPage extends StatelessWidget {
     return CommonPopScope(
       onWillPop: Navigator.of(context).pop,
       child: CommonScaffold(
+        iconPath: AppConstants.assets.icons.messageQuestionLinear,
         body: Stack(
           fit: StackFit.expand,
           children: [

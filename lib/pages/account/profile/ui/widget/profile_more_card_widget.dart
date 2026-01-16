@@ -22,8 +22,10 @@ class ProfileMoreCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BackdropSurfaceContainer.ellipse(
       onTap: onTap,
+      useShadow: true,
       color: context.primaryContainer,
-      hoverColor: context.secondaryContainer,
+      hoverColor: context.primaryContainer,
+      borderColor: context.theme.dividerColor,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 22.w,

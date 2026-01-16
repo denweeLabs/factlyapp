@@ -67,6 +67,9 @@
             "profile": {
                 "title": "Profilo"
             },
+            "subscription": {
+                "title": "Abbonamento"
+            },
             "interests": {
                 "title": "Interessi"
             },
@@ -126,11 +129,50 @@
             "personal": {
                 "title": "Personale"
             },
+            "subscription": {
+                "title": "Abbonamento"
+            },
             "more": {
                 "title": "Altro",
                 "change_password": "Cambia\npassword",
                 "contact_support": "Contatta\nsupporto"
             }
+        }
+    },
+
+
+    "subscription": {
+        "basic_plan": "Denwee Basic",
+        "premium_plan": "Premium",
+        "active_plan": "Piano attivo",
+        "upgrade_cta": "Passa",
+        "paywall": {
+            "title": "Ottieni di più da ogni fatto senza limiti",
+            "benefits": {
+                "line_1": "Spiegazioni immediate",
+                "line_2": "Accesso illimitato all’archivio",
+                "line_3": "Niente più pubblicità",
+                "ads_encourage_msg": {
+                    "one": "Hai passato ~{} minuto sugli annunci. Risparmia più tempo con Premium 🫶",
+                    "other": "Hai passato ~{} minuti sugli annunci. Risparmia più tempo con Premium 🫶"
+                }
+            },
+            "package": {
+                "monthly": {
+                    "title": "Mensile",
+                    "per_period": "mese"
+                },
+                "yearly": {
+                    "title": "Annuale",
+                    "per_period": "anno"
+                }
+            },
+            "footer": {
+                "restore": "Ripristina",
+                "privacy": "Privacy",
+                "terms": "Termini"
+            },
+            "expiry": "Scadenza"
         }
     },
 
@@ -260,6 +302,19 @@
                 "subtitle": "Ci dispiace di farti aspettare, ma al momento non ci sono annunci disponibili... Riprova tra qualche minuto :("
             }
         },
+        "subscriptions": {
+            "configuration": "Qualcosa è andato storto durante l'acquisto... Per favore riprova 🙏",
+            "purchase_not_allowed": "Oh... Sembra che gli acquisti non siano consentiti su questo dispositivo o account 😕",
+            "purchase_cancelled": "Acquisto annullato... Nessun problema, puoi riprovare quando vuoi 🙂",
+            "payment_pending": "Il pagamento è ancora in elaborazione... Attendi un momento ⏳",
+            "payment_failed": "Pagamento non riuscito... Controlla il metodo di pagamento e riprova 💳",
+            "already_subscribed": "Hai già un abbonamento attivo 🎉",
+            "subscription_not_found": "Nessun abbonamento attivo trovato... Prova a ripristinare o controlla l’account 🙂",
+            "insufficient_permissions": "Non siamo riusciti a verificare l'acquisto... Prova a ripristinare o ad accedere di nuovo 🔐",
+            "internal_server": "Ops! Qualcosa è andato storto da parte nostra... Stiamo sistemando ⚙️",
+            "connection_timeout": "Impossibile connettersi... Controlla la connessione e riprova 📶",
+            "unexpected": "Si è verificato un problema imprevisto... Stiamo indagando 🚨"
+        },
         "common": {
             "internal_server": "Qualcosa si è rotto da parte nostra... Stiamo lavorando per sistemarlo 🔧",
             "connection_timeout": "Nessuna connessione... Controlla la tua rete e riprova 📡",
@@ -324,6 +379,14 @@
         "reset_password_enter_email": {
             "title": "Reimposta la password",
             "subtitle": "Ti invieremo un link per reimpostare la password alla tua email... Se non arriva nulla, aspetta 30 secondi e riprova :)"
+        },
+        "success_purchase": {
+            "title": "È tutto pronto!",
+            "subtitle": "Il tuo accesso Premium è attivo fino al {}. Grazie mille per il tuo supporto! 🫶"
+        },
+        "subscription_packages_switch": {
+            "title": "Solo un avviso!",
+            "subtitle": "Quando cambi piano, l’abbonamento attuale verrà sostituito e il valore rimanente sarà applicato al nuovo piano 😉"
         }
     },
 

@@ -94,4 +94,16 @@ class AppColors {
   };
   static const lightGreen = Color(0xFF5CB75F);
   static const lightRed = Color(0xFFEB5A5A);
+  static const white01 = Color(0x03FFFFFF);
+  static const white02 = Color(0x05FFFFFF);
+  static const white04 = Color(0x0AFFFFFF);
+  static const white06 = Color(0x0FFFFFFF);
+  static const white08 = Color(0x14FFFFFF);
+
+  static const black02 = Color(0x05000000);
+  static const black04 = Color(0x0A000000);
+  static const black06 = Color(0x0F000000);
+  static const black08 = Color(0x14000000);
+  static const black10 = Color(0x1A000000);
+
 }
