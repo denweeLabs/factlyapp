@@ -1,5 +1,10 @@
 <h1 align="center">
-  Denwee App
+  <br>
+  <a href="https://www.denwee.com">
+    <img src="./res/app_icon_preview.webp" alt="Denwee: Daily Trivia" width="200">
+  </a>
+  <br>
+  Denwee: Daily Trivia
   <br>
 </h1>
 
