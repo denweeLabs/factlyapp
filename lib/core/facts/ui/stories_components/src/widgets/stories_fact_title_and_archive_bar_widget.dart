@@ -40,8 +40,8 @@ class StoriesFactTitleAndArchiveBar extends StatelessWidget {
               ? min(1.0, 2 * (scrollFraction - 0.5))
               : 0.0;
 
-          return Transform.translate(
-            offset: Offset(0.0, yTranslate),
+          return Padding(
+            padding: EdgeInsets.only(top: yTranslate),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
