@@ -6,6 +6,7 @@ import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.d
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
+import 'package:denwee/core/ui/bloc/notifications_cubit/notifications_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
 import 'package:denwee/core/ui/bloc/subscriptions_cubit/subscription_offerings_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
@@ -76,6 +77,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
         ),
         BlocListener<SubscriptionOfferingsCubit, SubscriptionOfferingsState>(
           listenWhen: _subscriptionOfferingsListener,
+          listener: (_, _) {},
+        ),
+        BlocListener<NotificationsCubit, NotificationsState>(
+          listenWhen: _notificationsListener,
           listener: (_, _) {},
         ),
       ],
@@ -194,6 +199,20 @@ class _RootBlocListenersState extends State<RootBlocListeners>
     /// check subscription status form backend when purchase successfully restored
     if (isSuccessPurchaseRestoration) {
       onSubscriptionRestored();
+    }
+
+    return false;
+  }
+
+  bool _notificationsListener(NotificationsState p, NotificationsState c) {
+    if (p.notification != c.notification && c.notification.isSome()) {
+      final notificationData = c.notification.toNullable()!;
+
+      if (c.showSnackbar) {
+        AppDialogs.showNotificationSnackbar(notificationData);
+      } else {
+        notificationData.tryLaunchLink();
+      }
     }
 
     return false;

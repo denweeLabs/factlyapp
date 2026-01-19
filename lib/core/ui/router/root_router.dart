@@ -127,7 +127,7 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
 
     case Routes.factDetails:
       final args = CustomSerializer(settings.arguments).getArguments(FactDetailsPageArgs.fromJson)!;
-      return FadeSlideupPageRouteBuilder(
+      return CircularRevealPageRouteBuilder(
         settings: settings,
         builder: (_) => BlocProvider(
           create: (_) => getIt<FactExplanationCubit>(param1: args.fact),
