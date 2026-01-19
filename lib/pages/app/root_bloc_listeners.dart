@@ -5,6 +5,7 @@ import 'package:denwee/core/statistics/domain/failure/statistics_failure.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
+import 'package:denwee/core/ui/bloc/notifications_cubit/notifications_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
@@ -70,6 +71,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
         ),
         BlocListener<FactsArchiveCubit, FactsArchiveState>(
           listenWhen: _archiveListener,
+          listener: (_, _) {},
+        ),
+        BlocListener<NotificationsCubit, NotificationsState>(
+          listenWhen: _notificationsListener,
           listener: (_, _) {},
         ),
       ],
@@ -161,6 +166,20 @@ class _RootBlocListenersState extends State<RootBlocListeners>
       AppDialogs.showErrorSnackbar(
         description: failure.errorMessage(context),
       );
+    }
+
+    return false;
+  }
+
+  bool _notificationsListener(NotificationsState p, NotificationsState c) {
+    if (p.notification != c.notification && c.notification.isSome()) {
+      final notificationData = c.notification.toNullable()!;
+
+      if (c.showSnackbar) {
+        AppDialogs.showNotificationSnackbar(notificationData);
+      } else {
+        notificationData.tryLaunchLink();
+      }
     }
 
     return false;

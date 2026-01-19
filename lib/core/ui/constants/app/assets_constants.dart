@@ -73,6 +73,7 @@ class _ImagesAssets {
   static const _folderPath = 'assets/images/';
 
   String interest(int id) => '${_folderPath}interest_$id.jpg';
+  final appBackgroundIcon = '${_folderPath}seal_background.png';
 }
 
 class _AnimationsAssets {
