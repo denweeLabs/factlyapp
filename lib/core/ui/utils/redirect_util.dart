@@ -7,6 +7,7 @@ import 'package:denwee/core/facts/domain/repo/daily_facts_repo.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/utils/dialogs_util.dart';
+import 'package:denwee/core/ui/utils/haptic_util.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/pages/authentication/ui/reset_password/reset_password_page_args.dart';
 import 'package:denwee/pages/fact_details/domain/args/fact_details_page_args.dart';
@@ -76,6 +77,7 @@ class RedirectUtil {
       return;
     }
     
+    HapticUtil.light();
     final context = getIt<RootRouterData>().context;
     final args = FactDetailsPageArgs(fact: result.$2!);
     context.restorablePushNamedArgs(Routes.factDetails,
