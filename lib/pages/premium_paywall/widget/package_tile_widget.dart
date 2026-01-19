@@ -77,6 +77,7 @@ class PaywallPackageTile extends StatelessWidget {
                               package.pricePeriodString(context),
                           style: bodyM.copyWith(
                             color: context.lightTextColorSecondary,
+                            fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
                           ),
                         ),
                       ],

@@ -23,6 +23,7 @@ class PaywallFooterLinks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = context.lightTextColor.withValues(alpha: 0.8);
+    final decorationColor = context.lightTextColorSecondary;
     
     return Wrap(
       alignment: WrapAlignment.center,
@@ -34,7 +35,7 @@ class PaywallFooterLinks extends StatelessWidget {
             context.tr(LocaleKeys.subscription_paywall_footer_restore),
             style: bodyM.copyWith(
               color: textColor,
-              decorationColor: textColor,
+              decorationColor: decorationColor,
               fontWeight: FontWeight.w700,
               decoration: TextDecoration.underline,
             ),
@@ -53,7 +54,7 @@ class PaywallFooterLinks extends StatelessWidget {
             context.tr(LocaleKeys.subscription_paywall_footer_privacy),
             style: bodyM.copyWith(
               color: textColor,
-              decorationColor: textColor,
+              decorationColor: decorationColor,
               fontWeight: FontWeight.w700,
               decoration: TextDecoration.underline,
             ),
@@ -72,7 +73,7 @@ class PaywallFooterLinks extends StatelessWidget {
             context.tr(LocaleKeys.subscription_paywall_footer_terms),
             style: bodyM.copyWith(
               color: textColor,
-              decorationColor: textColor,
+              decorationColor: decorationColor,
               fontWeight: FontWeight.w700,
               decoration: TextDecoration.underline,
             ),

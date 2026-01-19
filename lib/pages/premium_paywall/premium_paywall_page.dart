@@ -211,6 +211,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
         style: h1.copyWith(
           color: context.lightTextColor,
           fontWeight: FontWeight.w900,
+          fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
         ),
         textAlign: TextAlign.center,
       ),

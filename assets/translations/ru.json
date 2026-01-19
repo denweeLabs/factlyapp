@@ -31,7 +31,7 @@
     "onboarding": {
         "select_interests": {
             "title": "Что обычно пробуждает ваше любопытство?",
-            "subtitle": "Расскажите, что интересует вас больше всего",
+            "subtitle": "Расскажите, что вас интересует",
             "cta": "Выбрать"
         },
         "select_notification_time": {
