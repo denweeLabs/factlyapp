@@ -4,23 +4,18 @@ import 'package:denwee/core/ui/widget/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_out_up.dart';
 import 'package:denwee/core/ui/widget/animations/common_animations/common_animations.dart';
 import 'package:denwee/core/ui/widget/animations/constants/animation_bipos.dart';
-import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/animations/misc/route_aware_animated.dart';
 import 'package:denwee/core/ui/widget/animations/misc/route_observer_scope.dart';
-import 'package:denwee/core/ui/widget/animations/transitions/hero_transition.dart';
 import 'package:denwee/core/ui/widget/buttons/back_button_widget.dart';
 import 'package:denwee/core/ui/widget/buttons/action_button_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_pop_scope_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_scaffold_widget.dart';
-import 'package:denwee/core/ui/widget/misc/seal_in_circle_widget.dart';
 import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_page.dart';
 import 'package:denwee/pages/onboarding/configuration/select_interests/cubit/select_interests_cubit.dart';
-import 'package:denwee/pages/onboarding/configuration/select_interests/widget/components/interests_content_widget.dart';
-import 'package:denwee/pages/onboarding/welcome/welcome_page.dart';
+import 'package:denwee/pages/onboarding/configuration/select_interests/widget/interests_content_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:heroine/heroine.dart';
 import 'package:utils/utils.dart';
 
 class SelectInterestsPage extends StatelessWidget {
@@ -43,7 +38,6 @@ class SelectInterestsPage extends StatelessWidget {
           OnboardingConfigurationPage.contentBottomPadding(context) + 12.h;
 
       return CommonScaffold(
-        iconPath: AppConstants.assets.icons.messageQuestionLinear,
         body: RouteAwareAnimated(
           observer: RouteObserverScope.of(context),
           builder: (context, controller) => Stack(
@@ -79,26 +73,6 @@ class SelectInterestsPage extends StatelessWidget {
                       ),
                 ),
               ),
-              Positioned(
-                top: context.topPadding + 18.h,
-                right: 16.w,
-                child: RepaintBoundary(
-                  child: HeroTransition(
-                    tag: WelcomePage.sealInCircleHeroTag,
-                    spring: const Motion.smoothSpring(
-                      duration: CustomAnimationDurations.lowMedium,
-                    ),
-                    flightShuttleBuilder: const FlipShuttleBuilder(
-                      curve: Curves.easeInToLinear,
-                      flipForward: false,
-                    ),
-                    child: SealInCircle(
-                      size: 32,
-                      padding: EdgeInsets.all(12.w).copyWith(left: 14.w),
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -111,6 +85,7 @@ class SelectInterestsPage extends StatelessWidget {
     return CommonPopScope(
       onWillPop: Navigator.of(context).pop,
       child: CommonScaffold(
+        iconPath: AppConstants.assets.icons.messageQuestionLinear,
         body: Stack(
           fit: StackFit.expand,
           children: [

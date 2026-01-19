@@ -60,7 +60,7 @@ class _DenweeAppWrapperState extends State<DenweeAppWrapper> {
     }
 
     // check notifications permission on 5th & 10th enter of the app
-    else if (getIt<AuthCubit>().state.isAnonymousOrAuthenticated && enterCounter == 5 || enterCounter == 10) {
+    else if (getIt<AuthCubit>().state.isAnonymousOrAuthenticated && (enterCounter == 5 || enterCounter == 10)) {
       Future.delayed(requestNotificationsPermissionDelay, () {
         getIt<PermissionsCubit>().forceCheckNotifications(request: true);
       });

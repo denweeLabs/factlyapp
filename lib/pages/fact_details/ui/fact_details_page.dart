@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
-import 'package:denwee/core/ui/constants/app/app_constants.dart';
+import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/ui/constants/app/user_interests.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
@@ -13,10 +13,10 @@ import 'package:denwee/core/ui/widget/common/common_pop_scope_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_scaffold_widget.dart';
 import 'package:denwee/core/ui/widget/misc/backdrop_surface_container_widget.dart';
 import 'package:denwee/pages/fact_details/ui/cubit/fact_explanation_cubit.dart';
-import 'package:denwee/pages/fact_details/ui/widget/components/scroll_back_button_widget.dart';
-import 'package:denwee/pages/home/ui/widget/page_view/components/background.dart';
-import 'package:denwee/pages/home/ui/widget/page_view/components/bottom_section.dart';
-import 'package:denwee/pages/home/ui/widget/page_view/page_components/fact_page.dart';
+import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_scrollup_button_widget.dart';
+import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_view_background_widget.dart';
+import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_bottom_action_section_widget.dart';
+import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_fact_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,13 +34,14 @@ class FactDetailsPage extends StatefulWidget {
 }
 
 class _FactDetailsPageState extends State<FactDetailsPage> {
-  late final verticalScrollOffset = ValueNotifier<double>(0.0);
-  late final pageKey = GlobalKey<FactPageState>();
+  late final verticalScrollFraction = ValueNotifier<double>(0.0);
+  late final pageKey = GlobalKey<StoriesFactPageState>();
 
   late double bottomSectionInset;
   late double bottomSectionSafeInset;
   late double scrollViewTopPadding;
   late double pageSafeHeight;
+  late double pageHeightInv;
 
   @override
   void initState() {
@@ -52,14 +53,15 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     bottomSectionInset = getBottomSectionInset(context);
-    bottomSectionSafeInset = bottomSectionInset + BottomSection.containerHeight;
+    bottomSectionSafeInset = bottomSectionInset + StoriesBottomActionSection.containerHeight;
     scrollViewTopPadding = context.topPadding + 78.h;
     pageSafeHeight = 1.sh - scrollViewTopPadding - bottomSectionSafeInset;
+    pageHeightInv = 1 / pageSafeHeight;
   }
 
   @override
   void dispose() {
-    verticalScrollOffset.dispose();
+    verticalScrollFraction.dispose();
     super.dispose();
   }
 
@@ -68,6 +70,13 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
     final hasBottomPadding = bottomPadding > 0;
     if (Platform.isIOS) return hasBottomPadding ? bottomPadding : 24.h;
     return hasBottomPadding ? bottomPadding + 16.h : 24.h;
+  }
+
+  double resolveScrollFraction(double offset) {
+    final value = offset * pageHeightInv;
+    if (value <= 0.0) return 0.0;
+    if (value >= 1.0) return 1.0;
+    return value;
   }
 
   @override
@@ -89,23 +98,20 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
     );
   }
 
-  FactBackgroundImage _buildBackground() {
-    return FactBackgroundImage(
-      pageHeight: pageSafeHeight,
-      scrollOffset: verticalScrollOffset,
-      imagePath: AppConstants.assets.images.interest(
-        widget.fact.interest.id.value,
-      ),
+  StoriesViewBackground _buildBackground() {
+    return StoriesViewBackground(
+      scrollFraction: verticalScrollFraction,
+      imagePath: widget.fact.interest.imagePath,
     );
   }
 
   Widget _buildFactPage() {
-    return FactPage(
+    return StoriesFactPage(
       key: pageKey,
       fact: widget.fact,
       pageHeight: pageSafeHeight,
       cubit: context.read<FactExplanationCubit>(),
-      verticalScrollOffset: verticalScrollOffset,
+      initialScrollOffset: 0.0,
       onVerticalScrollChanged: _onVerticalScrollChanged,
       scrollViewTopPadding: scrollViewTopPadding,
       defaultContentPadding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 38.h),
@@ -114,7 +120,7 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
         right: 20.w,
         bottom: context.bottomPadding +
             32.h +
-            FactScrollBackButton.size +
+            StoriesScrollupButton.size +
             42.h,
       ),
     );
@@ -126,10 +132,9 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
       right: 14.w,
       bottom: bottomSectionInset,
       child: ValueListenableBuilder(
-        valueListenable: verticalScrollOffset,
-        builder: (context, offset, child) {
-          final rawFraction = (offset / pageSafeHeight).clamp(0.0, 1.0);
-          final fraction = Curves.easeInOut.transform(rawFraction);
+        valueListenable: verticalScrollFraction,
+        builder: (context, scrollFraction, child) {
+          final fraction = Curves.easeInOut.transform(scrollFraction);
           final yTranslate = bottomSectionSafeInset * fraction;
           final offstage = fraction >= 1.0;
 
@@ -142,7 +147,7 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
           );
         },
         child: BlocBuilder<FactExplanationCubit, FactExplanationState>(
-          builder: (context, state) => BottomSection(
+          builder: (context, state) => StoriesBottomActionSection(
             isLoading: state.loadingFactExplanation,
             onAccountTap: () => context.restorablePushReplacementNamedArgs(Routes.account),
             onReadMoreTap: () => NavigationUtil.onExplainFact(
@@ -199,6 +204,6 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
   }
 
   void _onVerticalScrollChanged(double offset) {
-    verticalScrollOffset.value = offset;
+    verticalScrollFraction.value = resolveScrollFraction(offset);
   }
 }

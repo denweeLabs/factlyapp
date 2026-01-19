@@ -79,6 +79,9 @@ dependencies {
     implementation("com.unity3d.ads:unity-ads:4.16.2")
     implementation("com.google.ads.mediation:unity:4.16.4.0")
 
+    // Submit the app to closed track with this dependency in order for Google Play Console to turn on subscriptions feature
+    implementation ("com.android.billingclient:billing:8.2.0")
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
 

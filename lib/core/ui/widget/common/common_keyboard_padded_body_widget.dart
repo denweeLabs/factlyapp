@@ -1,3 +1,4 @@
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_in_up.dart';
@@ -150,6 +151,7 @@ class _CommonKeyboardPaddedBodyState extends State<CommonKeyboardPaddedBody> {
         style: h0.copyWith(
           fontSize: CommonKeyboardPaddedBody.titleSize,
           color: context.darkPrimaryContainer.withValues(alpha: 0.1),
+          fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
         ),
       ).autoFadeInUp(sequencePos: 1),
     );

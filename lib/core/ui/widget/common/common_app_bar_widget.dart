@@ -1,3 +1,5 @@
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
+import 'package:denwee/core/ui/theme/app_colors.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/buttons/back_button_widget.dart';
@@ -49,11 +51,15 @@ class CommonAppBar extends StatelessWidget {
               child: BackdropSurfaceContainer.ellipse(
                 blur: 0.0,
                 color: context.isLightTheme ? context.lightPrimaryContainer : null,
+                borderColor: context.isLightTheme ? Colors.black12 : AppColors.white08,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
                   child: Text(
                     title!,
-                    style: h5.copyWith(color: context.textColor),
+                    style: h5.copyWith(
+                      color: context.textColor,
+                      fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),

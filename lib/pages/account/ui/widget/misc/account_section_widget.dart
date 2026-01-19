@@ -1,3 +1,4 @@
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ class AccountSection extends StatelessWidget {
     super.key,
     required this.title,
     required this.children,
-    this.verticalSpacing = 14,
+    this.verticalSpacing = 18,
     this.titlePadding,
     this.childrenPadding,
   });
@@ -33,6 +34,7 @@ class AccountSection extends StatelessWidget {
             style: h2.copyWith(
               color: context.textColor,
               fontWeight: FontWeight.w700,
+              fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
             ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,

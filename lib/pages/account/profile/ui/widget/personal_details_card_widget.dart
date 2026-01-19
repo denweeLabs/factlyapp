@@ -53,6 +53,7 @@ class PersonalDetailsCard extends StatelessWidget {
         shadows: [AppConstants.style.colors.commonColoredShadow(context)],
         shape: RoundedSuperellipseBorder(
           borderRadius: BorderRadius.all(AppConstants.style.radius.card),
+          side: const BorderSide(color: Colors.white12),
         ),
       ),
       child: Stack(

@@ -90,7 +90,10 @@ class ChangeLanguagePage extends StatelessWidget {
               children: [
                 Text(
                   language.nativeName,
-                  style: h4.copyWith(color: context.textColor),
+                  style: h4.copyWith(
+                    color: context.textColor,
+                    fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+                  ),
                 ),
                 2.verticalSpace,
                 Text(

@@ -1,14 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:denwee/core/ui/bloc/connectivity_cubit/connectivity_cubit.dart';
-import 'package:denwee/core/ui/bloc/permissions_cubit/permissions_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
-import 'package:denwee/core/ui/theme/app_colors.dart';
-import 'package:denwee/core/ui/theme/app_theme.dart';
-import 'package:denwee/core/ui/utils/dialogs_util.dart';
-import 'package:denwee/core/ui/utils/haptic_util.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/elastic_in.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_in.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_in_right.dart';
@@ -18,16 +9,16 @@ import 'package:denwee/core/ui/widget/buttons/back_button_widget.dart';
 import 'package:denwee/core/ui/widget/buttons/app_solid_button_widget.dart';
 import 'package:denwee/core/ui/widget/buttons/app_text_button_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_pop_scope_widget.dart';
-import 'package:denwee/core/user_preferences/domain/entity/user_preferences.dart';
-import 'package:denwee/di/di.dart';
 import 'package:denwee/localization/locale_keys.g.dart';
 import 'package:denwee/pages/authentication/args/authentication_action_result.dart';
 import 'package:denwee/pages/authentication/args/authentication_page_args.dart';
 import 'package:denwee/pages/authentication/ui/authentication_routes.dart';
 import 'package:denwee/pages/onboarding/configuration/cubit/onboarding_configuration_cubit.dart';
+import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_handlers.dart';
 import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_listener.dart';
 import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_routes.dart';
-import 'package:denwee/pages/onboarding/configuration/select_interests/cubit/select_interests_cubit.dart';
+import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_step.dart';
+import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_step_observer.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,17 +31,23 @@ class OnboardingConfigurationPage extends StatefulWidget {
   static const routeName = 'OnboardingConfigurationPage';
 
   static double backTopPadding(BuildContext context) => context.topPadding;
-  static double contentTopPadding(BuildContext context) => backTopPadding(context) + 48.h;
+  static double contentTopPadding(BuildContext context) =>
+      backTopPadding(context) + 44.h;
 
-  static final actionButtonHeight = 60.h;
+  static final actionButtonHeight = 66.h;
   static double contentBottomPadding(BuildContext context) =>
-      AppConstants.style.padding.onboardingBottomCtaPadding(context) + actionButtonHeight;
+      AppConstants.style.padding.onboardingBottomCtaPadding(context) +
+      32.h +
+      28.h +
+      actionButtonHeight;
 
   @override
   State<OnboardingConfigurationPage> createState() => _OnboardingConfigurationPageState();
 }
 
-class _OnboardingConfigurationPageState extends State<OnboardingConfigurationPage> with RestorationMixin {
+class _OnboardingConfigurationPageState extends State<OnboardingConfigurationPage>
+    with RestorationMixin, OnboardingConfigurationHandlers {
+
   late final RestorableRouteFuture<AuthorizationActionResult?> authenticationRoute;
   late final observer = TrackingRouteObserver<ModalRoute<void>>();
 
@@ -81,86 +78,24 @@ class _OnboardingConfigurationPageState extends State<OnboardingConfigurationPag
   @override
   Widget build(BuildContext context) {
     return OnboardingConfigurationListener(
-      onConfigured: _completeOnboarding,
+      onConfigured: () => completeOnboarding(context),
       child: CommonPopScope(
         onWillPop: _goBack,
         child: Stack(
           children: [
-
-            // Pages
             Positioned.fill(
-              child: RouteObserverScope(
-                observer: observer,
-                builder: (context, observer) => Navigator(
-                  observers: [
-                    observer,
-                    _StepsObserver(
-                      onChanged: context.read<OnboardingConfigurationCubit>().setStep,
-                    ),
-                  ],
-                  initialRoute: ConfigurationStep.selectInterests.route,
-                  key: context.read<OnboardingConfigurationCubit>().navigatorKey,
-                  onGenerateRoute: onboardingRouteFactory,
-                ),
-              ),
+              child: _buildPages(),
             ),
-
-            // Bottom action button
             Positioned(
               left: 24.w,
               right: 24.w,
               bottom: AppConstants.style.padding.onboardingBottomCtaPadding(context),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 0.48.sw,
-                    child: BlocBuilder<OnboardingConfigurationCubit, OnboardingConfigurationState>(builder: (context, state) {
-                      return AppTextButton(
-                        onTap: _onHaveAnAccount,
-                        padding: EdgeInsets.symmetric(vertical: 14),
-                        textColor: state.step.haveAccountTextColor(context),
-                        text: context.tr(LocaleKeys.welcome_have_an_account).toUpperCase(),
-                      ).autoFadeIn(sequencePos: 3);
-                    }),
-                  ),
-                  // 12.horizontalSpace,
-                  Expanded(
-                    child: BlocBuilder<OnboardingConfigurationCubit, OnboardingConfigurationState>(builder: (context, state) {
-                      return AppSolidButton(
-                        isBusy: state.submissionInProgress,
-                        buttonHeight: OnboardingConfigurationPage.actionButtonHeight,
-                        backgroundColors: state.step.bottomActionButtonBackgroundColor(context),
-                        textColor: state.step.bottomActionButtonTextColor(context),
-                        shadowColor: state.step.bottomActionButtonShadowColor(context),
-                        text: state.step.bottomActionButtonText(context),
-                        onTap: () => _onBottomActionButtonTap(state.step),
-                        displayIcon: !state.submissionInProgress &&
-                                state.submissionSuccess
-                            ? AppConstants.assets.icons.checkmarkLinear
-                            : null,
-                        isShimmering: true,
-                        isBubbles: true,
-                      ).autoElasticIn(sequencePos: 4);
-                    }),
-                  ),
-                ],
-              ),
+              child: _buildBottomButtons(),
             ),
-
-            // Back button
             Positioned(
               left: 0.0,
               top: OnboardingConfigurationPage.backTopPadding(context),
-              child: BlocBuilder<OnboardingConfigurationCubit, OnboardingConfigurationState>(builder: (context, state) {
-                return AppBackButton(
-                  onTap: _goBack,
-                  color: AppColors.icon[ThemeType.dark],
-                ).autoFadeInRight(
-                  slideFrom: 100,
-                  animate: state.step.showBackButton,
-                  reverseDuration: CustomAnimationDurations.low,
-                );
-              }),
+              child: _buildBackButton(),
             ),
           ],
         ),
@@ -168,45 +103,111 @@ class _OnboardingConfigurationPageState extends State<OnboardingConfigurationPag
     );
   }
 
-  Future<void> _goBack() async {
+  RouteObserverScope _buildPages() {
+    return RouteObserverScope(
+      observer: observer,
+      builder: (context, observer) => Navigator(
+        observers: [
+          observer,
+          OnboardingConfigurationStepObserver(
+            onChanged: context.read<OnboardingConfigurationCubit>().setStep,
+          ),
+        ],
+        initialRoute: ConfigurationStep.selectInterests.route,
+        key: context.read<OnboardingConfigurationCubit>().navigatorKey,
+        onGenerateRoute: onboardingRouteFactory,
+      ),
+    );
+  }
+
+  Widget _buildBottomButtons() {
+    return BlocBuilder<
+      OnboardingConfigurationCubit,
+      OnboardingConfigurationState
+    >(
+      builder: (context, state) {
+        final isIcon =
+            !state.submissionInProgress &&
+            state.isSubmissionVisibilityForced &&
+            state.submissionSuccess;
+
+        final icon = isIcon ? AppConstants.assets.icons.checkmarkLinear : null;
+        final isBusy = state.isSubmissionVisibilityForced && state.submissionInProgress;
+
+        return Column(
+          children: [
+            SizedBox(
+              width: 0.58.sw,
+              child: AppSolidButton(
+                isBusy: isBusy,
+                isBubbles: true,
+                isShimmering: true,
+                displayIcon: icon,
+                buttonHeight: OnboardingConfigurationPage.actionButtonHeight,
+                backgroundColors: state.step.bottomActionButtonBackgroundColor(context),
+                textColor: state.step.bottomActionButtonTextColor(context),
+                shadowColor: state.step.bottomActionButtonShadowColor(context),
+                text: state.step.bottomActionButtonText(context),
+                onTap: () => _onBottomActionButtonTap(state.step),
+              ).autoElasticIn(sequencePos: 4),
+            ),
+            AnimatedCrossFade(
+              firstChild: Center(
+                child: AppTextButton(
+                  onTap: _onHaveAnAccount,
+                  padding: EdgeInsets.only(top: 32.h),
+                  textColor: state.step.haveAccountTextColor(context),
+                  text: context.tr(LocaleKeys.welcome_have_an_account).toUpperCase(),
+                ).autoFadeIn(sequencePos: 3),
+              ),
+              secondChild: Container(),
+              duration: CustomAnimationDurations.lowMedium,
+              firstCurve: Curves.linearToEaseOut,
+              sizeCurve: Curves.fastEaseInToSlowEaseOut,
+              crossFadeState: state.step.showHaveAccount
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildBackButton() {
+    return BlocBuilder<
+      OnboardingConfigurationCubit,
+      OnboardingConfigurationState
+    >(
+      builder: (context, state) =>
+          AppBackButton(
+            onTap: _goBack,
+            color: state.step.backButtonColor(context),
+          ).autoFadeInRight(
+            slideFrom: 100,
+            forceComplete: false,
+            animate: state.step.showBackButton,
+            reverseDuration: CustomAnimationDurations.low,
+          ),
+    );
+  }
+
+  void _goBack() {
     final cubit = context.read<OnboardingConfigurationCubit>();
-    await cubit.navigatorKey.currentState?.maybePop();
+    final currentStep = cubit.state.step;
+    if (currentStep == ConfigurationStep.valuePrimer) {
+      return validateValuePrimer(context);
+    }
+    cubit.navigatorKey.currentState?.maybePop();
   }
 
   void _onBottomActionButtonTap(ConfigurationStep step) {
     switch (step) {
-      case ConfigurationStep.selectInterests:
-        return _validateOnSelectInterests();
-      case ConfigurationStep.selectThemeColoration:
-        return _validateOnThemeColoration();
+      case ConfigurationStep.selectInterests: return validateSelectInterests(context);
+      case ConfigurationStep.selectNotificationTime: return validateSelectNotificationTime(context);
+      case ConfigurationStep.selectThemeColoration: return validateThemeColoration(context);
+      case ConfigurationStep.valuePrimer: return validateValuePrimer(context);
     }
-  }
-
-  void _validateOnSelectInterests() {
-    final cubit = context.read<SelectInterestsCubit>();
-    if (cubit.state.selectedInterests.isEmpty) {
-      cubit.validateInterests();
-      HapticUtil.medium();
-    } else {
-      context
-          .read<OnboardingConfigurationCubit>()
-          .navigatorKey
-          .currentState
-          ?.pushNamed(ConfigurationStep.selectThemeColoration.route);
-    }
-  }
-
-  void _validateOnThemeColoration() async {
-    if (!context.read<ConnectivityCubit>().state.isNetworkAccess) {
-      return AppDialogs.showNoConnectionSnackbar();
-    }
-    final preferences = UserPreferences.fromOnboarding(
-      selectedInterests: context.read<SelectInterestsCubit>().state.selectedInterests,
-      selectedTheme: getIt<UserPreferencesCubit>().state.preferences.theme,
-      selectedLocale: context.locale,
-    );
-    await getIt<PermissionsCubit>().forceCheckNotifications(request: true);
-    context.read<OnboardingConfigurationCubit>().submitData(preferences);
   }
 
   void _onHaveAnAccount() {
@@ -224,39 +225,5 @@ class _OnboardingConfigurationPageState extends State<OnboardingConfigurationPag
         rootNavigator: true,
       );
     }
-  }
-
-  void _completeOnboarding() async {
-    context.read<UserPreferencesCubit>().changeInterests(
-          context.read<SelectInterestsCubit>().state.selectedInterests,
-        );
-    await Future.delayed(const Duration(milliseconds: 400));
-    context.restorablePushReplacementNamedArgs(
-      Routes.homeFromOnboarding,
-      rootNavigator: true,
-    );
-  }
-}
-
-class _StepsObserver extends NavigatorObserver {
-  final void Function(ConfigurationStep) onChanged;
-
-  _StepsObserver({required this.onChanged});
-
-  @override
-  void didPop(Route route, Route? previousRoute) {
-    super.didPop(route, previousRoute);
-    setStepFromRoute(previousRoute);
-  }
-
-  @override
-  void didPush(Route route, Route? previousRoute) {
-    super.didPush(route, previousRoute);
-    setStepFromRoute(route);
-  }
-
-  void setStepFromRoute(Route? route) {
-    final newStep = ConfigurationStep.fromRouteSettings(route?.settings);
-    onChanged(newStep);
   }
 }

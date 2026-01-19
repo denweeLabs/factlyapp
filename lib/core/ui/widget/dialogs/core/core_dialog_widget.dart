@@ -218,13 +218,13 @@ class CoreDialog extends StatelessWidget {
         children: [
           Text(
             title!,
-            style: h4.copyWith(color: context.textColor),
+            style: dialogTitle.copyWith(color: context.textColor),
             textAlign: TextAlign.center,
           ),
           12.verticalSpace,
           Text(
             subtitle!,
-            style: bodyS.copyWith(color: context.textColorSecondary),
+            style: dialogSubtitle.copyWith(color: context.textColorSecondary),
             textAlign: TextAlign.center,
           ),
         ],

@@ -6,6 +6,7 @@ abstract class OnboardingConfigurationState with _$OnboardingConfigurationState 
   const factory OnboardingConfigurationState({
     @Default(ConfigurationStep.selectInterests) ConfigurationStep step,
     @Default(false) bool submissionInProgress,
+    @Default(false) bool isSubmissionVisibilityForced,
     @Default(None()) Option<Either<CommonApiFailure, Unit>> submissionFailureOrSuccess,
   }) = _OnboardingConfigurationState;
 

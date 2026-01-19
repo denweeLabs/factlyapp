@@ -17,7 +17,6 @@ class _ConfigConstants {
     hourAndMin(20, 30),
     hourAndMin(21, 00),
     hourAndMin(21, 30),
-    hourAndMin(22, 00),
   ];
 
   /// Notifications are enabled by default
@@ -36,8 +35,8 @@ class _ConfigConstants {
   final usernameMinLength = 2;
   final usernameMaxLength = 25;
 
-  /// Request authentication every 7 app entries
-  final promptAuthenticationEachEnter = 7;
+  /// Request authentication on every 'n'th app enter
+  final promptAuthenticationEachEnter = 20;
 
   /// Password constraints
   final passwordMinLength = 8;
@@ -77,8 +76,8 @@ class _ConfigConstants {
     ),
     ThemeColoration(
       id: UniqueId.fromValue(3),
-      primary: const Color(0xFF6CC6BA),
-      secondary: const Color(0xFF267280),
+      primary: const Color(0xFF267280),
+      secondary: const Color(0xFF6CC6BA),
     ),
     ThemeColoration(
       id: UniqueId.fromValue(4),
@@ -111,6 +110,9 @@ class _ConfigConstants {
       secondary: const Color(0xFFFF9980),
     ),
   ];
+
+  /// Users must select at least 'n' interests
+  final interestsMinCount = 3;
 
 
   // ---------------------------------------------------------------------------

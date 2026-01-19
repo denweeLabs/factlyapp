@@ -47,20 +47,20 @@ class TrackingRouteObserver<R extends Route<dynamic>> extends RouteObserver<R> {
   void subscribe(RouteAware routeAware, R route) {
     super.subscribe(routeAware, route);
     _subscribers.add(routeAware);
-    debugPrint('[RouteObserver] Subscribed: $routeAware for route: ${route.settings.name}');
+    // debugPrint('[RouteObserver] Subscribed: $routeAware for route: ${route.settings.name}');
   }
 
   @override
   void unsubscribe(RouteAware routeAware) {
     super.unsubscribe(routeAware);
     _subscribers.remove(routeAware);
-    debugPrint('[RouteObserver] Unsubscribed: $routeAware');
+    // debugPrint('[RouteObserver] Unsubscribed: $routeAware');
   }
 
   void printSubscribers() {
-    debugPrint('[RouteObserver] Currently subscribed:');
-    for (final sub in _subscribers) {
-      debugPrint('  → $sub');
-    }
+    // debugPrint('[RouteObserver] Currently subscribed:');
+    // for (final sub in _subscribers) {
+    //   debugPrint('  → $sub');
+    // }
   }
 }

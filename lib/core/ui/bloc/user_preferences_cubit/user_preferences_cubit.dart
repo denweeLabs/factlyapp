@@ -48,6 +48,19 @@ class UserPreferencesCubit extends Cubit<UserPreferencesState> {
     );
   }
 
+  void setFromOnboarding({
+    required List<UserInterest> interests,
+    required DateTime notificationTime,
+  }) {
+    final newPreferences = state.preferences.copyWith(
+      interests: interests,
+      notifications: state.preferences.notifications.copyWith(
+        time: notificationTime,
+      ),
+    );
+    emitPreservePreferences(newPreferences);
+  }
+
   void changeInterests(List<UserInterest> interests) {
     final newPreferences = state.preferences.copyWith(interests: interests);
     emitPreservePreferences(newPreferences);

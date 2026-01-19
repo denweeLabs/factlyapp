@@ -60,9 +60,7 @@ extension _CommonBackgroundStyleX on CommonBackgroundStyle {
     switch (this) {
       case CommonBackgroundStyle.themeBased:
       case CommonBackgroundStyle.solid:
-        return context.isLightTheme
-            ? context.iconColor.withValues(alpha: 0.03)
-            : Colors.transparent;
+        return context.isLightTheme ? AppColors.black02 : AppColors.white01;
       case CommonBackgroundStyle.colored:
       case CommonBackgroundStyle.coloredReversed:
         return AppColors.icon[ThemeType.light]!.withValues(alpha: 0.04);
@@ -166,7 +164,7 @@ class CommonScaffold extends StatelessWidget {
 
     return Positioned(
       right: -108.w,
-      bottom: -24.h,
+      bottom: -28.h,
       child: AnimatedSwitcher(
         duration: CustomAnimationDurations.low,
         child: !hasIcon
@@ -175,7 +173,7 @@ class CommonScaffold extends StatelessWidget {
                 key: ValueKey(iconPath!),
                 path: iconPath!,
                 color: decorationIconColor,
-                size: 294.r,
+                size: 282.r,
               ).autoFadeInUp(delay: iconAppearDelay),
       ),
     );

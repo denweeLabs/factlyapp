@@ -5,7 +5,7 @@
     "welcome": {
         "title": "Denwee",
         "subtitle": "Découvrez chaque jour des faits courts, faciles à comprendre et mémorables !",
-        "begin_cta": "Commencer",
+        "begin_cta": "Explorer",
         "have_an_account": "Vous avez un compte ?"
     },
 
@@ -30,14 +30,34 @@
 
     "onboarding": {
         "select_interests": {
-            "title": "Choisissez vos\ncentres d'intérêt",
-            "subtitle": "Dites-nous ce qui vous passionne le plus",
-            "cta": "Suivant"
+            "title": "Qu’est-ce qui éveille ta curiosité ?",
+            "subtitle": "Dis-nous ce qui t’intéresse le plus",
+            "cta": "Choisir"
+        },
+        "select_notification_time": {
+            "title": "Un rappel quotidien pour rester curieux",
+            "subtitle": "Un fait envoyé chaque jour",
+            "time_selection_title": "Heure",
+            "dummy_notification": {
+                "title": "🌙  Bonsoir !",
+                "body": "Le cœur d’une baleine bleue peut peser plus de 180 kg et est de la taille d’une petite voiture, battant seulement 8–10 fois par minute !",
+                "time_ago": "maintenant"
+            },
+            "cta": "Activer"
         },
         "select_theme_colorations": {
-            "title": "Choisissez votre\nthème",
-            "subtitle": "Personnalisez votre expérience avec des couleurs",
-            "cta": "Terminé"
+            "title": "Choisis des couleurs qui te ressemblent",
+            "subtitle": "Personnalise ton expérience",
+            "cta": "Appliquer"
+        },
+        "value_primer": {
+            "title": "Transformer la curiosité en savoir",
+            "bullets": {
+                "line_1": "Découvre un fait court",
+                "line_2": "Appuie sur «{}»",
+                "line_3": "Découvre l’histoire"
+            },
+            "cta": "Explorer"
         }
     },
 
@@ -46,6 +66,9 @@
         "section": {
             "profile": {
                 "title": "Profil"
+            },
+            "subscription": {
+                "title": "Abonnement"
             },
             "interests": {
                 "title": "Centres d'intérêt"
@@ -106,11 +129,50 @@
             "personal": {
                 "title": "Personnel"
             },
+            "subscription": {
+                "title": "Abonnement"
+            },
             "more": {
                 "title": "Plus",
                 "change_password": "Changer\nle mot de passe",
                 "contact_support": "Contacter\nle support"
             }
+        }
+    },
+
+
+    "subscription": {
+        "basic_plan": "Denwee Basic",
+        "premium_plan": "Premium",
+        "active_plan": "Forfait actif",
+        "upgrade_cta": "Passer",
+        "paywall": {
+            "title": "Profitez de chaque fait sans aucune limite",
+            "benefits": {
+                "line_1": "Explications instantanées",
+                "line_2": "Accès illimité aux archives",
+                "line_3": "Plus aucune publicité",
+                "ads_encourage_msg": {
+                    "one": "Vous avez passé ~{} minute sur les pubs. Gagnez plus de temps avec Premium 🫶",
+                    "other": "Vous avez passé ~{} minutes sur les pubs. Gagnez plus de temps avec Premium 🫶"
+                }
+            },
+            "package": {
+                "monthly": {
+                    "title": "Mensuel",
+                    "per_period": "mois"
+                },
+                "yearly": {
+                    "title": "Annuel",
+                    "per_period": "an"
+                }
+            },
+            "footer": {
+                "restore": "Restaurer",
+                "privacy": "Confidentialité",
+                "terms": "Conditions"
+            },
+            "expiry": "Expiration"
         }
     },
 
@@ -138,7 +200,7 @@
             "long": "Le nom est trop long"
         },
         "interests": {
-            "empty": "Veuillez sélectionner au moins un centre d'intérêt"
+            "not_enough": "Choisissez au moins {} centres d’intérêt pour une meilleure expérience"
         }
     },
 
@@ -240,6 +302,19 @@
                 "subtitle": "Nous sommes désolés de vous faire attendre, mais il n'y a pas d'annonces disponibles pour le moment... Veuillez réessayer dans quelques minutes :("
             }
         },
+        "subscriptions": {
+            "configuration": "Un problème est survenu lors de la configuration de votre achat... Veuillez réessayer 🙏",
+            "purchase_not_allowed": "Oh... Il semble que les achats ne soient pas autorisés sur cet appareil ou ce compte 😕",
+            "purchase_cancelled": "Achat annulé... Pas d’inquiétude, vous pouvez réessayer quand vous voulez 🙂",
+            "payment_pending": "Votre paiement est en cours de traitement... Veuillez patienter ⏳",
+            "payment_failed": "Le paiement a échoué... Veuillez vérifier votre moyen de paiement 💳",
+            "already_subscribed": "Vous avez déjà un abonnement actif 🎉",
+            "subscription_not_found": "Aucun abonnement actif trouvé... Essayez de restaurer ou vérifiez votre compte 🙂",
+            "insufficient_permissions": "Impossible de vérifier l'achat... Veuillez restaurer ou vous reconnecter 🔐",
+            "internal_server": "Oups ! Un problème est survenu de notre côté... Nous y travaillons ⚙️",
+            "connection_timeout": "Impossible de se connecter... Vérifiez votre connexion 📶",
+            "unexpected": "Une erreur inattendue s'est produite... Nous enquêtons 🚨"
+        },
         "common": {
             "internal_server": "Quelque chose s'est mal passé de notre côté... Nous travaillons dessus 🔧",
             "connection_timeout": "Pas de connexion... Vérifiez votre Internet et réessayez 📡",
@@ -304,6 +379,14 @@
         "reset_password_enter_email": {
             "title": "Réinitialiser le mot de passe",
             "subtitle": "Nous t’enverrons un lien pour réinitialiser ton mot de passe par e-mail... Si rien n’arrive, attends 30 secondes et réessaie :)"
+        },
+        "success_purchase": {
+            "title": "C’est fait !",
+            "subtitle": "Votre accès Premium est actif jusqu’au {}. Merci beaucoup pour votre soutien ! 🫶"
+        },
+        "subscription_packages_switch": {
+            "title": "Petit rappel !",
+            "subtitle": "Lorsque vous changez de formule, votre abonnement actuel sera remplacé et la valeur restante sera appliquée au nouveau plan 😉"
         }
     },
 
