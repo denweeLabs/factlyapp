@@ -8,6 +8,7 @@ import 'package:denwee/core/ui/utils/redirect_util.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -104,13 +105,12 @@ class LauncherUtil {
     BuildContext context,
     String resource,
   ) async {
+    final preferences = getIt<UserPreferencesCubit>().state.preferences;
     final url = Uri.parse(resource).replace(
       queryParameters: {
-        'lang': getIt<UserPreferencesCubit>()
-            .state
-            .preferences
-            .language
-            .languageCode,
+        'lang': preferences.language.languageCode,
+        'coloration': preferences.theme.colorationId.value.toString(),
+        'brightness': preferences.theme.mode.name,
       },
     );
     final isSuccess = await launchUrl(url.toString());
