@@ -85,7 +85,7 @@ class SelectedInterestCard extends StatelessWidget {
             child: Image.asset(
               AppConstants.assets.images.interest(interest!.id.value),
               fit: BoxFit.cover,
-              cacheWidth: (width * 1.5).toInt(),
+              cacheWidth: (width * 2.0).toInt(),
             ),
           ),
           Positioned(
