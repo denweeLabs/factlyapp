@@ -17,6 +17,7 @@ extension FadeInRightExtension on Widget {
     Function(AnimationController)? controllerProvider,
     bool manualTrigger = false,
     bool animate = true,
+    bool forceComplete = true,
     Function(AnimateDoDirection direction)? onFinish,
     int? sequencePos,
   }) {
@@ -32,6 +33,7 @@ extension FadeInRightExtension on Widget {
       slideTo: Offset.zero,
       fadeFrom: 0.0,
       fadeTo: 1.0,
+      forceComplete: forceComplete,
       controllerProvider: controllerProvider,
       manualTrigger: manualTrigger,
       animate: animate,

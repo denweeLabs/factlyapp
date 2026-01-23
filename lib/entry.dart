@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:denwee/core/user_preferences/domain/repo/user_preferences_repo.dart';
 import 'package:denwee/localization/codegen_loader.g.dart';
 import 'package:denwee/pages/app/app.dart';
@@ -39,6 +40,10 @@ void run(String env) {
     });
 
 
+    // === Subscriptions ==========================================================
+    await getIt<SubscriptionsRepo>().init();
+
+
     // === Localization ===========================================================
     await EasyLocalization.ensureInitialized();
     final startLocale = getIt<UserPreferencesRepo>()
@@ -71,6 +76,7 @@ void run(String env) {
           useOnlyLangCode: true,
           saveLocale: false,
           startLocale: startLocale,
+          ignorePluralRules: false,
           supportedLocales: AppConstants.config.supportedLocales,
           fallbackLocale: AppConstants.config.fallbackLocale,
           path: AppConstants.config.localesPath,

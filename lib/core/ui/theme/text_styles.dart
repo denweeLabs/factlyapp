@@ -18,11 +18,18 @@ TextStyle _styleWrapper({
       fontFamily: fontFamily,
     );
 
+String get commonFontFamily {
+  return getIt<UserPreferencesCubit>().state.whenLanguage(
+    en: () => AppConstants.style.textStyle.primaryFontFamily,
+    ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
+  );
+}
+
 TextStyle get h0 {
   return _styleWrapper(
     fontSize: 32.sp,
     letterSpacing: -0.3,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w800,
   );
 }
@@ -31,7 +38,7 @@ TextStyle get h1 {
   return _styleWrapper(
     fontSize: 24.sp,
     letterSpacing: -0.2,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w700,
   );
 }
@@ -40,7 +47,7 @@ TextStyle get h2 {
   return _styleWrapper(
     fontSize: 22.sp,
     letterSpacing: -0.6,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w700,
   );
 }
@@ -49,7 +56,7 @@ TextStyle get h3 {
   return _styleWrapper(
     fontSize: 20.sp,
     letterSpacing: -0.2,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w600,
   );
 }
@@ -58,7 +65,7 @@ TextStyle get h4 {
   return _styleWrapper(
     fontSize: 18.sp,
     letterSpacing: -0.1,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w600,
   );
 }
@@ -67,7 +74,7 @@ TextStyle get h5 {
   return _styleWrapper(
     fontSize: 16.sp,
     letterSpacing: -0.1,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w600,
   );
 }
@@ -76,7 +83,7 @@ TextStyle get h6 {
   return _styleWrapper(
     fontSize: 14.sp,
     letterSpacing: 0.0,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w600,
   );
 }
@@ -85,7 +92,7 @@ TextStyle get bodyL {
   return _styleWrapper(
     fontSize: 16.sp,
     letterSpacing: -0.1,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w600,
   );
 }
@@ -94,7 +101,7 @@ TextStyle get bodyM {
   return _styleWrapper(
     fontSize: 14.sp,
     letterSpacing: -0.2,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w600,
   );
 }
@@ -103,7 +110,7 @@ TextStyle get bodyS {
   return _styleWrapper(
     fontSize: 12.sp,
     letterSpacing: -0.1,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: commonFontFamily,
     fontWeight: FontWeight.w600,
   );
 }
@@ -115,8 +122,8 @@ TextStyle get solidButton {
     letterSpacing: 0.2,
     fontWeight: FontWeight.w900,
     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
-      en: () => AppConstants.style.textStyle.secondaryFontFamiliy,
-      ru: () => AppConstants.style.textStyle.primaryFontFamily,
+      en: () => AppConstants.style.textStyle.primaryFontFamily,
+      ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
     ),
   );
 }
@@ -128,8 +135,8 @@ TextStyle get textButton {
     fontWeight: FontWeight.w900,
     letterSpacing: 0.9,
     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
-      en: () => AppConstants.style.textStyle.secondaryFontFamiliy,
-      ru: () => AppConstants.style.textStyle.primaryFontFamily,
+      en: () => AppConstants.style.textStyle.primaryFontFamily,
+      ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
     ),
   );
 }
@@ -138,7 +145,7 @@ TextStyle get textFieldHint {
   return _styleWrapper(
     fontSize: 16.sp,
     letterSpacing: 0.1,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
     fontWeight: FontWeight.w500,
   );
 }
@@ -147,7 +154,7 @@ TextStyle get textField {
   return _styleWrapper(
     fontSize: 16.sp,
     letterSpacing: 0.0,
-    fontFamily: AppConstants.style.textStyle.primaryFontFamily,
+    fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
     fontWeight: FontWeight.w500,
   );
 }
@@ -159,8 +166,8 @@ TextStyle get markdown {
     height: 1.5,
     fontWeight: FontWeight.w600,
     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
-      en: () => AppConstants.style.textStyle.secondaryFontFamiliy,
-      ru: () => AppConstants.style.textStyle.primaryFontFamily,
+      en: () => AppConstants.style.textStyle.primaryFontFamily,
+      ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
     ),
   );
 }
@@ -172,8 +179,8 @@ TextStyle get markdownDetailed {
     letterSpacing: -0.3,
     fontWeight: FontWeight.w600,
     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
-      en: () => AppConstants.style.textStyle.secondaryFontFamiliy,
-      ru: () => AppConstants.style.textStyle.primaryFontFamily,
+      en: () => AppConstants.style.textStyle.primaryFontFamily,
+      ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
     ),
   );
 }
@@ -187,8 +194,29 @@ TextStyle get factHeaderTitle {
       ru: () => 0.0,
     ),
     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
-      en: () => AppConstants.style.textStyle.secondaryFontFamiliy,
-      ru: () => AppConstants.style.textStyle.primaryFontFamily,
+      en: () => AppConstants.style.textStyle.primaryFontFamily,
+      ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
     ),
+  );
+}
+
+TextStyle get dialogTitle {
+  return _styleWrapper(
+    fontSize: 18.sp,
+    letterSpacing: -0.1,
+    fontWeight: FontWeight.w600,
+    fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+  );
+}
+
+TextStyle get dialogSubtitle {
+  return _styleWrapper(
+    fontSize: 12.sp,
+    letterSpacing: -0.1,
+    fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
+      en: () => AppConstants.style.textStyle.primaryFontFamily,
+      ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
+    ),
+    fontWeight: FontWeight.w600,
   );
 }

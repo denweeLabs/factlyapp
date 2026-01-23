@@ -38,4 +38,5 @@ class _FactsEndpoints {
     );
     return uri.toString();
   }
+  String dailyFact(String factId) => '$_base/daily/fact/$factId';
 }

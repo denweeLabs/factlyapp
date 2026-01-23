@@ -1,4 +1,5 @@
 import 'package:denwee/core/statistics/domain/entity/user_statistics.dart';
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/router/page_routes_builders/cross_fade_page_route_builder.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
@@ -124,6 +125,7 @@ class _ProfileOverlayUserStatisticsState extends State<ProfileOverlayUserStatist
                     fontWeight: FontWeight.w700,
                     color: context.textColor,
                     letterSpacing: -1.6,
+                    fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
                   ),
                 ),
                 3.horizontalSpace,
@@ -138,7 +140,10 @@ class _ProfileOverlayUserStatisticsState extends State<ProfileOverlayUserStatist
             2.verticalSpace,
             Text(
               item.title(context),
-              style: bodyS.copyWith(color: context.textColorSecondary),
+              style: bodyS.copyWith(
+                color: context.textColorSecondary,
+                fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+              ),
             ),
           ],
         ),

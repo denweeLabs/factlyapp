@@ -1,5 +1,7 @@
 import 'package:denwee/core/auth/domain/entity/email.dart';
+import 'package:denwee/core/notifications/domain/entity/push_notification.dart';
 import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
+import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/core/ui/router/page_routes_builders/fade_slideup_page_route_builder.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/dialogs/account_delete_confirmation_dialog_widget.dart';
@@ -11,9 +13,12 @@ import 'package:denwee/core/ui/widget/dialogs/reset_password_link_sent_dialog_wi
 import 'package:denwee/core/ui/widget/dialogs/reset_password_timeout_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/select_notification_time_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/session_expired_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/subscription_purchase_success_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/subscription_switch_warning_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/common_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/core_global_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/internet_connection_snackbar_widget.dart';
+import 'package:denwee/core/ui/widget/snackbars/notification_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -31,17 +36,19 @@ extension SnackBarPositionX on SnackBarPosition {
   EdgeInsets get padding {
     switch (this) {
       case SnackBarPosition.bottom:
-        return EdgeInsets.symmetric(horizontal: 18.w).copyWith(bottom: 18.h);
+        return EdgeInsets.symmetric(horizontal: 16.w).copyWith(bottom: 18.h);
       case SnackBarPosition.top:
-        return EdgeInsets.symmetric(horizontal: 18.w).copyWith(top: 12.h);
+        return EdgeInsets.symmetric(horizontal: 16.w).copyWith(top: 10.h);
     }
   }
 }
 
 class AppDialogs {
+  static const snackbarDefaultAnimationDuration = Duration(milliseconds: 1500);
   static const snackbarDefaultDisplayDuration = Duration(milliseconds: 1200);
   static const snackbarSuccessDisplayDuration = Duration(milliseconds: 800);
-  static const snackbarErrorDisplayDuration = Duration(milliseconds: 3200);
+  static const snackbarErrorDisplayDuration = Duration(milliseconds: 2200);
+  static const snackbarNotificationDisplayDuration = Duration(milliseconds: 2000);
   static final dialogBarrierColor = Colors.black.withValues(alpha: 0.65);
 
   static void showSuccessSnackbar({
@@ -70,6 +77,15 @@ class AppDialogs {
 
   static void showNoConnectionSnackbar() {
     _showSnackbar(const InternetConnectionSnackbar());
+  }
+
+  static void showNotificationSnackbar(PushNotification notification) {
+    _showSnackbar(
+      NotificationSnackbar(notification),
+      displayDuration: snackbarNotificationDisplayDuration,
+      onTap: notification.tryLaunchLink,
+      curve: const Interval(0.0, 0.4, curve: Curves.linearToEaseOut),
+    );
   }
 
   static Future<void> showSessionExpiredDialog(BuildContext context, VoidCallback onDismiss) {
@@ -158,6 +174,24 @@ class AppDialogs {
     );
   }
 
+  static Future<void> showSubscriptionPurchaseSuccessDialog(BuildContext context, UserSubscription subscription) {
+    return showDialog<void>(
+      context,
+      SubscriptionPurchaseSuccessDialog(subscription: subscription),
+      barrierColor: AppDialogs.dialogBarrierColor,
+      settings: const RouteSettings(name: SubscriptionPurchaseSuccessDialog.routeName),
+    );
+  }
+
+  static Future<bool?> showSubscriptionSwitchWarningDialog(BuildContext context) {
+    return showDialog<bool?>(
+      context,
+      const SubscriptionSwitchWarningDialog(),
+      barrierColor: AppDialogs.dialogBarrierColor,
+      settings: const RouteSettings(name: SubscriptionSwitchWarningDialog.routeName),
+    );
+  }
+
   static Future<T?> showDialog<T>(
     BuildContext context,
     Widget dialogBody, {
@@ -206,6 +240,8 @@ class AppDialogs {
     Widget snackbarWidget, {
     Duration? displayDuration,
     SnackBarPosition position = SnackBarPosition.top,
+    VoidCallback? onTap,
+    Curve curve = Curves.elasticOut,
   }) {
     final overlayState =
         GlobalSnackbarController.instance.overlayKey.currentState;
@@ -214,14 +250,15 @@ class AppDialogs {
     return showTopSnackBar(
       overlayState,
       snackbarWidget,
-      animationDuration: snackbarDefaultDisplayDuration,
-      displayDuration: snackbarDefaultDisplayDuration,
+      animationDuration: snackbarDefaultAnimationDuration,
+      displayDuration: displayDuration ?? snackbarDefaultDisplayDuration,
       reverseAnimationDuration: const Duration(milliseconds: 400),
-      curve: Curves.elasticOut,
+      curve: curve,
       snackBarPosition: position,
       dismissDirection: position.dismissDirections,
       padding: position.padding,
-      dismissType: DismissType.onTap,
+      dismissType: DismissType.onSwipe,
+      onTap: onTap,
     );
   }
 }

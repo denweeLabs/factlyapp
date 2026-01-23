@@ -3,6 +3,7 @@ import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/constants/app/user_interests.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
+import 'package:denwee/core/ui/widget/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/core/ui/widget/misc/backdrop_surface_container_widget.dart';
 import 'package:flutter/material.dart';
@@ -52,12 +53,22 @@ class SelectedInterestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMoreCard = interest == null;
 
-    return SizedBox.fromSize(
-      size: Size.fromWidth(width),
-      child: BackdropSurfaceContainer.ellipse(
+    if (isMoreCard) {
+      return BackdropSurfaceContainer.ellipse(
         onTap: onTap,
         onLongTap: onLongTap,
-        child: isMoreCard ? _buildMoreBody(context) : _buildInterestBody(context),
+        borderColor: context.isLightTheme ? Colors.black12 : Colors.white10,
+        size: Size.fromWidth(width),
+        child: _buildMoreBody(context),
+      );
+    }
+
+    return BounceTapAnimation(
+      onTap: onTap,
+      onLongTap: onLongTap,
+      child: SizedBox.fromSize(
+        size: Size.fromWidth(width),
+        child: _buildInterestBody(context),
       ),
     );
   }
@@ -74,7 +85,7 @@ class SelectedInterestCard extends StatelessWidget {
             child: Image.asset(
               AppConstants.assets.images.interest(interest!.id.value),
               fit: BoxFit.cover,
-              cacheHeight: 500,
+              cacheWidth: (width * 2.0).toInt(),
             ),
           ),
           Positioned(

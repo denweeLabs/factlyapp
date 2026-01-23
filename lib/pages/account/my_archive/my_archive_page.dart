@@ -52,15 +52,17 @@ class _MyArchivePageState extends State<MyArchivePage> {
   Widget build(BuildContext context) {
     return CommonScaffold(
       iconPath: AppConstants.assets.icons.archiveTickLinear,
-      body: Column(
-        children: [
-          CommonAppBar(
-            backgroundColor: _getHeaderBackgroundColor(true),
-            title: context.tr(LocaleKeys.account_section_daily_facts_items_archive),
-          ),
-          Expanded(
-            child: BlocBuilder<FactsArchiveCubit, FactsArchiveState>(
-              builder: (context, state) => AnimatedSwitcher(
+      body: BlocBuilder<FactsArchiveCubit, FactsArchiveState>(
+        builder: (context, state) => Column(
+          children: [
+            CommonAppBar(
+              backgroundColor: _getHeaderBackgroundColor(state.archiveIds.isNotEmpty),
+              title: context.tr(
+                LocaleKeys.account_section_daily_facts_items_archive,
+              ),
+            ),
+            Expanded(
+              child: AnimatedSwitcher(
                 switchInCurve: Curves.fastEaseInToSlowEaseOut,
                 switchOutCurve: const Interval(0.5, 1.0, curve: Curves.ease),
                 duration: CustomAnimationDurations.medium,
@@ -71,8 +73,8 @@ class _MyArchivePageState extends State<MyArchivePage> {
                 }(),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

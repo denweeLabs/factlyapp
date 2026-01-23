@@ -1,9 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
+import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
+import 'package:denwee/core/facts/domain/repo/daily_facts_repo.dart';
+import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/utils/dialogs_util.dart';
+import 'package:denwee/core/ui/utils/haptic_util.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/pages/authentication/ui/reset_password/reset_password_page_args.dart';
+import 'package:denwee/pages/fact_details/domain/args/fact_details_page_args.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/utils.dart';
@@ -12,6 +19,7 @@ import 'package:utils/utils.dart';
 class RedirectUtil {
   /*
   1. denwee://factlyapp/resetPassword
+  2. denwee://factlyapp/factDetails?id=1
   */
 
   static const scheme = 'denwee';
@@ -19,11 +27,12 @@ class RedirectUtil {
   Future<void> execute(Uri link) async {
     debugPrint('RedirectUtil execute: $link');
     switch (link.path) {
-      case '/resetPassword': return _handleRestPassword(link);
+      case '/resetPassword': return _handleResetPassword(link);
+      case '/factDetails': return _handleFactDetails(link);
     }
   }
 
-  Future<void> _handleRestPassword(Uri link) async {
+  Future<void> _handleResetPassword(Uri link) async {
 
     String? extractAccessToken(Uri link) {
       if (link.queryParameters.containsKey('access_token')) {
@@ -49,6 +58,29 @@ class RedirectUtil {
 
     final args = ResetPasswordPageArgs(accessToken: accessToken);
     context.restorablePushNamedArgs(Routes.resetPassword,
+        argsToJson: args.toJson);
+  }
+
+  Future<void> _handleFactDetails(Uri link) async {
+    final factIdString = link.queryParameters['id'];
+    if (factIdString == null) return;
+
+    final factId = int.tryParse(factIdString);
+    if (factId == null) return;
+
+    final result = (await getIt<DailyFactsRepo>().getFactByIdRemote(
+      UniqueId.fromValue(factId),
+    )).getEntries();
+
+    if (result.$1 != null) {
+      if (result.$1! == FactsFailure.connectionTimeout) AppDialogs.showNoConnectionSnackbar();
+      return;
+    }
+    
+    HapticUtil.light();
+    final context = getIt<RootRouterData>().context;
+    final args = FactDetailsPageArgs(fact: result.$2!);
+    context.restorablePushNamedArgs(Routes.factDetails,
         argsToJson: args.toJson);
   }
 }

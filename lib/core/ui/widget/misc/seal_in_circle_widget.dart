@@ -12,11 +12,15 @@ class SealInCircle extends StatelessWidget {
     this.padding,
     this.size,
     this.onTap,
+    this.backgroundColor,
+    this.hideShadow = false,
   });
 
   final EdgeInsets? padding;
   final int? size;
   final VoidCallback? onTap;
+  final Color? backgroundColor;
+  final bool hideShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +32,8 @@ class SealInCircle extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: context.primaryContainer,
-          boxShadow: [AppConstants.style.colors.commonShadow],
+          color: backgroundColor ?? context.primaryContainer,
+          boxShadow: hideShadow ? null : [AppConstants.style.colors.commonShadow],
         ),
         child: Padding(
           padding: padding ?? EdgeInsets.all(26.w).copyWith(left: 34.w),

@@ -7,7 +7,10 @@ import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/utils/haptic_util.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_in.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_in_up.dart';
+import 'package:denwee/core/ui/widget/animations/animate_do/fade_out_up.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
+import 'package:denwee/core/ui/widget/animations/misc/route_aware_animated.dart';
+import 'package:denwee/core/ui/widget/animations/misc/route_observer_scope.dart';
 import 'package:denwee/core/ui/widget/animations/scroll_physics/less_responsive_scroll_physics.dart';
 import 'package:denwee/core/ui/widget/common/common_scaffold_widget.dart';
 import 'package:denwee/core/ui/widget/misc/coloration_item_bubble_widget.dart';
@@ -56,6 +59,7 @@ class _SelectThemeColorationPageState extends State<SelectThemeColorationPage> {
     Future.delayed(CustomAnimationDurations.low, () {
       bubblesInitiallyAnimated = true;
     });
+    precacheValuePrimerAssets();
     super.initState();
   }
 
@@ -65,6 +69,19 @@ class _SelectThemeColorationPageState extends State<SelectThemeColorationPage> {
     super.dispose();
   }
 
+  void precacheValuePrimerAssets() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      precacheImage(
+        AssetImage(AppConstants.assets.images.interestShortFact),
+        context,
+      );
+      precacheImage(
+        AssetImage(AppConstants.assets.images.interestDetailedFact),
+        context,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
@@ -72,85 +89,128 @@ class _SelectThemeColorationPageState extends State<SelectThemeColorationPage> {
       style: CommonBackgroundStyle.colored,
       iconPath: AppConstants.assets.icons.brushLinear,
       systemNavigationBarContrastEnforced: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: OnboardingConfigurationPage.contentTopPadding(context),
-          ),
-          32.verticalSpace,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Text(
-              context.tr(LocaleKeys.onboarding_select_theme_colorations_title),
-              style: h0.copyWith(
-                height: 1.4,
-                letterSpacing: -0.6,
-                color: context.lightTextColor,
-              ),
-            ).autoFadeInUp(sequencePos: 1),
-          ),
-          12.verticalSpace,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Text(
-              context.tr(LocaleKeys.onboarding_select_theme_colorations_subtitle),
-              style: bodyL.copyWith(
-                color: context.lightTextColorSecondary,
-                height: 1.6,
-              ),
+      body: RouteAwareAnimated(
+        observer: RouteObserverScope.of(context),
+        builder: (context, controller) => Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: OnboardingConfigurationPage.contentTopPadding(context),
             ),
-          ).autoFadeInUp(sequencePos: 2),
-          24.verticalSpace,
-          Expanded(
-            child: PageView.builder(
-              controller: pageController,
-              itemCount: AppConstants.config.themeColorations.length,
-              physics: const LessResponsiveScrollPhysics(),
-              onPageChanged: _onPageChanged,
-              itemBuilder: (context, index) {
-                final coloration = AppConstants.config.themeColorations[index];
-                return BlocSelector<UserPreferencesCubit, UserPreferencesState, bool>(
-                  selector: (state) => state.preferences.theme.colorationId == coloration.id,
-                  builder: (context, isSelected) => ColorationItemBubble(
-                    size: bubbleSize,
-                    index: index,
-                    coloration: coloration,
-                    isSelected: isSelected,
-                    onTap: (_) => _animateTo(index),
-                  ).autoFadeInUp(
-                    slideCurve: CustomAnimationCurves.mediumElasticOut,
-                    delay: _getBubbleAppearDelay(index),
-                    fadeCurve: Curves.fastEaseInToSlowEaseOut,
+            32.verticalSpace,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child:
+                  Text(
+                        context.tr(
+                          LocaleKeys.onboarding_select_theme_colorations_title,
+                        ),
+                        style: h0.copyWith(
+                          height: 1.4,
+                          letterSpacing: -0.6,
+                          color: context.lightTextColor,
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+                      .autoFadeInUp(sequencePos: 1)
+                      .routeAwareFadeOutUp(
+                        controller: controller,
+                        sequencePos: 0,
+                        sequenceTotal: 3,
+                      ),
+            ),
+            20.verticalSpace,
+            Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Text(
+                    context.tr(
+                      LocaleKeys.onboarding_select_theme_colorations_subtitle,
+                    ),
+                    style: bodyL.copyWith(
+                      color: context.lightTextColorSecondary,
+                      height: 1.6,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                );
-              },
+                )
+                .autoFadeInUp(sequencePos: 2)
+                .routeAwareFadeOutUp(
+                  controller: controller,
+                  sequencePos: 1,
+                  sequenceTotal: 3,
+                ),
+            24.verticalSpace,
+            Expanded(
+              child:
+                  PageView.builder(
+                    controller: pageController,
+                    itemCount: AppConstants.config.themeColorations.length,
+                    physics: const LessResponsiveScrollPhysics(),
+                    onPageChanged: _onPageChanged,
+                    itemBuilder: (context, index) {
+                      final coloration =
+                          AppConstants.config.themeColorations[index];
+                      return BlocSelector<
+                        UserPreferencesCubit,
+                        UserPreferencesState,
+                        bool
+                      >(
+                        selector: (state) =>
+                            state.preferences.theme.colorationId ==
+                            coloration.id,
+                        builder: (context, isSelected) =>
+                            ColorationItemBubble(
+                              size: bubbleSize,
+                              index: index,
+                              coloration: coloration,
+                              isSelected: isSelected,
+                              onTap: (_) => _animateTo(index),
+                            ).autoFadeInUp(
+                              slideCurve:
+                                  CustomAnimationCurves.mediumElasticOut,
+                              delay: _getBubbleAppearDelay(index),
+                              fadeCurve: Curves.fastEaseInToSlowEaseOut,
+                            ),
+                      );
+                    },
+                  ).routeAwareFadeOutUp(
+                    controller: controller,
+                    sequencePos: 2,
+                    sequenceTotal: 3,
+                  ),
             ),
-          ),
-          Center(
-            child: SmoothPageIndicator(
-              controller: pageController,
-              count: AppConstants.config.themeColorations.length,
-              effect: ScrollingDotsEffect(
-                spacing: 10.0,
-                radius: 32.0,
-                smallDotScale: 0.0,
-                dotWidth: 10.0,
-                dotHeight: 10.0,
-                fixedCenter: true,
-                activeStrokeWidth: 0.0,
-                activeDotScale: 0.0,
-                paintStyle: PaintingStyle.fill,
-                dotColor: context.lightIconColorTernanry,
-                activeDotColor: context.lightIconColor,
-              ),
-            ).autoFadeIn(sequencePos: 4),
-          ),
-          42.verticalSpace,
-          SizedBox(
-            height: OnboardingConfigurationPage.contentBottomPadding(context),
-          ),
-        ],
+            Center(
+              child:
+                  SmoothPageIndicator(
+                        controller: pageController,
+                        count: AppConstants.config.themeColorations.length,
+                        effect: ScrollingDotsEffect(
+                          spacing: 10.0,
+                          radius: 32.0,
+                          smallDotScale: 0.0,
+                          dotWidth: 10.0,
+                          dotHeight: 10.0,
+                          fixedCenter: true,
+                          activeStrokeWidth: 0.0,
+                          activeDotScale: 0.0,
+                          paintStyle: PaintingStyle.fill,
+                          dotColor: context.lightIconColorTernanry,
+                          activeDotColor: context.lightIconColor,
+                        ),
+                      )
+                      .autoFadeIn(sequencePos: 4)
+                      .routeAwareFadeOutUp(
+                        controller: controller,
+                        sequencePos: 2,
+                        sequenceTotal: 3,
+                      ),
+            ),
+            32.verticalSpace,
+            SizedBox(
+              height: OnboardingConfigurationPage.contentBottomPadding(context),
+            ),
+          ],
+        ),
       ),
     );
   }

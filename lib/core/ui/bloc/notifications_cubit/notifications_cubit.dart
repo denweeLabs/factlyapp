@@ -4,6 +4,7 @@ import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
 import 'package:denwee/core/notifications/domain/entity/push_notification.dart';
 import 'package:denwee/core/notifications/domain/repo/push_notifications_repo.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
+import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dartz/dartz.dart';
@@ -32,9 +33,9 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   )
     : super(NotificationsState.initial()) {
     setup();
-    // getInitialMessage();
-    // listenForegroundNotifications();
-    // listenBackgroundNotifications();
+    getInitialMessage();
+    listenForegroundNotifications();
+    listenBackgroundNotifications();
   }
 
   Future<void> setup() async {
@@ -57,12 +58,13 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     tokenFailureOrSuccess.fold((_) {}, _updateToken);
   }
 
-  /*
   void getInitialMessage() {
     _messaging.getInitialMessage().then((remoteMessage) {
       if (remoteMessage != null) {
-        final notification = PushNotification.fromRemoteMessage(remoteMessage);
-        emit(state.copyWith(notification: Some(notification)));
+        Future.delayed(CustomAnimationDurations.lowMedium, () {
+          final notification = PushNotification.fromRemoteMessage(remoteMessage);
+          emit(state.copyWith(notification: Some(notification), showSnackbar: false));
+        });
       }
     });
   }
@@ -72,7 +74,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       remoteMessage,
     ) {
       final notification = PushNotification.fromRemoteMessage(remoteMessage);
-      emit(state.copyWith(notification: Some(notification)));
+      emit(state.copyWith(notification: Some(notification), showSnackbar: true));
     });
   }
 
@@ -81,10 +83,9 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       remoteMessage,
     ) {
       final notification = PushNotification.fromRemoteMessage(remoteMessage);
-      emit(state.copyWith(notification: Some(notification)));
+      emit(state.copyWith(notification: Some(notification), showSnackbar: false));
     });
   }
-  */
 
   Future<void> forceUpdateToken() async {
     final token = (await _pushNotificationsRepo.retrieveToken()).getEntries();

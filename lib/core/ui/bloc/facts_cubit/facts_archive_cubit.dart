@@ -7,6 +7,7 @@ import 'package:denwee/core/facts/domain/repo/facts_archive_repo.dart';
 import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
+import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
@@ -26,6 +27,7 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
   final CommonStorage _commonStorage;
   final AdsRepo _adsRepo;
   final ShowAddToArchiveAdUseCase _showAddToArchiveAdUseCase;
+  final UserSubscriptionCubit _userSubscriptionCubit;
 
   FactsArchiveCubit(
     this._profileCubit,
@@ -33,6 +35,7 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
     this._commonStorage,
     this._adsRepo,
     this._showAddToArchiveAdUseCase,
+    this._userSubscriptionCubit,
   ) : super(FactsArchiveState.initial(_archiveRepo.getArchiveIdsLocal()));
 
   var _itemsTotalCount = 0;
@@ -154,6 +157,9 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
   }
 
   Future<void> _checkAdDisplay() async {
+    // do not show any ads if user has subscription
+    if (_userSubscriptionCubit.state.isSubscribed) return;
+    
     final currentCounter = await _commonStorage.increaseAddToArchiveCounter();
 
     // wait for the counter and check if probability to show an ad has passed

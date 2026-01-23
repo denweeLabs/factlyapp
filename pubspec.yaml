@@ -5,7 +5,7 @@ description: "Denwee mobile application"
 publish_to: 'none'
 
 # App version + build
-version: 1.0.3+65
+version: 1.1.0+71
 
 # Env
 environment:
@@ -54,6 +54,9 @@ dependencies:
   gma_mediation_unity: ^1.6.2
   # gma_mediation_ironsource: ^2.1.0
 
+  # Subscriptions
+  purchases_flutter: ^9.10.2
+
   # Functional programming
   dartz: ^0.10.1
 
@@ -99,6 +102,9 @@ dependencies:
   animate_do: ^4.2.0
   email_validator: ^3.0.0
   flutter_inappwebview: ^6.1.5
+  el_tooltip: ^2.2.1
+  avatar_glow: ^3.0.1
+  skeletonizer: ^2.1.2
 
   # Utils
   rxdart: ^0.28.0

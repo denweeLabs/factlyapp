@@ -28,6 +28,9 @@ class AppSolidButton extends StatelessWidget {
     this.isShimmering = false,
     this.isBubbles = false,
     this.hideShadow = false,
+    this.width = double.infinity,
+    this.padding,
+    this.ignoreTapScale = false,
   });
 
   final String text;
@@ -42,6 +45,9 @@ class AppSolidButton extends StatelessWidget {
   final bool isShimmering;
   final bool isBubbles;
   final bool hideShadow;
+  final double? width;
+  final EdgeInsets? padding;
+  final bool ignoreTapScale;
 
   static final defaultHeight = 64.h;
   static const defaultBorderRadius = BorderRadius.all(Radius.circular(100));
@@ -55,21 +61,20 @@ class AppSolidButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CoreTapBounceAnimation(
       onTap: _onTap,
+      ignoreScale: ignoreTapScale,
       builder: (context, isHovered) => Stack(
         children: [
-          SizedBox.fromSize(
-            size: Size.fromHeight(buttonHeight ?? defaultHeight),
-            child: AnimatedContainer(
-              width: double.infinity,
-              height: buttonHeight ?? defaultHeight,
-              curve: Curves.fastEaseInToSlowEaseOut,
-              duration: CustomAnimationDurations.low,
-              decoration: _getDecoration(
-                context: context,
-                isHovered: isHovered,
-              ),
-              child: _buildDisplayElementsSwitcher(context),
+          AnimatedContainer(
+            width: width,
+            height: buttonHeight ?? defaultHeight,
+            curve: Curves.fastEaseInToSlowEaseOut,
+            duration: CustomAnimationDurations.low,
+            decoration: _getDecoration(
+              context: context,
+              isHovered: isHovered,
             ),
+            padding: padding,
+            child: _buildDisplayElementsSwitcher(context),
           ),
           if (isBubbles || (isBusy || isShimmering))
             _buildBackgroundAnimations(context),

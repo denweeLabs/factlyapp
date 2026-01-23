@@ -7,7 +7,7 @@ import 'package:denwee/core/ui/widget/animations/constants/common_animation_valu
 import 'package:denwee/core/ui/widget/animations/transitions/hero_transition.dart';
 import 'package:denwee/core/ui/widget/buttons/app_solid_button_widget.dart';
 import 'package:denwee/core/ui/widget/buttons/app_text_button_widget.dart';
-import 'package:denwee/core/ui/widget/misc/seal_in_circle_widget.dart';
+import 'package:denwee/core/ui/widget/misc/seal_in_square_widget.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/pages/authentication/args/authentication_action_result.dart';
 import 'package:denwee/pages/authentication/args/authentication_page_args.dart';
@@ -89,7 +89,7 @@ class _WelcomePageState extends State<WelcomePage> with RestorationMixin {
                 child: RepaintBoundary(
                   child: const HeroTransition(
                         tag: WelcomePage.sealInCircleHeroTag,
-                        child: SealInCircle(),
+                        child: SealInSquare(),
                       ).autoElasticIn(
                         sequencePos: 1,
                         scaleCurve: Curves.easeOutBack,
@@ -101,7 +101,7 @@ class _WelcomePageState extends State<WelcomePage> with RestorationMixin {
                 context.tr(LocaleKeys.welcome_title),
                 style: h0.copyWith(
                   color: context.textColor,
-                  fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+                  fontFamily: AppConstants.style.textStyle.primaryFontFamily,
                 ),
                 textAlign: TextAlign.center,
               ).autoFadeIn(sequencePos: 6),
@@ -115,8 +115,8 @@ class _WelcomePageState extends State<WelcomePage> with RestorationMixin {
                     fontWeight: FontWeight.w700,
                     fontFamily: getIt<UserPreferencesCubit>().state
                         .whenLanguage(
-                          en: () => AppConstants.style.textStyle.secondaryFontFamiliy,
-                          ru: () => AppConstants.style.textStyle.primaryFontFamily,
+                          en: () => AppConstants.style.textStyle.primaryFontFamily,
+                          ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
                         ),
                   ),
                   textAlign: TextAlign.center,

@@ -1,3 +1,4 @@
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
@@ -21,8 +22,10 @@ class ProfileMoreCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BackdropSurfaceContainer.ellipse(
       onTap: onTap,
+      useShadow: true,
       color: context.primaryContainer,
-      hoverColor: context.secondaryContainer,
+      hoverColor: context.primaryContainer,
+      borderColor: context.theme.dividerColor,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 22.w,
@@ -39,7 +42,10 @@ class ProfileMoreCard extends StatelessWidget {
             const Spacer(),
             Text(
               title,
-              style: bodyM.copyWith(color: context.textColor),
+              style: bodyM.copyWith(
+                color: context.textColor,
+                fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+              ),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),

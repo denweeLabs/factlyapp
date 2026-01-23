@@ -73,6 +73,10 @@ class _ImagesAssets {
   static const _folderPath = 'assets/images/';
 
   String interest(int id) => '${_folderPath}interest_$id.jpg';
+  final appBackgroundIcon = '${_folderPath}seal_background.png';
+  final appForegroundIcon = '${_folderPath}seal_foreground.png';
+  final interestShortFact = '${_folderPath}interest_short_fact.webp';
+  final interestDetailedFact = '${_folderPath}interest_detailed_fact.webp';
 }
 
 class _AnimationsAssets {
@@ -87,4 +91,6 @@ class _AnimationsAssets {
   final seal = '${_folderPath}seal.json';
   final smilingStar = '${_folderPath}smiling_star.json';
   final swipeUp = '${_folderPath}swipe_up.json';
+  final confetti = '${_folderPath}confetti.json';
+  final sparkles = '${_folderPath}sparkles.json';
 }

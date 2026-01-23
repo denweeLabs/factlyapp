@@ -5,7 +5,7 @@
     "welcome": {
         "title": "Denwee",
         "subtitle": "每天发现简短、易懂、令人难忘的趣味知识！",
-        "begin_cta": "开始",
+        "begin_cta": "探索",
         "have_an_account": "已有账户？"
     },
 
@@ -30,14 +30,34 @@
 
     "onboarding": {
         "select_interests": {
-            "title": "选择你的\n兴趣",
-            "subtitle": "告诉我们最让你兴奋的内容",
-            "cta": "下一步"
+            "title": "什么最能激发你的好奇心？",
+            "subtitle": "告诉我们你最感兴趣的内容",
+            "cta": "选择"
+        },
+        "select_notification_time": {
+            "title": "每天提醒你保持好奇",
+            "subtitle": "我们每天会发送一个事实",
+            "time_selection_title": "时间",
+            "dummy_notification": {
+                "title": "🌙  晚上好！",
+                "body": "蓝鲸的心脏重达**400磅**，大小相当于小汽车，每分钟仅跳动**8-10次**！",
+                "time_ago": "现在"
+            },
+            "cta": "启用"
         },
         "select_theme_colorations": {
-            "title": "选择你的\n主题",
+            "title": "选择让你感觉舒适的颜色",
             "subtitle": "用颜色个性化你的体验",
-            "cta": "完成"
+            "cta": "应用"
+        },
+        "value_primer": {
+            "title": "将好奇转化为知识",
+            "bullets": {
+                "line_1": "发现一个简短的事实",
+                "line_2": "点击“{}”深入了解",
+                "line_3": "了解事实背后的故事"
+            },
+            "cta": "探索"
         }
     },
 
@@ -46,6 +66,9 @@
         "section": {
             "profile": {
                 "title": "个人资料"
+            },
+            "subscription": {
+                "title": "订阅"
             },
             "interests": {
                 "title": "兴趣"
@@ -106,11 +129,49 @@
             "personal": {
                 "title": "个人"
             },
+            "subscription": {
+                "title": "订阅"
+            },
             "more": {
                 "title": "更多",
                 "change_password": "更改\n密码",
                 "contact_support": "联系客服"
             }
+        }
+    },
+
+
+    "subscription": {
+        "basic_plan": "Denwee Basic",
+        "premium_plan": "Premium",
+        "active_plan": "当前方案",
+        "upgrade_cta": "升级",
+        "paywall": {
+            "title": "从每一个事实中获得更多，无限探索",
+            "benefits": {
+                "line_1": "即时解析",
+                "line_2": "无限访问存档",
+                "line_3": "不再有广告",
+                "ads_encourage_msg": {
+                    "other": "你已花费约 {} 分钟在广告上。使用 Premium 节省更多时间 🫶"
+                }
+            },
+            "package": {
+                "monthly": {
+                    "title": "每月",
+                    "per_period": "月"
+                },
+                "yearly": {
+                    "title": "每年",
+                    "per_period": "年"
+                }
+            },
+            "footer": {
+                "restore": "恢复",
+                "privacy": "隐私政策",
+                "terms": "条款"
+            },
+            "expiry": "到期时间"
         }
     },
 
@@ -138,7 +199,7 @@
             "long": "名字太长"
         },
         "interests": {
-            "empty": "请选择至少一个兴趣"
+            "not_enough": "请选择至少 {} 个兴趣，以获得最佳体验"
         }
     },
 
@@ -240,6 +301,19 @@
                 "subtitle": "很抱歉让您久等了，目前没有可用广告…请几分钟后再试 :("
             }
         },
+        "subscriptions": {
+            "configuration": "购买过程中出现问题… 请再试一次 🙏",
+            "purchase_not_allowed": "哦… 此设备或账户不允许购买 😕",
+            "purchase_cancelled": "购买已取消… 没关系，您可以随时再试 🙂",
+            "payment_pending": "付款仍在处理中… 请稍等 ⏳",
+            "payment_failed": "付款失败… 请检查您的支付方式 💳",
+            "already_subscribed": "您已经拥有有效的订阅 🎉",
+            "subscription_not_found": "未找到有效订阅… 请尝试恢复或检查你的账户 🙂",
+            "insufficient_permissions": "无法验证购买… 请尝试恢复或重新登录 🔐",
+            "internal_server": "糟糕！我们的服务器出现问题了… 正在修复中 ⚙️",
+            "connection_timeout": "无法连接网络… 请检查您的网络 📶",
+            "unexpected": "发生了意外错误… 我们正在处理中 🚨"
+        },
         "common": {
             "internal_server": "服务器出错…我们正在处理 🔧",
             "connection_timeout": "无连接…请检查网络 📡",
@@ -304,6 +378,14 @@
         "reset_password_enter_email": {
             "title": "重置密码",
             "subtitle": "我们会向你的邮箱发送重置密码的链接... 如果一直没收到，请等待 30 秒后再试一次 :)"
+        },
+        "success_purchase": {
+            "title": "一切就绪！",
+            "subtitle": "您的 Premium 权限有效期至 {}。非常感谢您的支持！🫶"
+        },
+        "subscription_packages_switch": {
+            "title": "小提示！",
+            "subtitle": "当你更换套餐时，当前订阅将被替换，剩余价值将应用到新套餐中 😉"
         }
     },
 

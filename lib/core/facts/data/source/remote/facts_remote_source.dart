@@ -1,4 +1,5 @@
 import 'package:denwee/core/facts/data/model/archive_list_result_dto.dart';
+import 'package:denwee/core/facts/data/model/daily_fact_dto.dart';
 import 'package:denwee/core/facts/data/model/daily_facts_bucket_dto.dart';
 import 'package:denwee/core/facts/data/model/fact_explanation_dto.dart';
 import 'package:denwee/core/facts/data/source/remote/facts_remote_source_impl.dart';
@@ -10,6 +11,12 @@ abstract class FactsRemoteSource {
   /// [ConnectionException]
   /// [GenericException]
   Future<DailyFactsBucketDto> getDailyFactsBucket({String? languageCode, List<String>? interests});
+
+  /// Throws:
+  /// [AuthorizationException]
+  /// [ConnectionException]
+  /// [GenericException]
+  Future<DailyFactDto> getDailyFactById(int id);
 
   /// Throws:
   /// [AuthorizationException]

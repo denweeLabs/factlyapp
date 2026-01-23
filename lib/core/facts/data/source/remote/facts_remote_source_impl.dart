@@ -1,5 +1,6 @@
 import 'package:denwee/core/facts/data/model/archive_list_result_dto.dart';
 import 'package:denwee/core/facts/data/model/archived_fact_dto.dart';
+import 'package:denwee/core/facts/data/model/daily_fact_dto.dart';
 import 'package:denwee/core/facts/data/model/daily_facts_bucket_dto.dart';
 import 'package:denwee/core/facts/data/model/fact_explanation_dto.dart';
 import 'package:denwee/core/facts/data/source/remote/facts_remote_source.dart';
@@ -143,6 +144,20 @@ class FactsRemoteSourceImpl implements FactsRemoteSource {
     );
     if (!response.isSuccessful) {
       final data = response.data as Map<String, dynamic>;
+      final errorResponse = ServerErrorResponse.fromJson(data);
+      throw errorResponse.asGenericException;
+    }
+  }
+
+  @override
+  Future<DailyFactDto> getDailyFactById(int id) async {
+    final response = await _requestExecutor.get(
+      Endpoints.facts.dailyFact(id.toString()),
+    );
+    final data = response.data as Map<String, dynamic>;
+    if (response.isSuccessful) {
+      return DailyFactDto.fromJson(data);
+    } else {
       final errorResponse = ServerErrorResponse.fromJson(data);
       throw errorResponse.asGenericException;
     }

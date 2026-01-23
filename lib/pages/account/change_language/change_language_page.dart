@@ -50,7 +50,7 @@ class ChangeLanguagePage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 14.h),
                     child: const Divider(height: 0.0),
                   ),
-                  itemBuilder: (context, index) {
+                  itemBuilder: (_, index) {
                     final locale = context.supportedLocales[index];
                     final language = AppConstants.config.languages
                         .firstWhereOrNull(
@@ -90,7 +90,10 @@ class ChangeLanguagePage extends StatelessWidget {
               children: [
                 Text(
                   language.nativeName,
-                  style: h4.copyWith(color: context.textColor),
+                  style: h4.copyWith(
+                    color: context.textColor,
+                    fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+                  ),
                 ),
                 2.verticalSpace,
                 Text(
