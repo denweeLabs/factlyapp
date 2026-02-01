@@ -25,6 +25,7 @@ class AppSolidButton extends StatelessWidget {
     this.onTap,
     this.isBusy = false,
     this.displayIcon,
+    this.displayWidget,
     this.isShimmering = false,
     this.isBubbles = false,
     this.hideShadow = false,
@@ -42,6 +43,7 @@ class AppSolidButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isBusy;
   final String? displayIcon;
+  final Widget? displayWidget;
   final bool isShimmering;
   final bool isBubbles;
   final bool hideShadow;
@@ -121,6 +123,13 @@ class AppSolidButton extends StatelessWidget {
             maxLines: 1,
           ),
         ),
+      );
+    }
+
+    if (displayWidget != null) {
+      return SizedBox(
+        key: const ValueKey('solid_btn_widget'),
+        child: displayWidget!
       );
     }
 

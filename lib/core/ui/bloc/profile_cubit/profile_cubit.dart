@@ -1,3 +1,4 @@
+import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/profile/domain/entity/profile.dart';
 import 'package:denwee/core/profile/domain/failure/profile_failure.dart';
 import 'package:denwee/core/profile/domain/repo/profile_repo.dart';
@@ -29,6 +30,14 @@ class ProfileCubit extends Cubit<ProfileState> {
       (failure) => emit(state.copyWith(failure: Some(failure))),
       (profile) => emitPreserveProfile(profile),
     );
+  }
+
+  void updateUnlockedBackgroundIds(List<UniqueId> ids) {
+    var profile = state.profile.toNullable();
+    if (profile != null) {
+      profile = profile.copyWith(unlockedBackgrounds: ids);
+      emitPreserveProfile(profile);
+    }
   }
 
   Future<void> emitPreserveProfile(Profile data) async {

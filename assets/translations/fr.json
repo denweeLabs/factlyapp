@@ -81,6 +81,10 @@
                     "archive": "Archive"
                 }
             },
+            "background": {
+                "title": "Fond",
+                "more": "Plus"
+            },
             "theme": {
                 "title": "Thème",
                 "items": {
@@ -150,7 +154,7 @@
             "title": "Profitez de chaque fait sans aucune limite",
             "benefits": {
                 "line_1": "Explications instantanées",
-                "line_2": "Accès illimité aux archives",
+                "line_2": "Débloquez tous les fonds",
                 "line_3": "Plus aucune publicité",
                 "ads_encourage_msg": {
                     "one": "Vous avez passé ~{} minute sur les pubs. Gagnez plus de temps avec Premium 🫶",
@@ -174,6 +178,13 @@
             },
             "expiry": "Expiration"
         }
+    },
+
+
+    "backgrounds": {
+        "selected": "Sélectionné",
+        "apply": "Appliquer",
+        "unlock": "Débloquer"
     },
 
 
@@ -338,7 +349,8 @@
             "daily_facts": "Pas encore de faits quotidiens... Revenez plus tard pour découvrir quelque chose de nouveau !",
             "facts_archive": "Votre archive est vide — enregistrez quelques faits et ils apparaîtront ici !"
         },
-        "agreeing_to_terms": "En continuant, vous acceptez nos\n<terms>Conditions</terms> et notre <privacy>Confidentialité</privacy>"
+        "agreeing_to_terms": "En continuant, vous acceptez nos\n<terms>Conditions</terms> et notre <privacy>Confidentialité</privacy>",
+        "copied_to_clipboard": "Copié"
     },
 
 
@@ -387,6 +399,21 @@
         "subscription_packages_switch": {
             "title": "Petit rappel !",
             "subtitle": "Lorsque vous changez de formule, votre abonnement actuel sera remplacé et la valeur restante sera appliquée au nouveau plan 😉"
+        },
+        "background_purchase_confirmation": {
+            "title": "Youpi !",
+            "subtitle": "Débloquer ce fond pour {} étoiles ?"
+        },
+        "background_insufficient_balance": {
+            "title": "Pas encore 🥺",
+            "subtitle": "Vous n’avez pas encore assez d’étoiles pour débloquer ce fond"
+        },
+        "background_insufficient_few_balance": {
+            "title": "Presque fini ⭐️",
+            "subtitle": {
+                "one": "Il vous manque seulement {} étoile pour débloquer ce fond !",
+                "other": "Il vous manque seulement {} étoiles pour débloquer ce fond !"
+            }
         }
     },
 

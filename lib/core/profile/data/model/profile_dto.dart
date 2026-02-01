@@ -17,6 +17,7 @@ class ProfileDto {
   @JsonKey(name: 'avatar_url') final String? avatarUrl;
   @JsonKey(name: 'created_at') final DateTime? createdAt;
   @JsonKey(name: 'is_anonymous', defaultValue: false) final bool isAnonymous;
+  @JsonKey(name: 'unlocked_background_ids', defaultValue: []) final List<int> unlockedBackgrounds;
 
   const ProfileDto({
     required this.id,
@@ -25,6 +26,7 @@ class ProfileDto {
     required this.avatarUrl,
     required this.createdAt,
     required this.isAnonymous,
+    required this.unlockedBackgrounds,
   });
 
   factory ProfileDto.fromDomain(Profile profile) {
@@ -35,6 +37,7 @@ class ProfileDto {
       avatarUrl: profile.avatarUrl.toNullable()?.value,
       createdAt: profile.createdAt.toNullable(),
       isAnonymous: profile.isAnonymous,
+      unlockedBackgrounds: profile.unlockedBackgrounds.map((e) => e.value).toList(),
     );
   }
 
@@ -55,6 +58,7 @@ class ProfileDto {
       ),
       createdAt: optionOf(createdAt),
       isAnonymous: isAnonymous,
+      unlockedBackgrounds: unlockedBackgrounds.map(UniqueId.fromValue).toList(),
     );
   }
 

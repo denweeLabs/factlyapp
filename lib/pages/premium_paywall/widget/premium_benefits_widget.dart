@@ -79,7 +79,7 @@ class _PremiumBenefitsState extends State<PremiumBenefits> {
           text: context.tr(LocaleKeys.subscription_paywall_benefits_line_1),
         ),
         _Benefit(
-          iconPath: AppConstants.assets.icons.archiveTickLinear,
+          iconPath: AppConstants.assets.icons.galleryLinear,
           text: context.tr(LocaleKeys.subscription_paywall_benefits_line_2),
         ),
         BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(

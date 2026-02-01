@@ -56,6 +56,8 @@ class FactExplanationCubit extends Cubit<FactExplanationState> {
   }
 
   Future<void> checkFactExplanation() async {
+    if (fact.id.isEmpty) return;
+    
     if (state.factExplanationChecked || state.checkingFactExplanation) {
       return;
     }

@@ -1,4 +1,6 @@
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/active_background_cubit.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/ui/bloc/connectivity_cubit/connectivity_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
@@ -63,6 +65,12 @@ class RootBlocProviders extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => getIt<RoutesCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => getIt<AvailableBackgroundsCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => getIt<ActiveBackgroundCubit>(),
         ),
       ],
       child: child,

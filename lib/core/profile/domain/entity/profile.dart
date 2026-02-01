@@ -18,5 +18,6 @@ abstract class Profile with _$Profile implements IEntity {
     required Option<NetworkLink> avatarUrl,
     required Option<DateTime> createdAt,
     required bool isAnonymous,
+    required List<UniqueId> unlockedBackgrounds,
   }) = _Profile;
 }

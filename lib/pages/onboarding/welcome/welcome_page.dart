@@ -162,7 +162,7 @@ class _WelcomePageState extends State<WelcomePage> with RestorationMixin {
     if (result != null) {
       hidePage.value = true;
       context.restorablePushReplacementNamedArgs(
-        Routes.homeFromAuthentication,
+        Routes.homeSlidingClip,
         rootNavigator: true,
       );
     }

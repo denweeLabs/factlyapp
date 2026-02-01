@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:denwee/core/backgrounds/domain/entity/background_style.dart';
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/misc/data/storage/common_storage.dart';
@@ -21,18 +22,29 @@ import 'package:utils/utils.dart';
 class StoriesDailyFactsView extends StatefulWidget {
   const StoriesDailyFactsView({
     super.key,
+    required this.isLoading,
     required this.facts,
+    required this.interests,
     required this.goToAccount,
+    required this.goToBackgrounds,
+    required this.backgroundStyle,
+    required this.backgroundBrightness,
   });
 
+  final bool isLoading;
   final List<DailyFact> facts;
+  final List<UserInterest> interests;
   final VoidCallback goToAccount;
+  final VoidCallback goToBackgrounds;
+  final BackgroundStyle? backgroundStyle;
+  final Brightness backgroundBrightness;
 
   @override
   State<StoriesDailyFactsView> createState() => _StoriesDailyFactsViewState();
 }
 
-class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with SingleTickerProviderStateMixin {  
+class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView>
+    with SingleTickerProviderStateMixin {
   /// Total duration of a single story item playback
   static const storyDuration = Duration(seconds: 40);
 
@@ -54,29 +66,32 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
 
   /// Animation controller used to interpolate vertical scroll offset
   /// when switching between pages
-  late final scrollSwitchController = AnimationController.unbounded(vsync: this);
+  late final scrollSwitchController = AnimationController.unbounded(
+    vsync: this,
+  );
 
   /// Animation that represents the interpolated vertical scroll offset
   /// during page transitions
-  late Animation<double> scrollSwitchAnimation = AlwaysStoppedAnimation<double>(0.0);
+  late Animation<double> scrollSwitchAnimation = AlwaysStoppedAnimation<double>(
+    0.0,
+  );
 
   /// List of story items mapped with daily facts
-  late final storyItems = widget.facts
+  late final storyItems = widget.interests
       .map((e) => StoryItem(const SizedBox.shrink(), duration: storyDuration))
       .toList();
 
   /// Cubits responsible for loading and managing explanations
   /// for each daily fact
-  late final cubits = widget.facts
-      .map((fact) => getIt<FactExplanationCubit>(param1: fact))
-      .toList();
+  late List<FactExplanationCubit> cubits;
 
   /// Global keys for accessing and controlling individual fact pages
-  late final pageKeys =
-      widget.facts.map((_) => GlobalKey<StoriesFactPageState>()).toList();
+  late final pageKeys = widget.interests
+      .map((_) => GlobalKey<StoriesFactPageState>())
+      .toList();
 
   /// Per-page vertical scroll offsets used to sync UI state across fact pages
-  late final verticalScrollOffsets = widget.facts.map((_) => 0.0).toList();
+  late final verticalScrollOffsets = widget.interests.map((_) => 0.0).toList();
 
   late final verticalScrollFraction = ValueNotifier<double>(0.0);
   late final pageIndex = ValueNotifier<int>(0);
@@ -98,6 +113,7 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
     super.initState();
     scrollSwitchController.addListener(scrollSwitchListener);
     Future.delayed(checkShowcaseDelay, () => checkShowcase());
+    initFactPages();
   }
 
   @override
@@ -110,6 +126,14 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
     pageSafeHeight = 1.sh - scrollViewTopPadding - bottomSectionSafeInset;
     pageHeightInv = 1 / pageSafeHeight;
     storyBarsPadding = EdgeInsets.only(left: 20.w, right: 20.w, top: storybarTopPadding);
+  }
+
+  @override
+  void didUpdateWidget(covariant StoriesDailyFactsView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isLoading && !widget.isLoading) {
+      initFactPages();
+    }
   }
 
   @override
@@ -130,16 +154,28 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
     super.dispose();
   }
 
+  void initFactPages() {
+    if (widget.facts.isEmpty) return;
+
+    cubits = widget.facts
+        .map((fact) => getIt<FactExplanationCubit>(param1: fact))
+        .toList();
+
+    cubits.first.checkFactExplanation();
+  }
+
   double getBottomSectionInset(BuildContext context) {
     final bottomPadding = context.bottomPadding;
     final hasBottomPadding = bottomPadding > 0;
-    if (Platform.isIOS) return hasBottomPadding ? bottomPadding : 24.h;
-    return hasBottomPadding ? bottomPadding + 16.h : 24.h;
+    if (Platform.isIOS) return hasBottomPadding ? bottomPadding + 8.h : 24.h;
+    return hasBottomPadding ? bottomPadding + 18.h : 24.h;
   }
 
   void checkShowcase() {
     // Showcase starts only when the user arrives on homepage for the first time after onboarding
-    isShowcase = getIt<AuthCubit>().state.isAnonymous && !getIt<CommonStorage>().isShowcaseDisplayed();
+    isShowcase =
+        getIt<AuthCubit>().state.isAnonymous &&
+        !getIt<CommonStorage>().isShowcaseDisplayed();
     if (isShowcase) {
       getIt<CommonStorage>().setIsShowcaseDisplayed(true);
       storyController.pause();
@@ -193,11 +229,11 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
         duration: isShowcase
             ? const Duration(milliseconds: 1500)
             : const Duration(milliseconds: 1000),
-        child: pageIndexBuilder(
+        child: pageIndexProvider(
           builder: (index) => StoriesViewBackground(
+            isDefaultStaticImage: widget.isLoading,
             scrollFraction: verticalScrollFraction,
-            imagePath: widget.facts[index].interest.imagePath,
-            isAnimated: index != 0,
+            defaultPageIndex: index,
           ),
         ),
       ),
@@ -211,22 +247,31 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
       padding: storyBarsPadding,
       scrollFraction: verticalScrollFraction,
       onStoryChanged: animateToFactPage,
+      backgroundStyle: widget.backgroundStyle,
     );
   }
 
   Widget _buildStoryTitle() {
     return Positioned(
       left: 20.w,
-      right: 52.w,
+      right: 20.w,
       top: storybarTopPadding + 22.h,
-      child: pageIndexBuilder(
+      child: pageIndexProvider(
         builder: (index) {
-          final fact = widget.facts[index];
+          final fact = widget.facts.asMap()[index];
+
+          if (fact == null) {
+            return const SizedBox.shrink();
+          }
+
           return StoriesInterestTopTitle(
             factId: fact.id.value,
             interest: fact.interest.tryTranslate(context) ?? '',
             region: fact.region.toNullable(),
+            date: fact.displayDateText(),
             scrollFraction: verticalScrollFraction,
+            isSkeleton: widget.isLoading,
+            backgroundStyle: widget.backgroundStyle,
           );
         },
       ),
@@ -237,62 +282,62 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
     return Positioned.fill(
       child: IgnorePointer(
         ignoring: isShowcase,
-        child: PageView.builder(
-          controller: pageController,
-          itemCount: widget.facts.length,
-          onPageChanged: onPageChanged,
-          itemBuilder: (context, index) {
-            final fact = widget.facts[index];
+        child:
+            PageView.builder(
+              controller: pageController,
+              itemCount: widget.facts.length,
+              onPageChanged: onPageChanged,
+              itemBuilder: (context, index) {
+                final fact = widget.facts[index];
 
-            return ValueListenableBuilder(
-              valueListenable: pageIndex,
-              builder: (context, pageIndex, child) => AnimatedOpacity(
-                opacity: pageIndex == index ? 1.0 : 0.0,
-                duration: pageSwitchDuration,
-                curve: Curves.ease,
-                child: child!,
-              ),
-              child: BlocProvider.value(
-                value: cubits[index],
-                child: StoriesFactPage(
-                  key: pageKeys[index],
-                  fact: fact,
-                  cubit: cubits[index],
-                  pageHeight: pageSafeHeight,
-                  scrollViewTopPadding: scrollViewTopPadding,
-                  initialScrollOffset: verticalScrollOffsets[index],
-                  onVerticalScrollChanged: (offset) => onVerticalScrollChanged(offset, index),
-                  defaultContentPadding: EdgeInsets.only(
-                    left: 20.w,
-                    right: 20.w,
-                    bottom: 38.h,
+                return ValueListenableBuilder(
+                  valueListenable: pageIndex,
+                  builder: (context, pageIndex, child) => AnimatedOpacity(
+                    opacity: pageIndex == index ? 1.0 : 0.0,
+                    duration: pageSwitchDuration,
+                    curve: Curves.ease,
+                    child: child!,
                   ),
-                  detailedContentPadding: EdgeInsets.only(
-                    left: 20.w,
-                    right: 20.w,
-                    bottom: context.bottomPadding + 74.h + StoriesScrollupButton.size,
+                  child: BlocProvider.value(
+                    value: cubits[index],
+                    child: StoriesFactPage(
+                      fact: fact,
+                      key: pageKeys[index],
+                      cubit: cubits[index],
+                      pageHeight: pageSafeHeight,
+                      scrollViewTopPadding: scrollViewTopPadding,
+                      initialScrollOffset: verticalScrollOffsets[index],
+                      onVerticalScrollChanged: (offset) => onVerticalScrollChanged(offset, index),
+                      defaultContentPadding: EdgeInsets.symmetric(horizontal: 14.w),
+                      detailedContentPadding: EdgeInsets.only(
+                        left: 20.w,
+                        right: 20.w,
+                        bottom: context.bottomPadding + 74.h + StoriesScrollupButton.size,
+                      ),
+                      onFactLoadingStarted: storyController.pause,
+                      onFactLoadingFinished: storyController.play,
+                      isSkeleton: widget.isLoading,
+                      backgroundStyle: widget.backgroundStyle,
+                      backgroundBrightness: widget.backgroundBrightness,
+                    ),
                   ),
-                  onFactLoadingStarted: storyController.pause,
-                  onFactLoadingFinished: storyController.play,
-                ),
-              ),
-            );
-          },
-        ).autoElasticOut(
-          animate: isShowcase,
-          duration: const Duration(milliseconds: 1000),
-          reverseDuration: const Duration(milliseconds: 400),
-          scaleCurve: Curves.easeInOutSine,
-          scaleReverseCurve: const Interval(0.999, 1.0),
-          forceComplete: false,
-        ),
+                );
+              },
+            ).autoElasticOut(
+              animate: isShowcase,
+              duration: const Duration(milliseconds: 1000),
+              reverseDuration: const Duration(milliseconds: 400),
+              scaleCurve: Curves.easeInOutSine,
+              scaleReverseCurve: const Interval(0.999, 1.0),
+              forceComplete: false,
+            ),
       ),
     );
   }
 
   Widget _buildStoryGestures() {
     return StoriesViewGesturesArea(
-      ignorePointer: isShowcase,
+      ignorePointer: isShowcase || widget.isLoading,
       onHold: storyController.pause,
       onRelease: storyController.play,
       onLeft: storyController.previous,
@@ -305,15 +350,21 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
       left: 0.0,
       right: 0.0,
       top: context.topPadding,
-      child: pageIndexBuilder(
+      child: pageIndexProvider(
         builder: (index) {
-          final fact = widget.facts[index];
-          return StoriesFactTitleAndArchiveBar(
+          final fact = widget.facts.asMap()[index];
+          
+          if (fact == null) {
+            return const SizedBox.shrink();
+          }
+          
+          return StoriesFactTitle(
             factId: fact.id,
             factTitle: fact.title,
             scrollFraction: verticalScrollFraction,
             onBack: () => pageKeys[index].currentState?.scrollPageTo(0.0),
             ignorePointer: isShowcase,
+            backgroundBrightness: widget.backgroundBrightness,
           );
         },
       ),
@@ -331,41 +382,42 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
           valueListenable: verticalScrollFraction,
           builder: (context, scrollFraction, child) {
             final fraction = Curves.easeInQuad.transform(scrollFraction);
-            final yTranslate = bottomSectionSafeInset * fraction;
+            final yTranslate = (bottomSectionSafeInset * 1.2) * fraction;
             final offstage = fraction >= 1.0;
 
             return Transform.translate(
               offset: Offset(0.0, yTranslate),
-              child: Offstage(
-                offstage: offstage,
-                child: child!,
-              ),
+              child: Offstage(offstage: offstage, child: child!),
             );
           },
-          child: pageIndexBuilder(
-            builder: (index) => BlocBuilder<FactExplanationCubit, FactExplanationState>(
-              bloc: cubits[index],
-              builder: (context, state) => StoriesBottomActionSection(
-                isLoading: state.loadingFactExplanation,
-                onAccountTap: widget.goToAccount,
-                onReadMoreTap: () => NavigationUtil.onExplainFact(
-                  context: context,
-                  cubit: cubits[index],
-                  scrollToExplanationCallback: () => pageKeys[index].currentState?.scrollPageTo(pageSafeHeight),
-                  onUnlockProceedCallback: storyController.pause,
-                  onUnlockMethodDismissedCallback: storyController.play,
-                ),
+          child:
+              pageIndexProvider(
+                builder: (index) {
+                  return BlocBuilder<
+                    FactExplanationCubit,
+                    FactExplanationState
+                  >(
+                    bloc: cubits[index],
+                    builder: (context, state) => StoriesBottomActionSection(
+                      isSkeleton: widget.isLoading,
+                      ignoreCtaPointer: widget.isLoading,
+                      isLoadingExplanation: state.loadingFactExplanation,
+                      onAccountTap: widget.goToAccount,
+                      onBackgroundsTap: widget.goToBackgrounds,
+                      onReadMoreTap: () => _onReadMoreTap(index),
+                      backgroundStyle: widget.backgroundStyle,
+                    ),
+                  );
+                },
+              ).autoFadeOutDown(
+                animate: isShowcase,
+                duration: const Duration(milliseconds: 800),
+                reverseDuration: const Duration(milliseconds: 400),
+                slideCurve: Curves.easeInOutSine,
+                slideReverseCurve: const Interval(0.999, 1.0),
+                slideTo: bottomSectionSafeInset + 72.h,
+                forceComplete: false,
               ),
-            ),
-          ).autoFadeOutDown(
-            animate: isShowcase,
-            duration: const Duration(milliseconds: 800),
-            reverseDuration: const Duration(milliseconds: 400),
-            slideCurve: Curves.easeInOutSine,
-            slideReverseCurve: const Interval(0.999, 1.0),
-            slideTo: bottomSectionSafeInset + 72.h,
-            forceComplete: false,
-          ),
         ),
       ),
     );
@@ -388,7 +440,7 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
     );
   }
 
-  Widget pageIndexBuilder({required Widget Function(int) builder}) {
+  Widget pageIndexProvider({required Widget Function(int) builder}) {
     return ValueListenableBuilder(
       valueListenable: pageIndex,
       builder: (_, index, _) => builder(index),
@@ -417,11 +469,14 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
     if (prevScrollOffset == 0 && newScrollOffset == 0) return;
 
     // Prepare pages transition animation
-    scrollSwitchAnimation = Tween<double>(begin: prevScrollOffset, end: newScrollOffset).animate(CurvedAnimation(
-      parent: scrollSwitchController,
-      curve: Curves.fastEaseInToSlowEaseOut,
-      reverseCurve: Curves.fastEaseInToSlowEaseOut,
-    ));
+    scrollSwitchAnimation =
+        Tween<double>(begin: prevScrollOffset, end: newScrollOffset).animate(
+          CurvedAnimation(
+            parent: scrollSwitchController,
+            curve: Curves.fastEaseInToSlowEaseOut,
+            reverseCurve: Curves.fastEaseInToSlowEaseOut,
+          ),
+        );
 
     // Reset animation controller and start transition
     scrollSwitchController
@@ -433,7 +488,7 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
     if (!pageController.hasClients) return;
     isPageChanging = true;
     await pageController.animateToPage(
-      index, 
+      index,
       duration: pageSwitchDuration,
       curve: curve,
     );
@@ -444,7 +499,7 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
     checkPlaybackForScrollOffset(offset);
 
     verticalScrollOffsets[index] = offset;
-    
+
     if (pageIndex.value == index) {
       scrollSwitchController.stop();
       verticalScrollFraction.value = resolveScrollFraction(offset);
@@ -463,5 +518,15 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView> with Sing
         storyController.play();
       }
     }
+  }
+
+  void _onReadMoreTap(int index) {
+    NavigationUtil.onExplainFact(
+      context: context,
+      cubit: cubits[index],
+      scrollToExplanationCallback: () => pageKeys[index].currentState?.scrollPageTo(pageSafeHeight),
+      onUnlockProceedCallback: storyController.pause,
+      onUnlockMethodDismissedCallback: storyController.play,
+    );
   }
 }

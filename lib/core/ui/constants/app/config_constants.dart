@@ -50,6 +50,9 @@ class _ConfigConstants {
   // UX / UI BEHAVIOR
   // ---------------------------------------------------------------------------
 
+  /// Default background id
+  final defaultBackgroundId = UniqueId.fromValue(0);
+
   /// Enable haptic feedback by default
   final defaultHapticsEnabled = true;
 

@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/services.dart';
+
 String capitalizeFirstCharacter(String text) {
   if (text.isEmpty) {
     return text;
@@ -14,4 +16,9 @@ String capitalizeFirstCharacter(String text) {
 bool pseudoProbabilityOf(int percent) {
   final fraction = (percent / 100).clamp(0.0, 1.0);
   return Random().nextDouble() <= fraction;
+}
+
+Future<void> copyToClipboard(String text) {
+  final data = ClipboardData(text: text);
+  return Clipboard.setData(data);
 }

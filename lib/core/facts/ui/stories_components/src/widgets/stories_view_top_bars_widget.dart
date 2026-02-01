@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:denwee/core/backgrounds/domain/entity/background_style.dart';
 import 'package:denwee/core/facts/ui/stories_components/src/controller/story_controller.dart';
 import 'package:denwee/core/facts/ui/stories_components/src/controller/story_items_view.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +14,7 @@ class StoriesViewTopBars extends StatelessWidget {
     required this.padding,
     required this.scrollFraction,
     required this.onStoryChanged,
+    required this.backgroundStyle,
   });
 
   final List<StoryItem?> items;
@@ -20,6 +22,7 @@ class StoriesViewTopBars extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final ValueListenable<double> scrollFraction;
   final ValueChanged<int> onStoryChanged;
+  final BackgroundStyle? backgroundStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,8 @@ class StoriesViewTopBars extends StatelessWidget {
         indicatorOuterPadding: padding,
         onStoryShow: (_, index) => onStoryChanged(index),
         storyItems: items,
+        indicatorColor: backgroundStyle?.textColor.withValues(alpha: .4),
+        indicatorForegroundColor: backgroundStyle?.textColor.withValues(alpha: .8),
       ),
     );
   }
