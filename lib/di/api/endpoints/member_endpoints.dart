@@ -20,4 +20,16 @@ class _MemberEndpoints {
   final userStatistics = '$_base/statistics';
   final userSubscription = '$_base/subscription';
   final userIdentity = '$_base/identity';
+  final applyBackground = '$_base/background/apply';
+  final resetBackground = '$_base/background/reset';
+
+  String backgrounds({String? languageCode}) {
+    final url = '$_base/backgrounds';
+    final uri = Uri.parse(url).replace(
+      queryParameters: {
+        if (languageCode != null) 'lang': languageCode,
+      },
+    );
+    return uri.toString();
+  }
 }

@@ -1,5 +1,7 @@
 import 'package:denwee/core/ads/domain/repo/ads_repo.dart';
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/active_background_cubit.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
@@ -23,8 +25,9 @@ class HomePage extends StatefulWidget {
   final bool checkUserData;
 
   static const routeName = 'HomePage';
-  static const routeNameFromOnboarding = 'HomePageFromOnboarding';
-  static const routeNameFromAuthentication = 'HomePageFromAuthentication';
+  static const routeNameCircleReveal = 'HomePageCircleReveal';
+  static const routeNameSlidingClip = 'HomePageSlidingClip';
+  static const routeNameCrossFade = 'HomePageCrossFade';
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -52,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       if (widget.checkUserData) getIt<UserPreferencesCubit>().checkPreferences();
       if (widget.checkUserData) getIt<FactsArchiveCubit>().checkArchiveIds();
       if (widget.checkUserData) getIt<UserSubscriptionCubit>().checkSubscription();
+      if (widget.checkUserData) getIt<AvailableBackgroundsCubit>().checkBackgrounds();
       getIt<UserStatisticsCubit>().checkStatistics();
       lastSystemHealthCheck = DateTime.now();
     }
@@ -59,27 +63,59 @@ class _HomePageState extends State<HomePage> {
 
   bool shouldCheckSystemHealth() {
     return lastSystemHealthCheck == null ||
-        DateTime.now().difference(lastSystemHealthCheck!) >= checkSystemHealthPeriod;
+        DateTime.now().difference(lastSystemHealthCheck!) >=
+            checkSystemHealthPeriod;
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DailyFactsCubit, DailyFactsState>(
-      builder: (context, state) => CommonScaffold(
-        systemOverlayType: ThemeType.dark,
-        style: CommonBackgroundStyle.ofDarkTheme,
-        systemNavigationBarContrastEnforced: false,
-        body: StoriesDailyFactsBody(
-          isLoading: state.isFetching,
-          dailyFacts: state.bucket.toNullable()?.facts ?? const <DailyFact>[],
-          failure: state.bucketFailure.toNullable(),
-          onAccount: _goToAccount,
-        ),
-      ),
+      builder: (context, state) {
+        final backgroundStyle = context
+            .watch<ActiveBackgroundCubit>()
+            .state
+            .appliedBackground
+            .toNullable()
+            ?.background
+            .style;
+
+        final backgroundBrightness = backgroundStyle?.brightness ?? Brightness.dark;
+        final systemOverlayType = backgroundBrightness == Brightness.light
+            ? ThemeType.light
+            : ThemeType.dark;
+
+        return CommonScaffold(
+          systemOverlayType: systemOverlayType,
+          style: CommonBackgroundStyle.ofDarkTheme,
+          systemNavigationBarContrastEnforced: false,
+          body: StoriesDailyFactsBody(
+            isLoading: state.isFetching,
+            dailyFacts: state.bucket.toNullable()?.facts ?? const <DailyFact>[],
+            failure: state.bucketFailure.toNullable(),
+            onAccount: _goToAccount,
+            onBackgrounds: _goToBackgrounds,
+            backgroundStyle: backgroundStyle,
+            backgroundBrightness: backgroundBrightness,
+            interests: context
+                .read<UserPreferencesCubit>()
+                .state
+                .preferences
+                .interests,
+          ),
+        );
+      },
     );
   }
 
   void _goToAccount() {
     context.restorablePushReplacementNamedArgs(Routes.account);
+  }
+
+  void _goToBackgrounds() {
+    Navigator.restorablePushReplacementNamed(
+      context,
+      Routes.availableBackgrounds,
+      arguments: true,
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/constants/app/user_interests.dart';
+import 'package:denwee/core/user_preferences/domain/entity/background_preferences.dart';
 import 'package:denwee/core/user_preferences/domain/entity/misc_preferences.dart';
 import 'package:denwee/core/user_preferences/domain/entity/notifications_preferences.dart';
 import 'package:denwee/core/user_preferences/domain/entity/theme_preferences.dart';
@@ -15,6 +16,7 @@ abstract class UserPreferences with _$UserPreferences {
     required List<UserInterest> interests,
     required Locale language,
     required NotificationsPreferences notifications,
+    required BackgroundPreferences background,
     required ThemePreferences theme,
     required MiscPreferences misc,
   }) = _UserPreferences;
@@ -23,6 +25,7 @@ abstract class UserPreferences with _$UserPreferences {
     return UserPreferences(
       interests: const <UserInterest>[],
       language: AppConstants.config.fallbackLocale,
+      background: BackgroundPreferences.initial(),
       notifications: NotificationsPreferences.initial(),
       theme: ThemePreferences.initial(),
       misc: MiscPreferences.initial(),
@@ -38,6 +41,7 @@ abstract class UserPreferences with _$UserPreferences {
     return UserPreferences(
       interests: selectedInterests,
       notifications: notificationPreferences,
+      background: BackgroundPreferences.initial(),
       language: selectedLocale,
       theme: selectedTheme,
       misc: MiscPreferences.initial(),

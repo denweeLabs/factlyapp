@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_function_declarations_over_variables
 
+import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/misc/domain/restorable_states/custom_serializer.dart';
 import 'package:denwee/core/ui/router/page_routes_builders/circular_reveal_page_route_builder.dart';
@@ -7,6 +8,9 @@ import 'package:denwee/core/ui/router/page_routes_builders/cross_fade_page_route
 import 'package:denwee/core/ui/router/page_routes_builders/fade_slideup_page_route_builder.dart';
 import 'package:denwee/core/ui/router/page_routes_builders/slideup_clipath_page_route_builder.dart';
 import 'package:denwee/di/di.dart';
+import 'package:denwee/pages/available_backgrounds/available_backgrounds_page.dart';
+import 'package:denwee/pages/background_edit/background_edit_page.dart';
+import 'package:denwee/pages/background_edit/cubit/background_edit_cubit.dart';
 import 'package:denwee/pages/account/change_password/change_password_page.dart';
 import 'package:denwee/pages/authentication/args/authentication_action_result.dart';
 import 'package:denwee/pages/authentication/args/authentication_page_args.dart';
@@ -44,8 +48,9 @@ class Routes {
   static const welcome = WelcomePage.routeName;
   static const onboarding = OnboardingConfigurationPage.routeName;
   static const home = HomePage.routeName;
-  static const homeFromOnboarding = HomePage.routeNameFromOnboarding;
-  static const homeFromAuthentication = HomePage.routeNameFromAuthentication;
+  static const homeCircleReveal = HomePage.routeNameCircleReveal;
+  static const homeSlidingClip = HomePage.routeNameSlidingClip;
+  static const homeCrossFade = HomePage.routeNameCrossFade;
   static const account = AccountBasePage.routeName;
   static const authentication = AuthenticationPage.routeName;
   static const selectInterests = SelectInterestsPage.routeName;
@@ -53,6 +58,8 @@ class Routes {
   static const changePassword = ChangePasswordPage.routeName;
   static const resetPassword = ResetPasswordPage.routeName;
   static const premiumPaywall = PremiumPaywallPage.routeName;
+  static const availableBackgrounds = AvailableBackgroundsPage.routeName;
+  static const backgroundEdit = BackgroundEditPage.routeName;
 }
 
 final RouteFactory rootRouteFactory = (RouteSettings settings) {
@@ -82,14 +89,20 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
         builder: (_) => const HomePage(),
       );
 
-    case Routes.homeFromOnboarding:
+    case Routes.homeCircleReveal:
       return CircularRevealPageRouteBuilder<void>(
         settings: settings,
         builder: (_) => const HomePage(checkUserData: false),
       );
 
-    case Routes.homeFromAuthentication:
+    case Routes.homeSlidingClip:
       return SlideupClipPathPageRouteBuilder<void>(
+        settings: settings,
+        builder: (_) => const HomePage(checkUserData: false),
+      );
+
+    case Routes.homeCrossFade:
+      return CrossFadePageRouteBuilder<void>(
         settings: settings,
         builder: (_) => const HomePage(checkUserData: false),
       );
@@ -101,7 +114,10 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
       );
 
     case Routes.authentication:
-      final args = CustomSerializer(settings.arguments) .getArguments(AuthenticationPageArgs.fromJson) ??
+      final args =
+          CustomSerializer(
+            settings.arguments,
+          ).getArguments(AuthenticationPageArgs.fromJson) ??
           const AuthenticationPageArgs();
       return FadeSlideupPageRouteBuilder<AuthorizationActionResult?>(
         settings: settings,
@@ -126,7 +142,9 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
       );
 
     case Routes.factDetails:
-      final args = CustomSerializer(settings.arguments).getArguments(FactDetailsPageArgs.fromJson)!;
+      final args = CustomSerializer(
+        settings.arguments,
+      ).getArguments(FactDetailsPageArgs.fromJson)!;
       return CircularRevealPageRouteBuilder(
         settings: settings,
         builder: (_) => BlocProvider(
@@ -136,8 +154,9 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
       );
 
     case Routes.resetPassword:
-      final args = CustomSerializer(settings.arguments)
-          .getArguments(ResetPasswordPageArgs.fromJson)!;
+      final args = CustomSerializer(
+        settings.arguments,
+      ).getArguments(ResetPasswordPageArgs.fromJson)!;
       return CrossFadePageRouteBuilder<void>(
         settings: settings,
         builder: (_) => BlocProvider(
@@ -159,6 +178,27 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
       return FadeSlideupPageRouteBuilder(
         settings: settings,
         builder: (_) => const PremiumPaywallPage(),
+      );
+
+    case Routes.backgroundEdit:
+      final background = settings.arguments as AvailableBackground;
+
+      return CircularRevealPageRouteBuilder<void>(
+        settings: settings,
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<BackgroundEditCubit>(param1: background.style),
+          child: BackgroundEditPage(background: background),
+        ),
+      );
+
+    case Routes.availableBackgrounds:
+      final popToHome = settings.arguments as bool?;
+
+      return FadeSlideupPageRouteBuilder<void>(
+        settings: settings,
+        builder: (_) => popToHome == true
+            ? const AvailableBackgroundsPage(popToHome: true)
+            : const AvailableBackgroundsPage(),
       );
 
     default:

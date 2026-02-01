@@ -81,6 +81,10 @@
                     "archive": "Archivio"
                 }
             },
+            "background": {
+                "title": "Sfondo",
+                "more": "Altro"
+            },
             "theme": {
                 "title": "Tema",
                 "items": {
@@ -150,7 +154,7 @@
             "title": "Ottieni di più da ogni fatto senza limiti",
             "benefits": {
                 "line_1": "Spiegazioni immediate",
-                "line_2": "Accesso illimitato all’archivio",
+                "line_2": "Sblocca tutti gli sfondi",
                 "line_3": "Niente più pubblicità",
                 "ads_encourage_msg": {
                     "one": "Hai passato ~{} minuto sugli annunci. Risparmia più tempo con Premium 🫶",
@@ -174,6 +178,13 @@
             },
             "expiry": "Scadenza"
         }
+    },
+
+
+    "backgrounds": {
+        "selected": "Selezionato",
+        "apply": "Applica",
+        "unlock": "Sblocca"
     },
 
 
@@ -338,7 +349,8 @@
             "daily_facts": "Ancora nessun fatto giornaliero... Riprova più tardi per qualcosa di nuovo!",
             "facts_archive": "Il tuo archivio è vuoto — salva alcuni fatti e appariranno qui!"
         },
-        "agreeing_to_terms": "Continuando, accetti i nostri\n<terms>Termini</terms> e la nostra <privacy>Privacy</privacy>"
+        "agreeing_to_terms": "Continuando, accetti i nostri\n<terms>Termini</terms> e la nostra <privacy>Privacy</privacy>",
+        "copied_to_clipboard": "Copiato"
     },
 
 
@@ -387,6 +399,21 @@
         "subscription_packages_switch": {
             "title": "Solo un avviso!",
             "subtitle": "Quando cambi piano, l’abbonamento attuale verrà sostituito e il valore rimanente sarà applicato al nuovo piano 😉"
+        },
+        "background_purchase_confirmation": {
+            "title": "Evviva!",
+            "subtitle": "Vuoi sbloccare questo sfondo per {} stelle?"
+        },
+        "background_insufficient_balance": {
+            "title": "Non ancora 🥺",
+            "subtitle": "Non hai ancora abbastanza stelle per sbloccare questo sfondo"
+        },
+        "background_insufficient_few_balance": {
+            "title": "Ci sei quasi ⭐️",
+            "subtitle": {
+                "one": "Ti serve solo {} stella in più per sbloccare questo sfondo!",
+                "other": "Ti servono solo {} stelle in più per sbloccare questo sfondo!"
+            }
         }
     },
 

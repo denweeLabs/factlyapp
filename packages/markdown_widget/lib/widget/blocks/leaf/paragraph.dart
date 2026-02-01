@@ -79,9 +79,8 @@ const _defaultDelStyle = TextStyle(decoration: TextDecoration.lineThrough);
 
 ///see [StrongNode]
 const _defaultStrongStyle = TextStyle(
-  fontWeight: FontWeight.w800,
-  color: Colors.white,
-  letterSpacing: -0.4,
+  fontWeight: FontWeight.w900,
+  letterSpacing: -0.1,
 );
 
 ///see [EmNode]

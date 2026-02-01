@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,11 +9,15 @@ class StreamedMarkdownText extends StatefulWidget {
   const StreamedMarkdownText({
     super.key,
     required this.stream,
-    this.textStyle,
+    required this.pTextStyle,
+    required this.hTextStyle,
+    required this.bqTextStyle,
   });
 
   final Stream<String>? stream;
-  final TextStyle? textStyle;
+  final TextStyle pTextStyle;
+  final TextStyle hTextStyle;
+  final TextStyle bqTextStyle;
 
   @override
   State<StreamedMarkdownText> createState() => _StreamedMarkdownTextState();
@@ -112,7 +115,9 @@ class _StreamedMarkdownTextState extends State<StreamedMarkdownText> {
       duration: _fadeInDuration,
       previousText: _previous.toString(),
       currentText: _current.toString(),
-      textStyle: widget.textStyle,
+      pTextStyle: widget.pTextStyle,
+      hTextStyle: widget.hTextStyle,
+      bqTextStyle: widget.bqTextStyle,
     );
   }
 }
@@ -121,14 +126,18 @@ class FadingMarkdownBody extends StatelessWidget {
   final String previousText;
   final String currentText;
   final Duration duration;
-  final TextStyle? textStyle;
+  final TextStyle pTextStyle;
+  final TextStyle hTextStyle;
+  final TextStyle bqTextStyle;
 
   const FadingMarkdownBody({
     super.key,
     required this.previousText,
     required this.currentText,
     required this.duration,
-    this.textStyle,
+    required this.pTextStyle,
+    required this.hTextStyle,
+    required this.bqTextStyle,
   });
 
   @override
@@ -145,7 +154,9 @@ class FadingMarkdownBody extends StatelessWidget {
             opacity: 1.0 - opacity,
             child: AppMarkdownText(
               data: previousText,
-              textStyle: textStyle,
+              pTextStyle: pTextStyle,
+              hTextStyle: hTextStyle,
+              bqTextStyle: bqTextStyle,
             ),
           ),
           AnimatedOpacity(
@@ -153,7 +164,9 @@ class FadingMarkdownBody extends StatelessWidget {
             opacity: opacity,
             child: AppMarkdownText(
               data: currentText,
-              textStyle: textStyle,
+              pTextStyle: pTextStyle,
+              hTextStyle: hTextStyle,
+              bqTextStyle: bqTextStyle,
             ),
           ),
         ],
@@ -166,13 +179,15 @@ class AppMarkdownText extends StatelessWidget {
   const AppMarkdownText({
     super.key,
     required this.data,
-    this.textStyle,
+    required this.pTextStyle,
+    required this.hTextStyle,
+    required this.bqTextStyle,
   });
 
   final String data;
-  final TextStyle? textStyle;
-
-  static const _textColor = /*Color.fromARGB(255, 230, 224, 224)*/ Colors.white;
+  final TextStyle pTextStyle;
+  final TextStyle hTextStyle;
+  final TextStyle bqTextStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -182,17 +197,15 @@ class AppMarkdownText extends StatelessWidget {
       padding: EdgeInsets.zero,
       config: MarkdownConfig(
         configs: [
-          _H2(),
-          _H3(),
-          PConfig(
-            textStyle: (textStyle ?? markdown).copyWith(color: _textColor),
-          ),
+          _H2(textStyle: hTextStyle),
+          _H3(textStyle: hTextStyle),
+          PConfig(textStyle: pTextStyle),
           BlockquoteConfig(
             sideWith: 5.0,
             margin: EdgeInsets.zero,
             padding: EdgeInsets.symmetric(horizontal: 14.w),
             sideColor: context.theme.colorScheme.primary,
-            textColor: context.lightTextColor.withValues(alpha: 0.8),
+            textColor: bqTextStyle.color ?? Colors.white,
           ),
         ],
       ),
@@ -207,8 +220,12 @@ final DummyDivider = HeadingDivider(
 );
 
 class _H2 implements HeadingConfig {
+  final TextStyle textStyle;
+
+  const _H2({required this.textStyle});
+  
   @override
-  TextStyle get style => h1.copyWith(color: Colors.white);
+  TextStyle get style => textStyle;
 
   @override
   String get tag => MarkdownTag.h2.name;
@@ -221,8 +238,12 @@ class _H2 implements HeadingConfig {
 }
 
 class _H3 implements HeadingConfig {
+  final TextStyle textStyle;
+
+  const _H3({required this.textStyle});
+  
   @override
-  TextStyle get style => h1.copyWith(color: Colors.white);
+  TextStyle get style => textStyle;
 
   @override
   String get tag => MarkdownTag.h3.name;

@@ -1,0 +1,42 @@
+import 'dart:async';
+
+import 'package:dartz/dartz.dart';
+import 'package:denwee/core/backgrounds/domain/entity/apply_background_body.dart';
+import 'package:denwee/core/backgrounds/domain/entity/apply_background_result.dart';
+import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
+import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';
+import 'package:denwee/core/backgrounds/domain/repo/backgrounds_repo.dart';
+import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
+import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
+import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
+import 'package:injectable/injectable.dart';
+import 'package:utils/utils.dart';
+
+@LazySingleton()
+class ApplyCustomBackgroundUseCase {
+  final BackgroundsRepo _backgroundsRepo;
+  final UserPreferencesCubit _preferencesCubit;
+  final UserStatisticsCubit _statisticsCubit;
+  final ProfileCubit _profileCubit;
+
+  const ApplyCustomBackgroundUseCase(
+    this._backgroundsRepo,
+    this._preferencesCubit,
+    this._statisticsCubit,
+    this._profileCubit,
+  );
+
+  Future<Either<BackgroundFailure, (ResolvedBackgroundAsset, ApplyBackgroundResult)>> execute(ApplyBackgroundBody data) async {
+    final failureOrSuccess = await _backgroundsRepo.applyBackgroundRemote(data);
+    final submittedData = (failureOrSuccess.getEntries()).$2;
+
+    if (submittedData != null) {
+      _backgroundsRepo.storeBackgroundAssetLocal(submittedData.$1);
+      _profileCubit.updateUnlockedBackgroundIds(submittedData.$2.unlockedBackgroundIds);
+      _preferencesCubit.updateSelectedBackgroundId(submittedData.$2.activeBackground.id);
+      _statisticsCubit.updateStarsBalance(submittedData.$2.starsBalance);
+    }
+
+    return failureOrSuccess;
+  }
+}

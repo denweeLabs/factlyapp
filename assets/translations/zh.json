@@ -81,6 +81,10 @@
                     "archive": "存档"
                 }
             },
+            "background": {
+                "title": "背景",
+                "more": "更多"
+            },
             "theme": {
                 "title": "主题",
                 "items": {
@@ -150,7 +154,7 @@
             "title": "从每一个事实中获得更多，无限探索",
             "benefits": {
                 "line_1": "即时解析",
-                "line_2": "无限访问存档",
+                "line_2": "解锁所有背景",
                 "line_3": "不再有广告",
                 "ads_encourage_msg": {
                     "other": "你已花费约 {} 分钟在广告上。使用 Premium 节省更多时间 🫶"
@@ -175,6 +179,13 @@
         }
     },
 
+
+    "backgrounds": {
+        "selected": "已选择",
+        "apply": "应用",
+        "unlock": "解锁"
+    },
+    
 
     "showcase": {
         "title": "你的每日趣闻将在这里显示。",
@@ -337,7 +348,8 @@
             "daily_facts": "还没有每日趣闻…稍后再来看看新内容！",
             "facts_archive": "你的存档是空的 — 保存一些趣闻，它们会显示在这里！"
         },
-        "agreeing_to_terms": "继续操作即表示你同意我们的\n<terms>条款</terms>和<privacy>隐私</privacy>"
+        "agreeing_to_terms": "继续操作即表示你同意我们的\n<terms>条款</terms>和<privacy>隐私</privacy>",
+        "copied_to_clipboard": "已复制"
     },
 
 
@@ -386,6 +398,21 @@
         "subscription_packages_switch": {
             "title": "小提示！",
             "subtitle": "当你更换套餐时，当前订阅将被替换，剩余价值将应用到新套餐中 😉"
+        },
+        "background_purchase_confirmation": {
+            "title": "太棒了！",
+            "subtitle": "是否要花费 {} 颗星星解锁此背景？"
+        },
+        "background_insufficient_balance": {
+            "title": "还不够呢 🥺",
+            "subtitle": "你的星星数量还不足以解锁这个背景"
+        },
+        "background_insufficient_few_balance": {
+            "title": "就差一点 ⭐️",
+            "subtitle": {
+                "one": "只差 {} 颗星星就可以解锁这个背景了！",
+                "other": "只差 {} 颗星星就可以解锁这个背景了！"
+            }
         }
     },
 

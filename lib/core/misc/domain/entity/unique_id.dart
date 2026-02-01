@@ -6,7 +6,7 @@ class UniqueId {
   }
 
   factory UniqueId.empty() {
-    return UniqueId._(-1);
+    return const UniqueId._(-1);
   }
 
   const UniqueId._(this.value);
@@ -25,6 +25,8 @@ class UniqueId {
   }
 
   String get stringValue => value.toString();
+
+  bool get isEmpty => value < 0;
 
   @override
   bool operator ==(Object other) {

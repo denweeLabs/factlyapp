@@ -1,38 +1,59 @@
-import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
-import 'package:denwee/core/ui/constants/app/user_interests.dart';
+import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/widget/misc/app_markdown_text_widget.dart';
 import 'package:denwee/core/ui/widget/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StoriesFactShortContent extends StatelessWidget {
   const StoriesFactShortContent({
     super.key,
-    required this.fact,
+    required this.emoji,
+    required this.content,
     required this.padding,
+    this.textStyle,
   });
 
-  final DailyFact fact;
+  final String emoji;
+  final String content;
   final EdgeInsets padding;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
+    final effectiveFontFamily = getIt<UserPreferencesCubit>().state
+        .whenLanguage(
+          en: () => textStyle?.fontFamily ?? AppConstants.style.textStyle.primaryFontFamily,
+          ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
+        );
+
+    final effectiveTextStyle = factShortContent.copyWith(
+      color: textStyle?.color ?? context.lightTextColor,
+      fontSize: (textStyle?.fontSize ?? 20).sp,
+      fontFamily: effectiveFontFamily,
+    );
+
     return Padding(
       padding: padding,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildFactHeader(
-            context: context,
-            emoji: fact.interest.emoji ?? '',
-            title: fact.title,
-            date: fact.displayDateText(),
+          Center(
+            child: Text(
+              emoji,
+              style: TextStyle(fontSize: 28.sp, color: Colors.white),
+            ),
           ),
-          24.verticalSpace,
-          AppMarkdownText(data: fact.content),
+          18.verticalSpace,
+          Text(
+            content.replaceAll('**', ''),
+            style: effectiveTextStyle,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -92,11 +113,13 @@ class StoriesFactLongContent extends StatelessWidget {
     required this.fullContent,
     required this.streamedContent,
     required this.padding,
+    required this.brightness,
   });
 
   final String? fullContent;
   final Stream<String>? streamedContent;
   final EdgeInsets padding;
+  final Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
@@ -104,11 +127,25 @@ class StoriesFactLongContent extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final color = brightness == Brightness.dark
+        ? context.lightTextColor
+        : context.darkTextColor;
+
     return Padding(
       padding: padding,
       child: fullContent != null
-          ? AppMarkdownText(data: fullContent!, textStyle: markdownDetailed)
-          : StreamedMarkdownText(stream: streamedContent, textStyle: markdownDetailed),
+          ? AppMarkdownText(
+              data: fullContent!,
+              pTextStyle: factDetailedContent.copyWith(color: color),
+              hTextStyle: h1.copyWith(color: color),
+              bqTextStyle: factDetailedContent.copyWith(color: color),
+            )
+          : StreamedMarkdownText(
+              stream: streamedContent,
+              pTextStyle: factDetailedContent.copyWith(color: color),
+              hTextStyle: h1.copyWith(color: color),
+              bqTextStyle: factDetailedContent.copyWith(color: color),
+            ),
     );
   }
 }

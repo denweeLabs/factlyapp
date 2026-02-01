@@ -136,7 +136,7 @@ mixin OnboardingConfigurationHandlers {
     );
 
     context.restorablePushReplacementNamedArgs(
-      Routes.homeFromOnboarding,
+      Routes.homeCircleReveal,
       rootNavigator: true,
     );
   }

@@ -2,6 +2,7 @@ import 'package:denwee/core/statistics/domain/entity/user_statistics.dart';
 import 'package:denwee/core/statistics/domain/failure/statistics_failure.dart';
 import 'package:denwee/core/statistics/domain/repo/statistics_repo.dart';
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -40,6 +41,12 @@ class UserStatisticsCubit extends Cubit<UserStatisticsState> {
     ));
     await Future<void>.delayed(const Duration(milliseconds: 25));
     emit(state.copyWith(isInitiallyLoaded: true));
+  }
+
+  void updateStarsBalance(int value) {
+    final newStats = state.statistics.copyWith(stars: value);
+    emit(state.copyWith(statistics: newStats));
+    _statisticsRepo.storeStatisticsLocal(newStats);
   }
 
   void clearState() {

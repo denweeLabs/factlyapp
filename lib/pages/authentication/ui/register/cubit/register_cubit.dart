@@ -7,6 +7,7 @@ import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/core/statistics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/ui/bloc/notifications_cubit/notifications_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
@@ -27,6 +28,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   final UserStatisticsCubit _userStatisticsCubit;
   final NotificationsCubit _notificationsCubit;
   final AuthCubit _authCubit;
+  final AvailableBackgroundsCubit _backgroundsCubit;
   final CommonStorage _commonStorage;
   final SubscriptionsRepo _subscriptionsRepo;
   final AnalyticsRepo _analyticsRepo;
@@ -40,6 +42,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     this._commonStorage,
     this._analyticsRepo,
     this._notificationsCubit,
+    this._backgroundsCubit,
     this._subscriptionsRepo,
   ) : super(RegisterState.initial());
 
@@ -89,6 +92,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       await _profileCubit.emitPreserveProfile(result.profile);
       await _userStatisticsCubit.checkStatistics();
       await _authCubit.setAuthenticated();
+      _backgroundsCubit.checkBackgrounds();
       _subscriptionsRepo.login();
       _analyticsRepo.logSignUp();
     }

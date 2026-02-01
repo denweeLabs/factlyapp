@@ -68,7 +68,6 @@ class ArchivedFactTile extends StatelessWidget {
               child: AppArchiveButton(
                 factId: fact.id,
                 iconPadding: EdgeInsets.only(left: 18.w),
-                type: AppArchiveButtonType.iconOnly,
                 iconColor: context.iconColor,
               ),
             ),

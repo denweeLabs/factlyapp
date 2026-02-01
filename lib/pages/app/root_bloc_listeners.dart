@@ -1,9 +1,14 @@
+import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';
+import 'package:denwee/core/backgrounds/domain/use_case/on_background_applied_use_case.dart';
+import 'package:denwee/core/backgrounds/domain/use_case/on_default_background_selected_use_case.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
 import 'package:denwee/core/profile/domain/failure/profile_failure.dart';
 import 'package:denwee/core/statistics/domain/failure/statistics_failure.dart';
 import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/active_background_cubit.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
 import 'package:denwee/core/ui/bloc/notifications_cubit/notifications_cubit.dart';
@@ -11,6 +16,7 @@ import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
 import 'package:denwee/core/ui/bloc/subscriptions_cubit/subscription_offerings_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/utils/dialogs_util.dart';
 import 'package:denwee/core/ui/utils/haptic_util.dart';
@@ -81,6 +87,14 @@ class _RootBlocListenersState extends State<RootBlocListeners>
         ),
         BlocListener<NotificationsCubit, NotificationsState>(
           listenWhen: _notificationsListener,
+          listener: (_, _) {},
+        ),
+        BlocListener<AvailableBackgroundsCubit, AvailableBackgroundsState>(
+          listenWhen: _availableBackgroundsListener,
+          listener: (_, _) {},
+        ),
+        BlocListener<ActiveBackgroundCubit, ActiveBackgroundState>(
+          listenWhen: _activeBackgroundListener,
           listener: (_, _) {},
         ),
       ],
@@ -157,6 +171,11 @@ class _RootBlocListenersState extends State<RootBlocListeners>
       );
     }
 
+    if (c.preferences.background.selectedBackgroundId ==
+        AppConstants.config.defaultBackgroundId) {
+      getIt<OnDefaultBackgroundSelectedUseCase>().execute();
+    }
+
     return false;
   }
 
@@ -213,6 +232,50 @@ class _RootBlocListenersState extends State<RootBlocListeners>
       } else {
         notificationData.tryLaunchLink();
       }
+    }
+
+    return false;
+  }
+
+  bool _availableBackgroundsListener(
+    AvailableBackgroundsState p,
+    AvailableBackgroundsState c,
+  ) {
+    final isFailure = p.failure != c.failure && c.failure.isSome();
+
+    if (isFailure) {
+      final failure = c.failure.toNullable()!;
+      final isSessionExpired = failure.isInsufficientPermissions;
+      final context = getIt<RootRouterData>().context;
+      if (isSessionExpired) return onUserSessionExpired();
+      HapticUtil.medium();
+      AppDialogs.showErrorSnackbar(description: failure.errorMessage(context));
+    }
+
+    return false;
+  }
+
+  bool _activeBackgroundListener(
+    ActiveBackgroundState p,
+    ActiveBackgroundState c,
+  ) {
+    final isFailure = p.failure != c.failure && c.failure.isSome();
+
+    if (isFailure) {
+      final failure = c.failure.toNullable()!;
+      final isSessionExpired = failure.isInsufficientPermissions;
+      final context = getIt<RootRouterData>().context;
+      if (isSessionExpired) return onUserSessionExpired();
+      HapticUtil.medium();
+      AppDialogs.showErrorSnackbar(description: failure.errorMessage(context));
+    }
+
+    if (p.isApplying && !c.isApplying && c.isApplied) {
+      c.mapOrNull(
+        applied: (data) {
+          getIt<OnBackgroundAppliedUseCase>().execute(data.asset);
+        },
+      );
     }
 
     return false;

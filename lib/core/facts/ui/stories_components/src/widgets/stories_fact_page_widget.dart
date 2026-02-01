@@ -1,10 +1,13 @@
+import 'package:denwee/core/backgrounds/domain/entity/background_style.dart';
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
+import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_fact_action_buttons_widget.dart';
+import 'package:denwee/core/ui/constants/app/user_interests.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/animations/scroll_physics/less_responsive_scroll_physics.dart';
+import 'package:denwee/core/ui/widget/common/common_skeleton_item_widget.dart';
 import 'package:denwee/core/ui/widget/misc/fading_edge_widget.dart';
 import 'package:denwee/pages/fact_details/ui/cubit/fact_explanation_cubit.dart';
 import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_scrollup_button_widget.dart';
-import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_fact_tags_list_widget.dart';
 import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_fact_content_widget.dart';
 import 'package:denwee/pages/fact_details/ui/fact_details_listeners.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +29,11 @@ class StoriesFactPage extends StatefulWidget {
     required this.pageHeight,
     this.onFactLoadingStarted,
     this.onFactLoadingFinished,
+    this.scrollPhysics,
+    this.backgroundStyle,
+    this.ignorePointer = false,
+    this.isSkeleton = false,
+    this.backgroundBrightness,
   });
 
   final DailyFact fact;
@@ -38,6 +46,11 @@ class StoriesFactPage extends StatefulWidget {
   final double pageHeight;
   final VoidCallback? onFactLoadingStarted;
   final VoidCallback? onFactLoadingFinished;
+  final ScrollPhysics? scrollPhysics;
+  final BackgroundStyle? backgroundStyle;
+  final bool ignorePointer;
+  final bool isSkeleton;
+  final Brightness? backgroundBrightness;
 
   @override
   State<StoriesFactPage> createState() => StoriesFactPageState();
@@ -58,7 +71,7 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
     value: resolveScrollFraction(widget.initialScrollOffset),
   );
 
-  late final scrollPhysics = SnapScrollPhysics(
+  late final defaultScrollPhysics = SnapScrollPhysics(
     snaps: [Snap.avoidZone(0, widget.pageHeight)],
     parent: const LessResponsiveScrollPhysics(),
   );
@@ -94,15 +107,22 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
 
   @override
   Widget build(BuildContext context) {
-    return FactDetailsListeners(
-      onFactLoadingStarted: widget.onFactLoadingStarted,
-      onFactLoadingFinished: widget.onFactLoadingFinished,
-      onFactDetailsLoaded: () => scrollPageTo(widget.pageHeight),
-      child: Stack(
-        children: [
-          _buildScrollableContent(),
-          _buildScrollBackButton(),
-        ],
+    return CommonSkeletonItem(
+      isEnabled: widget.isSkeleton,
+      color: widget.backgroundStyle?.textColor,
+      child: IgnorePointer(
+        ignoring: widget.ignorePointer,
+        child: FactDetailsListeners(
+          onFactLoadingStarted: widget.onFactLoadingStarted,
+          onFactLoadingFinished: widget.onFactLoadingFinished,
+          onFactDetailsLoaded: () => scrollPageTo(widget.pageHeight),
+          child: Stack(
+            children: [
+              _buildScrollableContent(),
+              _buildScrollBackButton(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -119,7 +139,9 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
           child: ListView(
             padding: EdgeInsets.zero,
             controller: scrollController,
-            physics: hasExplanation ? scrollPhysics : const NeverScrollableScrollPhysics(),
+            physics: hasExplanation
+                ? widget.scrollPhysics ?? defaultScrollPhysics
+                : const NeverScrollableScrollPhysics(),
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             addRepaintBoundaries: false,
             addAutomaticKeepAlives: false,
@@ -139,7 +161,7 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
     return SizedBox.fromSize(
       size: Size.fromHeight(widget.pageHeight),
       child: Align(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.center,
         child: RepaintBoundary(
           child: AnimatedBuilder(
             animation: scrollFractionController,
@@ -156,25 +178,25 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: widget.pageHeight * 0.1),
                 StoriesFactShortContent(
-                  fact: widget.fact,
-                  padding: widget.defaultContentPadding.copyWith(bottom: 0.0),
+                  emoji: widget.fact.interest.emoji ?? '',
+                  content: widget.fact.content,
+                  padding: widget.defaultContentPadding,
+                  textStyle: widget.backgroundStyle?.asTextStyle,
                 ),
-                28.verticalSpace,
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: widget.defaultContentPadding.left - 6.0,
-                    right: widget.defaultContentPadding.right - 6.0,
-                    bottom: widget.defaultContentPadding.bottom,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
-                    child: StoriesFactTagsList(
-                      padding: EdgeInsets.only(left: 4.w, right: 18.w),
-                      fact: widget.fact,
-                    ),
+                24.verticalSpace,
+                Visibility(
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  visible: !widget.isSkeleton,
+                  child: StoriesFactActionButtons(
+                    website: widget.fact.source.toNullable(),
+                    factId: widget.fact.id,
+                    factContent: widget.fact.content,
+                    iconColor: widget.backgroundStyle?.textColor,
                   ),
                 ),
               ],
@@ -207,6 +229,7 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
             fullContent: state.explanation.toNullable()?.content,
             streamedContent: widget.cubit.explanationController.stream,
             padding: widget.detailedContentPadding,
+            brightness: widget.backgroundBrightness ?? Brightness.dark,
           ),
         ),
       ),

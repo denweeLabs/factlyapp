@@ -7,11 +7,15 @@ class ShimmerAnimation extends StatelessWidget {
     this.isEnabled = true,
     this.duration,
     this.interval,
+    this.color,
+    this.colorOpacity = 0.3,
   });
 
   final bool isEnabled;
   final Duration? duration;
   final Duration? interval;
+  final Color? color;
+  final double colorOpacity;
 
   static const defaultDuration = Duration(milliseconds: 2000);
   static const defaultInterval = Duration(milliseconds: 3000);
@@ -21,8 +25,8 @@ class ShimmerAnimation extends StatelessWidget {
     return RepaintBoundary(
       child: Shimmer(
         enabled: isEnabled,
-        colorOpacity: 0.3,
-        color: Colors.white,
+        colorOpacity: colorOpacity,
+        color: color ?? Colors.white,
         duration: duration ?? defaultDuration,
         interval: interval ?? defaultInterval,
         child: const SizedBox.shrink(),

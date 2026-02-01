@@ -4,9 +4,11 @@ import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/misc/domain/entity/i_entity.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/network/domain/entity/network_link.dart';
+import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/ui/constants/app/user_interests.dart';
 import 'package:denwee/core/ui/constants/formatters/common_formatters.dart';
 import 'package:dartz/dartz.dart';
+import 'package:denwee/di/di.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:utils/utils.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -15,6 +17,10 @@ part 'daily_fact.freezed.dart';
 
 @freezed
 abstract class DailyFact with _$DailyFact implements IEntity {
+  static const dummyFactTitle = 'The Blue Whale\'s Heart';
+  static const dummyFactContent =
+      'The heart of a blue whale is so massive it can weigh over 400 pounds and is about the size of a small car, beating only 8-10 times!';
+
   const DailyFact._();
   const factory DailyFact({
     required UniqueId id,
@@ -27,6 +33,20 @@ abstract class DailyFact with _$DailyFact implements IEntity {
     required Option<String> region,
     required Option<List<String>> relatedTopics,
   }) = _DailyFact;
+
+  factory DailyFact.dummy() {
+    return DailyFact(
+      id: UniqueId.empty(),
+      interest: getIt<UserPreferencesCubit>().state.preferences.interests.first,
+      content: DailyFact.dummyFactContent,
+      title: DailyFact.dummyFactTitle,
+      language: const Locale('en'),
+      source: const Some(NetworkLink.pure()),
+      date: const None(),
+      region: const None(),
+      relatedTopics: const None(),
+    );
+  }
 }
 
 extension DailyFactX on DailyFact {
@@ -34,7 +54,8 @@ extension DailyFactX on DailyFact {
     final nullableDate = date.toNullable();
     if (nullableDate == null) return false;
     final difference = currentDay().difference(nullableDate);
-    return interest.isHistory || (difference.inDays > 365 * 50);  // if more than 50 years
+    return interest.isHistory ||
+        (difference.inDays > 365 * 50); // if more than 50 years
   }
 
   bool showTimeAgoDate() {
@@ -44,7 +65,7 @@ extension DailyFactX on DailyFact {
   String? fullDateText() {
     final nullableDate = date.toNullable();
     if (nullableDate == null) return null;
-    return historical_date.format(nullableDate);
+    return fact_historical_date.format(nullableDate);
   }
 
   String? timeAgoDateText() {

@@ -1,6 +1,7 @@
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/ui/constants/app/user_interests.dart';
+import 'package:denwee/core/user_preferences/domain/entity/background_preferences.dart';
 import 'package:denwee/core/user_preferences/domain/entity/misc_preferences.dart';
 import 'package:denwee/core/user_preferences/domain/entity/notifications_preferences.dart';
 import 'package:denwee/core/user_preferences/domain/entity/theme_preferences.dart';
@@ -22,6 +23,7 @@ class UserPreferencesDto {
   @JsonKey(name: 'theme_mode') final String themeMode;
   @JsonKey(name: 'theme_coloration_id') final int themeColorationId;
   @JsonKey(name: 'haptics_enabled') final bool isHapticsEnabled;
+  @JsonKey(name: 'selected_background_id', defaultValue: 0) final int selectedBackgroundId;
 
   const UserPreferencesDto({
     required this.interests,
@@ -31,6 +33,7 @@ class UserPreferencesDto {
     required this.themeMode,
     required this.themeColorationId,
     required this.isHapticsEnabled,
+    required this.selectedBackgroundId,
   });
 
   factory UserPreferencesDto.fromDomain(UserPreferences preferences) {
@@ -44,6 +47,7 @@ class UserPreferencesDto {
       themeMode: preferences.theme.mode.name,
       themeColorationId: preferences.theme.colorationId.value,
       isHapticsEnabled: preferences.misc.isHapticsEnabled,
+      selectedBackgroundId: preferences.background.selectedBackgroundId.value,
     );
   }
 
@@ -54,6 +58,9 @@ class UserPreferencesDto {
       notifications: NotificationsPreferences(
         time: hhMmFromString(notificationTime),
         isEnabled: notificationsEnabled,
+      ),
+      background: BackgroundPreferences(
+        selectedBackgroundId: UniqueId.fromValue(selectedBackgroundId),
       ),
       theme: ThemePreferences(
         mode: ThemeMode.values.firstWhereOrNull((e) => e.name == themeMode) ?? ThemeMode.system,

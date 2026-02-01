@@ -8,11 +8,9 @@ class SmilingStarAnimatedIcon extends StatefulWidget {
     super.key,
     required this.animate,
     this.size = 13,
-    this.delay,
   });
 
   final bool animate;
-  final Duration? delay;
   final int size;
 
   @override
@@ -31,11 +29,7 @@ class _SmilingStarAnimatedIconState extends State<SmilingStarAnimatedIcon> with 
   @override
   void initState() {
     super.initState();
-    if (widget.animate && widget.delay == null) {
-      animate();
-    } else if (widget.delay != null) {
-      Future.delayed(widget.delay!, animate);
-    }
+    if (widget.animate) animate();
   }
 
   @override
