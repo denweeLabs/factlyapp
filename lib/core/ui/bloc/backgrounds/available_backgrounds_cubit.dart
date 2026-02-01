@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:dartz/dartz.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
 import 'package:denwee/core/backgrounds/domain/entity/background_style.dart';
