@@ -26,6 +26,9 @@ class _ConfigConstants {
   /// Backend requires a minimum of 30 min
   final notificationTimeSelectionStepMin = 30;
 
+  /// Request notification permission on every 'n'th app enter
+  final promptNotificationPermissionEachEnter = 3;
+
 
   // ---------------------------------------------------------------------------
   // USER ACCOUNT / PROFILE / AUTHENTICATION

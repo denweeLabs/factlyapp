@@ -1,9 +1,15 @@
 part of 'package:denwee/pages/background_edit/background_edit_page.dart';
 
 class _PreviewFactPages extends StatefulWidget {
-  const _PreviewFactPages({required this.pageController});
+  const _PreviewFactPages({
+    required this.pageController,
+    required this.pageSwitchDuration,
+    required this.pageSwitchCurve,
+  });
 
   final PageController pageController;
+  final Duration pageSwitchDuration;
+  final Curve pageSwitchCurve;
 
   @override
   State<_PreviewFactPages> createState() => _PreviewFactPagesState();
@@ -12,9 +18,6 @@ class _PreviewFactPages extends StatefulWidget {
 class _PreviewFactPagesState extends State<_PreviewFactPages> {
   late final pageHeight = 0.75.sh;
   late final topPadding = context.topPadding + 24.h;
-
-  static const pageSwitchDuration = Duration(milliseconds: 500);
-  static const pageSwitchCurve = Curves.ease;
 
   late final controller = PageController();
   late final pageIndex = ValueNotifier<int>(0);
@@ -59,8 +62,8 @@ class _PreviewFactPagesState extends State<_PreviewFactPages> {
                 valueListenable: pageIndex,
                 builder: (context, pageIndex, child) => AnimatedOpacity(
                   opacity: pageIndex == index ? 1.0 : 0.0,
-                  duration: pageSwitchDuration,
-                  curve: Curves.ease,
+                  duration: widget.pageSwitchDuration,
+                  curve: widget.pageSwitchCurve,
                   child: child!,
                 ),
                 child: BlocProvider.value(

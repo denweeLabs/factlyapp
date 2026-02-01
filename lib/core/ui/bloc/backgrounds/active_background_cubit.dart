@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:denwee/core/backgrounds/domain/entity/apply_background_body.dart';
 import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
 import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';

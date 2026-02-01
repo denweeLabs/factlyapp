@@ -95,12 +95,21 @@ class _BackgroundEditPageState extends State<BackgroundEditPage> {
     return false;
   }
 
-  void _openHome([Duration? delay]) async {
-    if (delay != null) await Future<void>.delayed(delay);
-    context.restorablePushReplacementNamedArgs(
-      Routes.homeCrossFade,
-      rootNavigator: true,
-    );
+  void _openHome([Duration? delay]) {
+    if (delay != null) {
+      Future.delayed(delay, () {
+        if (!mounted) return;
+        context.restorablePushReplacementNamedArgs(
+          Routes.homeCrossFade,
+          rootNavigator: true,
+        );
+      });
+    } else {
+      context.restorablePushReplacementNamedArgs(
+        Routes.homeCrossFade,
+        rootNavigator: true,
+      );
+    }
   }
 
   @override
@@ -166,7 +175,11 @@ class _BackgroundEditPageState extends State<BackgroundEditPage> {
   } 
 
   Widget _buildFactPages() {
-    return _PreviewFactPages(pageController: pageController);
+    return _PreviewFactPages(
+      pageController: pageController,
+      pageSwitchDuration: pageSwitchDuration,
+      pageSwitchCurve: pageSwitchCurve,
+    );
   }
 
   Widget _buildTopHeader() {
