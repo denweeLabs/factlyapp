@@ -48,6 +48,11 @@ class _IconsAssets {
   final magicStarLinear = '${_folderPath}magic_star_linear.svg';
   final videoPlayLinear = '${_folderPath}video_play_linear.svg';
   final profileDeleteLinear = '${_folderPath}profile_delete_linear.svg';
+  final imageLinear = '${_folderPath}image_linear.svg';
+  final galleryLinear = '${_folderPath}gallery_linear.svg';
+  final sendSqaureLinearLinear = '${_folderPath}send_sqaure_linear.svg';
+  final textBlockLinear = '${_folderPath}text_block_linear.svg';
+  final unlockLinear = '${_folderPath}unlock_linear.svg';
 
   // Bold icons
   final archiveTickBold = '${_folderPath}archive_tick_bold.svg';

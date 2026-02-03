@@ -5,7 +5,7 @@ description: "Denwee mobile application"
 publish_to: 'none'
 
 # App version + build
-version: 1.1.0+71
+version: 1.2.0+75
 
 # Env
 environment:
@@ -102,6 +102,11 @@ dependencies:
   animate_do: ^4.2.0
   email_validator: ^3.0.0
   flutter_inappwebview: ^6.1.5
+  cached_network_image: ^3.4.1
+  video_player: ^2.10.1
+  cached_video_player_plus: ^4.1.0
+  just_audio: ^0.10.5
+  flutter_colorpicker: ^1.1.0
   el_tooltip: ^2.2.1
   avatar_glow: ^3.0.1
   skeletonizer: ^2.1.2

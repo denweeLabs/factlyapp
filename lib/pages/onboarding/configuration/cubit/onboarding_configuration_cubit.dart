@@ -3,6 +3,7 @@ import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/notifications_cubit/notifications_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
@@ -27,6 +28,7 @@ class OnboardingConfigurationCubit extends Cubit<OnboardingConfigurationState> {
   final ProfileCubit _profileCubit;
   final AuthCubit _authCubit;
   final DailyFactsCubit _dailyFactsCubit;
+  final AvailableBackgroundsCubit _backgroundsCubit;
   final SubscriptionsRepo _subscriptionsRepo;
 
   OnboardingConfigurationCubit(
@@ -37,6 +39,7 @@ class OnboardingConfigurationCubit extends Cubit<OnboardingConfigurationState> {
     this._authCubit,
     this._profileCubit,
     this._dailyFactsCubit,
+    this._backgroundsCubit,
     this._subscriptionsRepo,
   ) : super(OnboardingConfigurationState.initial());
 
@@ -65,6 +68,7 @@ class OnboardingConfigurationCubit extends Cubit<OnboardingConfigurationState> {
       await _userPreferencesCubit.emitPreservePreferences(anonymousResult.preferences, remotePreserve: false);
       await _authCubit.setAnonymous();
       await _dailyFactsCubit.checkBucket();
+      _backgroundsCubit.checkBackgrounds();
       _subscriptionsRepo.login();
     }
     emit(state.copyWith(

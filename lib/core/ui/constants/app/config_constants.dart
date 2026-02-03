@@ -26,6 +26,9 @@ class _ConfigConstants {
   /// Backend requires a minimum of 30 min
   final notificationTimeSelectionStepMin = 30;
 
+  /// Request notification permission on every 'n'th app enter
+  final promptNotificationPermissionEachEnter = 3;
+
 
   // ---------------------------------------------------------------------------
   // USER ACCOUNT / PROFILE / AUTHENTICATION
@@ -49,6 +52,9 @@ class _ConfigConstants {
   // ---------------------------------------------------------------------------
   // UX / UI BEHAVIOR
   // ---------------------------------------------------------------------------
+
+  /// Default background id
+  final defaultBackgroundId = UniqueId.fromValue(0);
 
   /// Enable haptic feedback by default
   final defaultHapticsEnabled = true;

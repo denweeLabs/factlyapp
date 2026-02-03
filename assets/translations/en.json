@@ -81,6 +81,10 @@
                     "archive": "Archive"
                 }
             },
+            "background": {
+                "title": "Background",
+                "more": "More"
+            },
             "theme": {
                 "title": "Theme",
                 "items": {
@@ -111,7 +115,7 @@
         "statistics": {
             "stars": {
                 "title": "Stars",
-                "hint": "1 Ad = 1 Star\n You can use 1 star to instantly unlock a fact without watching an ad :)"
+                "hint": "1 Ad = 1 Star\nUse stars to instantly unlock fact explanations without ads, or unlock new backgrounds :)"
             },
             "streak": {
                 "title": "Streak",
@@ -150,7 +154,7 @@
             "title": "Get more from every fact & explore without limits",
             "benefits": {
                 "line_1": "Instant fact explanations",
-                "line_2": "Unlimited archive access",
+                "line_2": "Unlock all backgrounds",
                 "line_3": "No ads — ever",
                 "ads_encourage_msg": {
                     "one": "You’ve spent ~{} minute on ads. Save more time with Premium 🫶",
@@ -174,6 +178,13 @@
             },
             "expiry": "Expiry"
         }
+    },
+
+
+    "backgrounds": {
+        "selected": "Selected",
+        "apply": "Apply",
+        "unlock": "Unlock"
     },
 
 
@@ -338,7 +349,8 @@
             "daily_facts": "No daily facts yet... Check back later for something new!",
             "facts_archive": "Your archive is empty — save some facts and they’ll show up here!"
         },
-        "agreeing_to_terms": "By continuing, you agree to our\n<terms>Terms</terms> and <privacy>Privacy</privacy>"
+        "agreeing_to_terms": "By continuing, you agree to our\n<terms>Terms</terms> and <privacy>Privacy</privacy>",
+        "copied_to_clipboard": "Copied"
     },
 
 
@@ -387,6 +399,21 @@
         "subscription_packages_switch": {
             "title": "Just a heads up!",
             "subtitle": "When you change your plan, your current subscription will be replaced and any remaining value will be applied to the new plan 😉"
+        },
+        "background_purchase_confirmation": {
+            "title": "Yahoo!",
+            "subtitle": "Would you like to unlock this background for {} stars?"
+        },
+        "background_insufficient_balance": {
+            "title": "Not enough yet 🥺",
+            "subtitle": "You don’t have enough stars to unlock this background yet"
+        },
+        "background_insufficient_few_balance": {
+            "title": "Almost there ⭐️",
+            "subtitle": {
+                "one": "You need just {} more star to unlock this background!",
+                "other": "You need just {} more stars to unlock this background!"
+            }
         }
     },
 

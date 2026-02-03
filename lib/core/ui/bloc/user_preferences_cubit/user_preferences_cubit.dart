@@ -114,6 +114,13 @@ class UserPreferencesCubit extends Cubit<UserPreferencesState> {
     }
   }
 
+  void updateSelectedBackgroundId(UniqueId id) {
+    final newPreferences = state.preferences.copyWith(
+      background: state.preferences.background.copyWith(selectedBackgroundId: id),
+    );
+    emitPreservePreferences(newPreferences, remotePreserve: false);
+  }
+
   Future<void> clearState({
     bool preserveTheme = false,
     bool preserveLanguage = false,

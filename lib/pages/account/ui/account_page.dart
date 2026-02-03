@@ -9,6 +9,7 @@ import 'package:denwee/core/permissions/domain/entity/app_permission_status.dart
 import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
 import 'package:denwee/core/statistics/domain/entity/user_statistics.dart';
 import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
+import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/ui/bloc/permissions_cubit/permissions_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
@@ -23,6 +24,7 @@ import 'package:denwee/core/ui/widget/animations/constants/common_animation_valu
 import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_scaffold_widget.dart';
 import 'package:denwee/pages/account/ui/widget/subscription/subscription_card_widget.dart';
+import 'package:denwee/pages/account/ui/widget/backgrounds/backgrounds_overview_list_widget.dart';
 import 'package:denwee/pages/account/ui/widget/theme_colorations/coloration_overview_selector_widget.dart';
 import 'package:denwee/core/ui/widget/misc/fading_edge_widget.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
@@ -80,13 +82,15 @@ class _AccountPageState extends State<AccountPage> {
             _buildProfileSection(context),
             48.verticalSpace,
             _buildDailyFactsSection(context),
-            42.verticalSpace,
+            48.verticalSpace,
             _buildSubscriptionSection(context),
+            58.verticalSpace,
+            _buildBackgrounds(context),
             48.verticalSpace,
             _buildThemeModeSection(context),
-            44.verticalSpace,
-            _buildThemeColorationSection(context),
             48.verticalSpace,
+            _buildThemeColorationSection(context),
+            52.verticalSpace,
             _buildPreferencesSection(context),
             38.verticalSpace,
             _buildMoreSection(context),
@@ -185,6 +189,17 @@ class _AccountPageState extends State<AccountPage> {
           onTap: () => context.restorablePushNamedArgs(AccountRoutes.myArchive),
         ),
       ],
+    );
+  }
+
+  Widget _buildBackgrounds(BuildContext context) {
+    return AccountSection(
+      verticalSpacing: 24,
+      title: context.tr(LocaleKeys.account_section_background_title),
+      suffixText: context.tr(LocaleKeys.account_section_background_more),
+      onTap: () => _onBackgroundsTap(context),
+      childrenPadding: EdgeInsets.only(right: 20.w),
+      children: const [BackgroundsOverviewList()],
     );
   }
 
@@ -298,6 +313,16 @@ class _AccountPageState extends State<AccountPage> {
 
   void _onAboutAppTap(BuildContext context) {
     context.restorablePushNamedArgs(AccountRoutes.aboutApp);
+  }
+
+  void _onBackgroundsTap(BuildContext context) {
+    if (getIt<AvailableBackgroundsCubit>().state.backgrounds.isEmpty) {
+      return;
+    }
+    context.restorablePushNamedArgs(
+      Routes.availableBackgrounds,
+      rootNavigator: true,
+    );
   }
 
   void _promptDelayedNotificationsPermission() {

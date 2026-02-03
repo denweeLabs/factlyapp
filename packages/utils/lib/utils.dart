@@ -9,3 +9,4 @@ export 'src/functions/jwt_util.dart';
 export 'src/functions/helper_functions.dart';
 
 export 'src/json_converters/date_format_json_converter.dart';
+export 'src/json_converters/color_json_converter.dart';

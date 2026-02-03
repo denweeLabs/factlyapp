@@ -8,11 +8,9 @@ class SparklesAnimatedIcon extends StatefulWidget {
     super.key,
     required this.animate,
     this.size = 14,
-    this.delay,
   });
 
   final bool animate;
-  final Duration? delay;
   final int size;
 
   @override
@@ -35,11 +33,7 @@ class _SparklesAnimatedIconState extends State<SparklesAnimatedIcon>
   @override
   void initState() {
     super.initState();
-    if (widget.animate && widget.delay == null) {
-      animate();
-    } else if (widget.delay != null) {
-      Future.delayed(widget.delay!, animate);
-    }
+    if (widget.animate) animate();
   }
 
   @override

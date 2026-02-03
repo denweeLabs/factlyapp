@@ -159,12 +159,12 @@ TextStyle get textField {
   );
 }
 
-TextStyle get markdown {
+TextStyle get factShortContent {
   return _styleWrapper(
-    fontSize: 16.sp,
-    letterSpacing: -0.4,
     height: 1.5,
-    fontWeight: FontWeight.w600,
+    letterSpacing: -0.25,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w700,
     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
       en: () => AppConstants.style.textStyle.primaryFontFamily,
       ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
@@ -172,10 +172,10 @@ TextStyle get markdown {
   );
 }
 
-TextStyle get markdownDetailed {
+TextStyle get factDetailedContent {
   return _styleWrapper(
     height: 1.65,
-    fontSize: 16.sp,
+    fontSize: 17.sp,
     letterSpacing: -0.3,
     fontWeight: FontWeight.w600,
     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(

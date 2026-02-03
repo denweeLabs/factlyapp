@@ -4,8 +4,12 @@ import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
 import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/core/ui/router/page_routes_builders/fade_slideup_page_route_builder.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
+import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/dialogs/account_delete_confirmation_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/advertisment_alert_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/background_insufficient_balance_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/background_unlock_confirmation_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/hsv_color_picker_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/reset_pass_email_prompt_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/fact_explanation_unlock_method_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/grant_permission_dialog_widget.dart';
@@ -19,9 +23,11 @@ import 'package:denwee/core/ui/widget/snackbars/common_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/core_global_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/internet_connection_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/notification_snackbar_widget.dart';
+import 'package:denwee/core/ui/widget/snackbars/toast_message_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:utils/utils.dart';
 
 extension SnackBarPositionX on SnackBarPosition {
   List<DismissDirection> get dismissDirections {
@@ -49,6 +55,7 @@ class AppDialogs {
   static const snackbarSuccessDisplayDuration = Duration(milliseconds: 800);
   static const snackbarErrorDisplayDuration = Duration(milliseconds: 2200);
   static const snackbarNotificationDisplayDuration = Duration(milliseconds: 2000);
+  static const toastMessageDisplayDuration = Duration(milliseconds: 1000);
   static final dialogBarrierColor = Colors.black.withValues(alpha: 0.65);
 
   static void showSuccessSnackbar({
@@ -85,6 +92,19 @@ class AppDialogs {
       displayDuration: snackbarNotificationDisplayDuration,
       onTap: notification.tryLaunchLink,
       curve: const Interval(0.0, 0.4, curve: Curves.linearToEaseOut),
+    );
+  }
+
+  static void showToastMessage(
+    String message, {
+    SnackBarPosition position = SnackBarPosition.top,
+    EdgeInsets? padding,
+  }) {
+    _showSnackbar(
+      ToastMessageSnackbar(message),
+      displayDuration: toastMessageDisplayDuration,
+      position: position,
+      padding: padding,
     );
   }
 
@@ -192,6 +212,55 @@ class AppDialogs {
     );
   }
 
+  static Future<void> showHsvColorPickerDialog(
+    BuildContext context, {
+    required Color selectedColor,
+    required ValueChanged<Color> onChanged,
+  }) {
+    return Navigator.of(context, rootNavigator: true).push(
+      FadeSlideupPageRouteBuilder(
+        slideBegin: 0.15,
+        barrierDismissible: true,
+        settings: const RouteSettings(name: HsvColorPickerDialog.routeName),
+        barrierColor: Colors.transparent,
+        duration: CustomAnimationDurations.low,
+        reverseDuration: CustomAnimationDurations.ultraLow,
+        builder: (_) => AlertDialog(
+          insetPadding: EdgeInsets.only(bottom: context.bottomPadding),
+          shadowColor: Colors.black87,
+          backgroundColor: context.primaryContainer,
+          surfaceTintColor: Colors.transparent,
+          alignment: Alignment.bottomCenter,
+          shape: RoundedSuperellipseBorder(
+            borderRadius: BorderRadius.all(Radius.circular(38)),
+          ),
+          content: HsvColorPickerDialog(
+            selectedColor: selectedColor,
+            onChanged: onChanged,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Future<bool?> showBackgroundUnlockConfirmationDialog(BuildContext context, int backgroundPrice) {
+    return showDialog<bool?>(
+      context,
+      BackgroundUnlockConfirmationDialog(backgroundPrice: backgroundPrice),
+      barrierColor: AppDialogs.dialogBarrierColor,
+      settings: const RouteSettings(name: BackgroundUnlockConfirmationDialog.routeName),
+    );
+  }
+
+  static Future<void> showBackgroundInsufficientBalanceDialog(BuildContext context, int starsLeftToUnlock) {
+    return showDialog<void>(
+      context,
+      BackgroundInsufficientBalanceDialog(starsLeftToUnlock: starsLeftToUnlock),
+      barrierColor: AppDialogs.dialogBarrierColor,
+      settings: const RouteSettings(name: BackgroundInsufficientBalanceDialog.routeName),
+    );
+  }
+
   static Future<T?> showDialog<T>(
     BuildContext context,
     Widget dialogBody, {
@@ -242,6 +311,7 @@ class AppDialogs {
     SnackBarPosition position = SnackBarPosition.top,
     VoidCallback? onTap,
     Curve curve = Curves.elasticOut,
+    EdgeInsets? padding,
   }) {
     final overlayState =
         GlobalSnackbarController.instance.overlayKey.currentState;
@@ -256,7 +326,7 @@ class AppDialogs {
       curve: curve,
       snackBarPosition: position,
       dismissDirection: position.dismissDirections,
-      padding: position.padding,
+      padding: padding ?? position.padding,
       dismissType: DismissType.onSwipe,
       onTap: onTap,
     );

@@ -1,7 +1,8 @@
+import 'package:denwee/core/backgrounds/domain/entity/background_style.dart';
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
+import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
 import 'package:denwee/core/facts/ui/stories_components/src/stories_daily_facts_view.dart';
-import 'package:denwee/core/facts/ui/stories_components/src/widgets/stories_view_skeleton_loading_widget.dart';
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
@@ -16,14 +17,22 @@ class StoriesDailyFactsBody extends StatelessWidget {
     super.key,
     required this.isLoading,
     required this.dailyFacts,
+    required this.interests,
     required this.onAccount,
+    required this.onBackgrounds,
     required this.failure,
+    required this.backgroundStyle,
+    required this.backgroundBrightness,
   });
 
   final bool isLoading;
   final FactsFailure? failure;
   final List<DailyFact> dailyFacts;
+  final List<UserInterest> interests;
   final VoidCallback onAccount;
+  final VoidCallback onBackgrounds;
+  final BackgroundStyle? backgroundStyle;
+  final Brightness backgroundBrightness;
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +45,7 @@ class StoriesDailyFactsBody extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    if (isLoading) {
-      return StoriesViewSkeletonLoading(
-        onAccount: onAccount,
-        key: const ValueKey(0),
-      );
-    }
-
-    if (dailyFacts.isEmpty) {
+    if (!isLoading && dailyFacts.isEmpty) {
       return Stack(
         key: const ValueKey(1),
         children: [
@@ -71,10 +73,20 @@ class StoriesDailyFactsBody extends StatelessWidget {
       );
     }
 
+    final firstFact = dailyFacts.firstOrNull;
+    final effectiveFacts = isLoading
+        ? [firstFact ?? DailyFact.dummy()]
+        : dailyFacts;
+
     return StoriesDailyFactsView(
-      facts: dailyFacts,
-      goToAccount: onAccount,
       key: const ValueKey(2),
+      facts: effectiveFacts,
+      interests: interests,
+      isLoading: isLoading,
+      goToAccount: onAccount,
+      goToBackgrounds: onBackgrounds,
+      backgroundStyle: backgroundStyle,
+      backgroundBrightness: backgroundBrightness,
     );
   }
 }

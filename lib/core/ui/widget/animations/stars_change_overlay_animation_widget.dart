@@ -39,7 +39,7 @@ class _StarsChangeOverlayAnimationState extends State<StarsChangeOverlayAnimatio
       final isChanged = state.statistics.stars != _lastStarsCount;
 
       _isEarned = state.statistics.stars > _lastStarsCount;
-      _changedStarsCount = state.statistics.stars - _lastStarsCount;
+      _changedStarsCount = (state.statistics.stars - _lastStarsCount).abs();
 
       if (isInitiallyLoaded && isChanged && !_isAnimate) {
         toggleAnimation(true);

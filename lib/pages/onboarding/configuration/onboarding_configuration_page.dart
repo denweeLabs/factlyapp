@@ -221,7 +221,7 @@ class _OnboardingConfigurationPageState extends State<OnboardingConfigurationPag
   void _onAuthenticationCompleted(AuthorizationActionResult? result) {
     if (result != null) {
       context.restorablePushReplacementNamedArgs(
-        Routes.homeFromAuthentication,
+        Routes.homeSlidingClip,
         rootNavigator: true,
       );
     }

@@ -101,7 +101,7 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
   StoriesViewBackground _buildBackground() {
     return StoriesViewBackground(
       scrollFraction: verticalScrollFraction,
-      imagePath: widget.fact.interest.imagePath,
+      defaultCustomImagePath: widget.fact.interest.imagePath,
     );
   }
 
@@ -148,8 +148,9 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
         },
         child: BlocBuilder<FactExplanationCubit, FactExplanationState>(
           builder: (context, state) => StoriesBottomActionSection(
-            isLoading: state.loadingFactExplanation,
+            isLoadingExplanation: state.loadingFactExplanation,
             onAccountTap: () => context.restorablePushReplacementNamedArgs(Routes.account),
+            onBackgroundsTap: () => context.restorablePushReplacementNamedArgs(Routes.availableBackgrounds),
             onReadMoreTap: () => NavigationUtil.onExplainFact(
               context: context,
               cubit: context.read<FactExplanationCubit>(),
@@ -195,7 +196,6 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
           ),
           AppArchiveButton(
             factId: widget.fact.id,
-            type: AppArchiveButtonType.iconOnly,
             iconPadding: EdgeInsets.symmetric(horizontal: 20.w),
           ),
         ],

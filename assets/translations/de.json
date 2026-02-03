@@ -81,6 +81,10 @@
                     "archive": "Archiv"
                 }
             },
+            "background": {
+                "title": "Hintergrund",
+                "more": "Mehr"
+            },
             "theme": {
                 "title": "Thema",
                 "items": {
@@ -111,7 +115,7 @@
         "statistics": {
             "stars": {
                 "title": "Sterne",
-                "hint": "1 Anzeige = 1 Stern\nDu kannst 1 Stern verwenden, um einen Fakt sofort ohne Anzeige freizuschalten :)"
+                "hint": "1 Anzeige = 1 Stern\nNutze Sterne, um Erklärungen sofort ohne Werbung freizuschalten oder neue Hintergründe freizuschalten :)"
             },
             "streak": {
                 "title": "Serie",
@@ -150,7 +154,7 @@
             "title": "Mehr aus jedem Fakt herausholen – ohne Grenzen",
             "benefits": {
                 "line_1": "Sofortige Erklärungen",
-                "line_2": "Unbegrenzter Archivzugang",
+                "line_2": "Alle Hintergründe freischalten",
                 "line_3": "Keine Werbung mehr",
                 "ads_encourage_msg": {
                     "one": "Du hast ~{} Minute mit Werbung verbracht. Spare mehr Zeit mit Premium 🫶",
@@ -174,6 +178,13 @@
             },
             "expiry": "Ablauf"
         }
+    },
+
+
+    "backgrounds": {
+        "selected": "Ausgewählt",
+        "apply": "Anwenden",
+        "unlock": "Freischalten"
     },
 
 
@@ -338,7 +349,8 @@
             "daily_facts": "Noch keine täglichen Fakten... Schau später wieder vorbei für Neues!",
             "facts_archive": "Dein Archiv ist leer — speichere ein paar Fakten und sie werden hier angezeigt!"
         },
-        "agreeing_to_terms": "Wenn du fortfährst, akzeptierst du unsere\n<terms>AGB</terms> und den <privacy>Datenschutz</privacy>"
+        "agreeing_to_terms": "Wenn du fortfährst, akzeptierst du unsere\n<terms>AGB</terms> und den <privacy>Datenschutz</privacy>",
+        "copied_to_clipboard": "Kopiert"
     },
 
 
@@ -387,6 +399,21 @@
         "subscription_packages_switch": {
             "title": "Kleiner Hinweis!",
             "subtitle": "Wenn du deinen Tarif änderst, wird dein aktuelles Abonnement ersetzt und der verbleibende Wert auf den neuen Tarif angewendet 😉"
+        },
+        "background_purchase_confirmation": {
+            "title": "Juhu!",
+            "subtitle": "Möchtest du diesen Hintergrund für {} Sterne freischalten?"
+        },
+        "background_insufficient_balance": {
+            "title": "Noch nicht genug 🥺",
+            "subtitle": "Du hast noch nicht genug Sterne, um diesen Hintergrund freizuschalten"
+        },
+        "background_insufficient_few_balance": {
+            "title": "Fast geschafft ⭐️",
+            "subtitle": {
+                "one": "Dir fehlt nur noch {} Stern, um diesen Hintergrund freizuschalten!",
+                "other": "Dir fehlen nur noch {} Sterne, um diesen Hintergrund freizuschalten!"
+            }
         }
     },
 
