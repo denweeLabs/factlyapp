@@ -66,6 +66,11 @@ class UserSubscriptionCubit extends Cubit<UserSubscriptionState> {
     return newState;
   }
 
+  Future<void> emitPreserveSubscription(UserSubscription data) async {
+    emit(UserSubscriptionState.subscribed(data));
+    await _subscriptionsRepo.storeSubscriptionLocal(data);
+  }
+
   void clearState() {
     emit(const UserSubscriptionState.unsubscribed());
   }

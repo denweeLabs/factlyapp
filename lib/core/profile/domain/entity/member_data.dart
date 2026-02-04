@@ -6,16 +6,15 @@ import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/core/user_preferences/domain/entity/user_preferences.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'login_result.freezed.dart';
+part 'member_data.freezed.dart';
 
 @freezed
-abstract class LoginResult with _$LoginResult {
-  const factory LoginResult({
-    required String userId,
+abstract class MemberData with _$MemberData {
+  const factory MemberData({
     required Profile profile,
-    required UserPreferences preferences,
     required UserStatistics statistics,
+    required UserPreferences preferences,
     required Option<UserSubscription> activeSubscription,
     required List<UniqueId> archivedFactIds,
-  }) = _LoginResult;
+  }) = _MemberData;
 }

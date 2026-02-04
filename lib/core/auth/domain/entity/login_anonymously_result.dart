@@ -7,6 +7,7 @@ part 'login_anonymously_result.freezed.dart';
 @freezed
 abstract class LoginAnonymouslyResult with _$LoginAnonymouslyResult {
   const factory LoginAnonymouslyResult({
+    required String userId,
     required Profile profile,
     required UserPreferences preferences,
   }) = _LoginAnonymouslyResult;

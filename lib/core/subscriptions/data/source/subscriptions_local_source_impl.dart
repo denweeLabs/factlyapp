@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:denwee/core/misc/data/storage/local_storage.dart';
 import 'package:denwee/core/subscriptions/data/model/user_subscription_dto.dart';
-import 'package:denwee/core/subscriptions/data/source/local/subscriptions_local_source.dart';
+import 'package:denwee/core/subscriptions/domain/source/subscriptions_local_source.dart';
 import 'package:denwee/di/modules/server_module.dart';
 import 'package:injectable/injectable.dart';
 

@@ -1,6 +1,5 @@
 import 'package:denwee/core/auth/data/model/change_password_body_dto.dart';
 import 'package:denwee/core/auth/data/model/reset_password_body_dto.dart';
-import 'package:denwee/core/auth/data/source/auth_remote_source.dart';
 import 'package:denwee/core/auth/domain/entity/change_password_body.dart';
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/auth/domain/entity/login_anonymously_result.dart';
@@ -12,6 +11,7 @@ import 'package:denwee/core/auth/domain/failure/change_password_failure.dart';
 import 'package:denwee/core/auth/domain/failure/login_failure.dart';
 import 'package:denwee/core/auth/domain/failure/register_failure.dart';
 import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
+import 'package:denwee/core/auth/domain/source/auth_remote_source.dart';
 import 'package:denwee/core/network/data/exceptions/app_exception.dart';
 import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
 import 'package:denwee/core/user_preferences/data/model/user_preferences_dto.dart';

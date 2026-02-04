@@ -1,6 +1,6 @@
 import 'package:denwee/core/facts/data/model/fact_explanation_dto.dart';
-import 'package:denwee/core/facts/data/source/local/facts_local_source.dart';
-import 'package:denwee/core/facts/data/source/remote/facts_remote_source.dart';
+import 'package:denwee/core/facts/domain/source/facts_local_source.dart';
+import 'package:denwee/core/facts/domain/source/facts_remote_source.dart';
 import 'package:denwee/core/facts/domain/entity/fact_explanation.dart';
 import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
 import 'package:denwee/core/facts/domain/repo/fact_explanations_repo.dart';

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
 import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
@@ -14,13 +16,15 @@ class OnBackgroundAppliedUseCase {
   );
 
   void execute(ResolvedBackgroundAsset asset) {
-    _availableBackgroundsCubit.updateBackgroundStyle(
-      backgroundId: _userPreferencesCubit
-          .state
-          .preferences
-          .background
-          .selectedBackgroundId,
-      style: asset.background.style,
+    unawaited(
+      _availableBackgroundsCubit.updateBackgroundStyle(
+        backgroundId: _userPreferencesCubit
+            .state
+            .preferences
+            .background
+            .selectedBackgroundId,
+        style: asset.background.style,
+      ),
     );
   }
 }

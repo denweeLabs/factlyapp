@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:denwee/core/facts/data/model/daily_facts_bucket_dto.dart';
 import 'package:denwee/core/facts/data/model/fact_explanation_dto.dart';
-import 'package:denwee/core/facts/data/source/local/facts_local_source.dart';
+import 'package:denwee/core/facts/domain/source/facts_local_source.dart';
 import 'package:denwee/core/misc/data/storage/local_storage.dart';
 import 'package:denwee/db/daos/fact_explanations_dao.dart';
 import 'package:denwee/di/modules/server_module.dart';

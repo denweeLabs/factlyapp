@@ -1,23 +1,10 @@
 import 'package:denwee/core/network/data/model/server_error_response.dart';
 import 'package:denwee/core/network/domain/request_executor/request_executor.dart';
 import 'package:denwee/core/notifications/data/model/push_notifications_subscribe_body_dto.dart';
+import 'package:denwee/core/notifications/domain/source/push_notifications_remote_source.dart';
 import 'package:denwee/di/api/endpoints/endpoints.dart';
 import 'package:denwee/di/modules/server_module.dart';
 import 'package:injectable/injectable.dart';
-
-abstract class PushNotificationsRemoteSource {
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<void> subscribe(PushNotificationsSubscribeBodyDto dto);
-
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<void> unsubscribe(String token);
-}
 
 @LazySingleton(as: PushNotificationsRemoteSource)
 class PushNotificationsRemoteSourceImpl implements PushNotificationsRemoteSource {

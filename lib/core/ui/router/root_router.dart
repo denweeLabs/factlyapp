@@ -6,7 +6,7 @@ import 'package:denwee/core/misc/domain/restorable_states/custom_serializer.dart
 import 'package:denwee/core/ui/router/page_routes_builders/circular_reveal_page_route_builder.dart';
 import 'package:denwee/core/ui/router/page_routes_builders/cross_fade_page_route_builder.dart';
 import 'package:denwee/core/ui/router/page_routes_builders/fade_slideup_page_route_builder.dart';
-import 'package:denwee/core/ui/router/page_routes_builders/slideup_clipath_page_route_builder.dart';
+import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/pages/available_backgrounds/available_backgrounds_page.dart';
 import 'package:denwee/pages/background_edit/background_edit_page.dart';
@@ -49,7 +49,7 @@ class Routes {
   static const onboarding = OnboardingConfigurationPage.routeName;
   static const home = HomePage.routeName;
   static const homeCircleReveal = HomePage.routeNameCircleReveal;
-  static const homeSlidingClip = HomePage.routeNameSlidingClip;
+  static const homeFromLogin = HomePage.routeNameFromLogin;
   static const homeCrossFade = HomePage.routeNameCrossFade;
   static const account = AccountBasePage.routeName;
   static const authentication = AuthenticationPage.routeName;
@@ -95,9 +95,13 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
         builder: (_) => const HomePage(checkUserData: false),
       );
 
-    case Routes.homeSlidingClip:
-      return SlideupClipPathPageRouteBuilder<void>(
+    case Routes.homeFromLogin:
+      return FadeSlideupPageRouteBuilder<void>(
         settings: settings,
+        slideBegin: -0.06,
+        duration: CustomAnimationDurations.ultraLow,
+        fadeCurve: Curves.fastEaseInToSlowEaseOut,
+        slideCurve: Curves.ease,
         builder: (_) => const HomePage(checkUserData: false),
       );
 

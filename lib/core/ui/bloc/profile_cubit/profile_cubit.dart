@@ -32,12 +32,16 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  void updateUnlockedBackgroundIds(List<UniqueId> ids) {
+  Future<void> updateUnlockedBackgroundIds(List<UniqueId> ids) async {
     var profile = state.profile.toNullable();
     if (profile != null) {
       profile = profile.copyWith(unlockedBackgrounds: ids);
-      emitPreserveProfile(profile);
+      return emitPreserveProfile(profile);
     }
+  }
+
+  void raiseFailure(ProfileFailure failure) {
+    emit(state.copyWith(failure: Some(failure)));
   }
 
   Future<void> emitPreserveProfile(Profile data) async {

@@ -70,53 +70,37 @@ class _BackgroundEditPageState extends State<BackgroundEditPage> {
     super.dispose();
   }
 
-  bool _backgroundApplyListener(
-    ActiveBackgroundState p,
-    ActiveBackgroundState c,
-  ) {
-    final isApplied = p.isApplying && !c.isApplying && c.isApplied;
+  void _applyBackgroundListener(
+    BuildContext context,
+    ActiveBackgroundState state,
+  ) async {
+    state.mapOrNull(
+      applied: (data) async {
+        HapticUtil.medium();
 
-    if (isApplied) {
-      c.mapOrNull(
-        applied: (data) {
-          HapticUtil.medium();
-          context.read<BackgroundEditCubit>().onSuccessBackgroundApply(
-            data.isPurchasedViaStars,
-          );
-          _openHome(
-            data.isPurchasedViaStars
-                ? CustomAnimationDurations.mediumHigh
-                : null,
-          );
-        },
-      );
-    }
+        context.read<BackgroundEditCubit>().onSuccessBackgroundApply(
+          data.isPurchasedViaStars,
+        );
 
-    return false;
-  }
+        if (data.isPurchasedViaStars) {
+          await Future.delayed(CustomAnimationDurations.mediumHigh);
+        }
 
-  void _openHome([Duration? delay]) {
-    if (delay != null) {
-      Future.delayed(delay, () {
-        if (!mounted) return;
+        if (!context.mounted) return;
+
         context.restorablePushReplacementNamedArgs(
           Routes.homeCrossFade,
           rootNavigator: true,
         );
-      });
-    } else {
-      context.restorablePushReplacementNamedArgs(
-        Routes.homeCrossFade,
-        rootNavigator: true,
-      );
-    }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<ActiveBackgroundCubit, ActiveBackgroundState>(
-      listener: (_, __) {},
-      listenWhen: _backgroundApplyListener,
+      listener: _applyBackgroundListener,
+      listenWhen: (p, c) => p.isApplying && !c.isApplying && c.isApplied,
       child: CommonPopScope(
         onWillPop: _goBack,
         child: CommonScaffold(

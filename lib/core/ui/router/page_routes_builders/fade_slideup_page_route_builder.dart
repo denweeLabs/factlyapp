@@ -7,9 +7,13 @@ class FadeSlideupPageRouteBuilder<T> extends PageRouteBuilder<T> {
   FadeSlideupPageRouteBuilder({
     super.settings,
     required this.builder,
-    Duration duration = CustomAnimationDurations.lowMedium,
+    Duration duration = const Duration(milliseconds: 700),
     Duration reverseDuration = CustomAnimationDurations.ultraLow,
-    double slideBegin = 0.07,
+    double slideBegin = 0.06,
+    Curve fadeCurve = const Interval(0.0, 0.6, curve: Curves.ease),
+    Curve fadeReverseCurve = Curves.easeInOutQuart,
+    Curve slideCurve = CustomAnimationCurves.fasterEaseInToSlowEaseOut,
+    Curve slideReverseCurve = Curves.easeInOutQuad,
     super.barrierDismissible,
     super.barrierColor,
   }) : super(
@@ -24,8 +28,8 @@ class FadeSlideupPageRouteBuilder<T> extends PageRouteBuilder<T> {
             ).animate(
               CurvedAnimation(
                 parent: animation,
-                curve: const Interval(0.0, 0.6, curve: Curves.ease),
-                reverseCurve: Curves.easeInOutQuint,
+                curve: fadeCurve,
+                reverseCurve: fadeReverseCurve,
               ),
             );
 
@@ -35,8 +39,8 @@ class FadeSlideupPageRouteBuilder<T> extends PageRouteBuilder<T> {
             ).animate(
               CurvedAnimation(
                 parent: animation,
-                curve: CustomAnimationCurves.fasterEaseInToSlowEaseOut,
-                reverseCurve: Curves.easeInOut,
+                curve: slideCurve,
+                reverseCurve: slideReverseCurve,
               ),
             );
 

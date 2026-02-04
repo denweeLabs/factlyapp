@@ -18,18 +18,19 @@ import 'package:utils/utils.dart';
 
 mixin RootBlocListenersHandlers {
   var processingExpiredSession = false;
+  var isErrorSnackbarDisplayed = false;
 
-  void onAppResumed() {
+  void processAppResume() {
     getIt<PermissionsCubit>().forceCheckNotifications();
   }
 
-  void onUserLoggedOut() {
+  void processLoggedOutUser() {
     getIt<OnLogoutUseCase>().execute();
     Navigator.of(getIt<RootRouterData>().context, rootNavigator: true)
         .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => true);
   }
 
-  Future<void> onUserPurchasedPackage(PremiumPackage package) async {
+  Future<void> processPurchasedSubscriptionPackage(PremiumPackage package) async {
     final result = await getIt<UserSubscriptionCubit>().pollSubscription(
       targetPackageType: package.type,
     );
@@ -58,7 +59,7 @@ mixin RootBlocListenersHandlers {
     );
   }
 
-  Future<void> onSubscriptionRestored() async {
+  Future<void> processRestoredSubscription() async {
     final result = await getIt<UserSubscriptionCubit>().pollSubscription();
     final context = getIt<RootRouterData>().context;
 
@@ -85,7 +86,7 @@ mixin RootBlocListenersHandlers {
     );
   }
 
-  bool onUserSessionExpired() {
+  bool processExpiredSession() {
     // prevents concurrent dialogs
     if (processingExpiredSession) return false;
     processingExpiredSession = true;
@@ -117,5 +118,32 @@ mixin RootBlocListenersHandlers {
     );
 
     return true;
+  }
+
+  void processErrorSnackbar({
+    required String Function(BuildContext) messageProvider,
+    required bool isInsufficientPermissions,
+  }) {
+    // if an error caused by expired session
+    if (isInsufficientPermissions) {
+      processExpiredSession();
+      return;
+    }
+    
+    // if error already displayed
+    if (isErrorSnackbarDisplayed) return;
+
+    // update display flag
+    isErrorSnackbarDisplayed = true;
+
+    // show error
+    final context = getIt<RootRouterData>().context;
+    HapticUtil.medium();
+    AppDialogs.showErrorSnackbar(description: messageProvider(context));
+
+    // restore display flag
+    Future.delayed(AppDialogs.snackbarErrorDisplayDuration, () {
+      isErrorSnackbarDisplayed = false;
+    });
   }
 }

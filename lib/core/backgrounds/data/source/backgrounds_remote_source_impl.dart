@@ -1,7 +1,7 @@
 import 'package:denwee/core/backgrounds/data/model/apply_background_body_dto.dart';
 import 'package:denwee/core/backgrounds/data/model/apply_background_response_dto.dart';
 import 'package:denwee/core/backgrounds/data/model/available_backgrounds_response_dto.dart';
-import 'package:denwee/core/backgrounds/data/source/remote/backgrounds_remote_source.dart';
+import 'package:denwee/core/backgrounds/domain/source/backgrounds_remote_source.dart';
 import 'package:denwee/core/network/data/exceptions/connection_exception.dart';
 import 'package:denwee/core/network/data/model/server_error_response.dart';
 import 'package:denwee/core/network/domain/request_executor/request_executor.dart';

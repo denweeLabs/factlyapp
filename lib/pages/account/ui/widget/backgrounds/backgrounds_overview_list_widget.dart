@@ -66,13 +66,23 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
     return false;
   }
 
-  bool _activeBackgroundListener(ActiveBackgroundState p, ActiveBackgroundState c) {
+  bool _activeBackgroundListener(
+    ActiveBackgroundState p,
+    ActiveBackgroundState c,
+  ) {
     if (p.isApplying && !c.isApplying && c.isApplied) {
-      context.restorablePushReplacementNamedArgs(
-        Routes.homeCrossFade,
-        rootNavigator: true,
+      c.maybeWhen(
+        applied: (isPurchasedViaStars, _) {
+          if (isPurchasedViaStars) return;
+          context.restorablePushReplacementNamedArgs(
+            Routes.homeCrossFade,
+            rootNavigator: true,
+          );
+        },
+        orElse: () {},
       );
     }
+    
     return false;
   }
 

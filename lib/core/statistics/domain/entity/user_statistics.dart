@@ -13,7 +13,7 @@ abstract class UserStatistics with _$UserStatistics {
     required int streakRecord,
     required int knownFacts,
     required Option<DateTime> lastActiveDate,
-    required bool isStreakLost,
+    required Option<bool> isStreakLost,
   }) = _UserStatistics;
 
   factory UserStatistics.initial() {
@@ -24,7 +24,7 @@ abstract class UserStatistics with _$UserStatistics {
       streakRecord: 0,
       knownFacts: 0,
       lastActiveDate: Some(currentDay()),
-      isStreakLost: false,
+      isStreakLost: const None(),
     );
   }
 }

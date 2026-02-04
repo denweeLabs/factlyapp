@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:denwee/core/backgrounds/data/source/remote/backgrounds_remote_source.dart';
+import 'package:denwee/core/backgrounds/domain/source/backgrounds_remote_source.dart';
 import 'package:denwee/core/backgrounds/domain/entity/active_background.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
 import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
