@@ -8,11 +8,13 @@ part 'login_anonymously_response_dto.g.dart';
 @JsonSerializable(createToJson: false)
 class LoginAnonymouslyResponseDto {
   @JsonKey(name: 'access_token') final String accessToken;
+  @JsonKey(name: 'user_id') final String userId;
   final ProfileDto profile;
   final UserPreferencesDto preferences;
 
   const LoginAnonymouslyResponseDto({
     required this.accessToken,
+    required this.userId,
     required this.profile,
     required this.preferences,
   });
@@ -21,6 +23,7 @@ class LoginAnonymouslyResponseDto {
       _$LoginAnonymouslyResponseDtoFromJson(json);
 
   LoginAnonymouslyResult toResult() => LoginAnonymouslyResult(
+        userId: userId,
         profile: profile.toDomain(),
         preferences: preferences.toDomain(),
       );

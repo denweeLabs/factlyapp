@@ -11,7 +11,7 @@ abstract class SubscriptionsRepo {
   Future<Either<SubscriptionsFailure, Unit>> init();
   Future<Either<SubscriptionsFailure, PremiumPackages>> getPackages();
   Future<Either<SubscriptionsFailure, Unit>> purchase(PremiumPackage package);
-  Future<Either<SubscriptionsFailure, Unit>> login();
+  Future<Either<SubscriptionsFailure, Unit>> login({String? userId});
   Future<Either<SubscriptionsFailure, Unit>> logout();
   Future<Either<SubscriptionsFailure, Unit>> restore();
 

@@ -1,13 +1,10 @@
 import 'package:denwee/core/ads/domain/repo/ads_repo.dart';
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
+import 'package:denwee/core/profile/domain/use_case/get_member_data_use_case.dart';
 import 'package:denwee/core/ui/bloc/backgrounds/active_background_cubit.dart';
 import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
-import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
-import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
-import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
 import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/common/common_scaffold_widget.dart';
@@ -26,7 +23,7 @@ class HomePage extends StatefulWidget {
 
   static const routeName = 'HomePage';
   static const routeNameCircleReveal = 'HomePageCircleReveal';
-  static const routeNameSlidingClip = 'HomePageSlidingClip';
+  static const routeNameFromLogin = 'HomePageFromLogin';
   static const routeNameCrossFade = 'HomePageCrossFade';
 
   @override
@@ -51,12 +48,12 @@ class _HomePageState extends State<HomePage> {
 
   void checkSystemHealth() {
     if (shouldCheckSystemHealth()) {
-      if (widget.checkUserData) getIt<ProfileCubit>().checkProfile();
-      if (widget.checkUserData) getIt<UserPreferencesCubit>().checkPreferences();
-      if (widget.checkUserData) getIt<FactsArchiveCubit>().checkArchiveIds();
-      if (widget.checkUserData) getIt<UserSubscriptionCubit>().checkSubscription();
-      if (widget.checkUserData) getIt<AvailableBackgroundsCubit>().checkBackgrounds();
-      getIt<UserStatisticsCubit>().checkStatistics();
+
+      if (widget.checkUserData) {
+        getIt<GetMemberDataUseCase>().execute();
+        getIt<AvailableBackgroundsCubit>().checkBackgrounds();
+      }
+      
       lastSystemHealthCheck = DateTime.now();
     }
   }

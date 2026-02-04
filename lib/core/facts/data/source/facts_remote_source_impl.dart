@@ -3,7 +3,7 @@ import 'package:denwee/core/facts/data/model/archived_fact_dto.dart';
 import 'package:denwee/core/facts/data/model/daily_fact_dto.dart';
 import 'package:denwee/core/facts/data/model/daily_facts_bucket_dto.dart';
 import 'package:denwee/core/facts/data/model/fact_explanation_dto.dart';
-import 'package:denwee/core/facts/data/source/remote/facts_remote_source.dart';
+import 'package:denwee/core/facts/domain/source/facts_remote_source.dart';
 import 'package:denwee/core/network/data/model/server_error_response.dart';
 import 'package:denwee/core/network/domain/request_executor/request_executor.dart';
 import 'package:denwee/di/api/endpoints/endpoints.dart';

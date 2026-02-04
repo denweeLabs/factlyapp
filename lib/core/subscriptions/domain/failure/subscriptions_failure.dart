@@ -56,6 +56,9 @@ enum SubscriptionsFailure {
 }
 
 extension SubscriptionsFailureX on SubscriptionsFailure {
+  bool get isInsufficientPermissions =>
+      this == SubscriptionsFailure.insufficientPermissions;
+  
   String errorMessage(BuildContext context) {
     switch (this) {
       case SubscriptionsFailure.configuration: return context.tr(LocaleKeys.error_message_subscriptions_configuration);

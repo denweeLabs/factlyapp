@@ -4,8 +4,8 @@ import 'package:denwee/core/backgrounds/data/model/available_background_dto.dart
 import 'package:denwee/core/backgrounds/data/model/available_backgrounds_response_dto.dart';
 import 'package:denwee/core/backgrounds/data/model/background_category_dto.dart';
 import 'package:denwee/core/backgrounds/data/model/resolved_background_asset_dto.dart';
-import 'package:denwee/core/backgrounds/data/source/local/backgrounds_local_source.dart';
-import 'package:denwee/core/backgrounds/data/source/remote/backgrounds_remote_source.dart';
+import 'package:denwee/core/backgrounds/domain/source/backgrounds_local_source.dart';
+import 'package:denwee/core/backgrounds/domain/source/backgrounds_remote_source.dart';
 import 'package:denwee/core/backgrounds/domain/entity/apply_background_body.dart';
 import 'package:denwee/core/backgrounds/domain/entity/apply_background_result.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
@@ -14,6 +14,7 @@ import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';
 import 'package:denwee/core/backgrounds/domain/repo/backgrounds_repo.dart';
 import 'package:denwee/core/backgrounds/domain/utils/background_asset_cache_util.dart';
 import 'package:denwee/core/network/data/exceptions/app_exception.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: BackgroundsRepo)
@@ -30,51 +31,81 @@ class BackgroundsRepoImpl implements BackgroundsRepo {
 
   @override
   List<AvailableBackground> getBackgroundsLocal() {
-    final categoriesDtos = _localSource.getBackgroundCategories();
-    final backgroundDtos = _localSource.getBackgrounds();
-    return backgroundDtos.mapWithCategories(categoriesDtos);
+    try {
+      final categoriesDtos = _localSource.getBackgroundCategories();
+      final backgroundDtos = _localSource.getBackgrounds();
+      return backgroundDtos.mapWithCategories(categoriesDtos);
+    } catch (error) {
+      debugPrint('getBackgroundsLocal error: $error');
+      return const <AvailableBackground>[];
+    }
   }
   
   @override
   Future<Unit> storeBackgroundsLocal(List<AvailableBackground> backgrounds) async {
-    final categoryDtos = <BackgroundCategoryDto>[];
-    final backgroundDtos = <AvailableBackgroundDto>[];
+    try {
+      final categoryDtos = <BackgroundCategoryDto>[];
+      final backgroundDtos = <AvailableBackgroundDto>[];
 
-    for (final background in backgrounds) {
-      categoryDtos.add(BackgroundCategoryDto.fromDomain(background.category));
-      backgroundDtos.add(AvailableBackgroundDto.fromDomain(background));
+      for (final background in backgrounds) {
+        categoryDtos.add(BackgroundCategoryDto.fromDomain(background.category));
+        backgroundDtos.add(AvailableBackgroundDto.fromDomain(background));
+      }
+      
+      await _localSource.storeBackgroundCategories(categoryDtos);
+      await _localSource.storeBackgrounds(backgroundDtos);
+
+      return unit;
+    } catch (error) {
+      debugPrint('storeBackgroundsLocal error: $error');
+      rethrow;
     }
-    
-    await _localSource.storeBackgroundCategories(categoryDtos);
-    await _localSource.storeBackgrounds(backgroundDtos);
-
-    return unit;
   }
 
   @override
   Future<Unit> deleteBackgroundsLocal() async {
-    await _localSource.deleteCategories();
-    await _localSource.deleteBackgrounds();
-    return unit;
+    try {
+      await _localSource.deleteCategories();
+      await _localSource.deleteBackgrounds();
+      return unit;
+    } catch (error) {
+      debugPrint('deleteBackgroundsLocal error: $error');
+      rethrow;
+    }
   }
 
   @override
   Option<ResolvedBackgroundAsset> getBackgroundAssetLocal() {
-    final assetDto = _localSource.getBackgroundAsset();
-    return optionOf(assetDto?.toDomain());
+    try {
+      final assetDto = _localSource.getBackgroundAsset();
+      return optionOf(assetDto?.toDomain());
+    } catch (error) {
+      debugPrint('getBackgroundAssetLocal error: $error');
+      return const None();
+    }
   }
 
   @override
   Future<Unit> storeBackgroundAssetLocal(ResolvedBackgroundAsset asset) async {
-    final dto = ResolvedBackgroundAssetDto.fromDomain(asset);
-    await _localSource.storeBackgroundAsset(dto);
-    return unit;
+    try {
+      final dto = ResolvedBackgroundAssetDto.fromDomain(asset);
+      await _localSource.storeBackgroundAsset(dto);
+      return unit;
+    } catch (error) {
+      debugPrint('storeBackgroundAssetLocal error: $error');
+      rethrow;
+    }
   }
 
   @override
   Future<Unit> deleteBackgroundAssetLocal() async {
-    await _localSource.deleteBackgroundAsset();
-    return unit;
+    try {
+      await _localSource.deleteBackgroundAsset();
+      return unit;
+    } catch (error) {
+      debugPrint('deleteBackgroundAssetLocal error: $error');
+      rethrow;
+    }
   }
 
   @override

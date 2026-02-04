@@ -1,13 +1,5 @@
-import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
-import 'package:denwee/core/misc/data/storage/common_storage.dart';
+import 'package:denwee/core/auth/domain/use_case/login_anonymously_use_case.dart';
 import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
-import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
-import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
-import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
-import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
-import 'package:denwee/core/ui/bloc/notifications_cubit/notifications_cubit.dart';
-import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/user_preferences/domain/entity/user_preferences.dart';
 import 'package:dartz/dartz.dart';
 import 'package:denwee/pages/onboarding/configuration/onboarding_configuration_step.dart';
@@ -21,27 +13,10 @@ part 'onboarding_configuration_cubit.freezed.dart';
 
 @Injectable()
 class OnboardingConfigurationCubit extends Cubit<OnboardingConfigurationState> {
-  final AuthRepo _authRepo;
-  final CommonStorage _commonStorage;
-  final UserPreferencesCubit _userPreferencesCubit;
-  final NotificationsCubit _notificationsCubit;
-  final ProfileCubit _profileCubit;
-  final AuthCubit _authCubit;
-  final DailyFactsCubit _dailyFactsCubit;
-  final AvailableBackgroundsCubit _backgroundsCubit;
-  final SubscriptionsRepo _subscriptionsRepo;
+  final LoginAnonymouslyUseCase _loginAnonymouslyUseCase;
 
-  OnboardingConfigurationCubit(
-    this._authRepo,
-    this._commonStorage,
-    this._userPreferencesCubit,
-    this._notificationsCubit,
-    this._authCubit,
-    this._profileCubit,
-    this._dailyFactsCubit,
-    this._backgroundsCubit,
-    this._subscriptionsRepo,
-  ) : super(OnboardingConfigurationState.initial());
+  OnboardingConfigurationCubit(this._loginAnonymouslyUseCase)
+    : super(OnboardingConfigurationState.initial());
 
   final navigatorKey = GlobalKey<NavigatorState>();
   BuildContext get context => navigatorKey.currentState!.context;
@@ -59,21 +34,14 @@ class OnboardingConfigurationCubit extends Cubit<OnboardingConfigurationState> {
       isSubmissionVisibilityForced: isSubmissionVisibilityForced,
       submissionFailureOrSuccess: const None(),
     ));
-    final anonymousLoginFailureOrSuccess = await _authRepo.signInAnonymously(preferences: preferences);
-    final anonymousResult = anonymousLoginFailureOrSuccess.toOption().fold(() => null, (data) => data);
-    if (anonymousResult != null) {
-      await _commonStorage.setIsOnboardingState(false);
-      await _notificationsCubit.forceUpdateToken();
-      await _profileCubit.emitPreserveProfile(anonymousResult.profile);
-      await _userPreferencesCubit.emitPreservePreferences(anonymousResult.preferences, remotePreserve: false);
-      await _authCubit.setAnonymous();
-      await _dailyFactsCubit.checkBucket();
-      _backgroundsCubit.checkBackgrounds();
-      _subscriptionsRepo.login();
-    }
+    
+    final failureOrSuccess = await _loginAnonymouslyUseCase.execute(
+      preferences: preferences,
+    );
+    
     emit(state.copyWith(
       submissionInProgress: false,
-      submissionFailureOrSuccess: Some(anonymousLoginFailureOrSuccess.map((_) => unit)),
+      submissionFailureOrSuccess: Some(failureOrSuccess.map((_) => unit)),
     ));
   }
 

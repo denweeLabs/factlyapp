@@ -21,7 +21,8 @@ class ApplyDefaultBackgroundUseCase {
     final defaultId = AppConstants.config.defaultBackgroundId;
     final failureOrSuccess = await _backgroundsRepo.resetBackgroundRemote();
     if (failureOrSuccess.isRight()) {
-      _preferencesCubit.updateSelectedBackgroundId(defaultId);
+      unawaited(_preferencesCubit.updateSelectedBackgroundId(defaultId));
+      unawaited(_backgroundsRepo.deleteBackgroundAssetLocal());
     }
     return failureOrSuccess;
   }

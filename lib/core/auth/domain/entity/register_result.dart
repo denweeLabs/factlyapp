@@ -7,6 +7,7 @@ part 'register_result.freezed.dart';
 @freezed
 abstract class RegisterResult with _$RegisterResult {
   const factory RegisterResult({
+    required String userId,
     required Profile profile,
     required UserPreferences preferences,
   }) = _RegisterResult;
