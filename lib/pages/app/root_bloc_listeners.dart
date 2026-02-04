@@ -1,6 +1,5 @@
 import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';
 import 'package:denwee/core/backgrounds/domain/use_case/on_background_applied_use_case.dart';
-import 'package:denwee/core/backgrounds/domain/use_case/on_default_background_selected_use_case.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
 import 'package:denwee/core/profile/domain/failure/profile_failure.dart';
@@ -16,10 +15,7 @@ import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
 import 'package:denwee/core/ui/bloc/subscriptions_cubit/subscription_offerings_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
-import 'package:denwee/core/ui/constants/app/app_constants.dart';
-import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/utils/dialogs_util.dart';
-import 'package:denwee/core/ui/utils/haptic_util.dart';
 import 'package:denwee/core/user_preferences/domain/failure/preferences_failure.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/pages/app/root_listeners_handlers.dart';
@@ -53,7 +49,7 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) onAppResumed();
+    if (state == AppLifecycleState.resumed) processAppResume();
     super.didChangeAppLifecycleState(state);
   }
 
@@ -104,7 +100,7 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
   bool _authListener(AuthState p, AuthState c) {
     final isLoggedOut = p.isAuthenticated && c.isUnauthenticated;
-    if (isLoggedOut) onUserLoggedOut();
+    if (isLoggedOut) processLoggedOutUser();
     return false;
   }
 
@@ -113,11 +109,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
     if (isFailure) {
       final failure = c.failure.toNullable()!;
-      final isSessionExpired = failure.isInsufficientPermissions;
-      final context = getIt<RootRouterData>().context;
-      if (isSessionExpired) return onUserSessionExpired();
-      HapticUtil.medium();
-      AppDialogs.showErrorSnackbar(description: failure.errorMessage(context),);
+      processErrorSnackbar(
+        messageProvider: failure.errorMessage,
+        isInsufficientPermissions: failure.isInsufficientPermissions,
+      );
     }
 
     return false;
@@ -128,11 +123,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
     if (isFailure) {
       final failure = c.failure.toNullable()!;
-      final isSessionExpired = failure.isInsufficientPermissions;
-      final context = getIt<RootRouterData>().context;
-      if (isSessionExpired) return onUserSessionExpired();
-      HapticUtil.medium();
-      AppDialogs.showErrorSnackbar(description: failure.errorMessage(context));
+      processErrorSnackbar(
+        messageProvider: failure.errorMessage,
+        isInsufficientPermissions: failure.isInsufficientPermissions,
+      );
     }
 
     return false;
@@ -143,11 +137,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
     if (isFailure) {
       final failure = c.failure.toNullable()!;
-      final isSessionExpired = failure.isInsufficientPermissions;
-      final context = getIt<RootRouterData>().context;
-      if (isSessionExpired) return onUserSessionExpired();
-      HapticUtil.medium();
-      AppDialogs.showErrorSnackbar(description: failure.errorMessage(context));
+      processErrorSnackbar(
+        messageProvider: failure.errorMessage,
+        isInsufficientPermissions: failure.isInsufficientPermissions,
+      );
     }
     
     final oldLanguage = p.preferences.language.languageCode;
@@ -171,11 +164,6 @@ class _RootBlocListenersState extends State<RootBlocListeners>
       );
     }
 
-    if (c.preferences.background.selectedBackgroundId ==
-        AppConstants.config.defaultBackgroundId) {
-      getIt<OnDefaultBackgroundSelectedUseCase>().execute();
-    }
-
     return false;
   }
 
@@ -184,12 +172,9 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
     if (isFailure) {
       final failure = c.failure.toNullable()!;
-      final isSessionExpired = failure.isInsufficientPermissions;
-      final context = getIt<RootRouterData>().context;
-      if (isSessionExpired) return onUserSessionExpired();
-      HapticUtil.medium();
-      AppDialogs.showErrorSnackbar(
-        description: failure.errorMessage(context),
+      processErrorSnackbar(
+        messageProvider: failure.errorMessage,
+        isInsufficientPermissions: failure.isInsufficientPermissions,
       );
     }
 
@@ -203,21 +188,20 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
     if (isFailure) {
       final failure = c.failure.toNullable()!;
-      final context = getIt<RootRouterData>().context;
-      HapticUtil.medium();
-      AppDialogs.showErrorSnackbar(
-        description: failure.errorMessage(context),
+      processErrorSnackbar(
+        messageProvider: failure.errorMessage,
+        isInsufficientPermissions: failure.isInsufficientPermissions,
       );
     }
 
     /// check subscription status form backend when purchase was made
     if (isSuccessPackagePurchase) {
-      onUserPurchasedPackage(c.purchasedPackage.toNullable()!);
+      processPurchasedSubscriptionPackage(c.purchasedPackage.toNullable()!);
     }
 
     /// check subscription status form backend when purchase successfully restored
     if (isSuccessPurchaseRestoration) {
-      onSubscriptionRestored();
+      processRestoredSubscription();
     }
 
     return false;
@@ -245,11 +229,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
     if (isFailure) {
       final failure = c.failure.toNullable()!;
-      final isSessionExpired = failure.isInsufficientPermissions;
-      final context = getIt<RootRouterData>().context;
-      if (isSessionExpired) return onUserSessionExpired();
-      HapticUtil.medium();
-      AppDialogs.showErrorSnackbar(description: failure.errorMessage(context));
+      processErrorSnackbar(
+        messageProvider: failure.errorMessage,
+        isInsufficientPermissions: failure.isInsufficientPermissions,
+      );
     }
 
     return false;
@@ -263,11 +246,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
 
     if (isFailure) {
       final failure = c.failure.toNullable()!;
-      final isSessionExpired = failure.isInsufficientPermissions;
-      final context = getIt<RootRouterData>().context;
-      if (isSessionExpired) return onUserSessionExpired();
-      HapticUtil.medium();
-      AppDialogs.showErrorSnackbar(description: failure.errorMessage(context));
+      processErrorSnackbar(
+        messageProvider: failure.errorMessage,
+        isInsufficientPermissions: failure.isInsufficientPermissions,
+      );
     }
 
     if (p.isApplying && !c.isApplying && c.isApplied) {

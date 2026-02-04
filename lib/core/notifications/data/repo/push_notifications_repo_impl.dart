@@ -4,8 +4,8 @@ import 'package:denwee/core/misc/domain/repo/device_info_repo.dart';
 import 'package:denwee/core/network/data/exceptions/app_exception.dart';
 import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
 import 'package:denwee/core/notifications/data/model/push_notifications_subscribe_body_dto.dart';
-import 'package:denwee/core/notifications/data/source/push_notifications_remote_source.dart';
 import 'package:denwee/core/notifications/domain/repo/push_notifications_repo.dart';
+import 'package:denwee/core/notifications/domain/source/push_notifications_remote_source.dart';
 import 'package:denwee/di/modules/server_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -51,6 +51,15 @@ class PushNotificationsRepoImpl implements PushNotificationsRepo {
     } catch (_) {
       return left(CommonApiFailure.unexpected);
     }
+  }
+
+  @override
+  Future<Either<CommonApiFailure, Unit>> retrieveTokenAndSubscribe() async {
+    final tokenFailureOrSuccess = await retrieveToken();
+    return tokenFailureOrSuccess.fold((failure) => left(failure), (token) {
+      if (token == null) return left(CommonApiFailure.unexpected);
+      return subscribe(token);
+    });
   }
 
   @override

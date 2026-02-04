@@ -7,7 +7,6 @@ import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/core/notifications/domain/repo/push_notifications_repo.dart';
 import 'package:denwee/core/profile/domain/repo/profile_repo.dart';
 import 'package:denwee/core/statistics/domain/repo/statistics_repo.dart';
-import 'package:denwee/core/ui/bloc/backgrounds/active_background_cubit.dart';
 import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
@@ -43,7 +42,6 @@ class OnLogoutUseCase {
   final FactsArchiveCubit _factsArchiveCubit;
   final DailyFactsCubit _dailyFactsCubit;
   final AvailableBackgroundsCubit _availableBackgroundsCubit;
-  final ActiveBackgroundCubit _activeBackgroundCubit;
 
   OnLogoutUseCase(
     this._commonStorage,
@@ -64,7 +62,6 @@ class OnLogoutUseCase {
     this._factsArchiveCubit,
     this._dailyFactsCubit,
     this._availableBackgroundsCubit,
-    this._activeBackgroundCubit,
   );
 
   void execute() async {
@@ -77,7 +74,6 @@ class OnLogoutUseCase {
     _statisticsRepo.deleteStatisticsLocal();
     _factExplanationsRepo.deleteFactExplanationsLocal();
     _backgroundsRepo.deleteBackgroundsLocal();
-    _backgroundsRepo.deleteBackgroundAssetLocal();
     _subscriptionsRepo.deleteSubscriptionLocal();
     _subscriptionsRepo.logout();
     _accessTokenRepo.clearSession();
@@ -89,7 +85,6 @@ class OnLogoutUseCase {
     _dailyFactsCubit.clearState();
     _userStatisticsCubit.clearState();
     _availableBackgroundsCubit.clearState();
-    _activeBackgroundCubit.clearState();
     _userSubscriptionCubit.clearState();
     _preferencesCubit.clearState(
       preserveTheme: true,

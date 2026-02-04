@@ -114,11 +114,11 @@ class UserPreferencesCubit extends Cubit<UserPreferencesState> {
     }
   }
 
-  void updateSelectedBackgroundId(UniqueId id) {
+  Future<void> updateSelectedBackgroundId(UniqueId id) async {
     final newPreferences = state.preferences.copyWith(
       background: state.preferences.background.copyWith(selectedBackgroundId: id),
     );
-    emitPreservePreferences(newPreferences, remotePreserve: false);
+    return emitPreservePreferences(newPreferences, remotePreserve: false);
   }
 
   Future<void> clearState({

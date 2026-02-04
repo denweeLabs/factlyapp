@@ -2,7 +2,7 @@ import 'package:denwee/core/facts/data/model/archive_list_result_dto.dart';
 import 'package:denwee/core/facts/data/model/daily_fact_dto.dart';
 import 'package:denwee/core/facts/data/model/daily_facts_bucket_dto.dart';
 import 'package:denwee/core/facts/data/model/fact_explanation_dto.dart';
-import 'package:denwee/core/facts/data/source/remote/facts_remote_source_impl.dart';
+import 'package:denwee/core/facts/data/source/facts_remote_source_impl.dart';
 import 'package:denwee/core/network/data/exceptions/connection_exception.dart';
 
 abstract class FactsRemoteSource {

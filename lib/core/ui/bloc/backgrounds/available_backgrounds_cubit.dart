@@ -7,6 +7,7 @@ import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';
 import 'package:denwee/core/backgrounds/domain/repo/backgrounds_repo.dart';
 import 'package:denwee/core/backgrounds/domain/use_case/get_available_backgrounds_use_case.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
+import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -43,10 +44,13 @@ class AvailableBackgroundsCubit extends Cubit<AvailableBackgroundsState> {
     ));
   }
 
-  void updateBackgroundStyle({
+  Future<void> updateBackgroundStyle({
     required UniqueId backgroundId,
     required BackgroundStyle style,
-  }) {
+  }) async {
+    if (backgroundId == AppConstants.config.defaultBackgroundId) {
+      return;
+    }
     emit(state.maybeWhen(
       success: (backgrounds) {
         final updatedBackgrounds = [...state.backgrounds].map((e) {

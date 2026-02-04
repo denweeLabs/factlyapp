@@ -129,7 +129,7 @@ class SelectInterestsPage extends StatelessWidget {
   void _onConfirmInterests(BuildContext context) {
     final cubit = context.read<SelectInterestsCubit>();
     final interests = cubit.state.selectedInterests;
-    if (interests.isEmpty) {
+    if (!cubit.state.isValid) {
       cubit.validateInterests();
       return HapticUtil.medium();
     }

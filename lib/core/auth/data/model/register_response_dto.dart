@@ -7,13 +7,14 @@ part 'register_response_dto.g.dart';
 
 @JsonSerializable(createToJson: false)
 class RegisterResponseDto {
-  @JsonKey(name: 'access_token')
-  final String accessToken;
+  @JsonKey(name: 'access_token') final String accessToken;
+  @JsonKey(name: 'user_id') final String userId;
   final ProfileDto profile;
   final UserPreferencesDto preferences;
 
   const RegisterResponseDto({
     required this.accessToken,
+    required this.userId,
     required this.profile,
     required this.preferences,
   });
@@ -22,6 +23,7 @@ class RegisterResponseDto {
       _$RegisterResponseDtoFromJson(json);
 
   RegisterResult toResult() => RegisterResult(
+        userId: userId,
         profile: profile.toDomain(),
         preferences: preferences.toDomain(),
       );

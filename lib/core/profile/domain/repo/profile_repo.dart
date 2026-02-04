@@ -1,3 +1,4 @@
+import 'package:denwee/core/profile/domain/entity/member_data.dart';
 import 'package:denwee/core/profile/domain/entity/profile.dart';
 import 'package:denwee/core/profile/domain/entity/update_profile_body.dart';
 import 'package:denwee/core/profile/domain/failure/profile_failure.dart';
@@ -12,4 +13,5 @@ abstract class ProfileRepo {
   // Remote
   Future<Either<ProfileFailure, Profile>> getProfileRemote();
   Future<Either<ProfileFailure, Profile>> updateProfileRemote(UpdateProfileBody body);
+  Future<Either<ProfileFailure, MemberData>> getMemberDataRemote();
 }

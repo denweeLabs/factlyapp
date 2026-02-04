@@ -32,8 +32,11 @@ class GetAvailableBackgroundsUseCase {
     final availableBackgrounds = entries.$2?.$2 ?? const <AvailableBackground>[];
     
     if (activeBackground != null) {
-      _activeBackgroundCubit.setCustomBackground(activeBackground);
+      unawaited(_activeBackgroundCubit.setCustomBackground(activeBackground));
       unawaited(_backgroundsRepo.storeBackgroundAssetLocal(activeBackground));
+    } else {
+      unawaited(_activeBackgroundCubit.clearState());
+      unawaited(_backgroundsRepo.deleteBackgroundAssetLocal());
     }
 
     if (availableBackgrounds.isNotEmpty) {

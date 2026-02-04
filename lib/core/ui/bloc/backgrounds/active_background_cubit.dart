@@ -73,11 +73,11 @@ class ActiveBackgroundCubit extends Cubit<ActiveBackgroundState> {
     ));
   }
 
-  void setCustomBackground(ResolvedBackgroundAsset asset) {
+  Future<void> setCustomBackground(ResolvedBackgroundAsset asset) async {
     emit(ActiveBackgroundState.applied(isPurchasedViaStars: false, asset: asset));
   }
 
-  void clearState() {
+  Future<void> clearState() async {
     emit(const ActiveBackgroundState.defaultBackground());
   }
 }

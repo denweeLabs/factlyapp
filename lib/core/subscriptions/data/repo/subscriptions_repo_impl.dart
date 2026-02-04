@@ -4,8 +4,8 @@ import 'package:dartz/dartz.dart';
 import 'package:denwee/core/auth/domain/repo/user_identity_repo.dart';
 import 'package:denwee/core/network/data/exceptions/app_exception.dart';
 import 'package:denwee/core/subscriptions/data/model/user_subscription_dto.dart';
-import 'package:denwee/core/subscriptions/data/source/local/subscriptions_local_source.dart';
-import 'package:denwee/core/subscriptions/data/source/remote/subscriptions_remote_source.dart';
+import 'package:denwee/core/subscriptions/domain/source/subscriptions_local_source.dart';
+import 'package:denwee/core/subscriptions/domain/source/subscriptions_remote_source.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_product_ids.dart';
 import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
@@ -161,14 +161,13 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
   }
 
   @override
-  Future<Either<SubscriptionsFailure, Unit>> login() async {
-    final failureOrSuccess = await _userIdentityRepo.getUserIdRemote();
-    final userId = failureOrSuccess.toOption().toNullable();
-    if (userId == null) {
+  Future<Either<SubscriptionsFailure, Unit>> login({String? userId}) async {
+    final effectiveUserId = userId ?? (await _userIdentityRepo.getUserIdRemote()).toOption().toNullable();
+    if (effectiveUserId == null) {
       return left(SubscriptionsFailure.configuration);
     }
     try {
-      await Purchases.logIn(userId);
+      await Purchases.logIn(effectiveUserId);
       return right(unit);
     } on PlatformException catch (error) {
       final failure = SubscriptionsFailure.fromPurchasesError(

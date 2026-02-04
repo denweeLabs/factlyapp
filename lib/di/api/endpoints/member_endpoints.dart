@@ -10,6 +10,7 @@ class _MemberEndpoints {
   final signInAnonymously = '$_base/login_anonymously';
   final tokenUpdate = '$_base/token';
   final profile = '$_base/profile';
+  final memberData = '$_base/bootstrap';
   final preferences = '$_base/preferences';
   final account = '$_base/account';
   final changePassword = '$_base/account/change_password';

@@ -31,10 +31,10 @@ class ApplyCustomBackgroundUseCase {
     final submittedData = (failureOrSuccess.getEntries()).$2;
 
     if (submittedData != null) {
-      _backgroundsRepo.storeBackgroundAssetLocal(submittedData.$1);
-      _profileCubit.updateUnlockedBackgroundIds(submittedData.$2.unlockedBackgroundIds);
-      _preferencesCubit.updateSelectedBackgroundId(submittedData.$2.activeBackground.id);
-      _statisticsCubit.updateStarsBalance(submittedData.$2.starsBalance);
+      unawaited(_backgroundsRepo.storeBackgroundAssetLocal(submittedData.$1));
+      unawaited(_profileCubit.updateUnlockedBackgroundIds(submittedData.$2.unlockedBackgroundIds));
+      unawaited(_preferencesCubit.updateSelectedBackgroundId(submittedData.$2.activeBackground.id));
+      unawaited(_statisticsCubit.updateStarsBalance(submittedData.$2.starsBalance));
     }
 
     return failureOrSuccess;

@@ -13,7 +13,7 @@ class UserStatisticsDto {
   @JsonKey(name: 'longest_streak') final int streakRecord;
   @JsonKey(name: 'known_facts') final int knownFacts;
   @JsonKey(name: 'last_active_date') final DateTime? lastActiveDate;
-  @JsonKey(name: 'streak_lost') final bool streakLost;
+  @JsonKey(name: 'streak_lost') final bool? streakLost;
 
   const UserStatisticsDto({
     required this.stars,
@@ -33,7 +33,7 @@ class UserStatisticsDto {
       streakRecord: domain.streakRecord,
       knownFacts: domain.knownFacts,
       lastActiveDate: domain.lastActiveDate.toNullable(),
-      streakLost: domain.isStreakLost,
+      streakLost: domain.isStreakLost.toNullable(),
     );
   }
 
@@ -45,7 +45,7 @@ class UserStatisticsDto {
       streakRecord: streakRecord,
       knownFacts: knownFacts,
       lastActiveDate: optionOf(lastActiveDate),
-      isStreakLost: streakLost,
+      isStreakLost: optionOf(streakLost),
     );
   }
 

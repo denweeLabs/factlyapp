@@ -6,6 +6,7 @@ import 'package:denwee/core/auth/data/model/register_body_dto.dart';
 import 'package:denwee/core/auth/data/model/register_response_dto.dart';
 import 'package:denwee/core/auth/data/model/reset_password_body_dto.dart';
 import 'package:denwee/core/auth/domain/repo/access_token_repo.dart';
+import 'package:denwee/core/auth/domain/source/auth_remote_source.dart';
 import 'package:denwee/core/network/data/model/server_error_response.dart';
 import 'package:denwee/core/network/data/model/server_response.dart';
 import 'package:denwee/core/network/domain/request_executor/request_executor.dart';
@@ -13,62 +14,6 @@ import 'package:denwee/core/user_preferences/data/model/user_preferences_dto.dar
 import 'package:denwee/di/api/endpoints/endpoints.dart';
 import 'package:denwee/di/modules/server_module.dart';
 import 'package:injectable/injectable.dart';
-
-abstract class AuthRemoteSource {
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<LoginResponseDto> login(String email, String password);
-
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<RegisterResponseDto> register(
-    String email,
-    String password,
-    UserPreferencesDto preferencesDto,
-  );
-
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<LoginAnonymouslyResponseDto> signInAnonymously(
-    UserPreferencesDto preferencesDto,
-  );
-
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<void> changePassword(ChangePasswordBodyDto bodyDto);
-
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<void> resetPassword(String email);
-
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<void> resetPasswordValidate(ResetPasswordBodyDto bodyDto);
-
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<void> deleteAccount();
-
-  /// Throws:
-  /// [AuthorizationException]
-  /// [ConnectionException]
-  /// [GenericException]
-  Future<String> getUserId();
-}
 
 @LazySingleton(as: AuthRemoteSource)
 class AuthRemoteSourceImpl implements AuthRemoteSource {

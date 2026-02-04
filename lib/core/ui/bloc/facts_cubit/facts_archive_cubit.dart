@@ -1,6 +1,6 @@
 import 'package:denwee/core/ads/domain/repo/ads_repo.dart';
 import 'package:denwee/core/ads/domain/use_case/show_add_to_archive_ad_use_case.dart';
-import 'package:denwee/core/facts/data/source/remote/facts_remote_source_impl.dart';
+import 'package:denwee/core/facts/data/source/facts_remote_source_impl.dart';
 import 'package:denwee/core/facts/domain/entity/archived_fact.dart';
 import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
 import 'package:denwee/core/facts/domain/repo/facts_archive_repo.dart';
@@ -150,6 +150,11 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
     } else {
       await _archiveRepo.deleteFactLocal(id);
     }
+  }
+
+  Future<void> emitPreserveArchivedIds(List<UniqueId> data) async {
+    emit(state.copyWith(archiveIds: data));
+    await _archiveRepo.storeArchiveIdsLocal(data);
   }
 
   void clearState() {

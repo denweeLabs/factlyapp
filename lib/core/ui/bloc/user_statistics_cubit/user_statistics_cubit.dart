@@ -43,10 +43,15 @@ class UserStatisticsCubit extends Cubit<UserStatisticsState> {
     emit(state.copyWith(isInitiallyLoaded: true));
   }
 
-  void updateStarsBalance(int value) {
+  Future<void> updateStarsBalance(int value) async {
     final newStats = state.statistics.copyWith(stars: value);
     emit(state.copyWith(statistics: newStats));
-    _statisticsRepo.storeStatisticsLocal(newStats);
+    await _statisticsRepo.storeStatisticsLocal(newStats);
+  }
+
+  Future<void> emitPreserveStatistics(UserStatistics data) async {
+    emit(state.copyWith(statistics: data));
+    await _statisticsRepo.storeStatisticsLocal(data);
   }
 
   void clearState() {
