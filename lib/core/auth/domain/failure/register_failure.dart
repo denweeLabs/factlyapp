@@ -14,6 +14,7 @@ enum RegisterFailure {
   disabled(apiCodes: [RegisterErrorCodes.disabled]),
   internalServer(apiCodes: [GenericErrorCodes.internalServer]),
   connectionTimeout(apiCodes: [GenericErrorCodes.connectionTimeout]),
+  cancelled(),
   unexpected();
 
   final List<String>? apiCodes;
@@ -38,6 +39,7 @@ extension RegisterFailureX on RegisterFailure {
       case RegisterFailure.weakPassword: return context.tr(LocaleKeys.error_message_register_weak_password);
       case RegisterFailure.userAlreadyExists: return context.tr(LocaleKeys.error_message_register_user_already_exists);
       case RegisterFailure.disabled: return context.tr(LocaleKeys.error_message_register_disabled);
+      case RegisterFailure.cancelled: return context.tr(LocaleKeys.error_message_register_cancelled);
       case RegisterFailure.internalServer: return context.tr(LocaleKeys.error_message_register_internal_server);
       case RegisterFailure.connectionTimeout: return context.tr(LocaleKeys.error_message_register_connection_timeout);
       default: return context.tr(LocaleKeys.error_message_register_unexpected);

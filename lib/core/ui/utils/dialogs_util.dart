@@ -1,4 +1,5 @@
 import 'package:denwee/core/auth/domain/entity/email.dart';
+import 'package:denwee/core/misc/domain/service/app_review_service.dart';
 import 'package:denwee/core/notifications/domain/entity/push_notification.dart';
 import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
 import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
@@ -9,6 +10,7 @@ import 'package:denwee/core/ui/widget/dialogs/account_delete_confirmation_dialog
 import 'package:denwee/core/ui/widget/dialogs/advertisment_alert_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/background_insufficient_balance_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/background_unlock_confirmation_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/email_change_warning_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/hsv_color_picker_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/reset_pass_email_prompt_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/fact_explanation_unlock_method_dialog_widget.dart';
@@ -19,6 +21,7 @@ import 'package:denwee/core/ui/widget/dialogs/select_notification_time_dialog_wi
 import 'package:denwee/core/ui/widget/dialogs/session_expired_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/subscription_purchase_success_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/dialogs/subscription_switch_warning_dialog_widget.dart';
+import 'package:denwee/core/ui/widget/dialogs/success_signup_review_encourage_dialog_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/common_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/core_global_snackbar_widget.dart';
 import 'package:denwee/core/ui/widget/snackbars/internet_connection_snackbar_widget.dart';
@@ -259,6 +262,27 @@ class AppDialogs {
       barrierColor: AppDialogs.dialogBarrierColor,
       settings: const RouteSettings(name: BackgroundInsufficientBalanceDialog.routeName),
     );
+  }
+
+  static Future<bool?> showEmailChangeWarningDialog(BuildContext context) {
+    return showDialog<bool?>(
+      context,
+      const EmailChangeWarningDialog(),
+      barrierColor: AppDialogs.dialogBarrierColor,
+      settings: const RouteSettings(name: EmailChangeWarningDialog.routeName),
+    );
+  }
+
+  static Future<void> showSuccessSignupReviewEncourageDialog(BuildContext context) async {
+    final isOk = await showDialog<bool?>(
+      context,
+      const SuccessSignupReviewEncourageDialog(),
+      barrierColor: AppDialogs.dialogBarrierColor,
+      settings: const RouteSettings(name: SuccessSignupReviewEncourageDialog.routeName),
+    );
+    if (isOk == true) {
+      return AppReviewService.requestReview();
+    }
   }
 
   static Future<T?> showDialog<T>(

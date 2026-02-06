@@ -16,14 +16,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProfileOverlayCard extends StatelessWidget {
   const ProfileOverlayCard({
     super.key,
-    required this.heroTag,
     required this.isAuthenticated,
     required this.statistics,
     required this.onTap,
     required this.userName,
   });
 
-  final String heroTag;
   final bool isAuthenticated;
   final UserStatistics statistics;
   final VoidCallback onTap;

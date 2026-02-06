@@ -1,8 +1,12 @@
+import 'package:denwee/core/ui/router/root_router.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
+import 'package:denwee/core/ui/utils/dialogs_util.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_out_left.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/buttons/back_button_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_pop_scope_widget.dart';
+import 'package:denwee/di/di.dart';
+import 'package:denwee/pages/authentication/args/authentication_action_result.dart';
 import 'package:denwee/pages/authentication/args/authentication_page_args.dart';
 import 'package:denwee/pages/authentication/ui/authentication_listeners.dart';
 import 'package:denwee/pages/authentication/ui/authentication_routes.dart';
@@ -15,13 +19,24 @@ class AuthenticationPage extends StatelessWidget {
   const AuthenticationPage({super.key, required this.args});
 
   static const routeName = 'AuthenticationPage';
+  static const showSignupReviewDialogDelay = Duration(milliseconds: 800);
 
   final AuthenticationPageArgs args;
 
   bool _pageListener(BuildContext context, AuthenticationPageState p,
       AuthenticationPageState c) {
     if (p.successResult.isNone() && c.successResult.isSome()) {
-      Navigator.pop(context, c.successResult.toNullable()!);
+      final result = c.successResult.toNullable()!;
+
+      // show review encourage dialog
+      if (result == AuthorizationActionResult.signedUp) {
+        Future.delayed(
+          showSignupReviewDialogDelay,
+          showSignupReviewEncourageDialog,
+        );
+      }
+
+      Navigator.pop(context, result);
       return false;
     }
 
@@ -88,5 +103,10 @@ class AuthenticationPage extends StatelessWidget {
         .currentState!
         .maybePop());
     return isFirstRouteInCurrentTab;
+  }
+
+  void showSignupReviewEncourageDialog() {
+    final context = getIt<RootRouterData>().context;
+    AppDialogs.showSuccessSignupReviewEncourageDialog(context);
   }
 }

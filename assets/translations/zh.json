@@ -275,6 +275,7 @@
             "weak_password": "嗯，这个密码太容易被猜到…试试更强的密码 🔐",
             "user_not_found": "我们找不到匹配的账户…你注册过吗？ 😉",
             "user_banned": "此账户已被限制…如有疑问请联系支持 🙏",
+            "cancelled": "登录已取消……当你准备好时可以随时再试 😉",
             "internal_server": "哎呀！服务器出错…我们正在修复 🔧",
             "connection_timeout": "无法连接…请检查网络并重试 📶",
             "unexpected": "发生了意外问题…我们正在处理 🚨"
@@ -284,6 +285,7 @@
             "weak_password": "哎呀，这个密码太弱…试试更强的密码 💪",
             "user_already_exists": "这个邮箱已被使用…试着登录 😉",
             "disabled": "当前注册已关闭…请稍后再试 🕒",
+            "cancelled": "注册已取消……当你准备好时可以随时继续 😉",
             "internal_server": "服务器出错…我们正在处理 🔧",
             "connection_timeout": "无连接…请检查网络 📡",
             "unexpected": "发生意外错误…我们正在处理 🚨"
@@ -393,7 +395,7 @@
         },
         "success_purchase": {
             "title": "一切就绪！",
-            "subtitle": "您的 Premium 权限有效期至 {}。非常感谢您的支持！🫶"
+            "subtitle": "您的 Premium 权限有效期至 {}。非常感谢您的支持！❤️"
         },
         "subscription_packages_switch": {
             "title": "小提示！",
@@ -413,6 +415,14 @@
                 "one": "只差 {} 颗星星就可以解锁这个背景了！",
                 "other": "只差 {} 颗星星就可以解锁这个背景了！"
             }
+        },
+        "email_change": {
+            "title": "温馨提示！",
+            "subtitle": "请确保您可以访问此电子邮箱地址，它将用于账号恢复 📧"
+        },
+        "signup_review_encourage": {
+            "title": "很高兴在这里见到你 🎉",
+            "subtitle": "感谢你使用 Denwee！如果你喜欢这款应用，留下一个简短的评价是支持它的好方式。祝你拥有美好的一天！❤️"
         }
     },
 

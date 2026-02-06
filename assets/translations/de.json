@@ -276,6 +276,7 @@
             "weak_password": "Hmm, dieses Passwort ist zu leicht zu erraten... Versuche etwas Stärkeres 🔐",
             "user_not_found": "Wir konnten kein Konto mit diesen Daten finden... Hast du dich registriert? 😉",
             "user_banned": "Dieses Konto wurde eingeschränkt... Wenn du denkst, dass das ein Fehler ist, kontaktiere den Support 🙏",
+            "cancelled": "Die Anmeldung wurde abgebrochen... Du kannst es erneut versuchen, wenn du bereit bist 😉",
             "internal_server": "Ups! Auf unserer Seite ist etwas schiefgelaufen... Wir beheben es! 🔧",
             "connection_timeout": "Verbindung nicht möglich... Überprüfe dein Internet und versuche es erneut 📶",
             "unexpected": "Ein unerwartetes Problem ist aufgetreten... Wir prüfen es! 🚨"
@@ -285,6 +286,7 @@
             "weak_password": "Ups, dieses Passwort ist zu schwach... Versuch es stärker zu machen 💪",
             "user_already_exists": "Diese E-Mail ist anscheinend schon vergeben... Versuche dich einzuloggen 😉",
             "disabled": "Registrierungen sind momentan geschlossen... Versuche es später 🕒",
+            "cancelled": "Die Registrierung wurde abgebrochen... Du kannst jederzeit weitermachen, wenn du bereit bist 😉",
             "internal_server": "Auf unserer Seite ist etwas kaputt gegangen... Wir arbeiten daran 🔧",
             "connection_timeout": "Keine Verbindung... Überprüfe dein Internet und versuche es erneut 📡",
             "unexpected": "Ein unerwarteter Fehler ist aufgetreten... Wir kümmern uns darum! 🚨"
@@ -394,7 +396,7 @@
         },
         "success_purchase": {
             "title": "Alles bereit!",
-            "subtitle": "Dein Premium-Zugang ist bis zum {} aktiv. Vielen Dank für deine Unterstützung! 🫶"
+            "subtitle": "Dein Premium-Zugang ist bis zum {} aktiv. Vielen Dank für deine Unterstützung! ❤️"
         },
         "subscription_packages_switch": {
             "title": "Kleiner Hinweis!",
@@ -414,6 +416,14 @@
                 "one": "Dir fehlt nur noch {} Stern, um diesen Hintergrund freizuschalten!",
                 "other": "Dir fehlen nur noch {} Sterne, um diesen Hintergrund freizuschalten!"
             }
+        },
+        "email_change": {
+            "title": "Kleiner Hinweis!",
+            "subtitle": "Bitte stellen Sie sicher, dass Sie Zugriff auf diese E-Mail-Adresse haben. Sie wird für die Kontowiederherstellung verwendet 📧"
+        },
+        "signup_review_encourage": {
+            "title": "Schön, dass du hier bist 🎉",
+            "subtitle": "Danke, dass du Denwee nutzt! Wenn dir die App gefällt, hilft eine kurze Bewertung sehr dabei, sie zu unterstützen. Wir wünschen dir einen tollen Tag! ❤️"
         }
     },
 

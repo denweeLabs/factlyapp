@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:denwee/core/auth/domain/entity/email.dart';
+import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/core/auth/domain/entity/username.dart';
 import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
 import 'package:denwee/core/profile/domain/failure/profile_failure.dart';
@@ -42,7 +43,6 @@ class ProfilePage extends StatefulWidget {
 
   static const routeName = 'ProfilePage';
 
-  static const personalDetailsHeroTag = 'profile_personal_hero_tag';
   static const hPadding = 24;
 
   @override
@@ -56,21 +56,14 @@ class _ProfilePageState extends State<ProfilePage> {
   final nameFocusNode = FocusNode();
   final emailFocusNode = FocusNode();
 
+  late final AppSupportedAuthProvider authProvider;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final profile =
-          getIt<ProfileCubit>().state.profile.getOrElse(() => throw '');
-
-      // display name in case it present
-      if (profile.name.isSome()) {
-        nameController.text = profile.name.getOrElse(() => throw '').value;
-      }
-
-      // display email
-      emailController.text = profile.email.toNullable()!.value;
+      initTextControllers();
     });
-
+    initAuthProvider();
     super.initState();
   }
 
@@ -81,6 +74,22 @@ class _ProfilePageState extends State<ProfilePage> {
     nameFocusNode.dispose();
     emailFocusNode.dispose();
     super.dispose();
+  }
+
+  void initTextControllers() {
+    final profile = getIt<ProfileCubit>().state.profile.toNullable();
+    final name = profile?.name.toNullable();
+    final email = profile?.email.toNullable();
+    
+    if (name != null) nameController.text = name.value;
+    if (email != null) emailController.text = email.value;
+  }
+
+  void initAuthProvider() {
+    authProvider = getIt<ProfileCubit>().state.profile.fold(
+      () => AppSupportedAuthProvider.email,
+      (profile) => profile.authProvider,
+    );
   }
 
   bool _listener(EditProfileState p, EditProfileState c) {
@@ -157,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               delay: const Duration(milliseconds: 400),
                             ),
                             58.verticalSpace,
-                            _buildLogoutButton(context).fadeScale(
+                            _buildLogoutButton(context, hasChanges).fadeScale(
                               fades: const BiPos(0.0, 1.0),
                               scales: const BiPos(0.0, 1.0),
                               delay: const Duration(milliseconds: 600),
@@ -202,12 +211,17 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Widget _buildLogoutButton(BuildContext context) {
+  Widget _buildLogoutButton(BuildContext context, bool hasChanges) {
     return FractionallySizedBox(
       widthFactor: 0.58,
       child: AppSolidButton(
         text: context.tr(LocaleKeys.button_logout),
         onTap: getIt<AuthCubit>().setUnauthenticated,
+        backgroundColors: !hasChanges ? null : [
+          context.darkPrimaryContainer,
+          context.darkPrimaryContainer,
+        ],
+        hideShadow: hasChanges,
       ),
     );
   }
@@ -272,6 +286,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   emailErrorMessage: state.email.error?.errorName(context),
                   // misc
                   isFormValid: state.isValid,
+                  authProvider: authProvider,
                 );
               }),
               const SubscriptionCard(onlyBody: true),
@@ -323,19 +338,34 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // void _onAvatarTap() {}
 
-  void _onSave() {
+  void _onSave() async {
     final state = context.read<EditProfileCubit>().state;
-    if (state.isValid) {
-      if (state.isSaving || state.isAccountDeleting) return;
-      _unfocus();
-      context.read<EditProfileCubit>().save();
-    } else {
+
+    // validate state
+    if (!state.isValid) {
       HapticUtil.medium();
-      context.read<EditProfileCubit>().validate(
-            name: state.name.toNullable()?.value,
-            email: state.email.value,
-          );
+      return context.read<EditProfileCubit>().validate(
+        name: state.name.toNullable()?.value,
+        email: state.email.value,
+      );
     }
+
+    // prevent concurrent requests
+    if (state.isSaving || state.isAccountDeleting) {
+      return;
+    }
+
+    // unfocus text fields
+    _unfocus();
+
+    // show warning before changing email
+    if (state.isEmailChanged) {
+      final isOk = await AppDialogs.showEmailChangeWarningDialog(context);
+      if (isOk != true) return;
+    }
+
+    // submit changes
+    context.read<EditProfileCubit>().save();
   }
 
   void _onAccountDelete() {

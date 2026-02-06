@@ -6,7 +6,9 @@ class _MemberEndpoints {
   static const _base = 'member';
 
   final login = '$_base/login';
+  final loginThirdParty = '$_base/login_oauth';
   final register = '$_base/register';
+  final thirdPartyRegister = '$_base/register_oauth';
   final signInAnonymously = '$_base/login_anonymously';
   final tokenUpdate = '$_base/token';
   final profile = '$_base/profile';

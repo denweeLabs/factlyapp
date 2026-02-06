@@ -90,12 +90,8 @@ class _RegisterPageState extends State<RegisterPage> {
               onPasswordChanged: context.read<RegisterCubit>().onPasswordChanged,
               passwordInError: !signUpState.password.isPure && signUpState.password.isNotValid,
               passwordErrorMessage: signUpState.password.error?.errorName(context),
-              // onPasswordEditingComplete: _registerWithEmailAndPassword,
-              // onGoogleAuth: _loginWithGoogle,
-              // isGoogleAuthInProgress: thirdPartyAuthState.googleAuthInProgress,
+              onGoogleAuth: _registerWithGoogle,
               showPasswordVisibilityButton: true,
-              onGoogleAuth: () {},
-              isGoogleAuthInProgress: false,
             ),
           ),
         ),
@@ -123,15 +119,13 @@ class _RegisterPageState extends State<RegisterPage> {
               return AppSolidButton(
                 onTap: _registerWithEmailAndPassword,
                 text: context.tr(LocaleKeys.button_register),
-                isBusy: signUpState.authInProgress /*|| thirdPartyAuthState.authInProgress*/,
+                isBusy: signUpState.authInProgress,
                 backgroundColors: [
                   context.lightPrimaryContainer,
                   context.lightPrimaryContainer,
                 ],
                 shadowColor: Colors.black45,
                 textColor: context.theme.colorScheme.primary,
-                // textColor: context.darkPrimaryContainer,
-                // useIconWhenBusy: thirdPartyAuthState.authInProgress,
               ).autoElasticIn(sequencePos: 6);
             }),
           ),
@@ -152,14 +146,14 @@ class _RegisterPageState extends State<RegisterPage> {
           );
     } else {
       _unfocus();
-      _ensureConnected(context, context.read<RegisterCubit>().register);
+      _ensureConnected(context, context.read<RegisterCubit>().registerWithEmailAndPassword);
     }
   }
 
-  // void _loginWithGoogle() {
-  //   _unfocus();
-  //   _ensureConnected(context, context.read<ThirdPartyAuthCubit>().authorizeWithGoogle);
-  // }
+  void _registerWithGoogle() {
+    _unfocus();
+    _ensureConnected(context, context.read<RegisterCubit>().registerWithGoogle);
+  }
 
   void _onHaveAnAccount() {
     context

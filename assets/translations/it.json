@@ -276,6 +276,7 @@
             "weak_password": "Hmm, quella password è troppo facile da indovinare... Prova con qualcosa di più sicuro 🔐",
             "user_not_found": "Non abbiamo trovato un account con quei dati... Ti sei registrato? 😉",
             "user_banned": "Questo account è stato limitato... Se pensi sia un errore, contatta il supporto 🙏",
+            "cancelled": "L’accesso è stato annullato... Puoi riprovare quando sei pronto 😉",
             "internal_server": "Ops! Qualcosa è andato storto da parte nostra... Stiamo sistemando! 🔧",
             "connection_timeout": "Impossibile connettersi... Controlla la tua connessione e riprova 📶",
             "unexpected": "Si è verificato un problema imprevisto... Lo stiamo controllando! 🚨"
@@ -285,6 +286,7 @@
             "weak_password": "Ops, quella password è troppo debole... Prova a renderla più sicura 💪",
             "user_already_exists": "Sembra che questa email sia già in uso... Prova a effettuare il login 😉",
             "disabled": "Le registrazioni sono attualmente chiuse... Riprova più tardi 🕒",
+            "cancelled": "La registrazione è stata annullata... Puoi continuare quando sei pronto 😉",
             "internal_server": "Qualcosa si è rotto da parte nostra... Stiamo lavorando per sistemarlo 🔧",
             "connection_timeout": "Nessuna connessione... Controlla la tua rete e riprova 📡",
             "unexpected": "Si è verificato un errore imprevisto... Stiamo lavorando! 🚨"
@@ -394,7 +396,7 @@
         },
         "success_purchase": {
             "title": "È tutto pronto!",
-            "subtitle": "Il tuo accesso Premium è attivo fino al {}. Grazie mille per il tuo supporto! 🫶"
+            "subtitle": "Il tuo accesso Premium è attivo fino al {}. Grazie mille per il tuo supporto! ❤️"
         },
         "subscription_packages_switch": {
             "title": "Solo un avviso!",
@@ -414,6 +416,14 @@
                 "one": "Ti serve solo {} stella in più per sbloccare questo sfondo!",
                 "other": "Ti servono solo {} stelle in più per sbloccare questo sfondo!"
             }
+        },
+        "email_change": {
+            "title": "Solo un avviso!",
+            "subtitle": "Assicurati di avere accesso a questo indirizzo email. Verrà utilizzato per il recupero dell’account 📧"
+        },
+        "signup_review_encourage": {
+            "title": "Che bello vederti qui 🎉",
+            "subtitle": "Grazie per usare Denwee! Se ti piace l’app, lasciare una breve recensione è un ottimo modo per supportarla. Ti auguriamo una giornata fantastica! ❤️"
         }
     },
 

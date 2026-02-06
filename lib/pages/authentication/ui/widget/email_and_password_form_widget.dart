@@ -6,6 +6,7 @@ import 'package:denwee/core/ui/widget/animations/animate_do/elastic_in.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/animations/tap_animations/bounce_tap_animation.dart';
+import 'package:denwee/core/ui/widget/buttons/icon_button_widget.dart';
 import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/core/ui/widget/common/common_loading_widget.dart';
 import 'package:denwee/core/ui/widget/inputs/app_input_widget.dart';
@@ -32,7 +33,6 @@ class EmailAndPasswordForm extends StatelessWidget {
     required this.passwordErrorMessage,
     this.onPasswordEditingComplete,
     required this.onGoogleAuth,
-    required this.isGoogleAuthInProgress,
     this.onForgotPass,
     this.isForgotPassInProgress = false,
     this.showPasswordVisibilityButton = false,
@@ -53,7 +53,6 @@ class EmailAndPasswordForm extends StatelessWidget {
   final VoidCallback? onForgotPass;
   final bool isForgotPassInProgress;
   final VoidCallback onGoogleAuth;
-  final bool isGoogleAuthInProgress;
 
   static const fieldBorderRadius = 18;
   static const fieldPrefixIconSize = 22;
@@ -95,7 +94,7 @@ class EmailAndPasswordForm extends StatelessWidget {
             padding: fieldPadding.copyWith(right: 0.0),
             borderRadius: EmailAndPasswordForm.fieldBorderRadius,
             prefixIconSize: EmailAndPasswordForm.fieldPrefixIconSize,
-            // innerTrailingWidget: _buildGoogleAuthTrailing(),
+            innerTrailingWidget: _buildGoogleAuthTrailing(),
           ).autoFadeInUp(sequencePos: 2),
           12.verticalSpace,
           AppInput(
@@ -199,34 +198,24 @@ class EmailAndPasswordForm extends StatelessWidget {
     );
   }
 
-  /*
   Widget _buildGoogleAuthTrailing() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         10.horizontalSpace,
-        Container(
+        const SizedBox(
           width: 1.0,
-          height: 30.h,
-          color: Colors.white30,
+          height: 28.0,
+          child: ColoredBox(color: Colors.white30),
         ),
-        FadeLoopAnimation(
-          enabled: isGoogleAuthInProgress,
-          delay: const Duration(milliseconds: 500),
-          duration: const Duration(milliseconds: 1000),
-          child: BounceTapAnimation(
-            onTap: onGoogleAuth,
-            child: Padding(
-              padding: EdgeInsets.only(right: 14.w, left: 10.w),
-              child: SvgPicture.asset(
-                AppConstants.assets.icons.google,
-                height: 30.sp,
-              ),
-            ),
-          ),
+        AppIconButton(
+          onTap: onGoogleAuth,
+          ignoreIconColor: true,
+          iconPath: AppConstants.assets.icons.google,
+          padding: EdgeInsets.only(left: 14.w, right: 18.w),
+          size: 30,
         ),
       ],
     );
   }
-  */
 }

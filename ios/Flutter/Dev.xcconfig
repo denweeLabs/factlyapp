@@ -1,2 +1,4 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Generated.xcconfig"
+
+GOOGLE_CLIENT_ID = com.googleusercontent.apps.665205452522-nrkcum55k7n2tlgs30vcspi4n2kpmi58

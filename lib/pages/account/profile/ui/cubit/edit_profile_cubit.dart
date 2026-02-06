@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/auth/domain/entity/username.dart';
 import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
@@ -12,6 +14,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:utils/utils.dart';
 
 part 'edit_profile_state.dart';
 part 'edit_profile_cubit.freezed.dart';
@@ -108,12 +111,14 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     ));
     final body = UpdateProfileBody(name: state.name, email: state.email);
     final failureOrSuccess = await _profileRepo.updateProfileRemote(body);
-    final isSuccess = failureOrSuccess.isRight();
+    final updatedProfile = failureOrSuccess.getEntries().$2;
 
-    if (isSuccess) {
-      _setInitialPersonalDetails(name: state.name, email: state.email);
-      final newProfile = failureOrSuccess.toOption().toNullable()!;
-      await _profileCubit.emitPreserveProfile(newProfile);
+    if (updatedProfile != null) {
+      _setInitialPersonalDetails(
+        name: updatedProfile.name,
+        email: updatedProfile.email.toNullable()!,
+      );
+      unawaited(_profileCubit.emitPreserveProfile(updatedProfile));
     }
 
     emit(state.copyWith(
