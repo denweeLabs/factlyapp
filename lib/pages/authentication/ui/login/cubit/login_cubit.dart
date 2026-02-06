@@ -43,7 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(email: newEmail, password: newPass));
   }
 
-  Future<void> login() async {
+  Future<void> loginWithEmailAndPassword() async {
     assert(state.email.isValid);
     assert(state.password.isValid);
 
@@ -54,10 +54,26 @@ class LoginCubit extends Cubit<LoginState> {
       authInProgress: true,
     ));
 
-    final failureOrSuccess = await _loginUseCase.execute(
+    final failureOrSuccess = await _loginUseCase.withEmailAndPassword(
       email: state.email,
       password: state.password,
     );
+
+    emit(state.copyWith(
+      failureOrSuccess: some(failureOrSuccess),
+      authInProgress: false,
+    ));
+  }
+
+  Future<void> loginWithGoogle() async {
+    if (state.authInProgress) return;
+
+    emit(state.copyWith(
+      failureOrSuccess: const None(),
+      authInProgress: true,
+    ));
+
+    final failureOrSuccess = await _loginUseCase.withGoogle();
 
     emit(state.copyWith(
       failureOrSuccess: some(failureOrSuccess),

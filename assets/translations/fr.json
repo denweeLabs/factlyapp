@@ -276,6 +276,7 @@
             "weak_password": "Hmm, ce mot de passe est trop facile à deviner... Essayez quelque chose de plus fort 🔐",
             "user_not_found": "Nous n'avons pas trouvé de compte avec ces informations... Vous êtes inscrit ? 😉",
             "user_banned": "Ce compte a été restreint... Si vous pensez que c'est une erreur, contactez le support 🙏",
+            "cancelled": "La connexion a été annulée... Vous pouvez réessayer quand vous serez prêt 😉",
             "internal_server": "Oups ! Quelque chose s'est mal passé de notre côté... Nous réparons ça ! 🔧",
             "connection_timeout": "Impossible de se connecter... Vérifiez votre Internet et réessayez 📶",
             "unexpected": "Un problème inattendu est survenu... Nous examinons cela ! 🚨"
@@ -285,6 +286,7 @@
             "weak_password": "Oups, ce mot de passe est trop faible... Essayez quelque chose de plus fort 💪",
             "user_already_exists": "Il semble que cet e-mail soit déjà utilisé... Essayez de vous connecter 😉",
             "disabled": "Les inscriptions sont actuellement fermées... Veuillez réessayer plus tard 🕒",
+            "cancelled": "L’inscription a été annulée... Vous pouvez continuer quand vous serez prêt 😉",
             "internal_server": "Quelque chose s'est mal passé de notre côté... Nous travaillons dessus 🔧",
             "connection_timeout": "Pas de connexion... Vérifiez votre Internet et réessayez 📡",
             "unexpected": "Une erreur inattendue est survenue... Nous nous en occupons ! 🚨"
@@ -394,7 +396,7 @@
         },
         "success_purchase": {
             "title": "C’est fait !",
-            "subtitle": "Votre accès Premium est actif jusqu’au {}. Merci beaucoup pour votre soutien ! 🫶"
+            "subtitle": "Votre accès Premium est actif jusqu’au {}. Merci beaucoup pour votre soutien ! ❤️"
         },
         "subscription_packages_switch": {
             "title": "Petit rappel !",
@@ -414,6 +416,14 @@
                 "one": "Il vous manque seulement {} étoile pour débloquer ce fond !",
                 "other": "Il vous manque seulement {} étoiles pour débloquer ce fond !"
             }
+        },
+        "email_change": {
+            "title": "Petite information !",
+            "subtitle": "Assurez-vous d’avoir accès à cette adresse e-mail. Elle sera utilisée pour la récupération du compte 📧"
+        },
+        "signup_review_encourage": {
+            "title": "Ravi de te voir ici 🎉",
+            "subtitle": "Merci d’utiliser Denwee ! Si tu apprécies l’application, laisser un petit avis est un excellent moyen de la soutenir. Nous te souhaitons une excellente journée ! ❤️"
         }
     },
 

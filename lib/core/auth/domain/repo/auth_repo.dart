@@ -17,9 +17,13 @@ abstract class AuthRepo {
     required Email email,
     required Password password,
   });
+  Future<Either<LoginFailure, LoginResult>> loginWithGoogle();
   Future<Either<RegisterFailure, RegisterResult>> register({
     required Email email,
     required Password password,
+    required UserPreferences preferences,
+  });
+  Future<Either<RegisterFailure, RegisterResult>> registerWithGoogle({
     required UserPreferences preferences,
   });
   Future<Either<CommonApiFailure, LoginAnonymouslyResult>> signInAnonymously({

@@ -3,7 +3,6 @@ import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/elastic_in.dart';
 import 'package:denwee/core/ui/widget/animations/animate_do/fade_in.dart';
-import 'package:denwee/core/ui/widget/animations/transitions/hero_transition.dart';
 import 'package:denwee/core/ui/widget/buttons/app_solid_button_widget.dart';
 import 'package:denwee/core/ui/widget/buttons/app_text_button_widget.dart';
 import 'package:denwee/core/ui/widget/misc/seal_in_square_widget.dart';
@@ -24,7 +23,6 @@ class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
   static const routeName = 'WelcomePage';
-  static const sealInCircleHeroTag = 'welcome_seal_in_circle';
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -76,10 +74,10 @@ class _WelcomePageState extends State<WelcomePage> with RestorationMixin {
           children: [
             Center(
               child: RepaintBoundary(
-                child: const HeroTransition(
-                  tag: WelcomePage.sealInCircleHeroTag,
-                  child: SealInSquare(),
-                ).autoElasticIn(sequencePos: 1, scaleCurve: Curves.easeOutBack),
+                child: const SealInSquare().autoElasticIn(
+                  sequencePos: 1,
+                  scaleCurve: Curves.easeOutBack,
+                ),
               ),
             ),
             32.verticalSpace,

@@ -5,7 +5,7 @@ description: "Denwee mobile application"
 publish_to: 'none'
 
 # App version + build
-version: 1.2.1+77
+version: 1.2.2+78
 
 # Env
 environment:
@@ -23,6 +23,9 @@ dependencies:
   firebase_messaging: ^16.1.1
   firebase_crashlytics: ^5.0.7
   firebase_analytics: ^12.1.1
+  
+  # Third-party auth
+  google_sign_in: ^6.3.0
 
   # Intl
   intl: ^0.20.2
@@ -110,6 +113,7 @@ dependencies:
   el_tooltip: ^2.2.1
   avatar_glow: ^3.0.1
   skeletonizer: ^2.1.2
+  in_app_review: ^2.0.11
 
   # Utils
   rxdart: ^0.28.0

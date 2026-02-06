@@ -13,6 +13,7 @@ class AppIconButton extends StatelessWidget {
     this.color,
     this.padding,
     this.bounceMinScale = CoreTapBounceAnimation.defaultMinScale,
+    this.ignoreIconColor = false,
   });
 
   final String iconPath;
@@ -21,6 +22,7 @@ class AppIconButton extends StatelessWidget {
   final Color? color;
   final EdgeInsets? padding;
   final double bounceMinScale;
+  final bool ignoreIconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class AppIconButton extends StatelessWidget {
           path: iconPath,
           size: size,
           color: color,
+          ignoreIconColor: ignoreIconColor,
         ),
       ),
     );

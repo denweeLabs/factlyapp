@@ -5,6 +5,8 @@ import 'package:denwee/core/auth/data/model/login_response_dto.dart';
 import 'package:denwee/core/auth/data/model/register_body_dto.dart';
 import 'package:denwee/core/auth/data/model/register_response_dto.dart';
 import 'package:denwee/core/auth/data/model/reset_password_body_dto.dart';
+import 'package:denwee/core/auth/data/model/third_party_login_body_dto.dart';
+import 'package:denwee/core/auth/data/model/third_party_register_body_dto.dart';
 import 'package:denwee/core/auth/domain/repo/access_token_repo.dart';
 import 'package:denwee/core/auth/domain/source/auth_remote_source.dart';
 import 'package:denwee/core/network/data/model/server_error_response.dart';
@@ -26,11 +28,10 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
   );
 
   @override
-  Future<LoginResponseDto> login(String email, String password) async {
-    final body = LoginBodyDto(email: email, password: password).toJson();
+  Future<LoginResponseDto> login(LoginBodyDto body) async {
     final response = await _requestExecutor.post(
       Endpoints.member.login,
-      body: body,
+      body: body.toJson(),
     );
     final data = response.data as Map<String, dynamic>;
 
@@ -44,20 +45,44 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
   }
 
   @override
-  Future<RegisterResponseDto> register(
-    String email,
-    String password,
-    UserPreferencesDto preferencesDto,
-  ) async {
-    final body = RegisterBodyDto(
-      email: email,
-      password: password,
-      preferences: preferencesDto,
-    ).toJson();
+  Future<LoginResponseDto> thirdPartyLogin(ThirdPartyLoginBodyDto body) async {
+    final response = await _requestExecutor.post(
+      Endpoints.member.loginThirdParty,
+      body: body.toJson(),
+    );
+    final data = response.data as Map<String, dynamic>;
+    if (response.isSuccessful) {
+      await _processTokensFromResponse(response);
+      return LoginResponseDto.fromJson(data);
+    } else {
+      final errorResponse = ServerErrorResponse.fromJson(data);
+      throw errorResponse.asGenericException;
+    }
+  }
+
+  @override
+  Future<RegisterResponseDto> register(RegisterBodyDto body) async {
     final response = await _requestExecutor.post(
       Endpoints.member.register,
-      body: body,
+      body: body.toJson(),
     );
+    final data = response.data as Map<String, dynamic>;
+    if (response.isSuccessful) {
+      await _processTokensFromResponse(response);
+      return RegisterResponseDto.fromJson(data);
+    } else {
+      final errorResponse = ServerErrorResponse.fromJson(data);
+      throw errorResponse.asGenericException;
+    }
+  }
+
+  @override
+  Future<RegisterResponseDto> thirdPartyRegister(ThirdPartyRegisterBodyDto body) async {
+    final response = await _requestExecutor.post(
+      Endpoints.member.thirdPartyRegister,
+      body: body.toJson(),
+    );
+    
     final data = response.data as Map<String, dynamic>;
     if (response.isSuccessful) {
       await _processTokensFromResponse(response);

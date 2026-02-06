@@ -1,4 +1,5 @@
 import 'package:animated_switcher_plus/animated_switcher_plus.dart';
+import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/constants/formatters/input_formatters.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
@@ -24,6 +25,7 @@ class PersonalDetailsCard extends StatelessWidget {
     required this.onEmailChanged,
     required this.emailErrorMessage,
     required this.emailInError,
+    required this.authProvider,
     required this.isFormValid,
   });
 
@@ -38,7 +40,7 @@ class PersonalDetailsCard extends StatelessWidget {
   final ValueChanged<String> onEmailChanged;
   final String? emailErrorMessage;
   final bool emailInError;
-
+  final AppSupportedAuthProvider authProvider;
   final bool isFormValid;
 
   @override
@@ -100,11 +102,12 @@ class PersonalDetailsCard extends StatelessWidget {
                 ),
                 6.verticalSpace,
                 AppInput(
+                  isEnabled: isEmailFieldEnabled,
                   hintStyle: textFieldHint.copyWith(color: context.lightTextColor),
                   focusNode: emailFocusNode,
                   controller: emailController,
                   hint: context.tr(LocaleKeys.input_field_hint_email),
-                  prefixIcon: AppConstants.assets.icons.smsLinear,
+                  prefixIcon: emailPrefixIcon,
                   primaryDetailsColor: context.lightTextColor,
                   cursorColor: context.lightTextColor,
                   textInputAction: TextInputAction.done,
@@ -141,5 +144,19 @@ class PersonalDetailsCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String get emailPrefixIcon {
+    switch (authProvider) {
+      case AppSupportedAuthProvider.email: return AppConstants.assets.icons.smsLinear;
+      case AppSupportedAuthProvider.google: return AppConstants.assets.icons.google;
+    }
+  }
+
+  bool get isEmailFieldEnabled {
+    switch (authProvider) {
+      case AppSupportedAuthProvider.email: return true;
+      case AppSupportedAuthProvider.google: return false;
+    }
   }
 }

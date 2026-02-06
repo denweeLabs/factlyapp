@@ -33,7 +33,6 @@ import 'package:denwee/di/di.dart';
 import 'package:denwee/localization/locale_keys.g.dart';
 import 'package:denwee/pages/authentication/args/authentication_page_args.dart';
 import 'package:denwee/pages/authentication/ui/authentication_routes.dart';
-import 'package:denwee/pages/account/profile/ui/profile_page.dart';
 import 'package:denwee/pages/account/ui/account_base_page.dart';
 import 'package:denwee/pages/account/ui/account_routes.dart';
 import 'package:denwee/pages/account/ui/widget/misc/account_horizontal_tile_widget.dart';
@@ -108,7 +107,6 @@ class _AccountPageState extends State<AccountPage> {
         Builder(
           builder: (context) => ProfileOverlayCard(
             onTap: () => _onProfileTap(context),
-            heroTag: ProfilePage.personalDetailsHeroTag,
             isAuthenticated: context.select<AuthCubit, bool>((cubit) => cubit.state.isAuthenticated),
             statistics: context.select<UserStatisticsCubit, UserStatistics>((cubit) => cubit.state.statistics),
             userName: context.watch<ProfileCubit>().state.commonUserName(context),

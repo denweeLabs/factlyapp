@@ -12,6 +12,7 @@ import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart
 import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
 import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
 import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
+import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
 import 'package:denwee/core/user_preferences/domain/entity/user_preferences.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/utils.dart';
@@ -25,6 +26,7 @@ class LoginAnonymouslyUseCase {
   final SubscriptionsRepo _subscriptionsRepo;
   final ProfileCubit _profileCubit;
   final UserPreferencesCubit _preferencesCubit;
+  final UserStatisticsCubit _statisticsCubit;
   final AvailableBackgroundsCubit _backgroundsCubit;
   final DailyFactsCubit _dailyFactsCubit;
 
@@ -36,6 +38,7 @@ class LoginAnonymouslyUseCase {
     this._subscriptionsRepo,
     this._profileCubit,
     this._preferencesCubit,
+    this._statisticsCubit,
     this._backgroundsCubit,
     this._dailyFactsCubit,
   );
@@ -79,13 +82,13 @@ class LoginAnonymouslyUseCase {
   /// - Preserves profile and preferences locally
   /// 
   Future<void> _submitAppState(LoginAnonymouslyResult result) async {
-    /// Update state to 'anonymous'
-    ///
-    unawaited(_authCubit.setAnonymous());
-
     /// Update and store user profile
     /// 
     unawaited(_profileCubit.emitPreserveProfile(result.profile));
+
+    /// Update and store user statistics
+    /// 
+    unawaited(_statisticsCubit.emitPreserveStatistics(result.statistics));
 
     /// Update and store user preferences
     /// 
@@ -93,6 +96,14 @@ class LoginAnonymouslyUseCase {
       result.preferences,
       remotePreserve: false,
     ));
+
+    /// Small delay to establish state before setting to 'anonymous'
+    ///
+    await Future<void>.delayed(const Duration(milliseconds: 15));
+
+    /// Update state to 'anonymous'
+    ///
+    unawaited(_authCubit.setAnonymous());
   }
 
 

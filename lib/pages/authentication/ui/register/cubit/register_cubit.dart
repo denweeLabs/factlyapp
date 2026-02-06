@@ -39,7 +39,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(state.copyWith(email: newEmail, password: newPass));
   }
 
-  Future<void> register() async {
+  Future<void> registerWithEmailAndPassword() async {
     assert(state.email.isValid);
     assert(state.password.isValid);
 
@@ -50,9 +50,27 @@ class RegisterCubit extends Cubit<RegisterState> {
       authInProgress: true,
     ));
     
-    final failureOrSuccess = await _registerUseCase.execute(
+    final failureOrSuccess = await _registerUseCase.withEmailAndPassword(
       email: state.email,
       password: state.password,
+      preferences: _preferencesCubit.state.preferences,
+    );
+
+    emit(state.copyWith(
+      failureOrSuccess: some(failureOrSuccess),
+      authInProgress: false,
+    ));
+  }
+
+  Future<void> registerWithGoogle() async {
+    if (state.authInProgress) return;
+
+    emit(state.copyWith(
+      failureOrSuccess: const None(),
+      authInProgress: true,
+    ));
+    
+    final failureOrSuccess = await _registerUseCase.withGoogle(
       preferences: _preferencesCubit.state.preferences,
     );
 

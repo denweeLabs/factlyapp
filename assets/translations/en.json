@@ -276,6 +276,7 @@
             "weak_password": "Hmm, that password is too easy to guess... Try something stronger 🔐",
             "user_not_found": "We couldn't find an account with those details... Did you sign up? 😉",
             "user_banned": "This account has been restricted... If you believe this is a mistake, please contact support 🙏",
+            "cancelled": "Login was cancelled... You can try again whenever you’re ready 😉",
             "internal_server": "Oops! Something went wrong on our end... We're fixing it! 🔧",
             "connection_timeout": "Unable to connect... Please check your internet and try again 📶",
             "unexpected": "An unexpected issue occurred... We're looking into it! 🚨"
@@ -285,6 +286,7 @@
             "weak_password": "Oops, that password’s too weak... Try adding more strength to it 💪",
             "user_already_exists": "Looks like this email is already taken... Try logging in instead 😉",
             "disabled": "Registrations are currently closed... Please try again later 🕒",
+            "cancelled": "Registration was cancelled... You can continue anytime when you’re ready 😉",
             "internal_server": "Something broke on our side... We're working on it 🔧",
             "connection_timeout": "No connection... Please check your internet and try again 📡",
             "unexpected": "Unexpected error happened... We're on it! 🚨"
@@ -394,7 +396,7 @@
         },
         "success_purchase": {
             "title": "You’re all set!",
-            "subtitle": "Your Premium access is now active until {}. Thanks a ton for your support! 🫶"
+            "subtitle": "Your Premium access is now active until {}. Thanks a ton for your support! ❤️"
         },
         "subscription_packages_switch": {
             "title": "Just a heads up!",
@@ -414,6 +416,14 @@
                 "one": "You need just {} more star to unlock this background!",
                 "other": "You need just {} more stars to unlock this background!"
             }
+        },
+        "email_change": {
+            "title": "Just a heads up!",
+            "subtitle": "Please make sure you have access to this email address. It will be used for account recovery 📧"
+        },
+        "signup_review_encourage": {
+            "title": "Nice to see you here 🎉",
+            "subtitle": "Thanks for using Denwee! If you enjoy the app, leaving a quick review is a great way to support it. Wishing you an awesome day ahead! ❤️"
         }
     },
 
