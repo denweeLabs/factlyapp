@@ -54,7 +54,7 @@ class LoginUseCase {
   );
 
 
-  /// Executes the full login flow.
+  /// Executes the full login flow with email and password.
   ///
   /// What it does:
   /// - Authenticate the user via [AuthRepo]
@@ -62,7 +62,7 @@ class LoginUseCase {
   /// - Establish internal services and background processes
   /// - Load essential app resources required after login
   ///
-  Future<Either<LoginFailure, LoginResult>> execute({
+  Future<Either<LoginFailure, LoginResult>> withEmailAndPassword({
     required Email email,
     required Password password,
   }) async {
@@ -70,6 +70,26 @@ class LoginUseCase {
       email: email,
       password: password,
     );
+    final successResult = failureOrSuccess.getEntries().$2;
+    if (successResult != null) {
+      await _submitAppState(successResult);
+      await _establishInternalData(successResult);
+      await _loadAppResources();
+    }
+    return failureOrSuccess;
+  }
+
+
+  /// Executes the full login flow with Google.
+  ///
+  /// What it does:
+  /// - Authenticate the user via [AuthRepo]
+  /// - On success, hydrate in-memory app state with user-related data
+  /// - Establish internal services and background processes
+  /// - Load essential app resources required after login
+  ///
+  Future<Either<LoginFailure, LoginResult>> withGoogle() async {
+    final failureOrSuccess = await _authRepo.loginWithGoogle();
     final successResult = failureOrSuccess.getEntries().$2;
     if (successResult != null) {
       await _submitAppState(successResult);
@@ -90,10 +110,6 @@ class LoginUseCase {
   /// - Preserves data locally
   /// 
   Future<void> _submitAppState(LoginResult result) async {
-    /// Update state to 'authenticated'
-    ///
-    unawaited(_authCubit.setAuthenticated());
-
     /// Update and store user profile
     /// 
     unawaited(_profileCubit.emitPreserveProfile(result.profile));
@@ -119,6 +135,14 @@ class LoginUseCase {
     /// Update and store fact ids that user has added to archive
     /// 
     unawaited(_factsArchiveCubit.emitPreserveArchivedIds(result.archivedFactIds));
+
+    /// Small delay to establish state before setting to 'authenticated'
+    ///
+    await Future<void>.delayed(const Duration(milliseconds: 15));
+
+    /// Update state to 'authenticated'
+    ///
+    unawaited(_authCubit.setAuthenticated());
   }
 
 

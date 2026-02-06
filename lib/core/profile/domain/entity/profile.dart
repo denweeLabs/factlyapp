@@ -1,4 +1,5 @@
 import 'package:denwee/core/auth/domain/entity/email.dart';
+import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/core/auth/domain/entity/username.dart';
 import 'package:denwee/core/misc/domain/entity/i_entity.dart';
 import 'package:denwee/core/network/domain/entity/network_link.dart';
@@ -19,5 +20,6 @@ abstract class Profile with _$Profile implements IEntity {
     required Option<DateTime> createdAt,
     required bool isAnonymous,
     required List<UniqueId> unlockedBackgrounds,
+    required AppSupportedAuthProvider authProvider,
   }) = _Profile;
 }

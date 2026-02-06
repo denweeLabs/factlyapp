@@ -95,13 +95,9 @@ class _LoginPageState extends State<LoginPage> {
                   passwordInError: !signInState.password.isPure && signInState.password.isNotValid,
                   passwordErrorMessage: signInState.password.error?.errorName(context),
                   onPasswordEditingComplete: _loginWithEmailAndPassword,
-                  onGoogleAuth: () {},
-                  isGoogleAuthInProgress: false,
+                  onGoogleAuth: _loginWithGoogle,
                   onForgotPass: _onForgotPass,
                   isForgotPassInProgress: signInState.resetPassInProgress,
-                  // onGoogleAuth: _loginWithGoogle,
-                  // isGoogleAuthInProgress:
-                  //     thirdPartyAuthState.googleAuthInProgress,
                 ),
               ],
             ),
@@ -158,15 +154,17 @@ class _LoginPageState extends State<LoginPage> {
           );
     } else {
       _unfocus();
-      _ensureConnected(context, context.read<LoginCubit>().login);
+      _ensureConnected(context, context.read<LoginCubit>().loginWithEmailAndPassword);
     }
   }
 
-  // void _loginWithGoogle() {
-  // _unfocus();
-  // _ensureConnected(
-  // context, context.read<ThirdPartyAuthCubit>().authorizeWithGoogle);
-  // }
+  void _loginWithGoogle() {
+    _unfocus();
+    _ensureConnected(
+      context,
+      context.read<LoginCubit>().loginWithGoogle,
+    );
+  }
 
   void _onForgotPass() async {
     _unfocus();

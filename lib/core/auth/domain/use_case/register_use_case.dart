@@ -40,7 +40,7 @@ class RegisterUseCase {
   );
 
 
-  /// Executes the full user registration flow.
+  /// Executes the full user registration flow with email and password.
   ///
   /// Responsibilities:
   /// - Register a new user account via [AuthRepo]
@@ -48,7 +48,7 @@ class RegisterUseCase {
   ///
   /// Returns either a [RegisterFailure] or a successful [RegisterResult].
   /// 
-  Future<Either<RegisterFailure, RegisterResult>> execute({
+  Future<Either<RegisterFailure, RegisterResult>> withEmailAndPassword({
     required Email email,
     required Password password,
     required UserPreferences preferences,
@@ -67,16 +67,35 @@ class RegisterUseCase {
   }
 
 
+  /// Executes the full user registration flow with Google.
+  ///
+  /// Responsibilities:
+  /// - Register a new user account via [AuthRepo]
+  /// - On success, transition the app into an authenticated state
+  ///
+  /// Returns either a [RegisterFailure] or a successful [RegisterResult].
+  /// 
+  Future<Either<RegisterFailure, RegisterResult>> withGoogle({
+    required UserPreferences preferences,
+  }) async {
+    final failureOrSuccess = await _authRepo.registerWithGoogle(
+      preferences: preferences,
+    );
+    final successResult = failureOrSuccess.getEntries().$2;
+    if (successResult != null) {
+      await _submitAppState(successResult);
+      await _establishInternalData(successResult);
+    }
+    return failureOrSuccess;
+  }
+
+
   /// Submits newly created user data into application state.
   ///
   /// This method hydrates core user-related cubits immediately
   /// after a successful registration.
   ///
   Future<void> _submitAppState(RegisterResult result) async {
-    /// Update state to 'authenticated'
-    ///
-    unawaited(_authCubit.setAuthenticated());
-
     /// Update and store user profile
     /// 
     unawaited(_profileCubit.emitPreserveProfile(result.profile));
@@ -87,6 +106,14 @@ class RegisterUseCase {
       result.preferences,
       remotePreserve: false,
     ));
+
+    /// Small delay to establish state before setting to 'authenticated'
+    ///
+    await Future<void>.delayed(const Duration(milliseconds: 15));
+
+    /// Update state to 'authenticated'
+    ///
+    unawaited(_authCubit.setAuthenticated());
   }  
 
 

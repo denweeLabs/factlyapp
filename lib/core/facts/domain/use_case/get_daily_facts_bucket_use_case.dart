@@ -31,7 +31,7 @@ class GetDailyFactsBucketUseCase {
     final bucket = failureOrSuccess.fold((_) => null, (bucket) => bucket);
 
     if (bucket != null) {
-      unawaited(_dailyFactsRepo.storeBucketLocal(bucket));
+      await _dailyFactsRepo.storeBucketLocal(bucket);
     }
 
     return failureOrSuccess.map((bucket) => bucket.normalized());

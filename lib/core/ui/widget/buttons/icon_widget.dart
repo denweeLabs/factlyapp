@@ -13,12 +13,14 @@ class CommonAppIcon extends ImplicitlyAnimatedWidget {
     this.color,
     super.duration = CustomAnimationDurations.ultraLow,
     this.useTransition = true,
+    this.ignoreIconColor = false,
   });
 
   final String path;
   final double size;
   final Color? color;
   final bool useTransition;
+  final bool ignoreIconColor;
 
   @override
   _CommonIconState createState() => _CommonIconState();
@@ -52,6 +54,16 @@ class _CommonIconState extends AnimatedWidgetBaseState<CommonAppIcon> {
 
   Widget _buildIcon(BuildContext context) {
     final wh = widget.size.w;
+
+    if (widget.ignoreIconColor) {
+      return SvgPicture.asset(
+        widget.path,
+        height: wh,
+        width: wh,
+        key: ValueKey(widget.path),
+        colorFilter: null,
+      );
+    }
 
     final Animation<double> animation = this.animation;
 

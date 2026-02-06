@@ -1,4 +1,5 @@
 import 'package:denwee/core/auth/domain/entity/email.dart';
+import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/core/auth/domain/entity/username.dart';
 import 'package:denwee/core/profile/domain/entity/profile.dart';
 import 'package:denwee/core/network/domain/entity/network_link.dart';
@@ -14,10 +15,31 @@ class ProfileDto {
   final int id;
   final String? email;
   final String? name;
-  @JsonKey(name: 'avatar_url') final String? avatarUrl;
-  @JsonKey(name: 'created_at') final DateTime? createdAt;
-  @JsonKey(name: 'is_anonymous', defaultValue: false) final bool isAnonymous;
-  @JsonKey(name: 'unlocked_background_ids', defaultValue: []) final List<int> unlockedBackgrounds;
+
+  @JsonKey(name: 'avatar_url') 
+  final String? avatarUrl;
+
+  @JsonKey(name: 'created_at')
+  final DateTime? createdAt;
+
+  @JsonKey(
+    name: 'is_anonymous', 
+    defaultValue: false,
+  )
+  final bool isAnonymous;
+
+  @JsonKey(
+    name: 'unlocked_background_ids', 
+    defaultValue: [],
+  )
+  final List<int> unlockedBackgrounds;
+
+  @JsonKey(
+    name: 'raw_app_meta_data',
+    fromJson: _authProviderFromJson,
+    toJson: _authProviderToJson,
+  )
+  final String authProvider;
 
   const ProfileDto({
     required this.id,
@@ -27,6 +49,7 @@ class ProfileDto {
     required this.createdAt,
     required this.isAnonymous,
     required this.unlockedBackgrounds,
+    required this.authProvider,
   });
 
   factory ProfileDto.fromDomain(Profile profile) {
@@ -38,6 +61,7 @@ class ProfileDto {
       createdAt: profile.createdAt.toNullable(),
       isAnonymous: profile.isAnonymous,
       unlockedBackgrounds: profile.unlockedBackgrounds.map((e) => e.value).toList(),
+      authProvider: profile.authProvider.name,
     );
   }
 
@@ -59,6 +83,7 @@ class ProfileDto {
       createdAt: optionOf(createdAt),
       isAnonymous: isAnonymous,
       unlockedBackgrounds: unlockedBackgrounds.map(UniqueId.fromValue).toList(),
+      authProvider: AppSupportedAuthProvider.fromString(authProvider),
     );
   }
 
@@ -66,4 +91,18 @@ class ProfileDto {
       _$ProfileDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProfileDtoToJson(this);
+}
+
+String _authProviderFromJson(dynamic json) {
+  if (json is Map<String, dynamic>) {
+    final provider = json['provider'];
+    if (provider != null && provider is String && provider.isNotEmpty) {
+      return provider;
+    }
+  }
+  return AppSupportedAuthProvider.email.name;
+}
+
+Map<String, dynamic> _authProviderToJson(String provider) {
+  return {'provider': provider};
 }

@@ -1,5 +1,9 @@
 import 'package:denwee/core/auth/data/model/change_password_body_dto.dart';
+import 'package:denwee/core/auth/data/model/login_body_dto.dart';
+import 'package:denwee/core/auth/data/model/register_body_dto.dart';
 import 'package:denwee/core/auth/data/model/reset_password_body_dto.dart';
+import 'package:denwee/core/auth/data/model/third_party_login_body_dto.dart';
+import 'package:denwee/core/auth/data/model/third_party_register_body_dto.dart';
 import 'package:denwee/core/auth/domain/entity/change_password_body.dart';
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/auth/domain/entity/login_anonymously_result.dart';
@@ -7,11 +11,14 @@ import 'package:denwee/core/auth/domain/entity/login_result.dart';
 import 'package:denwee/core/auth/domain/entity/password.dart';
 import 'package:denwee/core/auth/domain/entity/register_result.dart';
 import 'package:denwee/core/auth/domain/entity/reset_password_body.dart';
+import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
+import 'package:denwee/core/auth/domain/entity/third_party_register_body.dart';
 import 'package:denwee/core/auth/domain/failure/change_password_failure.dart';
 import 'package:denwee/core/auth/domain/failure/login_failure.dart';
 import 'package:denwee/core/auth/domain/failure/register_failure.dart';
 import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
 import 'package:denwee/core/auth/domain/source/auth_remote_source.dart';
+import 'package:denwee/core/auth/domain/providers/google/google_sign_in_provider.dart';
 import 'package:denwee/core/network/data/exceptions/app_exception.dart';
 import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
 import 'package:denwee/core/user_preferences/data/model/user_preferences_dto.dart';
@@ -22,8 +29,9 @@ import 'package:injectable/injectable.dart';
 @LazySingleton(as: AuthRepo)
 class AuthRepoImpl implements AuthRepo {
   final AuthRemoteSource _remoteSource;
+  final GoogleSignInProvider _googleSignInProvider;
 
-  const AuthRepoImpl(this._remoteSource);
+  const AuthRepoImpl(this._remoteSource, this._googleSignInProvider);
 
   @override
   Future<Either<LoginFailure, LoginResult>> login({
@@ -31,9 +39,29 @@ class AuthRepoImpl implements AuthRepo {
     required Password password,
   }) async {
     try {
-      final response = await _remoteSource.login(
-        email.value,
-        password.value,
+      final body = LoginBodyDto(
+        email: email.value,
+        password: password.value,
+      );
+      final response = await _remoteSource.login(body);
+      return right(response.toResult());
+    } on AppException catch (error) {
+      final failure = LoginFailure.fromAppException(error);
+      return left(failure);
+    } catch (_) {
+      return left(LoginFailure.unexpected);
+    }
+  }
+
+  @override
+  Future<Either<LoginFailure, LoginResult>> loginWithGoogle() async {
+    try {
+      final result = await _googleSignInProvider.authenticate();
+      if (result == null) return left(LoginFailure.cancelled);
+      
+      final body = ThirdPartyLoginBody.google(idToken: result.idToken);
+      final response = await _remoteSource.thirdPartyLogin(
+        ThirdPartyLoginBodyDto.fromDomain(body),
       );
       return right(response.toResult());
     } on AppException catch (error) {
@@ -51,10 +79,35 @@ class AuthRepoImpl implements AuthRepo {
     required UserPreferences preferences,
   }) async {
     try {
-      final response = await _remoteSource.register(
-        email.value,
-        password.value,
-        UserPreferencesDto.fromDomain(preferences),
+      final body = RegisterBodyDto(
+        email: email.value,
+        password: password.value,
+        preferences: UserPreferencesDto.fromDomain(preferences),
+      );
+      final response = await _remoteSource.register(body);
+      return right(response.toResult());
+    } on AppException catch (error) {
+      final failure = RegisterFailure.fromAppException(error);
+      return left(failure);
+    } catch (_) {
+      return left(RegisterFailure.unexpected);
+    }
+  }
+
+  @override
+  Future<Either<RegisterFailure, RegisterResult>> registerWithGoogle({
+    required UserPreferences preferences,
+  }) async {
+    try {
+      final result = await _googleSignInProvider.authenticate();
+      if (result == null) return left(RegisterFailure.cancelled);
+
+      final body = ThirdPartyRegisterBody.google(
+        idToken: result.idToken,
+        preferences: preferences,
+      );
+      final response = await _remoteSource.thirdPartyRegister(
+        ThirdPartyRegisterBodyDto.fromDomain(body),
       );
       return right(response.toResult());
     } on AppException catch (error) {

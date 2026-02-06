@@ -14,6 +14,7 @@ enum LoginFailure {
   userBanned(apiCodes: [LoginErrorCodes.userBanned]),
   internalServer(apiCodes: [GenericErrorCodes.internalServer]),
   connectionTimeout(apiCodes: [GenericErrorCodes.connectionTimeout]),
+  cancelled(),
   unexpected();
 
   final List<String>? apiCodes;
@@ -38,6 +39,7 @@ extension LoginFailureX on LoginFailure {
       case LoginFailure.weakPassword: return context.tr(LocaleKeys.error_message_login_weak_password);
       case LoginFailure.userNotFound: return context.tr(LocaleKeys.error_message_login_user_not_found);
       case LoginFailure.userBanned: return context.tr(LocaleKeys.error_message_login_user_banned);
+      case LoginFailure.cancelled: return context.tr(LocaleKeys.error_message_login_cancelled);
       case LoginFailure.internalServer: return context.tr(LocaleKeys.error_message_login_internal_server);
       case LoginFailure.connectionTimeout: return context.tr(LocaleKeys.error_message_login_connection_timeout);
       default: return context.tr(LocaleKeys.error_message_login_unexpected);
