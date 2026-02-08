@@ -1,6 +1,6 @@
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
-import 'package:denwee/core/ui/constants/app/app_constants.dart';
+import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'background_selection_item.freezed.dart';

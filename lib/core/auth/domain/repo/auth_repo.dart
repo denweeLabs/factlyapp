@@ -5,10 +5,10 @@ import 'package:denwee/core/auth/domain/entity/login_result.dart';
 import 'package:denwee/core/auth/domain/entity/password.dart';
 import 'package:denwee/core/auth/domain/entity/register_result.dart';
 import 'package:denwee/core/auth/domain/entity/reset_password_body.dart';
-import 'package:denwee/core/auth/domain/failure/change_password_failure.dart';
-import 'package:denwee/core/auth/domain/failure/login_failure.dart';
-import 'package:denwee/core/auth/domain/failure/register_failure.dart';
-import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
+import 'package:denwee/core/auth/domain/entity/change_password_failure.dart';
+import 'package:denwee/core/auth/domain/entity/login_failure.dart';
+import 'package:denwee/core/auth/domain/entity/register_failure.dart';
+import 'package:denwee/core/network/domain/entity/common_api_failure.dart';
 import 'package:denwee/core/user_preferences/domain/entity/user_preferences.dart';
 import 'package:dartz/dartz.dart';
 
@@ -29,6 +29,7 @@ abstract class AuthRepo {
   Future<Either<CommonApiFailure, LoginAnonymouslyResult>> signInAnonymously({
     required UserPreferences preferences,
   });
+  Future<Either<CommonApiFailure, String>> getUserIdRemote();
   Future<Either<ChangePasswordFailure, Unit>> changePassword(ChangePasswordBody body);
   Future<Either<ChangePasswordFailure, Unit>> resetPassword(Email email);
   Future<Either<ChangePasswordFailure, Unit>> resetPasswordValidate(ResetPasswordBody body);

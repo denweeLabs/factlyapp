@@ -14,7 +14,7 @@ class _FactsEndpoints {
     final url = '$_base/daily/bucket';
     final uri = Uri.parse(url).replace(
       queryParameters: {
-        if (languageCode != null) 'lang': languageCode,
+        if (languageCode != null && languageCode.isNotEmpty) 'lang': languageCode,
         if (interests != null && interests.isNotEmpty) 'interests': interests.join(','),
       },
     );

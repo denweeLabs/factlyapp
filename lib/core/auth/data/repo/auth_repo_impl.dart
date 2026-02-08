@@ -13,14 +13,14 @@ import 'package:denwee/core/auth/domain/entity/register_result.dart';
 import 'package:denwee/core/auth/domain/entity/reset_password_body.dart';
 import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/core/auth/domain/entity/third_party_register_body.dart';
-import 'package:denwee/core/auth/domain/failure/change_password_failure.dart';
-import 'package:denwee/core/auth/domain/failure/login_failure.dart';
-import 'package:denwee/core/auth/domain/failure/register_failure.dart';
+import 'package:denwee/core/auth/domain/entity/change_password_failure.dart';
+import 'package:denwee/core/auth/domain/entity/login_failure.dart';
+import 'package:denwee/core/auth/domain/entity/register_failure.dart';
 import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
 import 'package:denwee/core/auth/domain/source/auth_remote_source.dart';
 import 'package:denwee/core/auth/domain/providers/google/google_sign_in_provider.dart';
-import 'package:denwee/core/network/data/exceptions/app_exception.dart';
-import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
+import 'package:denwee/core/network/data/model/app_exception.dart';
+import 'package:denwee/core/network/domain/entity/common_api_failure.dart';
 import 'package:denwee/core/user_preferences/data/model/user_preferences_dto.dart';
 import 'package:denwee/core/user_preferences/domain/entity/user_preferences.dart';
 import 'package:dartz/dartz.dart';
@@ -130,6 +130,21 @@ class AuthRepoImpl implements AuthRepo {
     } on AppException catch (error) {
       final failure = CommonApiFailure.fromAppException(error);
       return left(failure);
+    } catch (_) {
+      return left(CommonApiFailure.unexpected);
+    }
+  }
+
+  @override
+  Future<Either<CommonApiFailure, String>> getUserIdRemote() async {
+    try {
+      final userId = await _remoteSource.getUserId();
+      if (userId.trim().isEmpty) {
+        return left(CommonApiFailure.unexpected);
+      }
+      return right(userId);
+    } on AppException catch (e) {
+      return left(CommonApiFailure.fromAppException(e));
     } catch (_) {
       return left(CommonApiFailure.unexpected);
     }

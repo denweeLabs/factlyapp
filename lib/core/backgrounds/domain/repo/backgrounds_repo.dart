@@ -3,7 +3,7 @@ import 'package:denwee/core/backgrounds/domain/entity/apply_background_body.dart
 import 'package:denwee/core/backgrounds/domain/entity/apply_background_result.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
 import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
-import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';
+import 'package:denwee/core/backgrounds/domain/entity/background_failure.dart';
 
 abstract class BackgroundsRepo {
   List<AvailableBackground> getBackgroundsLocal();

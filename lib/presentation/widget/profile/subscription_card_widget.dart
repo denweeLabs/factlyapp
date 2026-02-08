@@ -1,0 +1,178 @@
+import 'package:animated_switcher_plus/animated_switcher_plus.dart';
+import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
+import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
+import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
+import 'package:denwee/presentation/shared/router/root_router.dart';
+import 'package:denwee/presentation/shared/theme/app_colors.dart';
+import 'package:denwee/presentation/shared/theme/app_theme.dart';
+import 'package:denwee/presentation/shared/theme/text_styles.dart';
+import 'package:denwee/presentation/widget/shared/animations/animated_icons/sparkles_animated_icon_widget.dart';
+import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
+import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
+import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
+import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:utils/utils.dart';
+
+class SubscriptionCard extends StatelessWidget {
+  const SubscriptionCard({super.key, this.onlyBody = false});
+
+  final bool onlyBody;
+
+  @override
+  Widget build(BuildContext context) {
+    if (onlyBody) return _buildBody();
+
+    final decoration = ShapeDecoration(
+      shape: RoundedSuperellipseBorder(
+        borderRadius: BorderRadius.all(AppConstants.style.radius.cardSmall),
+        side: context.isLightTheme
+            ? const BorderSide(color: AppColors.black08)
+            : const BorderSide(color: AppColors.white06),
+      ),
+      color: context.primaryContainer,
+      shadows: [
+        BoxShadow(
+          color: context.theme.colorScheme.primary.withValues(alpha: 0.5),
+          offset: const Offset(0.0, 25.0),
+          spreadRadius: -35,
+          blurRadius: 35,
+        ),
+      ],
+    );
+
+    return GestureDetector(
+      onTap: () => _onTap(context),
+      child: DecoratedBox(
+        decoration: decoration,
+        child: Stack(
+          children: [
+            Positioned(
+              right: -28.w,
+              bottom: -32.h,
+              child: CommonAppIcon(
+                path: AppConstants.assets.icons.verifyLinear,
+                color: context.isLightTheme
+                    ? AppColors.black04
+                    : AppColors.white04,
+                size: 92.w,
+              ),
+            ),
+            _buildBody(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(24.w, 26.h, 20.w, 26.h),
+      child: BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
+        builder: (context, userSubscriptionState) {
+          final activeSubscription = userSubscriptionState.activeSubscription
+              .toNullable();
+
+          return AnimatedSwitcherPlus.flipX(
+            duration: CustomAnimationDurations.low,
+            switchOutCurve: const Interval(0.0, 0.5),
+            switchInCurve: const Interval(0.5, 1.0),
+            child: _buildContent(
+              context: context,
+              activeSubscription: activeSubscription,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildContent({
+    required BuildContext context,
+    required UserSubscription? activeSubscription,
+  }) {
+    final isSubscribed = activeSubscription != null;
+
+    return Row(
+      key: ValueKey(isSubscribed),
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTitle(context: context, isSubscribed: isSubscribed),
+              2.verticalSpace,
+              _buildSubtitle(
+                context: context,
+                expiryText: activeSubscription
+                    ?.expiryText(context)
+                    .toUpperCase(),
+              ),
+            ],
+          ),
+        ),
+        8.horizontalSpace,
+        AppSolidButton(
+          width: null,
+          onTap: () => _onTap(context),
+          text: isSubscribed
+              ? context.tr(LocaleKeys.subscription_active_plan).toUpperCase()
+              : context.tr(LocaleKeys.subscription_upgrade_cta).toUpperCase(),
+          isShimmering: true,
+          buttonHeight: 34.h,
+          hideShadow: true,
+          isBubbles: isSubscribed,
+          padding: EdgeInsets.symmetric(horizontal: 14.w),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTitle({
+    required BuildContext context,
+    required bool isSubscribed,
+  }) {
+    if (isSubscribed) {
+      return Row(
+        children: [
+          Text(
+            context.tr(LocaleKeys.subscription_premium_plan),
+            style: h4.copyWith(
+              color: context.textColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          4.horizontalSpace,
+          const SparklesAnimatedIcon(animate: true),
+        ],
+      );
+    }
+
+    return Text(
+      context.tr(LocaleKeys.subscription_basic_plan),
+      style: h4.copyWith(color: context.textColor, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget _buildSubtitle({
+    required BuildContext context,
+    required String? expiryText,
+  }) {
+    return Text(
+      expiryText ??
+          context.tr(LocaleKeys.subscription_active_plan).toUpperCase(),
+      style: textButton.copyWith(
+        fontSize: 11.sp,
+        letterSpacing: 0.65,
+        color: context.textColor.withValues(alpha: 0.3),
+      ),
+    );
+  }
+
+  void _onTap(BuildContext context) {
+    context.restorablePushNamedArgs(Routes.premiumPaywall, rootNavigator: true);
+  }
+}

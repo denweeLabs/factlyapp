@@ -1,6 +1,6 @@
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
 import 'package:denwee/core/facts/domain/entity/daily_facts_bucket.dart';
-import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
+import 'package:denwee/core/facts/domain/entity/facts_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 

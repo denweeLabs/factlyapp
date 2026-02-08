@@ -1,4 +1,4 @@
-import 'package:denwee/core/facts/data/source/facts_remote_source_impl.dart';
+import 'package:denwee/core/facts/data/source/remote/facts_api.dart';
 
 part 'member_endpoints.dart';
 part 'facts_endpoints.dart';
