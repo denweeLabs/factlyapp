@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/constants/formatters/input_formatters.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
@@ -32,7 +35,7 @@ class EmailAndPasswordForm extends StatelessWidget {
     required this.passwordInError,
     required this.passwordErrorMessage,
     this.onPasswordEditingComplete,
-    required this.onGoogleAuth,
+    required this.onAuthProvider,
     this.onForgotPass,
     this.isForgotPassInProgress = false,
     this.showPasswordVisibilityButton = false,
@@ -52,7 +55,7 @@ class EmailAndPasswordForm extends StatelessWidget {
   final bool showPasswordVisibilityButton;
   final VoidCallback? onForgotPass;
   final bool isForgotPassInProgress;
-  final VoidCallback onGoogleAuth;
+  final void Function(ThirdPartyAuthProvider) onAuthProvider;
 
   static const fieldBorderRadius = 18;
   static const fieldPrefixIconSize = 22;
@@ -94,7 +97,7 @@ class EmailAndPasswordForm extends StatelessWidget {
             padding: fieldPadding.copyWith(right: 0.0),
             borderRadius: EmailAndPasswordForm.fieldBorderRadius,
             prefixIconSize: EmailAndPasswordForm.fieldPrefixIconSize,
-            innerTrailingWidget: _buildGoogleAuthTrailing(),
+            innerTrailingWidget: _buildThirdPartyMethods(),
           ).autoFadeInUp(sequencePos: 2),
           12.verticalSpace,
           AppInput(
@@ -198,18 +201,26 @@ class EmailAndPasswordForm extends StatelessWidget {
     );
   }
 
-  Widget _buildGoogleAuthTrailing() {
+  Widget _buildThirdPartyMethods() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         10.horizontalSpace,
         const SizedBox(
           width: 1.0,
-          height: 28.0,
+          height: 24.0,
           child: ColoredBox(color: Colors.white30),
         ),
+        if (Platform.isIOS)
+          AppIconButton(
+            onTap: () => onAuthProvider(ThirdPartyAuthProvider.apple),
+            color: Colors.white,
+            iconPath: AppConstants.assets.icons.apple,
+            padding: EdgeInsets.only(left: 14.w),
+            size: 30,
+          ),
         AppIconButton(
-          onTap: onGoogleAuth,
+          onTap: () => onAuthProvider(ThirdPartyAuthProvider.google),
           ignoreIconColor: true,
           iconPath: AppConstants.assets.icons.google,
           padding: EdgeInsets.only(left: 14.w, right: 18.w),

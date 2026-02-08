@@ -80,6 +80,24 @@ class RegisterCubit extends Cubit<RegisterState> {
     ));
   }
 
+  Future<void> registerWithApple() async {
+    if (state.authInProgress) return;
+
+    emit(state.copyWith(
+      failureOrSuccess: const None(),
+      authInProgress: true,
+    ));
+    
+    final failureOrSuccess = await _registerUseCase.withApple(
+      preferences: _preferencesCubit.state.preferences,
+    );
+
+    emit(state.copyWith(
+      failureOrSuccess: some(failureOrSuccess),
+      authInProgress: false,
+    ));
+  }
+
   @override
   void emit(RegisterState state) {
     if (isClosed) return;

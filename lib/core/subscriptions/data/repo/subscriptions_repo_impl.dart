@@ -13,7 +13,7 @@ import 'package:denwee/core/subscriptions/domain/entity/subscriptions_failure.da
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:denwee/presentation/shared/constants/formatters/input_formatters.dart';
 import 'package:denwee/di/env.dart';
-import 'package:denwee/di/modules/server_module.dart';
+import 'package:denwee/di/server_module.dart';
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';

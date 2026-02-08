@@ -7,7 +7,6 @@ import 'package:denwee/core/network/data/model/connection_exception.dart';
 import 'package:denwee/core/network/data/model/server_response.dart';
 import 'package:denwee/core/network/domain/repo/request_executor.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
-import 'package:denwee/di/api/endpoints/endpoints.dart';
 import 'package:denwee/di/di.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +27,8 @@ class RequestExecutorImpl implements RequestExecutor {
     required this.dio,
     required this.accessTokenRepo,
   });
+
+  static const _tokenUpdateEndpoint = 'member/token';
 
   /// Prevents parallel `_addAuthHeaders()` calls
   Future<void>? _addAuthHeadersFuture;
@@ -268,14 +269,15 @@ class RequestExecutorImpl implements RequestExecutor {
   Future<String> _performTokenRefresh() async {
     try {
       final dioApi = getIt<Dio>(instanceName: 'API');
-      final url = Endpoints.member.tokenUpdate;
 
       final refreshToken = await accessTokenRepo.getRefreshToken();
       if (refreshToken == null) throw AuthorizationException();
 
       final body = {'refresh_token': refreshToken};
-
-      final response = await dioApi.post<Map<String, dynamic>>(url, data: body);
+      final response = await dioApi.post<Map<String, dynamic>>(
+        _tokenUpdateEndpoint,
+        data: body,
+      );
       final data = response.data!;
       final headers = response.headers.map;
 

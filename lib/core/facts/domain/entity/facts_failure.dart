@@ -1,7 +1,7 @@
 import 'package:denwee/core/ads/domain/entity/app_ad_failure.dart';
 import 'package:denwee/core/network/data/model/app_exception.dart';
-import 'package:denwee/di/api/error_codes/facts_error_codes.dart';
-import 'package:denwee/di/api/error_codes/generic_error_codes.dart';
+import 'package:denwee/core/network/domain/entity/facts_error_codes.dart';
+import 'package:denwee/core/network/domain/entity/generic_error_codes.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

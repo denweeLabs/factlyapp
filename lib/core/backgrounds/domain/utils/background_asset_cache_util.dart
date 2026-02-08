@@ -6,7 +6,7 @@ import 'package:denwee/core/backgrounds/domain/source/backgrounds_remote_source.
 import 'package:denwee/core/backgrounds/domain/entity/active_background.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
 import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
-import 'package:denwee/di/modules/server_module.dart';
+import 'package:denwee/di/server_module.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';

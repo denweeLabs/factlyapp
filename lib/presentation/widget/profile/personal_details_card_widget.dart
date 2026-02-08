@@ -150,6 +150,7 @@ class PersonalDetailsCard extends StatelessWidget {
     switch (authProvider) {
       case AppSupportedAuthProvider.email: return AppConstants.assets.icons.smsLinear;
       case AppSupportedAuthProvider.google: return AppConstants.assets.icons.google;
+      case AppSupportedAuthProvider.apple: return AppConstants.assets.icons.apple;
     }
   }
 
@@ -157,6 +158,7 @@ class PersonalDetailsCard extends StatelessWidget {
     switch (authProvider) {
       case AppSupportedAuthProvider.email: return true;
       case AppSupportedAuthProvider.google: return false;
+      case AppSupportedAuthProvider.apple: return false;
     }
   }
 }

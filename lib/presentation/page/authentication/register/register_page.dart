@@ -1,5 +1,6 @@
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/auth/domain/entity/password.dart';
+import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/presentation/bloc/connectivity/connectivity_cubit.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/dialogs_util.dart';
@@ -90,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
               onPasswordChanged: context.read<RegisterCubit>().onPasswordChanged,
               passwordInError: !signUpState.password.isPure && signUpState.password.isNotValid,
               passwordErrorMessage: signUpState.password.error?.errorName(context),
-              onGoogleAuth: _registerWithGoogle,
+              onAuthProvider: _registerWithThirdParty,
               showPasswordVisibilityButton: true,
             ),
           ),
@@ -150,9 +151,14 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  void _registerWithGoogle() {
+  void _registerWithThirdParty(ThirdPartyAuthProvider provider) {
     _unfocus();
-    _ensureConnected(context, context.read<RegisterCubit>().registerWithGoogle);
+    _ensureConnected(context, () {
+      switch (provider) {
+        case ThirdPartyAuthProvider.google: return context.read<RegisterCubit>().registerWithGoogle();
+        case ThirdPartyAuthProvider.apple: return context.read<RegisterCubit>().registerWithApple();
+      }
+    });
   }
 
   void _onHaveAnAccount() {

@@ -2,6 +2,7 @@
 
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/auth/domain/entity/password.dart';
+import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/presentation/bloc/connectivity/connectivity_cubit.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/dialogs_util.dart';
@@ -95,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                   passwordInError: !signInState.password.isPure && signInState.password.isNotValid,
                   passwordErrorMessage: signInState.password.error?.errorName(context),
                   onPasswordEditingComplete: _loginWithEmailAndPassword,
-                  onGoogleAuth: _loginWithGoogle,
+                  onAuthProvider: _loginWithThirdParty,
                   onForgotPass: _onForgotPass,
                   isForgotPassInProgress: signInState.resetPassInProgress,
                 ),
@@ -158,12 +159,14 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _loginWithGoogle() {
+  void _loginWithThirdParty(ThirdPartyAuthProvider provider) {
     _unfocus();
-    _ensureConnected(
-      context,
-      context.read<LoginCubit>().loginWithGoogle,
-    );
+    _ensureConnected(context, () {
+      switch (provider) {
+        case ThirdPartyAuthProvider.google: return context.read<LoginCubit>().loginWithGoogle();
+        case ThirdPartyAuthProvider.apple: return context.read<LoginCubit>().loginWithApple();
+      }
+    });
   }
 
   void _onForgotPass() async {
