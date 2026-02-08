@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:denwee/core/facts/domain/entity/daily_facts_bucket.dart';
-import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
+import 'package:denwee/core/facts/domain/entity/facts_failure.dart';
 import 'package:denwee/core/facts/domain/repo/daily_facts_repo.dart';
 import 'package:dartz/dartz.dart';
-import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
+import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()

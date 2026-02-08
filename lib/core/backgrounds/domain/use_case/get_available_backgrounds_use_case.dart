@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
 import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
-import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';
+import 'package:denwee/core/backgrounds/domain/entity/background_failure.dart';
 import 'package:denwee/core/backgrounds/domain/repo/backgrounds_repo.dart';
-import 'package:denwee/core/ui/bloc/backgrounds/active_background_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
+import 'package:denwee/presentation/bloc/backgrounds/active_background_cubit.dart';
+import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/utils.dart';
 

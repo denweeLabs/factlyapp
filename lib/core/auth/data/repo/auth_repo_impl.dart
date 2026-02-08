@@ -13,14 +13,15 @@ import 'package:denwee/core/auth/domain/entity/register_result.dart';
 import 'package:denwee/core/auth/domain/entity/reset_password_body.dart';
 import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/core/auth/domain/entity/third_party_register_body.dart';
-import 'package:denwee/core/auth/domain/failure/change_password_failure.dart';
-import 'package:denwee/core/auth/domain/failure/login_failure.dart';
-import 'package:denwee/core/auth/domain/failure/register_failure.dart';
+import 'package:denwee/core/auth/domain/entity/change_password_failure.dart';
+import 'package:denwee/core/auth/domain/entity/login_failure.dart';
+import 'package:denwee/core/auth/domain/entity/register_failure.dart';
+import 'package:denwee/core/auth/domain/providers/apple/apple_sign_in_provider.dart';
 import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
 import 'package:denwee/core/auth/domain/source/auth_remote_source.dart';
 import 'package:denwee/core/auth/domain/providers/google/google_sign_in_provider.dart';
-import 'package:denwee/core/network/data/exceptions/app_exception.dart';
-import 'package:denwee/core/network/domain/failure/common_api_failure.dart';
+import 'package:denwee/core/network/data/model/app_exception.dart';
+import 'package:denwee/core/network/domain/entity/common_api_failure.dart';
 import 'package:denwee/core/user_preferences/data/model/user_preferences_dto.dart';
 import 'package:denwee/core/user_preferences/domain/entity/user_preferences.dart';
 import 'package:dartz/dartz.dart';
@@ -30,8 +31,13 @@ import 'package:injectable/injectable.dart';
 class AuthRepoImpl implements AuthRepo {
   final AuthRemoteSource _remoteSource;
   final GoogleSignInProvider _googleSignInProvider;
+  final AppleSignInProvider _appleSignInProvider;
 
-  const AuthRepoImpl(this._remoteSource, this._googleSignInProvider);
+  const AuthRepoImpl(
+    this._remoteSource,
+    this._googleSignInProvider,
+    this._appleSignInProvider,
+  );
 
   @override
   Future<Either<LoginFailure, LoginResult>> login({
@@ -60,6 +66,28 @@ class AuthRepoImpl implements AuthRepo {
       if (result == null) return left(LoginFailure.cancelled);
       
       final body = ThirdPartyLoginBody.google(idToken: result.idToken);
+      final response = await _remoteSource.thirdPartyLogin(
+        ThirdPartyLoginBodyDto.fromDomain(body),
+      );
+      return right(response.toResult());
+    } on AppException catch (error) {
+      final failure = LoginFailure.fromAppException(error);
+      return left(failure);
+    } catch (_) {
+      return left(LoginFailure.unexpected);
+    }
+  }
+
+  @override
+  Future<Either<LoginFailure, LoginResult>> loginWithApple() async {
+    try {
+      final result = await _appleSignInProvider.authenticate();
+      if (result == null) return left(LoginFailure.cancelled);
+      
+      final body = ThirdPartyLoginBody.apple(
+        idToken: result.idToken,
+        nonce: result.nonce,
+      );
       final response = await _remoteSource.thirdPartyLogin(
         ThirdPartyLoginBodyDto.fromDomain(body),
       );
@@ -119,6 +147,31 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future<Either<RegisterFailure, RegisterResult>> registerWithApple({
+    required UserPreferences preferences,
+  }) async {
+    try {
+      final result = await _appleSignInProvider.authenticate();
+      if (result == null) return left(RegisterFailure.cancelled);
+
+      final body = ThirdPartyRegisterBody.apple(
+        idToken: result.idToken,
+        nonce: result.nonce,
+        preferences: preferences,
+      );
+      final response = await _remoteSource.thirdPartyRegister(
+        ThirdPartyRegisterBodyDto.fromDomain(body),
+      );
+      return right(response.toResult());
+    } on AppException catch (error) {
+      final failure = RegisterFailure.fromAppException(error);
+      return left(failure);
+    } catch (_) {
+      return left(RegisterFailure.unexpected);
+    }
+  }
+
+  @override
   Future<Either<CommonApiFailure, LoginAnonymouslyResult>> signInAnonymously({
     required UserPreferences preferences,
   }) async {
@@ -130,6 +183,21 @@ class AuthRepoImpl implements AuthRepo {
     } on AppException catch (error) {
       final failure = CommonApiFailure.fromAppException(error);
       return left(failure);
+    } catch (_) {
+      return left(CommonApiFailure.unexpected);
+    }
+  }
+
+  @override
+  Future<Either<CommonApiFailure, String>> getUserIdRemote() async {
+    try {
+      final userId = await _remoteSource.getUserId();
+      if (userId.trim().isEmpty) {
+        return left(CommonApiFailure.unexpected);
+      }
+      return right(userId);
+    } on AppException catch (e) {
+      return left(CommonApiFailure.fromAppException(e));
     } catch (_) {
       return left(CommonApiFailure.unexpected);
     }

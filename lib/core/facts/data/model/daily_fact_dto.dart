@@ -1,8 +1,8 @@
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/network/domain/entity/network_link.dart';
-import 'package:denwee/core/ui/constants/formatters/common_formatters.dart';
-import 'package:denwee/core/ui/constants/app/user_interests.dart';
+import 'package:denwee/presentation/shared/constants/formatters/date_formatters.dart';
+import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

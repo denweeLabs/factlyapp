@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:denwee/core/profile/domain/repo/profile_repo.dart';
-import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
-import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
-import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/facts_archive_cubit.dart';
+import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
+import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
+import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
+import 'package:denwee/presentation/bloc/user_statistics/user_statistics_cubit.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/utils.dart';
 
@@ -44,25 +44,25 @@ class GetMemberDataUseCase {
   /// 
   Future<void> execute() async {
     final failureOrSuccess = await _profileRepo.getMemberDataRemote();
-    final entries = failureOrSuccess.getEntries();
+    final (failure, memberData) = failureOrSuccess.getEntries();
 
     // if failure
-    if (entries.$1 != null) {
-      _profileCubit.raiseFailure(entries.$1!);
+    if (failure != null) {
+      _profileCubit.raiseFailure(failure);
     }
 
     // if success
-    else {
+    else if (memberData != null) {
       
       /// Update and store user profile
       unawaited(
-        _profileCubit.emitPreserveProfile(entries.$2!.profile),
+        _profileCubit.emitPreserveProfile(memberData.profile),
       );
 
       /// Update and store user preferences
       unawaited(
         _preferencesCubit.emitPreservePreferences(
-          entries.$2!.preferences,
+          memberData.preferences,
           remotePreserve: false,
         ),
       );
@@ -70,20 +70,20 @@ class GetMemberDataUseCase {
       /// Update and store user statistics
       unawaited(
         _statisticsCubit.emitPreserveStatistics(
-          entries.$2!.statistics,
+          memberData.statistics,
         ),
       );
 
       /// Update and store archived fact identifiers
       unawaited(
         _factsArchiveCubit.emitPreserveArchivedIds(
-          entries.$2!.archivedFactIds,
+          memberData.archivedFactIds,
         ),
       );
 
       /// Update and store active subscription (if present)
       final activeSubscription =
-          entries.$2!.activeSubscription.toNullable();
+          memberData.activeSubscription.toNullable();
 
       if (activeSubscription != null) {
         unawaited(

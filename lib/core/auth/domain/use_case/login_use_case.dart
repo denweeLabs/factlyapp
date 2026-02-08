@@ -4,20 +4,20 @@ import 'package:dartz/dartz.dart';
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/auth/domain/entity/login_result.dart';
 import 'package:denwee/core/auth/domain/entity/password.dart';
-import 'package:denwee/core/auth/domain/failure/login_failure.dart';
+import 'package:denwee/core/auth/domain/entity/login_failure.dart';
 import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
 import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/core/notifications/domain/repo/push_notifications_repo.dart';
-import 'package:denwee/core/statistics/domain/repo/analytics_repo.dart';
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
-import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
-import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
-import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
-import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
-import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
-import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
+import 'package:denwee/presentation/bloc/auth/auth_cubit.dart';
+import 'package:denwee/presentation/bloc/backgrounds/available_backgrounds_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/daily_facts_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/facts_archive_cubit.dart';
+import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
+import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
+import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
+import 'package:denwee/presentation/bloc/user_statistics/user_statistics_cubit.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/utils.dart';
 
@@ -90,6 +90,26 @@ class LoginUseCase {
   ///
   Future<Either<LoginFailure, LoginResult>> withGoogle() async {
     final failureOrSuccess = await _authRepo.loginWithGoogle();
+    final successResult = failureOrSuccess.getEntries().$2;
+    if (successResult != null) {
+      await _submitAppState(successResult);
+      await _establishInternalData(successResult);
+      await _loadAppResources();
+    }
+    return failureOrSuccess;
+  }
+
+
+  /// Executes the full login flow with Apple.
+  ///
+  /// What it does:
+  /// - Authenticate the user via [AuthRepo]
+  /// - On success, hydrate in-memory app state with user-related data
+  /// - Establish internal services and background processes
+  /// - Load essential app resources required after login
+  ///
+  Future<Either<LoginFailure, LoginResult>> withApple() async {
+    final failureOrSuccess = await _authRepo.loginWithApple();
     final successResult = failureOrSuccess.getEntries().$2;
     if (successResult != null) {
       await _submitAppState(successResult);

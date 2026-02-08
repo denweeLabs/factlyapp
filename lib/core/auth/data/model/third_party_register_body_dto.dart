@@ -9,12 +9,14 @@ class ThirdPartyRegisterBodyDto {
   final String provider;
   @JsonKey(name: 'id_token') final String idToken;
   @JsonKey(name: 'access_token') final String? accessToken;
+  final String? nonce;
   final UserPreferencesDto preferences;
 
   const ThirdPartyRegisterBodyDto({
     required this.provider,
     required this.idToken,
     required this.accessToken,
+    required this.nonce,
     required this.preferences,
   });
 
@@ -23,6 +25,7 @@ class ThirdPartyRegisterBodyDto {
       provider: body.provider.apiType,
       idToken: body.idToken,
       accessToken: body.accessToken.toNullable(),
+      nonce: body.nonce.toNullable(),
       preferences: UserPreferencesDto.fromDomain(body.preferences),
     );
   }
