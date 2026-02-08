@@ -1,10 +1,10 @@
 import 'package:denwee/core/facts/domain/entity/fact_explanation.dart';
-import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
+import 'package:denwee/core/facts/domain/entity/facts_failure.dart';
 import 'package:denwee/core/facts/domain/repo/fact_explanations_repo.dart';
 import 'package:denwee/core/facts/domain/use_case/fact_explanation_util_use_case.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:dartz/dartz.dart';
-import 'package:denwee/core/statistics/domain/repo/analytics_repo.dart';
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/utils.dart';
 

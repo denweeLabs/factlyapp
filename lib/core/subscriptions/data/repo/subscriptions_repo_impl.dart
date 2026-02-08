@@ -1,17 +1,17 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:denwee/core/auth/domain/repo/user_identity_repo.dart';
-import 'package:denwee/core/network/data/exceptions/app_exception.dart';
+import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
+import 'package:denwee/core/network/data/model/app_exception.dart';
 import 'package:denwee/core/subscriptions/data/model/user_subscription_dto.dart';
 import 'package:denwee/core/subscriptions/domain/source/subscriptions_local_source.dart';
 import 'package:denwee/core/subscriptions/domain/source/subscriptions_remote_source.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_product_ids.dart';
 import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
-import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.dart';
+import 'package:denwee/core/subscriptions/domain/entity/subscriptions_failure.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
-import 'package:denwee/core/ui/constants/formatters/input_formatters.dart';
+import 'package:denwee/presentation/shared/constants/formatters/input_formatters.dart';
 import 'package:denwee/di/env.dart';
 import 'package:denwee/di/modules/server_module.dart';
 import 'package:flutter/services.dart';
@@ -29,13 +29,13 @@ enum SubscriptionsPlatform { ios, android, test }
 class SubscriptionsRepoImpl implements SubscriptionsRepo {
   final SubscriptionsLocalSource _localSource;
   final SubscriptionsRemoteSource _remoteSource;
-  final UserIdentityRepo _userIdentityRepo;
+  final AuthRepo _authRepo;
   final String _environment;
 
   const SubscriptionsRepoImpl(
     this._localSource,
     this._remoteSource,
-    this._userIdentityRepo,
+    this._authRepo,
     @ENV this._environment,
   );
 
@@ -162,7 +162,7 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
 
   @override
   Future<Either<SubscriptionsFailure, Unit>> login({String? userId}) async {
-    final effectiveUserId = userId ?? (await _userIdentityRepo.getUserIdRemote()).toOption().toNullable();
+    final effectiveUserId = userId ?? (await _authRepo.getUserIdRemote()).toOption().toNullable();
     if (effectiveUserId == null) {
       return left(SubscriptionsFailure.configuration);
     }

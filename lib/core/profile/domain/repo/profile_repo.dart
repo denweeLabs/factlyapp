@@ -1,7 +1,7 @@
 import 'package:denwee/core/profile/domain/entity/member_data.dart';
 import 'package:denwee/core/profile/domain/entity/profile.dart';
 import 'package:denwee/core/profile/domain/entity/update_profile_body.dart';
-import 'package:denwee/core/profile/domain/failure/profile_failure.dart';
+import 'package:denwee/core/profile/domain/entity/profile_failure.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ProfileRepo {

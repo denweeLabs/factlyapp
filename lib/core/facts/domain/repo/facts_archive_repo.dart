@@ -1,6 +1,6 @@
-import 'package:denwee/core/facts/data/source/facts_remote_source_impl.dart';
+import 'package:denwee/core/facts/data/source/remote/facts_api.dart';
 import 'package:denwee/core/facts/domain/entity/archive_list_result.dart';
-import 'package:denwee/core/facts/domain/failure/facts_failure.dart';
+import 'package:denwee/core/facts/domain/entity/facts_failure.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:dartz/dartz.dart';
 

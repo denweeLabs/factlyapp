@@ -7,16 +7,16 @@ import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/core/notifications/domain/repo/push_notifications_repo.dart';
 import 'package:denwee/core/profile/domain/repo/profile_repo.dart';
 import 'package:denwee/core/statistics/domain/repo/statistics_repo.dart';
-import 'package:denwee/core/ui/bloc/backgrounds/available_backgrounds_cubit.dart';
+import 'package:denwee/presentation/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
-import 'package:denwee/core/ui/bloc/facts_cubit/daily_facts_cubit.dart';
-import 'package:denwee/core/ui/bloc/facts_cubit/facts_archive_cubit.dart';
-import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
-import 'package:denwee/core/ui/bloc/subscriptions_cubit/user_subscription_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_statistics_cubit/user_statistics_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/daily_facts_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/facts_archive_cubit.dart';
+import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
+import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
+import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
+import 'package:denwee/presentation/bloc/user_statistics/user_statistics_cubit.dart';
 import 'package:denwee/core/user_preferences/domain/repo/user_preferences_repo.dart';
-import 'package:denwee/pages/home/ui/home_page.dart';
+import 'package:denwee/presentation/page/home/home_page.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()

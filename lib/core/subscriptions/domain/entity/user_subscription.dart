@@ -1,8 +1,8 @@
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
-import 'package:denwee/core/ui/constants/formatters/common_formatters.dart';
+import 'package:denwee/presentation/shared/constants/formatters/date_formatters.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/di/env.dart';
-import 'package:denwee/localization/locale_keys.g.dart';
+import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

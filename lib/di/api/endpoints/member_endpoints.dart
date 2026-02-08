@@ -30,7 +30,7 @@ class _MemberEndpoints {
     final url = '$_base/backgrounds';
     final uri = Uri.parse(url).replace(
       queryParameters: {
-        if (languageCode != null) 'lang': languageCode,
+        if (languageCode != null && languageCode.isNotEmpty) 'lang': languageCode,
       },
     );
     return uri.toString();
