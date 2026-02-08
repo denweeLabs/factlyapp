@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:denwee/core/auth/domain/providers/google/google_sign_in_constants.dart';
 import 'package:denwee/di/env.dart';
-import 'package:denwee/di/modules/server_module.dart';
+import 'package:denwee/di/server_module.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

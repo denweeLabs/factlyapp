@@ -90,6 +90,29 @@ class RegisterUseCase {
   }
 
 
+  /// Executes the full user registration flow with Apple.
+  ///
+  /// Responsibilities:
+  /// - Register a new user account via [AuthRepo]
+  /// - On success, transition the app into an authenticated state
+  ///
+  /// Returns either a [RegisterFailure] or a successful [RegisterResult].
+  /// 
+  Future<Either<RegisterFailure, RegisterResult>> withApple({
+    required UserPreferences preferences,
+  }) async {
+    final failureOrSuccess = await _authRepo.registerWithApple(
+      preferences: preferences,
+    );
+    final successResult = failureOrSuccess.getEntries().$2;
+    if (successResult != null) {
+      await _submitAppState(successResult);
+      await _establishInternalData(successResult);
+    }
+    return failureOrSuccess;
+  }
+
+
   /// Submits newly created user data into application state.
   ///
   /// This method hydrates core user-related cubits immediately

@@ -81,6 +81,22 @@ class LoginCubit extends Cubit<LoginState> {
     ));
   }
 
+  Future<void> loginWithApple() async {
+    if (state.authInProgress) return;
+
+    emit(state.copyWith(
+      failureOrSuccess: const None(),
+      authInProgress: true,
+    ));
+
+    final failureOrSuccess = await _loginUseCase.withApple();
+
+    emit(state.copyWith(
+      failureOrSuccess: some(failureOrSuccess),
+      authInProgress: false,
+    ));
+  }
+
   Future<void> sendResetPassEmail([Email? forcedEmail]) async {
     final thisEmail = forcedEmail ?? state.email;
 

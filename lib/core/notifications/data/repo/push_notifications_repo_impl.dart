@@ -6,7 +6,7 @@ import 'package:denwee/core/network/domain/entity/common_api_failure.dart';
 import 'package:denwee/core/notifications/data/model/push_notifications_subscribe_body_dto.dart';
 import 'package:denwee/core/notifications/domain/repo/push_notifications_repo.dart';
 import 'package:denwee/core/notifications/domain/source/push_notifications_remote_source.dart';
-import 'package:denwee/di/modules/server_module.dart';
+import 'package:denwee/di/server_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:injectable/injectable.dart';

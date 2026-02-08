@@ -100,6 +100,26 @@ class LoginUseCase {
   }
 
 
+  /// Executes the full login flow with Apple.
+  ///
+  /// What it does:
+  /// - Authenticate the user via [AuthRepo]
+  /// - On success, hydrate in-memory app state with user-related data
+  /// - Establish internal services and background processes
+  /// - Load essential app resources required after login
+  ///
+  Future<Either<LoginFailure, LoginResult>> withApple() async {
+    final failureOrSuccess = await _authRepo.loginWithApple();
+    final successResult = failureOrSuccess.getEntries().$2;
+    if (successResult != null) {
+      await _submitAppState(successResult);
+      await _establishInternalData(successResult);
+      await _loadAppResources();
+    }
+    return failureOrSuccess;
+  }
+
+
   /// Submits authenticated user data into application state.
   ///
   /// This method updates all user-scoped cubits with data received

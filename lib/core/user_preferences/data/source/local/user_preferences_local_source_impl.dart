@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:denwee/core/misc/data/storage/local_storage.dart';
 import 'package:denwee/core/user_preferences/data/model/user_preferences_dto.dart';
 import 'package:denwee/core/user_preferences/domain/source/user_preferences_local_source.dart';
-import 'package:denwee/di/modules/server_module.dart';
+import 'package:denwee/di/server_module.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: UserPreferencesLocalSource)
