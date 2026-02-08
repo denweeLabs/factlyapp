@@ -7,6 +7,11 @@ import 'package:denwee/core/ui/theme/text_styles.dart';
 import 'package:denwee/core/ui/utils/dialogs_util.dart';
 import 'package:denwee/core/ui/utils/haptic_util.dart';
 import 'package:denwee/core/ui/utils/launcher_util.dart';
+import 'package:denwee/core/ui/widget/animations/animate_do/elastic_in.dart';
+import 'package:denwee/core/ui/widget/animations/animate_do/fade_in.dart';
+import 'package:denwee/core/ui/widget/animations/animate_do/fade_in_left.dart';
+import 'package:denwee/core/ui/widget/animations/animate_do/fade_in_right.dart';
+import 'package:denwee/core/ui/widget/animations/animate_do/scale_in_up.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/animations/shimmer_animation_widget.dart';
 import 'package:denwee/core/ui/widget/buttons/app_solid_button_widget.dart';
@@ -170,7 +175,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
         type: AppBackButtonType.cross,
         color: context.lightIconColorSecondary,
         padding: EdgeInsets.fromLTRB(24.w, 24.h, 32.w, 0.0),
-      ),
+      ).autoFadeIn(sequencePos: 5),
     );
   }
 
@@ -199,7 +204,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
             ),
           ),
         ],
-      ),
+      ).autoFadeIn(sequencePos: 3),
     );
   }
 
@@ -214,7 +219,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
           fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
         ),
         textAlign: TextAlign.center,
-      ),
+      ).autoScaleInUp(sequencePos: 1, slideFrom: 40),
     );
   }
 
@@ -251,7 +256,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
                   priceBuilder: (isPurchased) => isPurchased
                       ? purchasedPackage?.expiryText(context)
                       : null,
-                ),
+                ).autoFadeInLeft(sequencePos: 5, slideFrom: 50),
                 12.verticalSpace,
                 PaywallPackageTile(
                   package: packages.yearly,
@@ -264,7 +269,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
                   discountBadge: PackageDiscountBadge(
                     percent: packages.yearlyDiscountPercent,
                   ),
-                ),
+                ).autoFadeInRight(sequencePos: 5, slideFrom: 50),
               ],
             ),
           );
@@ -281,7 +286,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
           onRestore: _onRestore,
           onPrivacy: _onPrivacy,
           onTerms: _onTerms,
-        ),
+        ).autoFadeIn(sequencePos: 7),
       ),
     );
   }
@@ -323,7 +328,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
                   ignoreTapScale: isAlreadyPurchasedPackage,
                   shadowColor: Colors.black45,
                   isBusy: isLoading,
-                );
+                ).autoElasticIn(sequencePos: 6);
               },
             );
           },

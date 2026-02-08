@@ -7,6 +7,7 @@ import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubi
 import 'package:denwee/core/ui/constants/app/app_constants.dart';
 import 'package:denwee/core/ui/theme/app_theme.dart';
 import 'package:denwee/core/ui/theme/text_styles.dart';
+import 'package:denwee/core/ui/widget/animations/animate_do/scale_in_up.dart';
 import 'package:denwee/core/ui/widget/animations/constants/common_animation_values.dart';
 import 'package:denwee/core/ui/widget/buttons/icon_widget.dart';
 import 'package:denwee/core/ui/widget/misc/backdrop_surface_container_widget.dart';
@@ -77,10 +78,18 @@ class _PremiumBenefitsState extends State<PremiumBenefits> {
         _Benefit(
           iconPath: AppConstants.assets.icons.checkmarkLinear,
           text: context.tr(LocaleKeys.subscription_paywall_benefits_line_1),
+        ).autoScaleInUp(
+          sequencePos: 2,
+          slideFrom: 30,
+          duration: CustomAnimationDurations.medium,
         ),
         _Benefit(
           iconPath: AppConstants.assets.icons.galleryLinear,
           text: context.tr(LocaleKeys.subscription_paywall_benefits_line_2),
+        ).autoScaleInUp(
+          sequencePos: 3,
+          slideFrom: 30,
+          duration: CustomAnimationDurations.medium,
         ),
         BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
           builder: (context, state) => _Benefit(
@@ -89,6 +98,10 @@ class _PremiumBenefitsState extends State<PremiumBenefits> {
             tooltipBuilder: (child) => _buildAdTooltip(child, state),
             useRippleEffect: showAdsTooltip(state),
           ),
+        ).autoScaleInUp(
+          sequencePos: 4,
+          slideFrom: 30,
+          duration: CustomAnimationDurations.medium,
         ),
       ].insertBetween(14.verticalSpace),
     );
