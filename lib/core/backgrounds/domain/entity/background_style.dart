@@ -1,4 +1,4 @@
-import 'package:denwee/core/ui/theme/text_styles.dart';
+import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

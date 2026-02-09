@@ -10,10 +10,10 @@ import 'package:denwee/core/backgrounds/domain/entity/apply_background_body.dart
 import 'package:denwee/core/backgrounds/domain/entity/apply_background_result.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
 import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
-import 'package:denwee/core/backgrounds/domain/failure/background_failure.dart';
+import 'package:denwee/core/backgrounds/domain/entity/background_failure.dart';
 import 'package:denwee/core/backgrounds/domain/repo/backgrounds_repo.dart';
 import 'package:denwee/core/backgrounds/domain/utils/background_asset_cache_util.dart';
-import 'package:denwee/core/network/data/exceptions/app_exception.dart';
+import 'package:denwee/core/network/data/model/app_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 

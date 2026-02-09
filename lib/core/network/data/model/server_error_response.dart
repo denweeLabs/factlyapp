@@ -1,4 +1,4 @@
-import 'package:denwee/core/network/data/exceptions/generic_exception.dart';
+import 'package:denwee/core/network/data/model/generic_exception.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'server_error_response.g.dart';

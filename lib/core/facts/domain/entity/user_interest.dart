@@ -1,7 +1,7 @@
 import 'package:denwee/core/misc/domain/entity/i_entity.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
-import 'package:denwee/core/ui/constants/app/app_constants.dart';
-import 'package:denwee/core/ui/constants/app/user_interests.dart';
+import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
+import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_interest.freezed.dart';

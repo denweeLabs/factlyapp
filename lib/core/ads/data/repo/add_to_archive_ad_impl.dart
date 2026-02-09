@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:denwee/core/ads/data/utils/ads_util.dart';
+import 'package:denwee/core/ads/domain/utils/ads_util.dart';
 import 'package:denwee/core/ads/domain/entity/app_ad_failure.dart';
 import 'package:denwee/core/ads/domain/repo/app_ad.dart';
-import 'package:denwee/core/ui/constants/app/ads_constants.dart';
+import 'package:denwee/presentation/shared/constants/app/ads_constants.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -28,7 +28,7 @@ class AddToArchiveAd implements AppAd {
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) => secureComplete(right(ad)),
           onAdFailedToLoad: (error) {
-            final failure = AdsUtil.processLoadingError(error);
+            final failure = AdsUtil.processError(error);
             secureComplete(left(failure));
           },
         ),

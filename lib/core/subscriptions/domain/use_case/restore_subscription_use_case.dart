@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:denwee/core/statistics/domain/repo/analytics_repo.dart';
-import 'package:denwee/core/subscriptions/domain/failure/subscriptions_failure.dart';
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
+import 'package:denwee/core/subscriptions/domain/entity/subscriptions_failure.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:injectable/injectable.dart';
 

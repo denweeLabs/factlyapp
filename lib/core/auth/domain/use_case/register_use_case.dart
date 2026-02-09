@@ -4,15 +4,15 @@ import 'package:dartz/dartz.dart';
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/auth/domain/entity/password.dart';
 import 'package:denwee/core/auth/domain/entity/register_result.dart';
-import 'package:denwee/core/auth/domain/failure/register_failure.dart';
+import 'package:denwee/core/auth/domain/entity/register_failure.dart';
 import 'package:denwee/core/auth/domain/repo/auth_repo.dart';
 import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/core/notifications/domain/repo/push_notifications_repo.dart';
-import 'package:denwee/core/statistics/domain/repo/analytics_repo.dart';
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
-import 'package:denwee/core/ui/bloc/auth_cubit/auth_cubit.dart';
-import 'package:denwee/core/ui/bloc/profile_cubit/profile_cubit.dart';
-import 'package:denwee/core/ui/bloc/user_preferences_cubit/user_preferences_cubit.dart';
+import 'package:denwee/presentation/bloc/auth/auth_cubit.dart';
+import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
+import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:denwee/core/user_preferences/domain/entity/user_preferences.dart';
 import 'package:injectable/injectable.dart';
 import 'package:utils/utils.dart';
@@ -79,6 +79,29 @@ class RegisterUseCase {
     required UserPreferences preferences,
   }) async {
     final failureOrSuccess = await _authRepo.registerWithGoogle(
+      preferences: preferences,
+    );
+    final successResult = failureOrSuccess.getEntries().$2;
+    if (successResult != null) {
+      await _submitAppState(successResult);
+      await _establishInternalData(successResult);
+    }
+    return failureOrSuccess;
+  }
+
+
+  /// Executes the full user registration flow with Apple.
+  ///
+  /// Responsibilities:
+  /// - Register a new user account via [AuthRepo]
+  /// - On success, transition the app into an authenticated state
+  ///
+  /// Returns either a [RegisterFailure] or a successful [RegisterResult].
+  /// 
+  Future<Either<RegisterFailure, RegisterResult>> withApple({
+    required UserPreferences preferences,
+  }) async {
+    final failureOrSuccess = await _authRepo.registerWithApple(
       preferences: preferences,
     );
     final successResult = failureOrSuccess.getEntries().$2;

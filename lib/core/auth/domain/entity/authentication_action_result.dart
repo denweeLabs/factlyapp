@@ -1,0 +1,4 @@
+enum AuthorizationActionResult {
+  loggedIn,
+  signedUp,
+}

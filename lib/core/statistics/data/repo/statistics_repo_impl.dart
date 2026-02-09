@@ -1,9 +1,9 @@
-import 'package:denwee/core/network/data/exceptions/app_exception.dart';
+import 'package:denwee/core/network/data/model/app_exception.dart';
 import 'package:denwee/core/statistics/data/model/user_statistics_dto.dart';
 import 'package:denwee/core/statistics/domain/source/statistics_local_source.dart';
 import 'package:denwee/core/statistics/domain/source/statistics_remote_source.dart';
 import 'package:denwee/core/statistics/domain/entity/user_statistics.dart';
-import 'package:denwee/core/statistics/domain/failure/statistics_failure.dart';
+import 'package:denwee/core/statistics/domain/entity/statistics_failure.dart';
 import 'package:denwee/core/statistics/domain/repo/statistics_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';

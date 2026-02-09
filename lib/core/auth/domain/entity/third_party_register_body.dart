@@ -11,6 +11,7 @@ abstract class ThirdPartyRegisterBody with _$ThirdPartyRegisterBody {
     required ThirdPartyAuthProvider provider,
     required String idToken,
     required Option<String> accessToken,
+    required Option<String> nonce,
     required UserPreferences preferences,
   }) = _ThirdPartyRegisterBody;
 
@@ -22,6 +23,21 @@ abstract class ThirdPartyRegisterBody with _$ThirdPartyRegisterBody {
       provider: ThirdPartyAuthProvider.google,
       idToken: idToken,
       accessToken: const None(),
+      nonce: const None(),
+      preferences: preferences,
+    );
+  }
+
+  factory ThirdPartyRegisterBody.apple({
+    required String idToken,
+    required String nonce,
+    required UserPreferences preferences,
+  }) {
+    return ThirdPartyRegisterBody(
+      provider: ThirdPartyAuthProvider.apple,
+      idToken: idToken,
+      accessToken: const None(),
+      nonce: Some(nonce),
       preferences: preferences,
     );
   }
