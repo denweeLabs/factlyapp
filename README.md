@@ -34,6 +34,17 @@
 
 
 
+## 🎥 Onboarding
+
+Click to watch full app onboarding (30s):
+
+[![Onboarding Preview](res/onboarding_preview.gif)](https://www.denwee.com/media/onboarding.mp4)
+
+
+
+
+
+
 ## 🎨 Features
 
 - Daily facts delivery with [Supabase](https://supabase.com) and [ChatGPT Batch API](https://platform.openai.com/docs/guides/batch)
