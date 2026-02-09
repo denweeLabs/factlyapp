@@ -281,6 +281,7 @@ Some design elements and animations were inspired by [Reflectly App](https://ref
 
 ## ❤️ Support
 
+If this project helped you, a quick review on the App Store or Google Play would really mean a lot!
 For any questions or support, please reach out to support@denwee.com 🫶
 
 <a href="https://buymeacoffee.com/denweelabs" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-blue.png" alt="Buy Me A Coffee" height="41" width="174"></a>
