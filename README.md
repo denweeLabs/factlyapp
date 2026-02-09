@@ -222,7 +222,7 @@ ProfilePage
 
 ## 🚀 How To Run
 
-To run this application, you'll need [Flutter](https://flutter.dev) of version `3.35` or higher:
+To run this application, you'll need [Flutter](https://flutter.dev) of version `3.35.5` or higher:
 
 ```bash
 # Get all packages
