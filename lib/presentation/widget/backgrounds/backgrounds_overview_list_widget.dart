@@ -38,16 +38,16 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
 
   void initItems() {
     final backgrounds = getIt<AvailableBackgroundsCubit>().state.backgrounds;
-    if (backgrounds.isEmpty) return;
-
     final selectedBackgroundId = getIt<UserPreferencesCubit>()
         .state
         .preferences
         .background
         .selectedBackgroundId;
-    final unlockedBackgroundIds =
-        getIt<ProfileCubit>().state.profile.toNullable()?.unlockedBackgrounds ??
-        [];
+    final unlockedBackgroundIds = getIt<ProfileCubit>().state.profile
+        .toNullable()!
+        .unlockedBackgrounds;
+    
+    if (backgrounds.isEmpty) return;
 
     items.addAll(
       _buildOrderedBackgroundItems(
@@ -100,34 +100,43 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
             borderRadius: BorderRadius.horizontal(
               right: AppConstants.style.radius.cardMedium,
             ),
-            child: ListView.builder(
-              itemCount: items.length,
-              padding: EdgeInsets.only(left: 18.w),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                final item = items[index];
-                
-                return BackgroundSelectionUtil.isBackgroundItemSelected(
-                  item: item,
-                  builder: (isSelected) => RepaintBoundary.wrap(
-                    _cardWidgetBuilder(item, isSelected),
-                    index,
-                  ),
-                );
-              },
-            ),
+            child: _buildScrollableList(),
           ),
         ),
       ),
     );
   }
 
-  Widget _cardWidgetBuilder(BackgroundSelectionItem item, bool isSelected) {
+  Widget _buildScrollableList() {
+    return BackgroundCardSelectionProviders(
+      builder: (context, vm) => ListView.builder(
+        itemCount: items.length,
+        padding: EdgeInsets.only(left: 18.w),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final item = items[index];
+
+          return RepaintBoundary(
+            child: _cardWidgetBuilder(item: item, vm: vm),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _cardWidgetBuilder({
+    required BackgroundSelectionItem item,
+    required BackgroundCardSelectionVM vm,
+  }) {
+    final isSelected = item.isSelected(vm.selectedId);
+    
     return item.when(
       defaultBackground: () => DefaultBackgroundSelectionCard(isSelected: isSelected),
       availableBackground: (background) => BackgroundSelectionCard(
-        isSelected: isSelected,
         background: background,
+        isSelected: isSelected,
+        isSubscribed: vm.hasPremiumSubscription,
+        isUnlocked: vm.unlockedIds.contains(background.id),
       ),
     );
   }
@@ -141,10 +150,9 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
   List<BackgroundSelectionItem> _buildOrderedBackgroundItems({
     required List<AvailableBackground> backgrounds,
     required UniqueId selectedBackgroundId,
-    required List<UniqueId> unlockedBackgroundIds,
+    required Set<UniqueId> unlockedBackgroundIds,
   }) {
     final defaultBackgroundId = AppConstants.config.defaultBackgroundId;
-    final unlockedIds = unlockedBackgroundIds.toSet();
 
     // index available backgrounds by id
     final byId = {for (final bg in backgrounds) bg.id: bg};
@@ -162,7 +170,7 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
     }
 
     // 2. Unlocked backgrounds (excluding selected)
-    for (final id in unlockedIds) {
+    for (final id in unlockedBackgroundIds) {
       if (id == selectedBackgroundId) continue;
 
       final bg = byId[id];

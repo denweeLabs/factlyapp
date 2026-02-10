@@ -1,13 +1,12 @@
-import 'package:denwee/core/ads/domain/repo/ads_repo.dart';
+import 'dart:async';
+
 import 'package:denwee/core/ads/domain/use_case/show_add_to_archive_ad_use_case.dart';
 import 'package:denwee/core/facts/data/source/remote/facts_api.dart';
 import 'package:denwee/core/facts/domain/entity/archived_fact.dart';
 import 'package:denwee/core/facts/domain/entity/facts_failure.dart';
 import 'package:denwee/core/facts/domain/repo/facts_archive_repo.dart';
-import 'package:denwee/core/misc/data/storage/common_storage.dart';
+import 'package:denwee/core/facts/domain/use_case/handle_facts_archive_use_case.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
-import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
-import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
@@ -15,27 +14,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:collection/collection.dart';
-import 'package:utils/utils.dart';
 
 part 'facts_archive_state.dart';
 part 'facts_archive_cubit.freezed.dart';
 
 @LazySingleton()
 class FactsArchiveCubit extends Cubit<FactsArchiveState> {
-  final ProfileCubit _profileCubit;
   final FactsArchiveRepo _archiveRepo;
-  final CommonStorage _commonStorage;
-  final AdsRepo _adsRepo;
   final ShowAddToArchiveAdUseCase _showAddToArchiveAdUseCase;
-  final UserSubscriptionCubit _userSubscriptionCubit;
+  final HandleFactsArchiveUseCase _handleFactsArchiveUseCase;
 
   FactsArchiveCubit(
-    this._profileCubit,
     this._archiveRepo,
-    this._commonStorage,
-    this._adsRepo,
     this._showAddToArchiveAdUseCase,
-    this._userSubscriptionCubit,
+    this._handleFactsArchiveUseCase,
   ) : super(FactsArchiveState.initial(_archiveRepo.getArchiveIdsLocal()));
 
   var _itemsTotalCount = 0;
@@ -46,13 +38,15 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
       isFetching: true,
       failure: const None(),
     ));
-    final result = (await _archiveRepo.getArchiveRemote()).getEntries();
-    if (result.$2 != null) await _archiveRepo.storeArchiveIdsLocal(result.$2!);
-    emit(state.copyWith(
-      isFetching: false,
-      archiveIds: result.$2 ?? state.archiveIds,
-      failure: optionOf(result.$1),
-    ));
+
+    final failureOrSuccess = await _handleFactsArchiveUseCase.getIds();
+
+    emit(
+      failureOrSuccess.fold(
+        (failure) => state.copyWith(isFetching: false, failure: Some(failure)),
+        (success) => state.copyWith(isFetching: false, archiveIds: success.toSet()),
+      ),
+    );
   }
 
   Future<void> fetchArchiveList() async {
@@ -60,26 +54,26 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
 
     _itemsPage = 0;
 
-    final archiveResult = (await _archiveRepo.getArchiveListRemote(
+    final failureOrSuccess = await _archiveRepo.getArchiveListRemote(
       sortOrder: SortOrder.descending,
       count: AppConstants.config.myArchivePageSize,
       page: _itemsPage,
-    )).getEntries();
+    );
 
-    if (archiveResult.$1 != null) {
-      return emit(state.copyWith(
-        failure: Some(archiveResult.$1!),
-        isFetching: false,
-      ));
-    }
+    emit(
+      failureOrSuccess.fold(
+        (failure) => state.copyWith(isFetching: false, failure: Some(failure)),
+        (success) {
+          _itemsTotalCount = success.total;
 
-    _itemsTotalCount = archiveResult.$2!.total;
-
-    emit(state.copyWith(
-      archiveListTotalCount: _itemsTotalCount,
-      archiveList: archiveResult.$2!.items,
-      isFetching: false,
-    ));
+          return state.copyWith(
+            archiveListTotalCount: _itemsTotalCount,
+            archiveList: success.items,
+            isFetching: false,
+          );
+        },
+      ),
+    );
   }
 
   Future<void> fetchMoreArchiveList() async {
@@ -89,102 +83,81 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
       emit(state.copyWith(isFetchingMore: true));
 
       final newPage = _itemsPage + 1;
-      final archiveResult = (await _archiveRepo.getArchiveListRemote(
+      final failureOrSuccess = await _archiveRepo.getArchiveListRemote(
         sortOrder: SortOrder.descending,
         count: AppConstants.config.myArchivePageSize,
         page: newPage,
-      )).getEntries();
+      );
 
-      if (archiveResult.$1 != null) {
-        return emit(state.copyWith(
-          failure: Some(archiveResult.$1!),
-          isFetchingMore: false,
-        ));
-      }
+      emit(
+        failureOrSuccess.fold(
+          (failure) => state.copyWith(isFetchingMore: false, failure: Some(failure)),
+          (success) {
+            _itemsPage = newPage;
+            _itemsTotalCount = success.total;
 
-      _itemsPage = newPage;
-      _itemsTotalCount = archiveResult.$2!.total;
+            final newArchiveList = [
+              ...state.archiveList,
+              ...success.items,
+            ];
 
-      final newArchiveList = [...state.archiveList, ...archiveResult.$2!.items];
-
-      emit(state.copyWith(
-        archiveListTotalCount: _itemsTotalCount,
-        archiveList: newArchiveList,
-        isFetchingMore: false,
-      ));
+            return state.copyWith(
+              archiveListTotalCount: _itemsTotalCount,
+              archiveList: newArchiveList,
+              isFetchingMore: false,
+            );
+          },
+        ),
+      );
     }
   }
 
   Future<void> add(UniqueId id) async {
-    final archive = [...state.archiveIds, id];
+    final archive = Set<UniqueId>.from(state.archiveIds)..add(id);
+
     emit(state.copyWith(
       archiveIds: archive,
       failure: const None(),
     ));
-    final result = (await _archiveRepo.storeFactRemote(id)).getEntries();
-    if (result.$1 != null) {
-      final revertedArchive = [...state.archiveIds]..removeWhere((e) => e == id);
-      emit(state.copyWith(
-        archiveIds: revertedArchive,
-        failure: some(result.$1!),
-      ));
-    } else {
-      await _archiveRepo.storeFactLocal(id);
-      await _checkAdDisplay();
-    }
+
+    final failureOrSuccess = await _handleFactsArchiveUseCase.storeId(id);
+
+    failureOrSuccess.fold(
+      (failure) {
+        final revertedArchive = Set<UniqueId>.from(state.archiveIds)..remove(id);
+        emit(state.copyWith(
+          archiveIds: revertedArchive,
+          failure: Some(failure),
+        ));
+      },
+      (success) {
+        unawaited(_showAddToArchiveAdUseCase.executeIfEligible());
+      },
+    );
   }
 
   Future<void> remove(UniqueId id) async {
-    final archive = [...state.archiveIds]..removeWhere((e) => e == id);
+    final archive = Set<UniqueId>.from(state.archiveIds)..remove(id);
+
     emit(state.copyWith(
       archiveIds: archive,
       failure: const None(),
     ));
-    final result = (await _archiveRepo.deleteFactRemote(id)).getEntries();
-    if (result.$1 != null) {
-      final revertedArchive = [...state.archiveIds, id];
-      emit(state.copyWith(
-        archiveIds: revertedArchive,
-        failure: some(result.$1!),
-      ));
-    } else {
-      await _archiveRepo.deleteFactLocal(id);
-    }
+
+    final failureOrSuccess = await _handleFactsArchiveUseCase.removeId(id);
+
+    failureOrSuccess.fold((failure) {
+      final revertedArchive = Set<UniqueId>.from(state.archiveIds)..add(id);
+      emit(state.copyWith(archiveIds: revertedArchive, failure: Some(failure)));
+    }, (_) {});
   }
 
   Future<void> emitPreserveArchivedIds(List<UniqueId> data) async {
-    emit(state.copyWith(archiveIds: data));
+    emit(state.copyWith(archiveIds: data.toSet()));
     await _archiveRepo.storeArchiveIdsLocal(data);
   }
 
   void clearState() {
     emit(FactsArchiveState.initial(const <UniqueId>[]));
-  }
-
-  Future<void> _checkAdDisplay() async {
-    // do not show any ads if user has subscription
-    if (_userSubscriptionCubit.state.isSubscribed) return;
-    
-    final currentCounter = await _commonStorage.increaseAddToArchiveCounter();
-
-    // wait for the counter and check if probability to show an ad has passed
-    if (currentCounter < AppConstants.config.showArchiveAdOnCountOf) return;
-    await _commonStorage.resetAddToArchiveCounter();
-    final isChance = pseudoProbabilityOf(
-      AppConstants.config.showArchiveAdProbabilityPercent,
-    );
-    if (!isChance) return;
-
-    // load an ad
-    final ad = (await _adsRepo.getOrLoadAddToArchiveAd()).getEntries();
-
-    // if loaded -> show the ad
-    if (ad.$2 != null) {
-      final profileId = _profileCubit.state.profile.toNullable()!.id;
-      await _showAddToArchiveAdUseCase.execute(
-        ad: ad.$2!,
-        profileId: profileId,
-      );
-    }
   }
 }

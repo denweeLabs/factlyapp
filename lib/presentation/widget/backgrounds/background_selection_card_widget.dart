@@ -20,42 +20,35 @@ class BackgroundSelectionCard extends StatelessWidget {
     super.key,
     required this.isSelected,
     required this.background,
+    required this.isSubscribed,
+    required this.isUnlocked,
     this.forceOpenEdit = false,
   });
 
   final bool isSelected;
   final bool forceOpenEdit;
+  final bool isSubscribed;
+  final bool isUnlocked;
   final AvailableBackground background;
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundSelectionUtil.isSubscribedProvider(
-      builder: (isSubscribed) =>
-          BackgroundSelectionUtil.isBackgroundUnlockedProvider(
-            backgroundId: background.id,
-            builder: (isUnlocked) {
-              final hideBadge = background.isFree || isUnlocked || isSubscribed;
+    final hideBadge = background.isFree || isUnlocked || isSubscribed;
 
-              return BackgroundSelectionCardBody(
-                id: background.id,
-                lettersStyle: background.style.asTextStyle,
-                onTap: () => _onTap(
-                  context: context,
-                  isSubscribed: isSubscribed,
-                  isUnlocked: isUnlocked,
-                ),
-                onLongTap: () => _openBackgroundEdit(context),
-                isSelected: isSelected,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    _buildContent(),
-                    if (!hideBadge) _buildBadge(context),
-                  ],
-                ),
-              );
-            },
-          ),
+    return BackgroundSelectionCardBody(
+      id: background.id,
+      lettersStyle: background.style.asTextStyle,
+      onTap: () => _onTap(
+        context: context,
+        isSubscribed: isSubscribed,
+        isUnlocked: isUnlocked,
+      ),
+      onLongTap: () => _openBackgroundEdit(context),
+      isSelected: isSelected,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [_buildContent(), if (!hideBadge) _buildBadge(context)],
+      ),
     );
   }
 

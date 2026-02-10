@@ -7,7 +7,6 @@ import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
-import 'package:denwee/presentation/widget/shared/animations/animate_do/scale_in_up.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
@@ -78,18 +77,10 @@ class _PaywallPremiumBenefitsState extends State<PaywallPremiumBenefits> {
         _Benefit(
           iconPath: AppConstants.assets.icons.checkmarkLinear,
           text: context.tr(LocaleKeys.subscription_paywall_benefits_line_1),
-        ).autoScaleInUp(
-          sequencePos: 2,
-          slideFrom: 30,
-          duration: CustomAnimationDurations.medium,
         ),
         _Benefit(
           iconPath: AppConstants.assets.icons.galleryLinear,
           text: context.tr(LocaleKeys.subscription_paywall_benefits_line_2),
-        ).autoScaleInUp(
-          sequencePos: 3,
-          slideFrom: 30,
-          duration: CustomAnimationDurations.medium,
         ),
         BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
           builder: (context, state) => _Benefit(
@@ -98,10 +89,6 @@ class _PaywallPremiumBenefitsState extends State<PaywallPremiumBenefits> {
             tooltipBuilder: (child) => _buildAdTooltip(child, state),
             useRippleEffect: showAdsTooltip(state),
           ),
-        ).autoScaleInUp(
-          sequencePos: 4,
-          slideFrom: 30,
-          duration: CustomAnimationDurations.medium,
         ),
       ].insertBetween(14.verticalSpace),
     );

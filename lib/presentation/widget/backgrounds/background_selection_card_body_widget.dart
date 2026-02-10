@@ -72,7 +72,11 @@ class BackgroundSelectionCardBody extends StatelessWidget {
                             key: ValueKey(false),
                             color: Colors.white,
                           )
-                        : Text('Aa', key: ValueKey(true), style: lettersStyle),
+                        : Text(
+                            'Aa',
+                            key: const ValueKey(true),
+                            style: lettersStyle,
+                          ),
                   ),
                 ),
               ),

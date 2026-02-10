@@ -63,15 +63,17 @@ class PersonalDetailsCard extends StatelessWidget {
           Positioned(
             right: -12.w,
             bottom: -16.h,
-            child: AnimatedSwitcherPlus.zoomIn(
-              duration: CustomAnimationDurations.lowMedium,
-              switchInCurve: Curves.easeInOutSine,
-              switchOutCurve: Curves.easeInOutSine,
-              child: CommonAppIcon(
-                path: decorationIcon,
-                key: ValueKey(decorationIcon),
-                color: context.darkIconColor.withValues(alpha: .08),
-                size: 98,
+            child: RepaintBoundary(
+              child: AnimatedSwitcherPlus.zoomIn(
+                duration: CustomAnimationDurations.lowMedium,
+                switchInCurve: Curves.easeInOutSine,
+                switchOutCurve: Curves.easeInOutSine,
+                child: CommonAppIcon(
+                  path: decorationIcon,
+                  key: ValueKey(decorationIcon),
+                  color: context.darkIconColor.withValues(alpha: .08),
+                  size: 98,
+                ),
               ),
             ),
           ),

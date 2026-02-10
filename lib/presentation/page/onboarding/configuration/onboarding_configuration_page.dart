@@ -133,6 +133,7 @@ class _OnboardingConfigurationPageState extends State<OnboardingConfigurationPag
 
         final icon = isIcon ? AppConstants.assets.icons.checkmarkLinear : null;
         final isBusy = state.isSubmissionVisibilityForced && state.submissionInProgress;
+        final showProceedButtonAnimations = state.step.showProceedButtonAnimations;
 
         return Column(
           children: [
@@ -140,9 +141,9 @@ class _OnboardingConfigurationPageState extends State<OnboardingConfigurationPag
               width: 0.58.sw,
               child: AppSolidButton(
                 isBusy: isBusy,
-                isBubbles: true,
-                isShimmering: true,
                 displayIcon: icon,
+                isBubbles: showProceedButtonAnimations,
+                isShimmering: showProceedButtonAnimations,
                 buttonHeight: OnboardingConfigurationPage.actionButtonHeight,
                 backgroundColors: state.step.bottomActionButtonBackgroundColor(context),
                 textColor: state.step.bottomActionButtonTextColor(context),
