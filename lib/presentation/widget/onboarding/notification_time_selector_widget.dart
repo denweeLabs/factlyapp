@@ -4,7 +4,6 @@ import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
-import 'package:denwee/presentation/widget/shared/animations/fade_loop_animation.dart';
 import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_wheel_listview_widget.dart';
@@ -150,10 +149,7 @@ class _NotificationTimeSelectorState extends State<NotificationTimeSelector> {
               ),
             ),
             SizedBox(width: 64.w, child: _buildHoursWheel()),
-            FadeLoopAnimation(
-              delay: Duration.zero,
-              child: Text(':', style: h2.copyWith(color: context.textColor)),
-            ),
+            Text(':', style: h2.copyWith(color: context.textColor)),
             SizedBox(width: 64.w, child: _buildMinutesWheel()),
           ],
         ),

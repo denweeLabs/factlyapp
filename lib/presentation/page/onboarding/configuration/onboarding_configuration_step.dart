@@ -102,4 +102,13 @@ extension ConfigurationStepX on ConfigurationStep {
       case ConfigurationStep.valuePrimer: return false;
     }
   }
+
+  bool get showProceedButtonAnimations {
+    switch (this) {
+      case ConfigurationStep.selectInterests: return true;
+      case ConfigurationStep.selectNotificationTime: return true;
+      case ConfigurationStep.selectThemeColoration: return false;
+      case ConfigurationStep.valuePrimer: return true;
+    }
+  }
 }

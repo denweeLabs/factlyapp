@@ -29,7 +29,7 @@ mixin RootBlocListenersHandlers {
   void processLoggedOutUser() {
     getIt<OnLogoutUseCase>().execute();
     Navigator.of(getIt<RootRouterData>().context, rootNavigator: true)
-        .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => true);
+        .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => false);
   }
 
   Future<void> processPurchasedSubscriptionPackage(PremiumPackage package) async {

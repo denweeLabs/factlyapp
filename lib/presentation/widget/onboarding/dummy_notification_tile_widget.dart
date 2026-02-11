@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
@@ -9,40 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DummyNotificationTile extends StatelessWidget {
-  const DummyNotificationTile({super.key, this.isFront = true});
-
-  final bool isFront;
+  const DummyNotificationTile({super.key});
 
   static const borderRadius = BorderRadius.all(Radius.circular(28));
 
   @override
   Widget build(BuildContext context) {
-    if (!isFront || context.isLightTheme) {
-      return _buildTileBody(context);
-    }
-
     return ClipRRect(
       borderRadius: borderRadius,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: _buildTileBody(context),
-      ),
+      child: _buildTileBody(context),
     );
   }
 
   Widget _buildTileBody(BuildContext context) {
     final borderColor = context.isLightTheme ? Colors.black12 : Colors.white10;
-    final backgroundColorOpacity = !isFront || context.isLightTheme
-        ? 1.0
-        : 0.75;
 
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: borderColor),
         borderRadius: borderRadius,
-        color: context.primaryContainer.withValues(
-          alpha: backgroundColorOpacity,
-        ),
+        color: context.primaryContainer,
         boxShadow: const [
           BoxShadow(
             color: Colors.black12,

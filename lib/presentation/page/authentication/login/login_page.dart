@@ -82,9 +82,7 @@ class _LoginPageState extends State<LoginPage> {
         showBackButton: false,
         body: AutofillGroup(
           child: BlocBuilder<LoginCubit, LoginState>(
-            builder: (context, signInState) => Column(
-              children: [
-                EmailAndPasswordForm(
+            builder: (context, signInState) => EmailAndPasswordForm(
                   emailController: emailController,
                   emailFocusNode: emailFocusNode,
                   onEmailChanged: context.read<LoginCubit>().onEmailChanged,
@@ -100,9 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                   onForgotPass: _onForgotPass,
                   isForgotPassInProgress: signInState.resetPassInProgress,
                 ),
-              ],
             ),
-          ),
         ),
       ),
     );

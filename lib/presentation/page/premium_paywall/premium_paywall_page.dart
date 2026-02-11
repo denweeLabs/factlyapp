@@ -175,7 +175,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
         type: AppBackButtonType.cross,
         color: context.lightIconColorSecondary,
         padding: EdgeInsets.fromLTRB(24.w, 24.h, 32.w, 0.0),
-      ).autoFadeIn(sequencePos: 5),
+      ).autoFadeIn(sequencePos: 3),
     );
   }
 
@@ -204,7 +204,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
             ),
           ),
         ],
-      ).autoFadeIn(sequencePos: 3),
+      ).autoScaleInUp(sequencePos: 3, slideFrom: 0),
     );
   }
 
@@ -227,7 +227,11 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w).copyWith(right: 28.w),
-        child: const PaywallPremiumBenefits(),
+        child: const PaywallPremiumBenefits().autoScaleInUp(
+          sequencePos: 2,
+          slideFrom: 30,
+          duration: CustomAnimationDurations.medium,
+        ),
       ),
     );
   }
@@ -256,7 +260,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
                   priceBuilder: (isPurchased) => isPurchased
                       ? purchasedPackage?.expiryText(context)
                       : null,
-                ).autoFadeInLeft(sequencePos: 5, slideFrom: 50),
+                ).autoFadeInLeft(sequencePos: 3, slideFrom: 50),
                 12.verticalSpace,
                 PaywallPackageTile(
                   package: packages.yearly,
@@ -269,7 +273,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
                   discountBadge: PaywallPackageDiscountBadge(
                     percent: packages.yearlyDiscountPercent,
                   ),
-                ).autoFadeInRight(sequencePos: 5, slideFrom: 50),
+                ).autoFadeInRight(sequencePos: 3, slideFrom: 50),
               ],
             ),
           );
@@ -286,7 +290,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
           onRestore: _onRestore,
           onPrivacy: _onPrivacy,
           onTerms: _onTerms,
-        ).autoFadeIn(sequencePos: 7),
+        ).autoFadeIn(sequencePos: 6),
       ),
     );
   }
@@ -328,7 +332,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
                   ignoreTapScale: isAlreadyPurchasedPackage,
                   shadowColor: Colors.black45,
                   isBusy: isLoading,
-                ).autoElasticIn(sequencePos: 6);
+                ).autoElasticIn(sequencePos: 5);
               },
             );
           },
