@@ -16,4 +16,23 @@ extension PermissionStatusX on PermissionStatus {
         return const pm_status.AppPermissionStatus.denied();
     }
   }
+
+  /// Strict merge of two permission statuses
+  static pm_status.AppPermissionStatus mergeStrict2(
+    PermissionStatus photos,
+    PermissionStatus videos,
+  ) {
+    // Both granted
+    if (photos.isGranted && videos.isGranted) {
+      return const pm_status.AppPermissionStatus.granted();
+    }
+
+    // Any permanently denied → forever denied
+    if (photos.isPermanentlyDenied || videos.isPermanentlyDenied) {
+      return const pm_status.AppPermissionStatus.denied(isForever: true);
+    }
+
+    // Otherwise → incomplete permission
+    return const pm_status.AppPermissionStatus.denied();
+  }
 }

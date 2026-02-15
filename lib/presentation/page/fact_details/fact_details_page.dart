@@ -1,12 +1,16 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:io';
 
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
+import 'package:denwee/presentation/bloc/facts/fact_share_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:denwee/presentation/shared/router/root_router.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/navigation_util.dart';
+import 'package:denwee/presentation/widget/facts/stories_components/src/widgets/stories_fact_capture_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/archive_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/back_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_pop_scope_widget.dart';
@@ -86,13 +90,30 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
       child: CommonScaffold(
         systemOverlayType: ThemeType.dark,
         style: CommonBackgroundStyle.solid,
-        body: Stack(
-          children: [
-            _buildBackground(),
-            _buildFactPage(),
-            _buildAppBar(),
-            _buildBottomSection(),
-          ],
+        body: StoriesFactCapture(
+          builder: (context, captureArea, isWatermark, factOverlayKey) {
+            /// Function checks if widget is visible during fact screenshot
+            Widget _ifVisible(Widget Function() child) {
+              return AnimatedOpacity(
+                duration: FactShareCubit.layoutPrepareDuration,
+                opacity: captureArea == FactCaptureArea.page ? 0.0 : 1.0,
+                child: child(),
+              );
+            }
+
+            return Stack(
+              children: [
+                _buildBackground(),
+                _buildFactPage(
+                  showWatermark: isWatermark,
+                  isCapturing: captureArea != null,
+                  overlayKey: factOverlayKey,
+                ),
+                _ifVisible(_buildAppBar),
+                _ifVisible(_buildBottomSection),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -105,57 +126,69 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
     );
   }
 
-  Widget _buildFactPage() {
-    return StoriesFactPage(
-      key: pageKey,
-      fact: widget.fact,
-      pageHeight: pageSafeHeight,
-      cubit: context.read<FactExplanationCubit>(),
-      initialScrollOffset: 0.0,
-      onVerticalScrollChanged: _onVerticalScrollChanged,
-      scrollViewTopPadding: scrollViewTopPadding,
-      defaultContentPadding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 38.h),
-      detailedContentPadding: EdgeInsets.only(
-        left: 20.w,
-        right: 20.w,
-        bottom: context.bottomPadding +
-            32.h +
-            StoriesScrollupButton.size +
-            42.h,
+  Widget _buildFactPage({
+    required bool showWatermark,
+    required bool isCapturing,
+    required GlobalKey overlayKey,
+  }) {
+    return Positioned.fill(
+      child: RepaintBoundary(
+        key: overlayKey,
+        child: StoriesFactPage(
+          key: pageKey,
+          fact: widget.fact,
+          pageHeight: pageSafeHeight,
+          cubit: context.read<FactExplanationCubit>(),
+          initialScrollOffset: 0.0,
+          onVerticalScrollChanged: _onVerticalScrollChanged,
+          scrollViewTopPadding: scrollViewTopPadding,
+          showWatermark: showWatermark,
+          isCapturing: isCapturing,
+          defaultContentPadding: EdgeInsets.symmetric(horizontal: 14.w),
+          detailedContentPadding: EdgeInsets.only(
+            left: 20.w,
+            right: 20.w,
+            bottom: context.bottomPadding +
+                32.h +
+                StoriesScrollupButton.size +
+                42.h,
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildBottomSection() {
-    return Positioned(
-      left: 14.w,
-      right: 14.w,
-      bottom: bottomSectionInset,
-      child: ValueListenableBuilder(
-        valueListenable: verticalScrollFraction,
-        builder: (context, scrollFraction, child) {
-          final fraction = Curves.easeInOut.transform(scrollFraction);
-          final yTranslate = bottomSectionSafeInset * fraction;
-          final offstage = fraction >= 1.0;
-
-          return Transform.translate(
-            offset: Offset(0.0, yTranslate),
-            child: Offstage(
-              offstage: offstage,
-              child: child!,
-            ),
-          );
-        },
-        child: BlocBuilder<FactExplanationCubit, FactExplanationState>(
-          builder: (context, state) => StoriesBottomActionSection(
-            isLoadingExplanation: state.loadingFactExplanation,
-            onAccountTap: () => context.restorablePushReplacementNamedArgs(Routes.account),
-            onBackgroundsTap: () => context.restorablePushReplacementNamedArgs(Routes.availableBackgrounds),
-            onReadMoreTap: () => NavigationUtil.onExplainFact(
-              context: context,
-              cubit: context.read<FactExplanationCubit>(),
-              scrollToExplanationCallback: () =>
-                  pageKey.currentState?.scrollPageTo(pageSafeHeight),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(14.w, 0.0, 14.w, bottomSectionInset),
+        child: ValueListenableBuilder(
+          valueListenable: verticalScrollFraction,
+          builder: (context, scrollFraction, child) {
+            final fraction = Curves.easeInOut.transform(scrollFraction);
+            final yTranslate = bottomSectionSafeInset * fraction;
+            final offstage = fraction >= 1.0;
+              
+            return Transform.translate(
+              offset: Offset(0.0, yTranslate),
+              child: Offstage(
+                offstage: offstage,
+                child: child!,
+              ),
+            );
+          },
+          child: BlocBuilder<FactExplanationCubit, FactExplanationState>(
+            builder: (context, state) => StoriesBottomActionSection(
+              isLoadingExplanation: state.loadingFactExplanation,
+              onAccountTap: () => context.restorablePushReplacementNamedArgs(Routes.account),
+              onBackgroundsTap: () => context.restorablePushReplacementNamedArgs(Routes.availableBackgrounds),
+              onReadMoreTap: () => NavigationUtil.onExplainFact(
+                context: context,
+                cubit: context.read<FactExplanationCubit>(),
+                scrollToExplanationCallback: () =>
+                    pageKey.currentState?.scrollPageTo(pageSafeHeight),
+              ),
             ),
           ),
         ),
@@ -164,10 +197,8 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
   }
 
   Widget _buildAppBar() {
-    return Positioned(
-      left: 0.0,
-      right: 0.0,
-      top: context.topPadding + 20.h,
+    return Padding(
+      padding: EdgeInsets.only(top: context.topPadding + 20.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

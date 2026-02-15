@@ -194,6 +194,25 @@
     },
 
 
+    "fact_share": {
+        "more": "更多",
+        "hide_watermark": "隐藏水印",
+        "archive": {
+            "archive": "存档",
+            "unarchive": "取消存档"
+        },
+        "copy": {
+            "copy": "复制",
+            "copied": "已复制"
+        },
+        "download": {
+            "download": "下载",
+            "saved": "已保存"
+        },
+        "resource": "来源"
+    },
+
+
     "validation": {
         "email": {
             "empty": "请输入邮箱",
@@ -350,8 +369,7 @@
             "daily_facts": "还没有每日趣闻…稍后再来看看新内容！",
             "facts_archive": "你的存档是空的 — 保存一些趣闻，它们会显示在这里！"
         },
-        "agreeing_to_terms": "继续操作即表示你同意我们的\n<terms>条款</terms>和<privacy>隐私</privacy>",
-        "copied_to_clipboard": "已复制"
+        "agreeing_to_terms": "继续操作即表示你同意我们的\n<terms>条款</terms>和<privacy>隐私</privacy>"
     },
 
 
@@ -370,6 +388,20 @@
                 "subtitle": {
                     "basic": "要接收通知，请确保允许此应用权限",
                     "in_settings": "要接收通知，请确保在系统设置中允许此应用权限"
+                }
+            },
+            "photosAdd": {
+                "title": "权限",
+                "subtitle": {
+                    "basic": "为了保存和分享文件，请允许此应用访问存储空间",
+                    "in_settings": "为了保存和分享文件，请在系统设置中允许此应用访问存储空间"
+                }
+            },
+            "photosFull": {
+                "title": "权限",
+                "subtitle": {
+                    "basic": "要保存和分享文件，请允许此应用访问照片",
+                    "in_settings": "要保存和分享文件，请在系统设置中允许此应用访问照片"
                 }
             }
         },

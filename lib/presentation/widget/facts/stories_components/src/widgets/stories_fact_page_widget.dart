@@ -1,5 +1,9 @@
 import 'package:denwee/core/backgrounds/domain/entity/background_style.dart';
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
+import 'package:denwee/presentation/bloc/facts/fact_share_cubit.dart';
+import 'package:denwee/presentation/shared/theme/app_colors.dart';
+import 'package:denwee/presentation/shared/utils/widgets_util.dart';
+import 'package:denwee/presentation/widget/facts/denwee_watermark_widget.dart';
 import 'package:denwee/presentation/widget/facts/stories_components/src/widgets/stories_fact_action_buttons_widget.dart';
 import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
@@ -33,7 +37,11 @@ class StoriesFactPage extends StatefulWidget {
     this.backgroundStyle,
     this.ignorePointer = false,
     this.isSkeleton = false,
+    this.showWatermark = false,
+    this.isCapturing = false,
     this.backgroundBrightness,
+    this.onShare,
+    this.onShareFinished,
   });
 
   final DailyFact fact;
@@ -50,7 +58,11 @@ class StoriesFactPage extends StatefulWidget {
   final BackgroundStyle? backgroundStyle;
   final bool ignorePointer;
   final bool isSkeleton;
+  final bool showWatermark;
+  final bool isCapturing;
   final Brightness? backgroundBrightness;
+  final VoidCallback? onShare;
+  final VoidCallback? onShareFinished;
 
   @override
   State<StoriesFactPage> createState() => StoriesFactPageState();
@@ -179,7 +191,7 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: widget.pageHeight * 0.1),
+                SizedBox(height: widget.pageHeight * 0.125),
                 StoriesFactShortContent(
                   emoji: widget.fact.interest.emoji ?? '',
                   content: widget.fact.content,
@@ -192,11 +204,20 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
                   maintainAnimation: true,
                   maintainState: true,
                   visible: !widget.isSkeleton,
-                  child: StoriesFactActionButtons(
-                    website: widget.fact.source.toNullable(),
-                    factId: widget.fact.id,
-                    factContent: widget.fact.content,
-                    iconColor: widget.backgroundStyle?.textColor,
+                  child: WidgetsUtil.staticRepaintAnimatedCrossFade(
+                    state: widget.isCapturing
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: FactShareCubit.layoutPrepareDuration,
+                    firstChild: StoriesFactActionButtons(
+                      website: widget.fact.source.toNullable(),
+                      factId: widget.fact.id,
+                      factContent: widget.fact.content,
+                      iconColor: widget.backgroundStyle?.textColor,
+                      onShare: widget.onShare,
+                      onShareFinished: widget.onShareFinished,
+                    ),
+                    secondChild: _buildWatermark(),
                   ),
                 ),
               ],
@@ -281,6 +302,21 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
       px,
       duration: CustomAnimationDurations.lowMedium,
       curve: Curves.ease,
+    );
+  }
+  
+  Widget _buildWatermark() {
+    if (!widget.showWatermark) return const SizedBox.shrink();
+    
+    final backgroundColor = widget.backgroundBrightness == Brightness.dark
+        ? AppColors.white04
+        : AppColors.black04;
+    final textColor = (widget.backgroundStyle?.textColor ?? Colors.white)
+        .withValues(alpha: 0.35);
+
+    return DenweeWatermark(
+      backgroundColor: backgroundColor,
+      textColor: textColor,
     );
   }
 }

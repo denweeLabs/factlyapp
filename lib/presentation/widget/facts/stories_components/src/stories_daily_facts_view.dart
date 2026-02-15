@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:io';
 
 import 'package:denwee/core/backgrounds/domain/entity/background_style.dart';
@@ -5,9 +7,11 @@ import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/presentation/bloc/auth/auth_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/fact_share_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:denwee/presentation/shared/utils/haptic_util.dart';
 import 'package:denwee/presentation/shared/utils/navigation_util.dart';
+import 'package:denwee/presentation/widget/facts/stories_components/src/widgets/stories_fact_capture_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_out.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_out_down.dart';
 import 'package:denwee/presentation/widget/shared/animations/stars_change_overlay_animation_widget.dart';
@@ -206,18 +210,35 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _buildBackground(),
-        _buildStoriesBars(),
-        _buildStoryTitle(),
-        _buildFactPages(),
-        _buildStoryGestures(),
-        _buildTitleAndArchiveButton(),
-        _buildBottomSection(),
-        _buildEarnedStarAnimation(),
-        _buildShowcase(),
-      ],
+    return StoriesFactCapture(
+      builder: (context, captureArea, isWatermark, factOverlayKey) {
+        /// Function checks if widget is visible during fact screenshot
+        Widget _ifVisible(Widget Function() child) {
+          return AnimatedOpacity(
+            duration: FactShareCubit.layoutPrepareDuration,
+            opacity: captureArea == FactCaptureArea.page ? 0.0 : 1.0,
+            child: child(),
+          );
+        }
+
+        return Stack(
+          children: [
+            _buildBackground(),
+            _ifVisible(_buildStoriesBars),
+            _ifVisible(_buildStoryTitle),
+            _buildFactPages(
+              showWatermark: isWatermark,
+              isCapturing: captureArea != null,
+              overlayKey: factOverlayKey,
+            ),
+            _buildStoryGestures(),
+            _ifVisible(_buildTitleAndArchiveButton),
+            _ifVisible(_buildBottomSection),
+            _buildEarnedStarAnimation(),
+            _buildShowcase(),
+          ],
+        );
+      },
     );
   }
 
@@ -252,85 +273,102 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView>
   }
 
   Widget _buildStoryTitle() {
-    return Positioned(
-      left: 20.w,
-      right: 20.w,
-      top: storybarTopPadding + 22.h,
-      child: pageIndexProvider(
-        builder: (index) {
-          final fact = widget.facts.asMap()[index];
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          20.w,
+          storybarTopPadding + 22.h,
+          20.w,
+          0.0,
+        ),
+        child: pageIndexProvider(
+          builder: (index) {
+            final fact = widget.facts.asMap()[index];
 
-          if (fact == null) {
-            return const SizedBox.shrink();
-          }
+            if (fact == null) {
+              return const SizedBox.shrink();
+            }
 
-          return StoriesInterestTopTitle(
-            factId: fact.id.value,
-            interest: fact.interest.tryTranslate(context) ?? '',
-            region: fact.region.toNullable(),
-            date: fact.displayDateText(),
-            scrollFraction: verticalScrollFraction,
-            isSkeleton: widget.isLoading,
-            backgroundStyle: widget.backgroundStyle,
-          );
-        },
+            return StoriesInterestTopTitle(
+              factId: fact.id.value,
+              interest: fact.interest.tryTranslate(context) ?? '',
+              region: fact.region.toNullable(),
+              date: fact.displayDateText(),
+              scrollFraction: verticalScrollFraction,
+              isSkeleton: widget.isLoading,
+              backgroundStyle: widget.backgroundStyle,
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildFactPages() {
+  Widget _buildFactPages({
+    required bool showWatermark,
+    required bool isCapturing,
+    required GlobalKey overlayKey,
+  }) {
     return Positioned.fill(
-      child: IgnorePointer(
-        ignoring: isShowcase,
-        child:
-            PageView.builder(
-              controller: pageController,
-              itemCount: widget.facts.length,
-              onPageChanged: onPageChanged,
-              itemBuilder: (context, index) {
-                final fact = widget.facts[index];
-
-                return ValueListenableBuilder(
-                  valueListenable: pageIndex,
-                  builder: (context, pageIndex, child) => AnimatedOpacity(
-                    opacity: pageIndex == index ? 1.0 : 0.0,
-                    duration: pageSwitchDuration,
-                    curve: Curves.ease,
-                    child: child!,
-                  ),
-                  child: BlocProvider.value(
-                    value: cubits[index],
-                    child: StoriesFactPage(
-                      fact: fact,
-                      key: pageKeys[index],
-                      cubit: cubits[index],
-                      pageHeight: pageSafeHeight,
-                      scrollViewTopPadding: scrollViewTopPadding,
-                      initialScrollOffset: verticalScrollOffsets[index],
-                      onVerticalScrollChanged: (offset) => onVerticalScrollChanged(offset, index),
-                      defaultContentPadding: EdgeInsets.symmetric(horizontal: 14.w),
-                      detailedContentPadding: EdgeInsets.only(
-                        left: 20.w,
-                        right: 20.w,
-                        bottom: context.bottomPadding + 74.h + StoriesScrollupButton.size,
-                      ),
-                      onFactLoadingStarted: storyController.pause,
-                      onFactLoadingFinished: storyController.play,
-                      isSkeleton: widget.isLoading,
-                      backgroundStyle: widget.backgroundStyle,
-                      backgroundBrightness: widget.backgroundBrightness,
+      child: RepaintBoundary(
+        key: overlayKey,
+        child: IgnorePointer(
+          ignoring: isShowcase,
+          child:
+              PageView.builder(
+                controller: pageController,
+                itemCount: widget.facts.length,
+                onPageChanged: onPageChanged,
+                itemBuilder: (context, index) {
+                  final fact = widget.facts[index];
+        
+                  return ValueListenableBuilder(
+                    valueListenable: pageIndex,
+                    builder: (context, pageIndex, child) => AnimatedOpacity(
+                      opacity: pageIndex == index ? 1.0 : 0.0,
+                      duration: pageSwitchDuration,
+                      curve: Curves.ease,
+                      child: child!,
                     ),
-                  ),
-                );
-              },
-            ).autoElasticOut(
-              animate: isShowcase,
-              duration: const Duration(milliseconds: 1000),
-              reverseDuration: const Duration(milliseconds: 400),
-              scaleCurve: Curves.easeInOutSine,
-              scaleReverseCurve: const Interval(0.999, 1.0),
-              forceComplete: false,
-            ),
+                    child: BlocProvider.value(
+                      value: cubits[index],
+                      child: StoriesFactPage(
+                        fact: fact,
+                        key: pageKeys[index],
+                        cubit: cubits[index],
+                        pageHeight: pageSafeHeight,
+                        scrollViewTopPadding: scrollViewTopPadding,
+                        initialScrollOffset: verticalScrollOffsets[index],
+                        onVerticalScrollChanged: (offset) => onVerticalScrollChanged(offset, index),
+                        defaultContentPadding: EdgeInsets.symmetric(horizontal: 14.w),
+                        detailedContentPadding: EdgeInsets.only(
+                          left: 20.w,
+                          right: 20.w,
+                          bottom: context.bottomPadding + 74.h + StoriesScrollupButton.size,
+                        ),
+                        onFactLoadingStarted: storyController.pause,
+                        onFactLoadingFinished: storyController.play,
+                        isSkeleton: widget.isLoading,
+                        showWatermark: showWatermark,
+                        isCapturing: isCapturing,
+                        backgroundStyle: widget.backgroundStyle,
+                        backgroundBrightness: widget.backgroundBrightness,
+                        onShare: storyController.pause,
+                        onShareFinished: storyController.play,
+                      ),
+                    ),
+                  );
+                },
+              ).autoElasticOut(
+                animate: isShowcase,
+                duration: const Duration(milliseconds: 1000),
+                reverseDuration: const Duration(milliseconds: 400),
+                scaleCurve: Curves.easeInOutSine,
+                scaleReverseCurve: const Interval(0.999, 1.0),
+                forceComplete: false,
+              ),
+        ),
       ),
     );
   }
@@ -346,10 +384,8 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView>
   }
 
   Widget _buildTitleAndArchiveButton() {
-    return Positioned(
-      left: 0.0,
-      right: 0.0,
-      top: context.topPadding,
+    return Padding(
+      padding: EdgeInsets.only(top: context.topPadding),
       child: pageIndexProvider(
         builder: (index) {
           final fact = widget.facts.asMap()[index];
@@ -372,52 +408,53 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView>
   }
 
   Widget _buildBottomSection() {
-    return Positioned(
-      left: 14.w,
-      right: 14.w,
-      bottom: bottomSectionInset,
-      child: IgnorePointer(
-        ignoring: isShowcase,
-        child: ValueListenableBuilder(
-          valueListenable: verticalScrollFraction,
-          builder: (context, scrollFraction, child) {
-            final fraction = Curves.easeInQuad.transform(scrollFraction);
-            final yTranslate = (bottomSectionSafeInset * 1.2) * fraction;
-            final offstage = fraction >= 1.0;
-
-            return Transform.translate(
-              offset: Offset(0.0, yTranslate),
-              child: Offstage(offstage: offstage, child: child!),
-            );
-          },
-          child:
-              pageIndexProvider(
-                builder: (index) {
-                  return BlocBuilder<
-                    FactExplanationCubit,
-                    FactExplanationState
-                  >(
-                    bloc: cubits[index],
-                    builder: (context, state) => StoriesBottomActionSection(
-                      isSkeleton: widget.isLoading,
-                      ignoreCtaPointer: widget.isLoading,
-                      isLoadingExplanation: state.loadingFactExplanation,
-                      onAccountTap: widget.goToAccount,
-                      onBackgroundsTap: widget.goToBackgrounds,
-                      onReadMoreTap: () => _onReadMoreTap(index),
-                      backgroundStyle: widget.backgroundStyle,
-                    ),
-                  );
-                },
-              ).autoFadeOutDown(
-                animate: isShowcase,
-                duration: const Duration(milliseconds: 800),
-                reverseDuration: const Duration(milliseconds: 400),
-                slideCurve: Curves.easeInOutSine,
-                slideReverseCurve: const Interval(0.999, 1.0),
-                slideTo: bottomSectionSafeInset + 72.h,
-                forceComplete: false,
-              ),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(14.w, 0.0, 14.w, bottomSectionInset),
+        child: IgnorePointer(
+          ignoring: isShowcase,
+          child: ValueListenableBuilder(
+            valueListenable: verticalScrollFraction,
+            builder: (context, scrollFraction, child) {
+              final fraction = Curves.easeInQuad.transform(scrollFraction);
+              final yTranslate = (bottomSectionSafeInset * 1.2) * fraction;
+              final offstage = fraction >= 1.0;
+              
+              return Transform.translate(
+                offset: Offset(0.0, yTranslate),
+                child: Offstage(offstage: offstage, child: child!),
+              );
+            },
+            child:
+                pageIndexProvider(
+                  builder: (index) {
+                    return BlocBuilder<
+                      FactExplanationCubit,
+                      FactExplanationState
+                    >(
+                      bloc: cubits[index],
+                      builder: (context, state) => StoriesBottomActionSection(
+                        isSkeleton: widget.isLoading,
+                        ignoreCtaPointer: widget.isLoading,
+                        isLoadingExplanation: state.loadingFactExplanation,
+                        onAccountTap: widget.goToAccount,
+                        onBackgroundsTap: widget.goToBackgrounds,
+                        onReadMoreTap: () => _onReadMoreTap(index),
+                        backgroundStyle: widget.backgroundStyle,
+                      ),
+                    );
+                  },
+                ).autoFadeOutDown(
+                  animate: isShowcase,
+                  duration: const Duration(milliseconds: 800),
+                  reverseDuration: const Duration(milliseconds: 400),
+                  slideCurve: Curves.easeInOutSine,
+                  slideReverseCurve: const Interval(0.999, 1.0),
+                  slideTo: bottomSectionSafeInset + 72.h,
+                  forceComplete: false,
+                ),
+          ),
         ),
       ),
     );

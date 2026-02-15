@@ -25,4 +25,9 @@ abstract class ActiveBackgroundState with _$ActiveBackgroundState {
 
   Option<ResolvedBackgroundAsset> get appliedBackground =>
       optionOf(maybeWhen(applied: (_, data) => data, orElse: () => null));
+
+  UniqueId get selectedId => maybeWhen(
+    applied: (_, data) => data.background.id,
+    orElse: () => AppConstants.config.defaultBackgroundId,
+  );
 }

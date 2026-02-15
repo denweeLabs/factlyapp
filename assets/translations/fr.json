@@ -195,6 +195,25 @@
     },
 
 
+    "fact_share": {
+        "more": "Plus",
+        "hide_watermark": "Masquer le filigrane",
+        "archive": {
+            "archive": "Archiver",
+            "unarchive": "Désarchiver"
+        },
+        "copy": {
+            "copy": "Copier",
+            "copied": "Copié"
+        },
+        "download": {
+            "download": "Télécharger",
+            "saved": "Enregistré"
+        },
+        "resource": "Ressource"
+    },
+
+
     "validation": {
         "email": {
             "empty": "Veuillez fournir un e-mail",
@@ -351,8 +370,7 @@
             "daily_facts": "Pas encore de faits quotidiens... Revenez plus tard pour découvrir quelque chose de nouveau !",
             "facts_archive": "Votre archive est vide — enregistrez quelques faits et ils apparaîtront ici !"
         },
-        "agreeing_to_terms": "En continuant, vous acceptez nos\n<terms>Conditions</terms> et notre <privacy>Confidentialité</privacy>",
-        "copied_to_clipboard": "Copié"
+        "agreeing_to_terms": "En continuant, vous acceptez nos\n<terms>Conditions</terms> et notre <privacy>Confidentialité</privacy>"
     },
 
 
@@ -371,6 +389,20 @@
                 "subtitle": {
                     "basic": "Pour recevoir des notifications, assurez-vous d'autoriser cette application",
                     "in_settings": "Pour recevoir des notifications, assurez-vous d'autoriser cette application dans les paramètres du système"
+                }
+            },
+            "photosAdd": {
+                "title": "Autorisation",
+                "subtitle": {
+                    "basic": "Pour enregistrer et partager des fichiers, veuillez autoriser l’accès au stockage pour cette application",
+                    "in_settings": "Pour enregistrer et partager des fichiers, veuillez autoriser l’accès au stockage pour cette application dans les paramètres système"
+                }
+            },
+            "photosFull": {
+                "title": "Autorisation",
+                "subtitle": {
+                    "basic": "Pour enregistrer et partager des fichiers, veuillez autoriser l’accès aux photos pour cette application",
+                    "in_settings": "Pour enregistrer et partager des fichiers, veuillez autoriser l’accès aux photos pour cette application dans les paramètres système"
                 }
             }
         },

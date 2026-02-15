@@ -3,6 +3,7 @@ import 'package:denwee/presentation/bloc/backgrounds/active_background_cubit.dar
 import 'package:denwee/presentation/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/presentation/bloc/connectivity/connectivity_cubit.dart';
 import 'package:denwee/presentation/bloc/facts/daily_facts_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/fact_share_cubit.dart';
 import 'package:denwee/presentation/bloc/facts/facts_archive_cubit.dart';
 import 'package:denwee/presentation/bloc/notifications/notifications_cubit.dart';
 import 'package:denwee/presentation/bloc/permissions/permissions_cubit.dart';
@@ -67,6 +68,9 @@ class RootBlocProviders extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => getIt<ActiveBackgroundCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => getIt<FactShareCubit>(),
         ),
       ],
       child: child,

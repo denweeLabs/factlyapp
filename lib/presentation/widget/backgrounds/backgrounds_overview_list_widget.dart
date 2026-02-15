@@ -19,7 +19,7 @@ import 'package:utils/utils.dart';
 class BackgroundsOverviewList extends StatefulWidget {
   const BackgroundsOverviewList({super.key});
 
-  static final height = 154.h;
+  static final height = 160.w;
   static const maxVisibleCount = 15;
 
   @override

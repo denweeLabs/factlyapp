@@ -195,6 +195,25 @@
     },
 
 
+    "fact_share": {
+        "more": "Altro",
+        "hide_watermark": "Nascondi filigrana",
+        "archive": {
+            "archive": "Archivia",
+            "unarchive": "Rimuovi dall’archivio"
+        },
+        "copy": {
+            "copy": "Copia",
+            "copied": "Copiato"
+        },
+        "download": {
+            "download": "Scarica",
+            "saved": "Salvato"
+        },
+        "resource": "Risorsa"
+    },
+
+
     "validation": {
         "email": {
             "empty": "Per favore inserisci un'email",
@@ -351,8 +370,7 @@
             "daily_facts": "Ancora nessun fatto giornaliero... Riprova più tardi per qualcosa di nuovo!",
             "facts_archive": "Il tuo archivio è vuoto — salva alcuni fatti e appariranno qui!"
         },
-        "agreeing_to_terms": "Continuando, accetti i nostri\n<terms>Termini</terms> e la nostra <privacy>Privacy</privacy>",
-        "copied_to_clipboard": "Copiato"
+        "agreeing_to_terms": "Continuando, accetti i nostri\n<terms>Termini</terms> e la nostra <privacy>Privacy</privacy>"
     },
 
 
@@ -371,6 +389,20 @@
                 "subtitle": {
                     "basic": "Per ricevere notifiche, assicurati di permettere l'accesso a questa app",
                     "in_settings": "Per ricevere notifiche, assicurati di permettere l'accesso a questa app nelle impostazioni di sistema"
+                }
+            },
+            "photosAdd": {
+                "title": "Permesso",
+                "subtitle": {
+                    "basic": "Per salvare e condividere i file, consenti l’accesso alla memoria per questa app",
+                    "in_settings": "Per salvare e condividere i file, consenti l’accesso alla memoria per questa app nelle impostazioni di sistema"
+                }
+            },
+            "photosFull": {
+                "title": "Permesso",
+                "subtitle": {
+                    "basic": "Per salvare e condividere i file, consenti l’accesso alle foto per questa app",
+                    "in_settings": "Per salvare e condividere i file, consenti l’accesso alle foto per questa app nelle impostazioni di sistema"
                 }
             }
         },
