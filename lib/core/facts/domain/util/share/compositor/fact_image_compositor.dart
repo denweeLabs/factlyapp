@@ -14,7 +14,7 @@ class FactImageCompositor implements FactCompositor {
   const FactImageCompositor(this._background, this._storage);
 
   static const backgroundResolution = '1440:2560';
-  static const overlayScale = '1440*0.93';
+  static const overlayScale = '1440*0.95';
 
   @override
   Future<File> compose(Uint8List overlay) async {
