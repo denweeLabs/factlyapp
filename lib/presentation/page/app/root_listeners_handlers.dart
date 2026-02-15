@@ -23,7 +23,12 @@ mixin RootBlocListenersHandlers {
   var isErrorSnackbarDisplayed = false;
 
   void processAppResume() {
-    getIt<PermissionsCubit>().forceCheckNotifications();
+    Future.microtask(
+      () => getIt<PermissionsCubit>()
+        ..forceCheckNotifications()
+        ..forceCheckPhotosAdd()
+        ..forceCheckPhotosFull(),
+    );
   }
 
   void processLoggedOutUser() {

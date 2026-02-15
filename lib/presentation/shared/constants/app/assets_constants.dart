@@ -53,10 +53,14 @@ class _IconsAssets {
   final sendSqaureLinearLinear = '${_folderPath}send_sqaure_linear.svg';
   final textBlockLinear = '${_folderPath}text_block_linear.svg';
   final unlockLinear = '${_folderPath}unlock_linear.svg';
+  final copyLinear = '${_folderPath}copy_linear.svg';
+  final copySuccessLinear = '${_folderPath}copy_success_linear.svg';
+  final documentDownloadLinear = '${_folderPath}document_download_linear.svg';
 
   // Bold icons
   final archiveTickBold = '${_folderPath}archive_tick_bold.svg';
   final heartBold = '${_folderPath}heart_bold.svg';
+  final threeDotsHorizontalBold = '${_folderPath}three_dots_horizontal_bold.svg';
 
   // Arrows & Cross
   final arrowLeftAndroid = '${_folderPath}arrow_left_android.svg';
@@ -70,6 +74,12 @@ class _IconsAssets {
   final google = '${_folderPath}google_icon.svg';
   final apple = '${_folderPath}apple_icon.svg';
   final facebook = '${_folderPath}facebook_icon.svg';
+  final telegram = '${_folderPath}telegram_icon.svg';
+  final viber = '${_folderPath}viber_icon.svg';
+  final whatsapp = '${_folderPath}whatsapp_icon.svg';
+  final igLinear = '${_folderPath}ig_linear.svg';
+  final igStoryLinear = '${_folderPath}ig_story_linear.svg';
+  final igDirectLinear = '${_folderPath}ig_direct_linear.svg';
 }
 
 class _ImagesAssets {

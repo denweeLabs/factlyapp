@@ -9,6 +9,7 @@ abstract class DeviceInfo with _$DeviceInfo {
     required String operatingSystem,
     required String operatingSystemVersion,
     required String osVersionValue,
+    required int? androidSdkInt,
     required AppInfo appInfo,
     required String? deviceId,
   }) = _DeviceInfo;

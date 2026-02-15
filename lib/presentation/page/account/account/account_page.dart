@@ -3,14 +3,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
-import 'package:denwee/core/permissions/domain/entity/app_permission_status.dart';
 import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
 import 'package:denwee/core/statistics/domain/entity/user_statistics.dart';
 import 'package:denwee/presentation/bloc/auth/auth_cubit.dart';
 import 'package:denwee/presentation/bloc/backgrounds/available_backgrounds_cubit.dart';
-import 'package:denwee/presentation/bloc/permissions/permissions_cubit.dart';
 import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
 import 'package:denwee/presentation/bloc/user_statistics/user_statistics_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
@@ -46,7 +43,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:snap_scroll_physics/snap_scroll_physics.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:utils/utils.dart';
 
 class AccountPage extends StatefulWidget {
@@ -260,10 +256,7 @@ class _AccountPageState extends State<AccountPage> {
           title: context.tr(LocaleKeys.account_section_more_items_privacy_terms),
         ),
         AccountHorizontalTile.more(
-          onTap: () => LauncherUtil.launchSupportEmail(
-            context,
-            errorSnackbarPos: SnackBarPosition.bottom,
-          ),
+          onTap: () => LauncherUtil.launchSupportEmail(context),
           iconPath: AppConstants.assets.icons.messageQuestionLinear,
           title: context.tr(LocaleKeys.account_section_more_items_contact_support),
         ),
@@ -323,29 +316,6 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  void _promptDelayedNotificationsPermission() {
-    Future.delayed(CustomAnimationDurations.ultraLow, () {
-      getIt<PermissionsCubit>().forceCheckNotifications().then((status) {
-        _showNotificationsPermissionDialog(context, status);
-      });
-    });
-  }
-
-  void _showNotificationsPermissionDialog(BuildContext context, AppPermissionStatus status) async {
-    if (status.isAnyGranted) return;
-
-    final isForcedToSettings = status.isDeniedForever;
-    final result = await AppDialogs.showGrantPermissionDialog(
-      context,
-      type: AppPermissionType.notifications,
-      isForcedSettings: isForcedToSettings,
-    );
-    if (result == true) {
-      if (isForcedToSettings) return AppSettings.openAppSettings(type: AppSettingsType.notification);
-      getIt<PermissionsCubit>().forceCheckNotifications(request: true);
-    }
-  }
-
   void _onChangeNotificationTime() async {
     final initialTime = getIt<UserPreferencesCubit>().state.preferences.notifications.time;
     final time = await AppDialogs.showSelectNotificationTimeDialog(
@@ -356,5 +326,11 @@ class _AccountPageState extends State<AccountPage> {
       getIt<UserPreferencesCubit>().changeNotificationTime(time);
       _promptDelayedNotificationsPermission();
     }
+  }
+
+  void _promptDelayedNotificationsPermission() {
+    Future.delayed(CustomAnimationDurations.ultraLow, () {
+      AppDialogs.checkPermissionDialog(context, AppPermissionType.notifications);
+    });
   }
 }

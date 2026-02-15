@@ -25,7 +25,7 @@ class BackgroundSelectionCardBody extends StatelessWidget {
   final TextStyle lettersStyle;
   final Widget child;
 
-  static final width = 120.w;
+  static final width = 124.w;
 
   @override
   Widget build(BuildContext context) {
