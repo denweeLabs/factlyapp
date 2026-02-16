@@ -3,7 +3,7 @@ import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/misc/app_markdown_text_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -69,7 +69,7 @@ class StoriesFactShortContent extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        BackdropSurfaceContainer.ellipse(
+        SurfaceContainer.ellipse(
           size: Size.square(46.w),
           borderRadius: BorderRadius.all(Radius.circular(20)),
           color: elipseColor ?? Colors.white,

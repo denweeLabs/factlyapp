@@ -9,7 +9,6 @@ import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/animations/scroll_physics/less_responsive_scroll_physics.dart';
 import 'package:denwee/presentation/widget/shared/common/common_skeleton_item_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
 import 'package:denwee/presentation/bloc/facts/fact_explanation_cubit.dart';
 import 'package:denwee/presentation/widget/facts/stories_components/src/widgets/stories_scrollup_button_widget.dart';
 import 'package:denwee/presentation/widget/facts/stories_components/src/widgets/stories_fact_content_widget.dart';
@@ -145,25 +144,21 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
       child: BlocSelector<FactExplanationCubit, FactExplanationState, bool>(
         bloc: widget.cubit,
         selector: (state) => state.hasExplanation,
-        builder: (context, hasExplanation) => FadingEdge(
-          axis: Axis.vertical,
-          stops: edgesFadeStops,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            controller: scrollController,
-            physics: hasExplanation
-                ? widget.scrollPhysics ?? defaultScrollPhysics
-                : const NeverScrollableScrollPhysics(),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            addRepaintBoundaries: false,
-            addAutomaticKeepAlives: false,
-            addSemanticIndexes: false,
-            children: [
-              _defaultContent(),
-              _detailedContent(),
-              _overscrollFiller(),
-            ],
-          ),
+        builder: (context, hasExplanation) => ListView(
+          padding: EdgeInsets.zero,
+          controller: scrollController,
+          physics: hasExplanation
+              ? widget.scrollPhysics ?? defaultScrollPhysics
+              : const NeverScrollableScrollPhysics(),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          addRepaintBoundaries: false,
+          addAutomaticKeepAlives: false,
+          addSemanticIndexes: false,
+          children: [
+            _defaultContent(),
+            _detailedContent(),
+            _overscrollFiller(),
+          ],
         ),
       ),
     );
@@ -282,7 +277,7 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
       child: AnimatedBuilder(
         animation: scrollFractionController,
         builder: (context, child) {
-          final animate = scrollFractionController.value >= 1.0;
+          final animate = scrollFractionController.value >= 0.95;
 
           return AnimatedScale(
             scale: animate ? 1.0 : 0.0,

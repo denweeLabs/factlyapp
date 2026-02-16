@@ -63,15 +63,17 @@ class _SealAnimatedIconState extends State<SealAnimatedIcon>
 
   @override
   Widget build(BuildContext context) {
-    return LottieAnimation(
-      path: AppConstants.assets.animations.seal,
-      controller: animation,
-      size: widget.size,
-    ).shakeY(
-      from: 2,
-      infinite: true,
-      curve: Curves.easeInOutCirc,
-      duration: duration,
+    return RepaintBoundary(
+      child: LottieAnimation(
+        path: AppConstants.assets.animations.seal,
+        controller: animation,
+        size: widget.size,
+      ).shakeY(
+        from: 2,
+        infinite: true,
+        curve: Curves.easeInOutCirc,
+        duration: duration,
+      ),
     );
   }
 }

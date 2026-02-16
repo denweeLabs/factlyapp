@@ -7,6 +7,7 @@ import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/presentation/bloc/facts/fact_share_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:denwee/presentation/shared/router/root_router.dart';
+import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/navigation_util.dart';
@@ -15,7 +16,7 @@ import 'package:denwee/presentation/widget/shared/buttons/archive_button_widget.
 import 'package:denwee/presentation/widget/shared/buttons/back_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_pop_scope_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_scaffold_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/presentation/bloc/facts/fact_explanation_cubit.dart';
 import 'package:denwee/presentation/widget/facts/stories_components/src/widgets/stories_scrollup_button_widget.dart';
 import 'package:denwee/presentation/widget/facts/stories_components/src/widgets/stories_view_background_widget.dart';
@@ -89,7 +90,7 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
       onWillPop: Navigator.of(context).pop,
       child: CommonScaffold(
         systemOverlayType: ThemeType.dark,
-        style: CommonBackgroundStyle.solid,
+        backgroundColor: AppColors.primaryBackground[ThemeType.dark],
         body: StoriesFactCapture(
           builder: (context, captureArea, isWatermark, factOverlayKey) {
             /// Function checks if widget is visible during fact screenshot
@@ -206,7 +207,7 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
             color: context.lightIconColor,
             padding: EdgeInsets.symmetric(horizontal: 20.w),
           ),
-          BackdropSurfaceContainer.ellipse(
+          SurfaceContainer.ellipse(
             borderColor: Colors.white12,
             child: Padding(
               padding: EdgeInsets.symmetric(

@@ -106,4 +106,6 @@ class AppColors {
   static const black08 = Color(0x14000000);
   static const black10 = Color(0x1A000000);
 
+  static const dialogShadow = Colors.black54;
+
 }

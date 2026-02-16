@@ -1,28 +1,24 @@
 import 'package:denwee/presentation/widget/shared/animations/tap_animations/widget_hover_animation_provider.dart';
 import 'package:flutter/material.dart';
 
-class BounceTapFadeAnimation extends StatelessWidget {
-  const BounceTapFadeAnimation({
+class BounceTapWithBuilderAnimation extends StatelessWidget {
+  const BounceTapWithBuilderAnimation({
     super.key,
     this.onTap,
     this.onLongTap,
     this.enableHapticFeedback = true,
     this.minScale = defaultMinScale,
-    this.minFade = defaultMinFade,
-    required this.child,
+    required this.builder,
   });
 
   final VoidCallback? onTap;
   final VoidCallback? onLongTap;
-  final Widget child;
+  final Widget Function(BuildContext, Animation<double>) builder;
   final bool enableHapticFeedback;
   final double minScale;
-  final double minFade;
 
   static const defaultMinScale = 0.94;
-  static const defaultMinFade = 0.60;
   static const defaultScaleCurve = Curves.easeOutSine;
-  static const defaultFadeCurve = Curves.easeInOutSine;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +30,9 @@ class BounceTapFadeAnimation extends StatelessWidget {
         final scale = Tween(begin: 1.0, end: minScale).animate(
           CurvedAnimation(parent: animation, curve: defaultScaleCurve));
 
-        final fade = Tween(begin: 1.0, end: minFade).animate(
-          CurvedAnimation(parent: animation, curve: defaultFadeCurve));
-
-        return FadeTransition(
-          opacity: fade,
-          child: ScaleTransition(scale: scale, child: child),
+        return ScaleTransition(
+          scale: scale,
+          child: builder(context, animation),
         );
       },
     );

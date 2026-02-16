@@ -129,12 +129,17 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
     required BackgroundCardSelectionVM vm,
   }) {
     final isSelected = item.isSelected(vm.selectedId);
+    final isApplying = item.id == vm.applyingId;
     
     return item.when(
-      defaultBackground: () => DefaultBackgroundSelectionCard(isSelected: isSelected),
+      defaultBackground: () => DefaultBackgroundSelectionCard(
+        isSelected: isSelected,
+        isApplying: isApplying,
+      ),
       availableBackground: (background) => BackgroundSelectionCard(
         background: background,
         isSelected: isSelected,
+        isApplying: isApplying,
         isSubscribed: vm.hasPremiumSubscription,
         isUnlocked: vm.unlockedIds.contains(background.id),
       ),

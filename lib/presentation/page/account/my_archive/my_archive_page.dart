@@ -12,10 +12,10 @@ import 'package:denwee/presentation/widget/shared/common/common_app_bar_widget.d
 import 'package:denwee/presentation/widget/shared/common/common_loading_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_no_results_found_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_scaffold_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:denwee/presentation/widget/facts/archived_fact_tile_widget.dart';
 import 'package:denwee/presentation/page/fact_details/args/fact_details_page_args.dart';
+import 'package:denwee/presentation/widget/shared/misc/solid_fading_edge_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,10 +99,10 @@ class _MyArchivePageState extends State<MyArchivePage> {
   Widget _buildGroups(FactsArchiveState state, BuildContext context) {
     final data = state.groupedByMonth;
 
-    return FadingEdge(
+    return SolidVerticalFadingEdge(
       key: const ValueKey(2),
-      axis: Axis.vertical,
-      stops: const [0.0, 0.0, 0.8, 1.0],
+      backgroundColor: context.theme.colorScheme.background,
+      size: const FadingEdges.bottom(100),
       child: CustomScrollView(
         controller: scrollController,
         physics: const LessResponsiveScrollPhysics(

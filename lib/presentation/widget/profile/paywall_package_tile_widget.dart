@@ -4,9 +4,9 @@ import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_in.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/bubbles_animation_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -40,12 +40,12 @@ class PaywallPackageTile extends StatelessWidget {
       alpha: _getBackgroundColorOpacity(),
     );
 
-    return BounceTapFadeAnimation(
+    return BounceTapAnimation(
       onTap: () => onTap(package),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          BackdropSurfaceContainer.ellipse(
+          SurfaceContainer.ellipse(
             borderColor: borderColor,
             color: color,
             borderRadius: BorderRadius.all(AppConstants.style.radius.cardSmall),

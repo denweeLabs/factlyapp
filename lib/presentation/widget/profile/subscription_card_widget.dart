@@ -1,4 +1,3 @@
-import 'package:animated_switcher_plus/animated_switcher_plus.dart';
 import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
@@ -9,8 +8,8 @@ import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/sparkles_animated_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
-import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
+import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,69 +23,67 @@ class SubscriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (onlyBody) return _buildBody();
+    if (onlyBody) return _buildBody(context);
 
-    final decoration = ShapeDecoration(
-      shape: RoundedSuperellipseBorder(
-        borderRadius: BorderRadius.all(AppConstants.style.radius.cardSmall),
-        side: context.isLightTheme
-            ? const BorderSide(color: AppColors.black08)
-            : const BorderSide(color: AppColors.white06),
-      ),
-      color: context.primaryContainer,
-      shadows: [
-        BoxShadow(
-          color: context.theme.colorScheme.primary.withValues(alpha: 0.5),
-          offset: const Offset(0.0, 25.0),
-          spreadRadius: -35,
-          blurRadius: 35,
-        ),
-      ],
+    final shape = RoundedSuperellipseBorder(
+      borderRadius: BorderRadius.all(AppConstants.style.radius.cardSmall),
+      side: context.isLightTheme
+          ? const BorderSide(color: AppColors.black08)
+          : const BorderSide(color: AppColors.white06),
     );
+    final shadowColor = context.theme.colorScheme.primary.withValues(alpha: 0.5);
 
     return GestureDetector(
       onTap: () => _onTap(context),
+      behavior: HitTestBehavior.translucent,
       child: DecoratedBox(
-        decoration: decoration,
-        child: Stack(
-          children: [
-            Positioned(
-              right: -28.w,
-              bottom: -32.h,
-              child: CommonAppIcon(
-                path: AppConstants.assets.icons.verifyLinear,
-                color: context.isLightTheme
-                    ? AppColors.black04
-                    : AppColors.white04,
-                size: 92.w,
-              ),
-            ),
-            _buildBody(),
-          ],
+        decoration: ShapeDecoration(
+          shape: shape,
+          color: context.primaryContainer,
+          shadows: [BoxShadow(
+            color: shadowColor,
+            offset: const Offset(0.0, 25.0),
+            spreadRadius: -35,
+            blurRadius: 35,
+          )],
         ),
+        child: _buildBody(context),
       ),
     );
   }
 
-  Widget _buildBody() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(24.w, 26.h, 20.w, 26.h),
-      child: BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
-        builder: (context, userSubscriptionState) {
-          final activeSubscription = userSubscriptionState.activeSubscription
-              .toNullable();
-
-          return AnimatedSwitcherPlus.flipX(
-            duration: CustomAnimationDurations.low,
-            switchOutCurve: const Interval(0.0, 0.5),
-            switchInCurve: const Interval(0.5, 1.0),
-            child: _buildContent(
-              context: context,
-              activeSubscription: activeSubscription,
-            ),
-          );
-        },
-      ),
+  Widget _buildBody(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+          right: -28.w,
+          bottom: -32.h,
+          child: CommonAppIcon(
+            path: AppConstants.assets.icons.verifyLinear,
+            color: context.isLightTheme ? AppColors.black04 : AppColors.white04,
+            size: 92.w,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(24.w, 26.h, 20.w, 26.h),
+          child: BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
+            builder: (context, userSubscriptionState) {
+              final activeSubscription = userSubscriptionState.activeSubscription
+                  .toNullable();
+        
+              return AnimatedSwitcher(
+                duration: CustomAnimationDurations.low,
+                switchOutCurve: const Interval(0.0, 0.5),
+                switchInCurve: const Interval(0.5, 1.0),
+                child: _buildContent(
+                  context: context,
+                  activeSubscription: activeSubscription,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -146,7 +143,7 @@ class SubscriptionCard extends StatelessWidget {
             ),
           ),
           4.horizontalSpace,
-          const SparklesAnimatedIcon(animate: true),
+          const RepaintBoundary(child: SparklesAnimatedIcon(animate: true)),
         ],
       );
     }

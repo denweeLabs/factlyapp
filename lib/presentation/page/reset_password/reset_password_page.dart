@@ -7,9 +7,9 @@ import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/dialogs_util.dart';
 import 'package:denwee/presentation/shared/utils/haptic_util.dart';
-import 'package:denwee/presentation/widget/shared/animations/common_animations/common_animations.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_in.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/animated_switchers.dart';
-import 'package:denwee/presentation/widget/shared/animations/constants/animation_bipos.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_keyboard_padded_body_widget.dart';
@@ -182,11 +182,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       // hintStyle: bodyL.copyWith(
       //   color: context.lightTextColor.withValues(alpha: 0.7),
       // ),
-    ).fadeSlide(
-      fades: const BiPos(0.0, 1.0),
-      offsets: const BiPos(Offset(0.0, 0.5), Offset.zero),
-      delay: const Duration(milliseconds: 500),
-    );
+    ).autoFadeInUp(sequencePos: 2);
   }
 
   Widget _buildConfirmPasswordField(ChangePasswordState state) {
@@ -215,12 +211,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         // hintStyle: bodyL.copyWith(
         //   color: context.lightTextColor.withValues(alpha: 0.7),
         // ),
-      ).fadeSlide(
-        animate: isConfirmPasswordFieldVisible,
-        fades: const BiPos(0.0, 1.0),
-        offsets: const BiPos(Offset(0.0, 0.5), Offset.zero),
-        delay: const Duration(milliseconds: 200),
-      ),
+      ).autoFadeInUp(sequencePos: 3),
     );
   }
 
@@ -241,12 +232,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               context.lightPrimaryContainer,
             ],
             textColor: context.theme.colorScheme.primary,
-          ).fadeScale(
-            fades: const BiPos(0.0, 1.0),
-            scales: const BiPos(0.0, 1.0),
-            delay: const Duration(milliseconds: 800),
-            scaleCurve: Curves.elasticOut,
-          ),
+          ).autoElasticIn(sequencePos: 6),
         ),
       );
     });
@@ -273,12 +259,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             ),
           ),
         ],
-      ).fadeScale(
-        fades: const BiPos(0.0, 1.0),
-        scales: const BiPos(0.1, 1.0),
-        scaleCurve: Curves.linearToEaseOut,
-        delay: const Duration(milliseconds: 300),
-      ),
+      ).autoElasticIn(sequencePos: 1),
     );
   }
 

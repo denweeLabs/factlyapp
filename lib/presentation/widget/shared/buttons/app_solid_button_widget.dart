@@ -3,15 +3,14 @@ import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/animations/shimmer_animation_widget.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/core_tap_bounce_animation.dart';
 import 'package:denwee/presentation/widget/shared/animations/fade_loop_animation.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/bubbles_animation_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:utils/utils.dart';
 
 class AppSolidButton extends StatelessWidget {
   const AppSolidButton({
@@ -54,6 +53,16 @@ class AppSolidButton extends StatelessWidget {
   static final defaultHeight = 64.h;
   static const defaultBorderRadius = BorderRadius.all(Radius.circular(100));
 
+  static const _clipper = ShapeBorderClipper(
+    shape: RoundedSuperellipseBorder(
+      borderRadius: BorderRadius.all(Radius.circular(48.0)),
+    ),
+  );
+
+  static const _border = Border.fromBorderSide(
+    BorderSide(color: Colors.white12),
+  );
+
   void _onTap() {
     if (isBusy) return;
     onTap?.call();
@@ -61,28 +70,49 @@ class AppSolidButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CoreTapBounceAnimation(
+    final color1 = backgroundColors?[0] ?? context.theme.colorScheme.primary;
+    final color2 = backgroundColors?[1] ?? context.theme.colorScheme.secondary;
+    final effectiveGradientColors = [color1, color2];
+
+    final basicShadowColor = context.isLightTheme
+        ? context.theme.shadowColor
+        : context.theme.colorScheme.secondary;
+    final effectiveShadowColor = shadowColor ?? basicShadowColor;
+    final effectiveElavation = hideShadow ? 0.0 : 6.0;
+
+    return BounceTapAnimation(
       onTap: _onTap,
-      ignoreScale: ignoreTapScale,
-      builder: (context, isHovered) => Stack(
-        children: [
-          AnimatedContainer(
-            width: width,
-            height: buttonHeight ?? defaultHeight,
-            curve: Curves.fastEaseInToSlowEaseOut,
-            duration: CustomAnimationDurations.low,
-            decoration: _getDecoration(
-              context: context,
-              isHovered: isHovered,
+      child: PhysicalShape(
+        clipper: _clipper,
+        clipBehavior: Clip.hardEdge,
+        elevation: effectiveElavation,
+        color: Colors.transparent,
+        shadowColor: effectiveShadowColor,
+        child: Stack(
+          children: [
+            AnimatedContainer(
+              width: width,
+              height: buttonHeight ?? defaultHeight,
+              padding: padding,
+              duration: CustomAnimationDurations.low,
+              curve: Curves.fastEaseInToSlowEaseOut,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: effectiveGradientColors,
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: defaultBorderRadius,
+                border: _border,
+              ),
+              child: _buildDisplayElementsSwitcher(context),
             ),
-            padding: padding,
-            child: _buildDisplayElementsSwitcher(context),
-          ),
-          if (isBubbles || (isBusy || isShimmering))
-            _buildBackgroundAnimations(context),
-        ],
+            if (isBubbles || (isBusy || isShimmering))
+              _buildBackgroundAnimations(context),
+          ],
+        ),
       ),
-    );
+    ); 
   }
 
   Widget _buildDisplayElementsSwitcher(BuildContext context) {
@@ -148,73 +178,28 @@ class AppSolidButton extends StatelessWidget {
 
   Widget _buildBackgroundAnimations(BuildContext context) {
     return Positioned.fill(
-      child: ClipRSuperellipse(
-        borderRadius: defaultBorderRadius,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // bubbles
-            if (isBubbles)
-              const BubblesAnimation(
-                bubblesCount: 8,
-                opacity: 25,
-              ),
-
-            // busy fast shimmer
-            if (isBusy)
-              const ShimmerAnimation(
-                duration: CustomAnimationDurations.mediumHigh,
-                interval: Duration.zero,
-              )
-
-            // slow decorative shimmer
-            else if (isShimmering)
-              const ShimmerAnimation(),
-          ],
-        ),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // bubbles
+          if (isBubbles)
+            const BubblesAnimation(
+              bubblesCount: 8,
+              opacity: 25,
+            ),
+      
+          // busy fast shimmer
+          if (isBusy)
+            const ShimmerAnimation(
+              duration: CustomAnimationDurations.mediumHigh,
+              interval: Duration.zero,
+            )
+      
+          // slow decorative shimmer
+          else if (isShimmering)
+            const ShimmerAnimation(),
+        ],
       ),
-    );
-  }
-
-  ShapeDecoration _getDecoration({
-    required BuildContext context,
-    required bool isHovered,
-  }) {
-    final color1 = backgroundColors?[0] ?? context.theme.colorScheme.primary;
-    final color2 = backgroundColors?[1] ?? context.theme.colorScheme.secondary;
-
-    final hoverColor1 = Color.lerp(color1, Colors.white, 0.2)!;
-    final hoverColor2 = Color.lerp(color2, Colors.white, 0.2)!;
-
-    final thisGradientColors = [
-      isHovered ? hoverColor1 : color1,
-      isHovered ? hoverColor2 : color2,
-    ];
-
-    final thisShadowColor = shadowColor ?? (context.isLightTheme
-        ? context.theme.shadowColor
-        : context.theme.colorScheme.secondary);
-
-    return ShapeDecoration(
-      shape: const RoundedSuperellipseBorder(
-        borderRadius: defaultBorderRadius,
-        side: BorderSide(color: Colors.white12),
-      ),
-      gradient: LinearGradient(
-        colors: thisGradientColors,
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-      ),
-      shadows: hideShadow
-          ? null
-          : [
-              BoxShadow(
-                color: thisShadowColor,
-                blurRadius: 18.0,
-                spreadRadius: -14.0,
-                offset: const Offset(0.0, 12.0),
-              ).withTapResponse(isHovered),
-            ],
     );
   }
 }

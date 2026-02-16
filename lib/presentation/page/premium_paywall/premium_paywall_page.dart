@@ -2,6 +2,7 @@ import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:denwee/presentation/bloc/subscriptions/subscription_offerings_cubit.dart';
 import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
+import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/utils/dialogs_util.dart';
@@ -13,15 +14,14 @@ import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_right.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/scale_in_up.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
-import 'package:denwee/presentation/widget/shared/animations/shimmer_animation_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/back_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_loading_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_pop_scope_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_scaffold_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/solid_fading_edge_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:denwee/presentation/widget/profile/paywall_discount_badge_widget.dart';
@@ -113,7 +113,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
     if (state.packages.isNone()) {
       return Center(
         key: const ValueKey(1),
-        child: BackdropSurfaceContainer.circle(
+        child: SurfaceContainer.circle(
           onTap: initPackagesData,
           borderColor: Colors.white70,
           size: Size.square(62.h),
@@ -134,9 +134,9 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
     return Stack(
       key: const ValueKey(2),
       children: [
-        FadingEdge(
-          axis: Axis.vertical,
-          stops: const [0.0, 0.15, 0.77, 1.0],
+        SolidVerticalFadingEdge(
+          backgroundColor: context.theme.colorScheme.primary,
+          size: const FadingEdges.bottom(240),
           child: ListView(
             padding: EdgeInsets.only(
               top: context.topPadding,
@@ -181,29 +181,20 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
 
   Widget _buildPlanName(BuildContext context) {
     return Center(
-      child: Stack(
-        children: [
-          BackdropSurfaceContainer.ellipse(
-            onTap: HapticUtil.heavy,
-            onLongTap: HapticUtil.heavy,
-            color: Colors.white.withValues(alpha: 0.08),
-            borderColor: Colors.white24,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-              child: Text(
-                context.tr(LocaleKeys.subscription_premium_plan).toUpperCase(),
-                style: textButton.copyWith(color: context.lightTextColor),
-                textAlign: TextAlign.center,
-              ),
-            ),
+      child: SurfaceContainer.ellipse(
+        isShimmering: true,
+        onTap: HapticUtil.heavy,
+        onLongTap: HapticUtil.heavy,
+        color: AppColors.white08,
+        borderColor: Colors.white24,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+          child: Text(
+            context.tr(LocaleKeys.subscription_premium_plan).toUpperCase(),
+            style: textButton.copyWith(color: context.lightTextColor),
+            textAlign: TextAlign.center,
           ),
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: BackdropSurfaceContainer.defaultBorderRadius,
-              child: const ShimmerAnimation(),
-            ),
-          ),
-        ],
+        ),
       ).autoScaleInUp(sequencePos: 3, slideFrom: 0),
     );
   }
@@ -219,19 +210,19 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
           fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
         ),
         textAlign: TextAlign.center,
-      ).autoScaleInUp(sequencePos: 1, slideFrom: 40),
+          ).autoScaleInUp(
+            sequencePos: 1,
+            slideFrom: 40,
+            scaleCurve: Curves.linearToEaseOut,
+          ),
     );
   }
 
   Widget _buildBenefits(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w).copyWith(right: 28.w),
-        child: const PaywallPremiumBenefits().autoScaleInUp(
-          sequencePos: 2,
-          slideFrom: 30,
-          duration: CustomAnimationDurations.medium,
-        ),
+        padding: EdgeInsets.fromLTRB(24.w, 0.0, 28.w, 0.0),
+        child: const PaywallPremiumBenefits(),
       ),
     );
   }

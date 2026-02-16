@@ -9,11 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 @immutable
 class BackgroundCardSelectionVM {
   final UniqueId selectedId;
+  final UniqueId? applyingId;
   final Set<UniqueId> unlockedIds;
   final bool hasPremiumSubscription;
 
   const BackgroundCardSelectionVM({
     required this.selectedId,
+    required this.applyingId,
     required this.unlockedIds,
     required this.hasPremiumSubscription,
   });
@@ -45,31 +47,27 @@ class BackgroundCardSelectionProviders extends StatelessWidget {
               selector: (state) => state.profile.toNullable()?.unlockedBackgrounds ?? const <UniqueId>{},
               builder: (context, unlockedBackgroundIds) {
                 ///
-                ///
-                final data = BackgroundCardSelectionVM(
-                  selectedId: selectedBackgroundId,
-                  unlockedIds: unlockedBackgroundIds,
-                  hasPremiumSubscription: isSubscribed,
+                /// Applying background id
+                /// 
+                return BlocSelector<ActiveBackgroundCubit, ActiveBackgroundState, UniqueId?>(
+                  selector: (state) => state.applyingId.toNullable(),
+                  builder: (context, applyingId) {
+                    ///
+                    ///
+                    final data = BackgroundCardSelectionVM(
+                      selectedId: selectedBackgroundId,
+                      applyingId: applyingId,
+                      unlockedIds: unlockedBackgroundIds,
+                      hasPremiumSubscription: isSubscribed,
+                    );
+                    return builder(context, data);
+                  },
                 );
-                return builder(context, data);
               },
             );
           },
         );
       },
-    );
-  }
-}
-
-class BackgroundSelectionUtil {
-  /// Listens whether current background is applying
-  static Widget isBackgroundApplyingProvider({
-    required UniqueId backgroundId,
-    required Widget Function(bool) builder,
-  }) {
-    return BlocBuilder<ActiveBackgroundCubit, ActiveBackgroundState>(
-      builder: (_, state) =>
-          builder(state.applyingId.toNullable() == backgroundId),
     );
   }
 }

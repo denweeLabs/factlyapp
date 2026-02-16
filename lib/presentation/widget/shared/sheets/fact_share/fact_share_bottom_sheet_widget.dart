@@ -99,7 +99,6 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
       decoration: MaterialSheetDecoration(
         size: SheetSize.stretch,
         color: context.primaryContainer,
-        clipBehavior: Clip.antiAlias,
         shape: FactShareBottomSheet.shape,
       ),
       child:
@@ -167,6 +166,7 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
     return _HorizontalRow(
       children: [
         FactShareButton(
+          clipBehavior: Clip.hardEdge,
           isLoading: loadingTarget == FactShareSupportedTarget.instagramStories,
           onTap: () => _onOptionTap(FactShareSupportedTarget.instagramStories),
           label: 'Stories',
@@ -180,6 +180,7 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
           ),
         ),
         FactShareButton(
+          clipBehavior: Clip.hardEdge,
           isLoading: loadingTarget == FactShareSupportedTarget.whatsapp,
           onTap: () => _onOptionTap(FactShareSupportedTarget.whatsapp),
           label: 'WhatsApp',
@@ -190,6 +191,7 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
           ),
         ),
         FactShareButton(
+          clipBehavior: Clip.hardEdge,
           isLoading: loadingTarget == FactShareSupportedTarget.telegram,
           onTap: () => _onOptionTap(FactShareSupportedTarget.telegram),
           label: 'Telegram',
@@ -200,6 +202,7 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
           ),
         ),
         FactShareButton(
+          clipBehavior: Clip.hardEdge,
           isLoading: loadingTarget == FactShareSupportedTarget.viber,
           onTap: () => _onOptionTap(FactShareSupportedTarget.viber),
           label: 'Viber',
@@ -210,6 +213,7 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
           ),
         ),
         FactShareButton(
+          clipBehavior: Clip.hardEdge,
           isLoading: loadingTarget == FactShareSupportedTarget.facebook,
           onTap: () => _onOptionTap(FactShareSupportedTarget.facebook),
           label: 'Facebook',
@@ -220,6 +224,7 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
           ),
         ),
         FactShareButton(
+          clipBehavior: Clip.hardEdge,
           isLoading: loadingTarget == FactShareSupportedTarget.instagramDirect,
           onTap: () => _onOptionTap(FactShareSupportedTarget.instagramDirect),
           label: 'Direct',
@@ -233,6 +238,7 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
           ),
         ),
         FactShareButton(
+          clipBehavior: Clip.hardEdge,
           isLoading: loadingTarget == FactShareSupportedTarget.instagram,
           onTap: () => _onOptionTap(FactShareSupportedTarget.instagram),
           label: 'Instagram',
@@ -246,6 +252,7 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
           ),
         ),
         FactShareButton(
+          clipBehavior: Clip.hardEdge,
           isLoading: loadingTarget == FactShareSupportedTarget.more,
           onTap: () => _onOptionTap(FactShareSupportedTarget.more),
           label: context.tr(LocaleKeys.fact_share_more),

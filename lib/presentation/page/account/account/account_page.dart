@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
@@ -23,7 +22,6 @@ import 'package:denwee/presentation/widget/shared/common/common_scaffold_widget.
 import 'package:denwee/presentation/widget/profile/subscription_card_widget.dart';
 import 'package:denwee/presentation/widget/backgrounds/backgrounds_overview_list_widget.dart';
 import 'package:denwee/presentation/widget/profile/coloration_overview_selector_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
 import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:denwee/presentation/widget/profile/theme_overview_selector_widget.dart';
 import 'package:denwee/di/di.dart';
@@ -37,6 +35,7 @@ import 'package:denwee/presentation/widget/account/account_items_divider_widget.
 import 'package:denwee/presentation/widget/account/account_section_widget.dart';
 import 'package:denwee/presentation/widget/profile/profile_overlay_card_widget.dart';
 import 'package:denwee/presentation/widget/onboarding/selected_interests_list_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/solid_fading_edge_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +48,6 @@ class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
 
   static const routeName = 'AccountPage';
-
-  static const edgeFades = [0.0, 0.06, 0.75, 1.0];
 
   @override
   State<AccountPage> createState() => _AccountPageState();
@@ -66,10 +63,9 @@ class _AccountPageState extends State<AccountPage> {
     final scrollPhysics = SnapScrollPhysics(snaps: [scrollSnap]);
 
     return CommonScaffold(
-      body: FadingEdge(
-        enabled: Platform.isIOS,
-        axis: Axis.vertical,
-        stops: AccountPage.edgeFades,
+      body: SolidVerticalFadingEdge(
+        size: FadingEdges(top: topPadding, bottom: bottomPadding),
+        backgroundColor: context.theme.colorScheme.background,
         child: ListView(
           physics: scrollPhysics,
           padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),

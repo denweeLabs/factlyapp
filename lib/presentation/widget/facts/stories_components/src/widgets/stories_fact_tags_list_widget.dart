@@ -4,7 +4,7 @@ import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/launcher_util.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:utils/utils.dart';
@@ -84,7 +84,7 @@ class StoriesFactTagsList extends StatelessWidget {
     required String iconPath,
     required VoidCallback? onTap,
   }) {
-    return BackdropSurfaceContainer.ellipse(
+    return SurfaceContainer.ellipse(
       onTap: onTap,
       color: Colors.black38,
       borderColor: Colors.white10,
