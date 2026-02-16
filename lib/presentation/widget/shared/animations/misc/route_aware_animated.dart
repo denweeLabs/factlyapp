@@ -1,4 +1,3 @@
-import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animate_do.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:flutter/material.dart';
 
@@ -32,8 +31,8 @@ class _RouteAwareAnimatedState extends State<RouteAwareAnimated>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: widget.duration ?? RouteAwareAnimationValues.defaultDuration[AnimateDoDirection.forward]!,
-      reverseDuration: widget.reverseDuration ?? RouteAwareAnimationValues.defaultDuration[AnimateDoDirection.backward]!,
+      duration: widget.duration ?? CommonAnimationValues.ecForwardDuration,
+      reverseDuration: widget.reverseDuration ?? CommonAnimationValues.ecReverseDuration,
     );
   }
 

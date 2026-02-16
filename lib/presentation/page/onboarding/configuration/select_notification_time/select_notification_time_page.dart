@@ -50,7 +50,7 @@ class SelectNotificationTimePage extends StatelessWidget {
                         textAlign: TextAlign.center,
                       )
                       .autoFadeInUp(sequencePos: 1)
-                      .routeAwareFadeOutUp(
+                      .ecFadeOutUp(
                         controller: controller,
                         sequencePos: 0,
                         sequenceTotal: 3,
@@ -69,7 +69,7 @@ class SelectNotificationTimePage extends StatelessWidget {
                   ),
                 )
                 .autoFadeInUp(sequencePos: 2)
-                .routeAwareFadeOutUp(
+                .ecFadeOutUp(
                   controller: controller,
                   sequencePos: 1,
                   sequenceTotal: 3,
@@ -82,7 +82,7 @@ class SelectNotificationTimePage extends StatelessWidget {
                     RepaintBoundary(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        child: _buildNotificationTiles(context).routeAwareFadeOutUp(
+                        child: _buildNotificationTiles(context).ecFadeOutUp(
                           controller: controller,
                           sequencePos: 2,
                           sequenceTotal: 3,
@@ -104,7 +104,7 @@ class SelectNotificationTimePage extends StatelessWidget {
                                       .changeTime,
                                 )
                                 .autoFadeIn(sequencePos: 7)
-                                .routeAwareFadeOutUp(
+                                .ecFadeOutUp(
                                   controller: controller,
                                   sequencePos: 2,
                                   sequenceTotal: 3,

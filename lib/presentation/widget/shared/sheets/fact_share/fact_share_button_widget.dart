@@ -15,6 +15,7 @@ class FactShareButton extends StatelessWidget {
     required this.onTap,
     this.isLoading = false,
     this.decoration,
+    this.clipBehavior = Clip.none,
   });
 
   final Widget child;
@@ -22,6 +23,7 @@ class FactShareButton extends StatelessWidget {
   final BoxDecoration? decoration;
   final VoidCallback onTap;
   final bool isLoading;
+  final Clip clipBehavior;
 
   static final size = Size(74.w, 90.w);
 
@@ -35,6 +37,7 @@ class FactShareButton extends StatelessWidget {
           _CircleBody(
             onTap: onTap,
             decoration: decoration,
+            clipBehavior: clipBehavior,
             child: WidgetsUtil.staticRepaintAnimatedCrossFade(
               duration: CustomAnimationDurations.ultraLow,
               state: isLoading
@@ -62,29 +65,47 @@ class FactShareButton extends StatelessWidget {
 }
 
 class _CircleBody extends StatelessWidget {
-  const _CircleBody({this.onTap, this.decoration, this.child});
+  const _CircleBody({
+    this.onTap,
+    this.decoration,
+    this.child,
+    this.clipBehavior = Clip.none,
+  });
 
   final VoidCallback? onTap;
   final BoxDecoration? decoration;
+  final Clip clipBehavior;
   final Widget? child;
+
+  static final size = Size.square(FactShareButton.size.width * 0.69);
 
   @override
   Widget build(BuildContext context) {
-    return BounceTapAnimation(
-      onTap: onTap,
-      child: ClipOval(
-        child: SizedBox.fromSize(
-          size: Size.square(FactShareButton.size.width * 0.69),
-          child: DecoratedBox(
-            decoration:
-                decoration ??
-                BoxDecoration(
-                  color: context.isLightTheme
-                      ? Colors.blueGrey.shade100
-                      : Colors.blueGrey.shade500,
-                ),
-            child: Center(child: child),
-          ),
+    return BounceTapAnimation(onTap: onTap, child: _buildBody(context));
+  }
+
+  Widget _buildBody(BuildContext context) {
+    if (decoration == null) {
+      return SizedBox.fromSize(
+        size: size,
+        child: PhysicalModel(
+          shape: BoxShape.circle,
+          color: context.isLightTheme
+              ? Colors.blueGrey.shade100
+              : Colors.blueGrey.shade500,
+          clipBehavior: clipBehavior,
+          child: Center(child: child),
+        ),
+      );
+    }
+
+    return ClipOval(
+      clipBehavior: clipBehavior,
+      child: SizedBox.fromSize(
+        size: size,
+        child: DecoratedBox(
+          decoration: decoration!,
+          child: Center(child: child),
         ),
       ),
     );

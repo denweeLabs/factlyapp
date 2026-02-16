@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
-import 'package:denwee/presentation/bloc/backgrounds/active_background_cubit.dart';
 import 'package:denwee/presentation/bloc/user_statistics/user_statistics_cubit.dart';
 import 'package:denwee/presentation/page/available_backgrounds/util/background_selection_util.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
@@ -10,7 +9,7 @@ import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/smiling_star_animated_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/sparkles_animated_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,35 +38,32 @@ class BackgroundEditUnlockButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      child: BlocSelector<ActiveBackgroundCubit, ActiveBackgroundState, bool>(
-        selector: (state) => state.applyingId.toNullable() == background.id,
-        builder: (context, isApplying) {
-          return BlocSelector<UserStatisticsCubit, UserStatisticsState, int>(
-            selector: (state) => state.statistics.stars,
-            builder: (context, starsBalance) {
-              return BackgroundCardSelectionProviders(
-                builder: (context, vm) {
-                  final state = _resolveButtonState(
-                    isSubscribed: vm.hasPremiumSubscription,
-                    isUnlocked: vm.unlockedIds.contains(background.id),
-                    starsBalance: starsBalance,
-                  );
+      child: BlocSelector<UserStatisticsCubit, UserStatisticsState, int>(
+        selector: (state) => state.statistics.stars,
+        builder: (context, starsBalance) {
+          return BackgroundCardSelectionProviders(
+            builder: (context, vm) {
+              final isApplying = vm.applyingId == background.id;
+              
+              final state = _resolveButtonState(
+                isSubscribed: vm.hasPremiumSubscription,
+                isUnlocked: vm.unlockedIds.contains(background.id),
+                starsBalance: starsBalance,
+              );
 
-                  final text = _resolveButtonText(
-                    context: context,
-                    state: state,
-                    isSelected: vm.selectedId == background.id,
-                  );
+              final text = _resolveButtonText(
+                context: context,
+                state: state,
+                isSelected: vm.selectedId == background.id,
+              );
 
-                  return AppSolidButton(
-                    text: text,
-                    displayWidget: _buildBodyForState(context, state),
-                    onTap: isApplying ? null : () => onTap(state),
-                    textColor: context.lightTextColor,
-                    hideShadow: true,
-                    isBusy: isApplying,
-                  );
-                },
+              return AppSolidButton(
+                text: text,
+                displayWidget: _buildBodyForState(context, state),
+                onTap: isApplying ? null : () => onTap(state),
+                textColor: context.lightTextColor,
+                hideShadow: true,
+                isBusy: isApplying,
               );
             },
           );
@@ -143,7 +139,7 @@ class BackgroundEditUnlockButton extends StatelessWidget {
             style: solidButton.copyWith(color: context.lightTextColor),
           ),
           8.horizontalSpace,
-          BackdropSurfaceContainer.ellipse(
+          SurfaceContainer.ellipse(
             color: context.darkPrimaryContainer,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

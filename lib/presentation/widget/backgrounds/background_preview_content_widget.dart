@@ -18,10 +18,14 @@ class BackgroundPreviewContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      position: DecorationPosition.foreground,
-      decoration: BoxDecoration(color: foregroundColor),
-      child: _buildContent(),
+    return RepaintBoundary(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          _buildContent(),
+          if (foregroundColor != null) ColoredBox(color: foregroundColor!),
+        ],
+      ),
     );
   }
 

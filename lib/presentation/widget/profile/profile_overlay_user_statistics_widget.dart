@@ -7,7 +7,7 @@ import 'package:denwee/presentation/widget/shared/animations/animated_icons/smil
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/fire_animatied_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/question_animated_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_number_widget.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/animations/transitions/hero_transition.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:denwee/presentation/widget/profile/stat_hint_widget.dart';
@@ -109,8 +109,7 @@ class _ProfileOverlayUserStatisticsState extends State<ProfileOverlayUserStatist
     required Widget icon,
   }) {
     return Expanded(
-      child: BounceTapFadeAnimation(
-        minScale: 1.0,
+      child: BounceTapAnimation(
         onTap: () => _showStatisticHintDialog(context, item),
         child: Column(
           mainAxisSize: MainAxisSize.min,

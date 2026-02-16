@@ -1,7 +1,7 @@
 import 'package:denwee/core/misc/domain/entity/theme_coloration.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/core_tap_bounce_animation.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:flutter/material.dart';
 
 class ColorationItemBubble extends StatelessWidget {
@@ -11,7 +11,6 @@ class ColorationItemBubble extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.index,
-    // this.size = 0.24,
     required this.size,
     this.offset = const Offset(0.0, 0.14),
   });
@@ -23,9 +22,10 @@ class ColorationItemBubble extends StatelessWidget {
   final Offset offset;
   final int index;
 
+  static const minScale = 1.04;
+
   @override
   Widget build(BuildContext context) {
-    // final thisSize = size.sw;
     final scale = isSelected ? 1.12 : 0.96;
     final slide = isSelected ? Offset.zero : offset;
 
@@ -35,11 +35,10 @@ class ColorationItemBubble extends StatelessWidget {
 
     return Center(
       child: RepaintBoundary.wrap(
-        CoreTapBounceAnimation(
-          minScale: 1.04,
-          isHaptics: false,
+        BounceTapAnimation(
+          minScale: minScale,
           onTap: () => onTap(coloration),
-          builder: (context, isHovered) => AnimatedSlide(
+          child: AnimatedSlide(
             offset: slide,
             curve: CustomAnimationCurves.fasterEaseInToSlowEaseOut,
             duration: CustomAnimationDurations.low,

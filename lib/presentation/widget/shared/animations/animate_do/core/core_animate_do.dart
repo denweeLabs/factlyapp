@@ -11,11 +11,6 @@ library;
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
-enum AnimateDoDirection {
-  forward,
-  backward,
-}
-
 enum SlideDirection {
   left2Right,
   right2Left,

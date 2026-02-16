@@ -1,5 +1,5 @@
 import 'package:denwee/presentation/shared/utils/animations_util.dart';
-import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animate_do.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animation_mixin.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_fade.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,6 @@ extension FadeOutExtension on Widget {
     Duration? reverseDuration,
     Curve? fadeCurve,
     Curve? fadeReverseCurve,
-    Function(AnimationController)? controllerProvider,
     bool manualTrigger = false,
     bool animate = true,
     Function(AnimateDoDirection direction)? onFinish,
@@ -19,13 +18,12 @@ extension FadeOutExtension on Widget {
   }) {
     return CoreFade(
       delay: sequencePos != null ? AnimationsUtil.sequenceDelayProvider(sequencePos) : delay,
-      duration: duration ?? AutomatedAnimationValues.defaultDuration[AnimateDoDirection.forward]!,
-      reverseDuration: reverseDuration ?? AutomatedAnimationValues.defaultDuration[AnimateDoDirection.backward]!,
-      fadeCurve: fadeCurve ?? AutomatedAnimationValues.defaultFadeCurve[AnimateDoDirection.forward]!,
-      fadeReverseCurve: fadeReverseCurve ?? AutomatedAnimationValues.defaultFadeCurve[AnimateDoDirection.backward]!,
+      duration: duration ?? CommonAnimationValues.forwardDuration,
+      reverseDuration: reverseDuration ?? CommonAnimationValues.reverseDuration,
+      fadeCurve: fadeCurve ?? CommonAnimationValues.fadeDownForwardCurve,
+      fadeReverseCurve: fadeReverseCurve ?? CommonAnimationValues.fadeDownReverseCurve,
       fadeFrom: 1.0,
       fadeTo: 0.0,
-      controllerProvider: controllerProvider,
       manualTrigger: manualTrigger,
       animate: animate,
       onFinish: onFinish,
@@ -33,7 +31,7 @@ extension FadeOutExtension on Widget {
     );
   }
 
-  Widget routeAwareFadeOut({
+  Widget ecFadeOut({
     required AnimationController controller,
     Function(AnimateDoDirection direction)? onFinish,
     Curve? curve,
@@ -43,7 +41,7 @@ extension FadeOutExtension on Widget {
     final thisFadeCurve = AnimationsUtil.sequenceForwardCurveProvider(
       sequencePos,
       sequenceTotal,
-      curve ?? RouteAwareAnimationValues.defaultFadeCurve[AnimateDoDirection.forward]!,
+      curve ?? CommonAnimationValues.ecFadeDownForwardCurve,
     );
 
     return CoreFade(
@@ -51,7 +49,7 @@ extension FadeOutExtension on Widget {
       externalController: controller,
       onFinish: onFinish,
       fadeCurve: thisFadeCurve,
-      fadeReverseCurve: RouteAwareAnimationValues.defaultFadeCurve[AnimateDoDirection.backward]!,
+      fadeReverseCurve: CommonAnimationValues.ecFadeDownReverseCurve,
       fadeFrom: 1.0,
       fadeTo: 0.0,
       delay: null,

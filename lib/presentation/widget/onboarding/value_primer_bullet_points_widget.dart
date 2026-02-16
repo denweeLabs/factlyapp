@@ -6,7 +6,7 @@ import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class _Benefit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget buildBullet({Key? key}) {
-      return BackdropSurfaceContainer.circle(
+      return SurfaceContainer.circle(
         key: key,
         size: Size.square(28.w),
         borderColor: Colors.transparent,

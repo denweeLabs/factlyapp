@@ -2,14 +2,13 @@ import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
-import 'package:denwee/presentation/widget/shared/animations/common_animations/common_animations.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_right.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/animated_switchers.dart';
-import 'package:denwee/presentation/widget/shared/animations/constants/animation_bipos.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:denwee/presentation/bloc/onboarding/select_interests_cubit.dart';
 import 'package:denwee/presentation/widget/onboarding/interest_pick_tile_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/solid_fading_edge_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,9 +69,8 @@ class InterestsContent extends StatelessWidget {
         24.verticalSpace,
         Expanded(
           child: tilesWrapper(
-            FadingEdge(
-              axis: Axis.vertical,
-              stops: const [0.0, 0.06, 0.8, 1.0],
+            SolidVerticalFadingEdge(
+              backgroundColor: context.theme.colorScheme.background,
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(
                   horizontal: 12.w,
@@ -125,11 +123,7 @@ class InterestsContent extends StatelessWidget {
           ),
         ),
       ],
-    ).fadeSlide(
-      fades: const BiPos(1.0, 1.0),
-      offsets: const BiPos(Offset(-0.2, 0.0), Offset.zero),
-      offsetCurve: const ElasticOutCurve(0.1),
-    );
+    ).autoFadeInRight(slideCurve: const ElasticOutCurve(0.1));
   }
 
   Widget _buildSubtitle(BuildContext context) {

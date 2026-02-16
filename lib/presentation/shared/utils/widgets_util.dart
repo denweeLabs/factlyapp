@@ -1,29 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 /// Util mostly focused on GPU raster optimizations by removing extra repaint layers
 class WidgetsUtil {
-  static Widget maybeBackdrop({
-    required Widget child,
-    required double blur,
-    BorderRadius borderRadius = BorderRadius.zero,
-    BoxShape shape = BoxShape.rectangle,
-  }) {
-    if (blur <= 0) return child;
-
-    final filter = BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-      child: child,
-    );
-
-    switch (shape) {
-      case BoxShape.rectangle:
-        return ClipRSuperellipse(borderRadius: borderRadius, child: filter);
-      case BoxShape.circle:
-        return ClipOval(child: filter);
-    }
-  }
-
+  
   /// Cross fade with static size and repaint boundary. For dynamic size use AnimatedSwitcher
   static Widget staticRepaintAnimatedCrossFade({
     required CrossFadeState state,

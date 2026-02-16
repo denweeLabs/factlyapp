@@ -22,4 +22,9 @@ class BackgroundSelectionItem with _$BackgroundSelectionItem {
     availableBackground: (background) => background,
     orElse: () => null,
   );
+
+  UniqueId get id => when(
+    defaultBackground: () => AppConstants.config.defaultBackgroundId,
+    availableBackground: (background) => background.id,
+  );
 }

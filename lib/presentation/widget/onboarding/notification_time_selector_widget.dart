@@ -7,7 +7,7 @@ import 'package:denwee/presentation/widget/shared/animations/constants/common_an
 import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_wheel_listview_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -111,15 +111,14 @@ class _NotificationTimeSelectorState extends State<NotificationTimeSelector> {
     return Stack(
       children: [
         Center(
-          child: Container(
-            width: double.infinity,
-            height: itemExtent,
-            decoration: BoxDecoration(
-              color: context.primaryContainer,
-              border: Border.all(
-                color: context.isLightTheme ? Colors.black12 : Colors.white10,
+          child: SizedBox.fromSize(
+            size: Size.fromHeight(itemExtent),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: context.primaryContainer,
+                border: Border.all(color: context.isLightTheme ? Colors.black12 : Colors.white10),
+                borderRadius: const BorderRadius.all(Radius.circular(32)),
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(32)),
             ),
           ),
         ),
@@ -127,22 +126,21 @@ class _NotificationTimeSelectorState extends State<NotificationTimeSelector> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             12.horizontalSpace,
-            BackdropSurfaceContainer.circle(
+            SurfaceContainer.circle(
               color: context.theme.colorScheme.primary,
               size: const Size.square(38),
-              child: CommonAppIcon(
-                path: AppConstants.assets.icons.clockLinear,
-                color: context.lightIconColor,
-                size: 18,
+              child: Center(
+                child: CommonAppIcon(
+                  path: AppConstants.assets.icons.clockLinear,
+                  color: context.lightIconColor,
+                  size: 18,
+                ),
               ),
             ),
             8.horizontalSpace,
             Expanded(
               child: Text(
-                context.tr(
-                  LocaleKeys
-                      .onboarding_select_notification_time_time_selection_title,
-                ),
+                context.tr(LocaleKeys.onboarding_select_notification_time_time_selection_title),
                 style: bodyL.copyWith(color: context.textColor),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

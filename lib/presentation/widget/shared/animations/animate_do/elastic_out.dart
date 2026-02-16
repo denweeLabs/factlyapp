@@ -1,5 +1,5 @@
 import 'package:denwee/presentation/shared/utils/animations_util.dart';
-import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animate_do.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animation_mixin.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_fade_scale.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:flutter/material.dart';
@@ -13,29 +13,25 @@ extension ElasticOutExtension on Widget {
     Curve? scaleReverseCurve,
     Curve? fadeCurve,
     Curve? fadeReverseCurve,
-    Function(AnimationController)? controllerProvider,
     bool manualTrigger = false,
     bool animate = true,
     bool forceComplete = true,
-    Function(AnimateDoDirection direction)? onFinish,
     int? sequencePos,
   }) {
     return CoreFadeScale(
       delay: sequencePos != null ? AnimationsUtil.sequenceDelayProvider(sequencePos) : delay,
-      duration: duration ?? AutomatedAnimationValues.defaultDuration[AnimateDoDirection.forward]!,
-      reverseDuration: reverseDuration ?? AutomatedAnimationValues.defaultDuration[AnimateDoDirection.backward]!,
-      scaleCurve: scaleCurve ?? AutomatedAnimationValues.defaultElasticInCurve[AnimateDoDirection.forward]!,
-      scaleReverseCurve: scaleReverseCurve ?? AutomatedAnimationValues.defaultElasticInCurve[AnimateDoDirection.backward]!,
-      fadeCurve: fadeCurve ?? AutomatedAnimationValues.defaultFadeCurve[AnimateDoDirection.forward]!,
-      fadeReverseCurve: fadeReverseCurve ?? AutomatedAnimationValues.defaultFadeCurve[AnimateDoDirection.backward]!,
+      duration: duration ?? CommonAnimationValues.forwardDuration,
+      reverseDuration: reverseDuration ?? CommonAnimationValues.reverseDuration,
+      scaleCurve: scaleCurve ?? CommonAnimationValues.scaleDownForwardCurve,
+      scaleReverseCurve: scaleReverseCurve ?? CommonAnimationValues.scaleDownReverseCurve,
+      fadeCurve: fadeCurve ?? CommonAnimationValues.fadeDownForwardCurve,
+      fadeReverseCurve: fadeReverseCurve ?? CommonAnimationValues.fadeDownReverseCurve,
       scaleFrom: 1.0,
       scaleTo: 0.0,
       fadeFrom: 1.0,
       fadeTo: 0.0,
-      controllerProvider: controllerProvider,
       manualTrigger: manualTrigger,
       animate: animate,
-      onFinish: onFinish,
       forceComplete: forceComplete,
       child: this,
     );
@@ -51,17 +47,16 @@ extension ElasticOutExtension on Widget {
     final thisScaleCurve = AnimationsUtil.sequenceForwardCurveProvider(
       sequencePos,
       sequenceTotal,
-      curve ?? RouteAwareAnimationValues.defaultElasticInCurve[AnimateDoDirection.forward]!,
+      curve ?? CommonAnimationValues.ecScaleDownForwardCurve,
     );
 
     return CoreFadeScale(
       animate: controller.isForwardOrCompleted,
       externalController: controller,
-      onFinish: onFinish,
       scaleCurve: thisScaleCurve,
-      scaleReverseCurve: RouteAwareAnimationValues.defaultElasticInCurve[AnimateDoDirection.backward]!,
-      fadeCurve: RouteAwareAnimationValues.defaultFadeCurve[AnimateDoDirection.forward]!,
-      fadeReverseCurve: RouteAwareAnimationValues.defaultFadeCurve[AnimateDoDirection.backward]!,
+      scaleReverseCurve: CommonAnimationValues.ecScaleDownReverseCurve,
+      fadeCurve: CommonAnimationValues.ecFadeDownForwardCurve,
+      fadeReverseCurve: CommonAnimationValues.ecFadeDownReverseCurve,
       scaleFrom: 1.0,
       scaleTo: 0.0,
       fadeFrom: 1.0,
