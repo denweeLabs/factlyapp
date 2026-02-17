@@ -35,7 +35,7 @@ class BounceTapFadeAnimation extends StatelessWidget {
           CurvedAnimation(parent: animation, curve: defaultScaleCurve));
 
         final fade = Tween(begin: 1.0, end: minFade).animate(
-          CurvedAnimation(parent: animation, curve: defaultFadeCurve));
+          CurvedAnimation(parent: animation, curve: const Interval(0.5, 1.0, curve: defaultFadeCurve)));
 
         return FadeTransition(
           opacity: fade,

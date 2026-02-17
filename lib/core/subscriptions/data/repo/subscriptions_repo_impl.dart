@@ -17,6 +17,7 @@ import 'package:denwee/di/server_module.dart';
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:utils/utils.dart';
 
 /// Supported platforms
 enum SubscriptionsPlatform { ios, android, test }
@@ -32,12 +33,14 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
   final AuthRepo _authRepo;
   final String _environment;
 
-  const SubscriptionsRepoImpl(
+  SubscriptionsRepoImpl(
     this._localSource,
     this._remoteSource,
     this._authRepo,
     @ENV this._environment,
   );
+
+  var isInitSuccess = false;
 
   bool get isDevEnvironment {
     return _environment == Env.dev;
@@ -60,14 +63,17 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
   static const _entitlementId = 'premium';
   static const _productIds = <SubscriptionsPlatform, PremiumProductIds>{
     SubscriptionsPlatform.ios: PremiumProductIds(
+      weekly: 'denwee_factlyapp_premium_week',
       monthly: 'denwee_factlyapp_premium_month',
       yearly: 'denwee_factlyapp_premium_year',
     ),
     SubscriptionsPlatform.android: PremiumProductIds(
+      weekly: 'denwee_factlyapp_premium_week',
       monthly: 'denwee_factlyapp_premium_month',
       yearly: 'denwee_factlyapp_premium_year',
     ),
     SubscriptionsPlatform.test: PremiumProductIds(
+      weekly: 'denwee_factlyapp_premium_week',
       monthly: 'denwee_factlyapp_premium_month',
       yearly: 'denwee_factlyapp_premium_year',
     ),
@@ -106,6 +112,7 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
     try {
       final config = PurchasesConfiguration(_publicApiKey);
       await Purchases.configure(config);
+      isInitSuccess = true;
       return right(unit);
     } on PlatformException catch (error) {
       final failure = SubscriptionsFailure.fromPurchasesError(
@@ -119,6 +126,12 @@ class SubscriptionsRepoImpl implements SubscriptionsRepo {
 
   @override
   Future<Either<SubscriptionsFailure, PremiumPackages>> getPackages() async {
+    // Ensure initialized before getting offerings
+    if (!isInitSuccess) {
+      final (failure, _) = (await init()).getEntries();
+      if (failure != null) return left(failure);
+    }
+    
     try {
       final offerings = await Purchases.getOfferings();
       try {

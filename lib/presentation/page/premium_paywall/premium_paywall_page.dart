@@ -1,4 +1,5 @@
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
+import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/presentation/bloc/subscriptions/subscription_offerings_cubit.dart';
 import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
@@ -12,6 +13,7 @@ import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_left.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_right.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/scale_in_up.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
@@ -33,6 +35,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:utils/utils.dart';
+
+part 'plans/weekly_plan_tile_widget.dart';
+part 'plans/monthly_plan_tile_widget.dart';
+part 'plans/yearly_plan_tile_widget.dart';
 
 class PremiumPaywallPage extends StatefulWidget {
   const PremiumPaywallPage({super.key});
@@ -75,11 +81,12 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
 
     if (activeSubscription != null) {
       switch (activeSubscription.packageType) {
+        case PremiumPackageType.weekly: selectedPackage = ValueNotifier(packages.weekly);
         case PremiumPackageType.monthly: selectedPackage = ValueNotifier(packages.monthly);
         case PremiumPackageType.yearly: selectedPackage = ValueNotifier(packages.yearly);
       }
     } else {
-      selectedPackage = ValueNotifier(packages.monthly);
+      selectedPackage = ValueNotifier(packages.weekly);
     }
   }
 
@@ -233,7 +240,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
       child: BlocBuilder<UserSubscriptionCubit, UserSubscriptionState>(
         builder: (context, userSubscriptionState) {
           // already purchased package (if present)
-          final purchasedPackage = userSubscriptionState.activeSubscription
+          final activeSubscription = userSubscriptionState.activeSubscription
               .toNullable();
 
           // available packages to buy
@@ -243,28 +250,36 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
             valueListenable: selectedPackage,
             builder: (context, selectedPackage, _) => Column(
               children: [
-                PaywallPackageTile(
-                  package: packages.monthly,
-                  isSelected: selectedPackage == packages.monthly,
-                  isPurchased: packages.monthly.type == purchasedPackage?.packageType,
-                  onTap: (package) => this.selectedPackage.value = package,
-                  priceBuilder: (isPurchased) => isPurchased
-                      ? purchasedPackage?.expiryText(context)
-                      : null,
-                ).autoFadeInLeft(sequencePos: 3, slideFrom: 50),
-                12.verticalSpace,
-                PaywallPackageTile(
+                _YearlyPlan(
                   package: packages.yearly,
+                  activeSubscription: activeSubscription,
+                  isPurchased: packages.yearly.type == activeSubscription?.packageType,
                   isSelected: selectedPackage == packages.yearly,
-                  isPurchased: packages.yearly.type == purchasedPackage?.packageType,
                   onTap: (package) => this.selectedPackage.value = package,
-                  priceBuilder: (isPurchased) => isPurchased
-                      ? purchasedPackage?.expiryText(context)
-                      : null,
-                  discountBadge: PaywallPackageDiscountBadge(
-                    percent: packages.yearlyDiscountPercent,
-                  ),
-                ).autoFadeInRight(sequencePos: 3, slideFrom: 50),
+                  discountPercent: packages.yearlyDiscountPercentVersusWeekly,
+                ).autoFadeInRight(sequencePos: 5, slideFrom: 50),
+
+                12.verticalSpace,
+
+                _WeeklyPlan(
+                  package: packages.weekly,
+                  activeSubscription: activeSubscription,
+                  isPurchased: packages.weekly.type == activeSubscription?.packageType,
+                  isSelected: selectedPackage == packages.weekly,
+                  onTap: (package) => this.selectedPackage.value = package,
+                ).autoFadeInLeft(sequencePos: 5, slideFrom: 50),
+
+                if (packages.monthly != null) ...[
+                  12.verticalSpace,
+
+                  _MonthlyPlan(
+                    package: packages.monthly!,
+                    activeSubscription: activeSubscription,
+                    isPurchased: packages.monthly!.type == activeSubscription?.packageType,
+                    isSelected: selectedPackage == packages.monthly,
+                    onTap: (package) => this.selectedPackage.value = package,
+                  ).autoFadeInUp(sequencePos: 5, slideFrom: 20),
+                ],
               ],
             ),
           );
@@ -312,9 +327,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
 
                 return AppSolidButton(
                   onTap: _onUpgrade,
-                  text: isAlreadyPurchasedPackage
-                      ? context.tr(LocaleKeys.subscription_active_plan)
-                      : context.tr(LocaleKeys.subscription_upgrade_cta),
+                  text: _upgradeButtonText(isAlreadyPurchasedPackage),
                   backgroundColors: [
                     context.lightPrimaryContainer,
                     context.lightPrimaryContainer,
@@ -330,6 +343,16 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
         ),
       ),
     );
+  }
+
+  String _upgradeButtonText(bool isAlreadyPurchasedPackage) {
+    if (isAlreadyPurchasedPackage) {
+      return context.tr(LocaleKeys.subscription_active_plan);
+    }
+    if (selectedPackage.value?.type == PremiumPackageType.weekly) {
+      return context.tr(LocaleKeys.subscription_trial_cta);
+    }
+    return context.tr(LocaleKeys.subscription_upgrade_cta);
   }
 
   void _onPrivacy() {

@@ -150,6 +150,7 @@
         "premium_plan": "Premium",
         "active_plan": "Active plan",
         "upgrade_cta": "Upgrade",
+        "trial_cta": "Try for free",
         "paywall": {
             "title": "Get more from every fact & explore without limits",
             "benefits": {
@@ -162,13 +163,18 @@
                 }
             },
             "package": {
+                "weekly": {
+                    "title": "3-Day Trial",
+                    "price_string": "then {} per week"
+                },
                 "monthly": {
                     "title": "Monthly Plan",
-                    "per_period": "month"
+                    "price_string": "{} per month"
                 },
                 "yearly": {
                     "title": "Annual Plan",
-                    "per_period": "year"
+                    "price_string": "{} per year",
+                    "discount_badge": "Save {}%"
                 }
             },
             "footer": {

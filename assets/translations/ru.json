@@ -150,6 +150,7 @@
         "premium_plan": "Premium",
         "active_plan": "Активный план",
         "upgrade_cta": "Обновить",
+        "trial_cta": "Бесплатно",
         "paywall": {
             "title": "Получайте больше от каждого факта без ограничений",
             "benefits": {
@@ -164,13 +165,18 @@
                 }
             },
             "package": {
+                "weekly": {
+                    "title": "Пробный период 3 дня",
+                    "price_string": "затем {} в неделю"
+                },
                 "monthly": {
                     "title": "Ежемесячно",
-                    "per_period": "месяц"
+                    "price_string": "{} в месяц"
                 },
                 "yearly": {
                     "title": "Ежегодно",
-                    "per_period": "год"
+                    "price_string": "{} в год",
+                    "discount_badge": "Скидка {}%"
                 }
             },
             "footer": {

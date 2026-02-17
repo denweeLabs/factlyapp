@@ -1,7 +1,7 @@
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/tap_fade_animation.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,7 +64,7 @@ class PaywallFooterLinks extends StatelessWidget {
     required VoidCallback onTap,
     required String text,
   }) {
-    return TapFadeAnimation(
+    return BounceTapFadeAnimation(
       onTap: onTap,
       child: Text(
         text,
