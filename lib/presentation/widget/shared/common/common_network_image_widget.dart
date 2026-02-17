@@ -18,6 +18,7 @@ class CommonNetworkImage extends StatelessWidget {
       fadeInDuration: fadeDuration,
       fadeOutDuration: fadeDuration,
       placeholderFilterQuality: FilterQuality.low,
+      imageErrorBuilder: (_, __, ___) => const SizedBox.shrink(),
     );
   }
 }

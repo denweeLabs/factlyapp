@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
-import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
 import 'package:denwee/core/backgrounds/domain/entity/background_failure.dart';
 import 'package:denwee/core/backgrounds/domain/repo/backgrounds_repo.dart';
 import 'package:denwee/presentation/bloc/backgrounds/active_background_cubit.dart';
@@ -22,7 +21,7 @@ class GetAvailableBackgroundsUseCase {
     this._activeBackgroundCubit,
   );
 
-  Future<Either<BackgroundFailure, (Option<ResolvedBackgroundAsset>, List<AvailableBackground>)>> execute() async {
+  Future<Either<BackgroundFailure, List<AvailableBackground>>> execute() async {
     final languageCode = _preferencesCubit.state.preferences.language.languageCode;
     final failureOrSuccess = await _backgroundsRepo.getBackgroundsRemote(
       languageCode: languageCode,
@@ -43,6 +42,6 @@ class GetAvailableBackgroundsUseCase {
       unawaited(_backgroundsRepo.storeBackgroundsLocal(availableBackgrounds));
     }
 
-    return failureOrSuccess;
+    return failureOrSuccess.map((data) => data.$2);
   }
 }
