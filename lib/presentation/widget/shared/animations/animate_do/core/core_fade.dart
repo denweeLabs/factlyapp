@@ -1,4 +1,4 @@
-import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animate_do.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animation_mixin.dart';
 import 'package:flutter/material.dart';
 
 /// [key]: optional widget key reference
@@ -19,13 +19,14 @@ class CoreFade extends StatefulWidget {
   final Curve fadeReverseCurve;
   final double fadeFrom;
   final double fadeTo;
-  final Function(AnimationController)? controllerProvider;
   final AnimationController? externalController;
   final bool manualTrigger;
   final bool animate;
+  final bool forceComplete;
   final Function(AnimateDoDirection direction)? onFinish;
 
   const CoreFade({
+    super.key,
     required this.child,
     required this.delay,
     required this.duration,
@@ -34,78 +35,66 @@ class CoreFade extends StatefulWidget {
     required this.fadeReverseCurve,
     required this.fadeFrom,
     required this.fadeTo,
-    this.controllerProvider,
     this.externalController,
     this.manualTrigger = false,
     this.animate = true,
+    this.forceComplete = true,
     this.onFinish,
-    super.key,
   });
 
   @override
-  CoreFadeState createState() => CoreFadeState();
+  State<CoreFade> createState() => _CoreFadeState();
 }
 
-class CoreFadeState extends State<CoreFade>
-    with SingleTickerProviderStateMixin, AnimateDoState {
-    
-  late Animation<double> opacity;
-
-  Duration get delay {
-    return widget.delay ?? Duration.zero;
-  }
-
-  @override
-  void dispose() {
-    disposed = true;
-    if (widget.externalController == null) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
+class _CoreFadeState extends State<CoreFade> 
+    with SingleTickerProviderStateMixin, CoreAnimationMixin<CoreFade> {
+  late final Animation<double> opacity;
 
   @override
   void initState() {
     super.initState();
 
-    controller = widget.externalController ??
-        AnimationController(
-          duration: widget.duration,
-          reverseDuration: widget.reverseDuration,
-          vsync: this,
-        );
+    initCoreAnimation(
+      duration: widget.duration,
+      reverseDuration: widget.reverseDuration,
+      externalController: widget.externalController,
+      onFinish: widget.onFinish,
+    );
 
-    opacity = Tween<double>(begin: widget.fadeFrom, end: widget.fadeTo)
-        .animate(CurvedAnimation(
-      parent: controller,
-      curve: widget.fadeCurve,
-      reverseCurve: widget.fadeReverseCurve,
-    ));
+    opacity = Tween<double>(
+      begin: widget.fadeFrom,
+      end: widget.fadeTo,
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: widget.fadeCurve,
+        reverseCurve: widget.fadeReverseCurve,
+      ),
+    );
 
-    configAnimation(
-      delay: delay,
+    startAnimationIfNeeded(
       animate: widget.animate,
       manualTrigger: widget.manualTrigger,
-      infinite: false,
-      onFinish: widget.onFinish,
-      controllerCallback: widget.controllerProvider,
+      delay: widget.delay,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant CoreFade oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    handleAnimateUpdate(
+      oldAnimate: oldWidget.animate,
+      animate: widget.animate,
+      forceComplete: widget.forceComplete,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    buildAnimation(
-      delay: delay,
-      animate: widget.animate,
-      manualTrigger: widget.manualTrigger,
-      infinite: false,
-      onFinish: widget.onFinish,
-      controllerCallback: widget.controllerProvider,
-    );
-
     return AnimatedBuilder(
       animation: controller,
-      builder: (context, child) {
+      builder: (_, child) {
         return Opacity(
           opacity: opacity.value,
           child: child,

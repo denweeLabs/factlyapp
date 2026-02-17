@@ -2,6 +2,7 @@ import 'package:denwee/core/backgrounds/domain/entity/background_failure.dart';
 import 'package:denwee/core/backgrounds/domain/use_case/on_background_applied_use_case.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/facts/domain/entity/facts_failure.dart';
+import 'package:denwee/core/network/domain/entity/common_api_failure.dart';
 import 'package:denwee/core/profile/domain/entity/profile_failure.dart';
 import 'package:denwee/core/statistics/domain/entity/statistics_failure.dart';
 import 'package:denwee/core/subscriptions/domain/entity/subscriptions_failure.dart';
@@ -9,6 +10,7 @@ import 'package:denwee/presentation/bloc/auth/auth_cubit.dart';
 import 'package:denwee/presentation/bloc/backgrounds/active_background_cubit.dart';
 import 'package:denwee/presentation/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/presentation/bloc/facts/daily_facts_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/fact_share_cubit.dart';
 import 'package:denwee/presentation/bloc/facts/facts_archive_cubit.dart';
 import 'package:denwee/presentation/bloc/notifications/notifications_cubit.dart';
 import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
@@ -91,6 +93,10 @@ class _RootBlocListenersState extends State<RootBlocListeners>
         ),
         BlocListener<ActiveBackgroundCubit, ActiveBackgroundState>(
           listenWhen: _activeBackgroundListener,
+          listener: (_, _) {},
+        ),
+        BlocListener<FactShareCubit, FactShareState>(
+          listenWhen: _factCaptureListener,
           listener: (_, _) {},
         ),
       ],
@@ -257,6 +263,23 @@ class _RootBlocListenersState extends State<RootBlocListeners>
         applied: (data) {
           getIt<OnBackgroundAppliedUseCase>().execute(data.asset);
         },
+      );
+    }
+
+    return false;
+  }
+
+  bool _factCaptureListener(
+    FactShareState p,
+    FactShareState c,
+  ) {
+    final isFailure = p.failure != c.failure && c.failure.isSome();
+
+    if (isFailure) {
+      final failure = c.failure.toNullable()!;
+      processErrorSnackbar(
+        messageProvider: failure.errorMessage,
+        isInsufficientPermissions: false,
       );
     }
 

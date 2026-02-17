@@ -52,49 +52,16 @@ class StoriesInterestBackgroundAnimatedImageState
     begin: 1.04,
     end: 1.0,
   ).animate(CurvedAnimation(parent: appearController, curve: Curves.easeOut));
-  late final appearBlur = Tween<double>(begin: 5.0, end: 0.0).animate(
-    CurvedAnimation(
-      parent: appearController,
-      curve: Curves.fastEaseInToSlowEaseOut,
-    ),
-  );
-
-  // late final movementController = AnimationController(
-  //   vsync: this,
-  //   duration: movementDuration,
-  // );
-  // late final movementScale = Tween<double>(begin: 1.0, end: 1.3).animate(
-  //   CurvedAnimation(
-  //     parent: movementController,
-  //     curve: Curves.easeOutSine,
-  //     reverseCurve: Curves.easeIn,
-  //   ),
-  // );
-  // late final movementScaleAlignment =
-  //     Tween<Alignment>(begin: Alignment(0.0, 0.0), end: Alignment(-0.25, 0.65))
-  //         .animate(
-  //   CurvedAnimation(
-  //     parent: movementController,
-  //     curve: Curves.easeInOutQuad,
-  //     reverseCurve: Curves.easeIn,
-  //   ),
-  // );
 
   @override
   void initState() {
     appearController.forward();
-    // Future.delayed(movementPreDelayDuration, () {
-    //   if (mounted) {
-    //     movementController.loop(reverse: true);
-    //   }
-    // });
     super.initState();
   }
 
   @override
   void dispose() {
     appearController.dispose();
-    // movementController.dispose();
     super.dispose();
   }
 

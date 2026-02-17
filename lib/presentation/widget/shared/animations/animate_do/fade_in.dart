@@ -1,5 +1,5 @@
 import 'package:denwee/presentation/shared/utils/animations_util.dart';
-import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animate_do.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animation_mixin.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_fade.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,6 @@ extension FadeInExtension on Widget {
     Duration? reverseDuration,
     Curve? fadeCurve,
     Curve? fadeReverseCurve,
-    Function(AnimationController)? controllerProvider,
     bool manualTrigger = false,
     bool animate = true,
     Function(AnimateDoDirection direction)? onFinish,
@@ -19,13 +18,12 @@ extension FadeInExtension on Widget {
   }) {
     return CoreFade(
       delay: sequencePos != null ? AnimationsUtil.sequenceDelayProvider(sequencePos) : delay,
-      duration: duration ?? AutomatedAnimationValues.defaultDuration[AnimateDoDirection.forward]!,
-      reverseDuration: reverseDuration ?? AutomatedAnimationValues.defaultDuration[AnimateDoDirection.backward]!,
-      fadeCurve: fadeCurve ?? AutomatedAnimationValues.defaultFadeCurve[AnimateDoDirection.forward]!,
-      fadeReverseCurve: fadeReverseCurve ?? AutomatedAnimationValues.defaultFadeCurve[AnimateDoDirection.backward]!,
+      duration: duration ?? CommonAnimationValues.forwardDuration,
+      reverseDuration: reverseDuration ?? CommonAnimationValues.reverseDuration,
+      fadeCurve: fadeCurve ?? CommonAnimationValues.fadeUpForwardCurve,
+      fadeReverseCurve: fadeReverseCurve ?? CommonAnimationValues.fadeUpReverseCurve,
       fadeFrom: 0.0,
       fadeTo: 1.0,
-      controllerProvider: controllerProvider,
       manualTrigger: manualTrigger,
       animate: animate,
       onFinish: onFinish,

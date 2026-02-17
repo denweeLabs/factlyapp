@@ -7,15 +7,13 @@ import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_in.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/smiling_star_animated_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/heart_hands_animated_icon_widget.dart';
-import 'package:denwee/presentation/widget/shared/animations/common_animations/common_animations.dart';
-import 'package:denwee/presentation/widget/shared/animations/constants/animation_bipos.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/animations/shimmer_animation_widget.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_dismiss_ontap_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_pop_scope_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/bubbles_animation_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -121,7 +119,7 @@ class FactExplanationUnlockMethodDialog extends StatelessWidget {
                   bottom: context.bottomPadding + 32.h,
                   child: Center(
                     child:
-                        BackdropSurfaceContainer.circle(
+                        SurfaceContainer.circle(
                           onTap: Navigator.of(context).pop,
                           hoverColor: context.theme.colorScheme.primary,
                           borderColor: Colors.white12,
@@ -133,12 +131,7 @@ class FactExplanationUnlockMethodDialog extends StatelessWidget {
                               size: 22,
                             ),
                           ),
-                        ).fadeScaleRotation(
-                          fades: const BiPos(0.0, 1.0),
-                          scales: const BiPos(0.0, 1.0),
-                          rotations: const BiPos(1.0, 0.0),
-                          delay: const Duration(milliseconds: 100),
-                        ),
+                        ).autoElasticIn(sequencePos: 3),
                   ),
                 ),
               ],
@@ -157,7 +150,7 @@ class FactExplanationUnlockMethodDialog extends StatelessWidget {
   }) {
     final isStar = method == FactExplanationUnlockMethod.star;
 
-    return BounceTapFadeAnimation(
+    return BounceTapAnimation(
       onTap: onTap,
       child: Stack(
         clipBehavior: Clip.none,

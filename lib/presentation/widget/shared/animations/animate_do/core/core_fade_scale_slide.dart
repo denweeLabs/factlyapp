@@ -1,4 +1,4 @@
-import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animate_do.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/core/core_animation_mixin.dart';
 import 'package:flutter/material.dart';
 
 /// [key]: optional widget key reference
@@ -27,14 +27,14 @@ class CoreFadeScaleSlide extends StatefulWidget {
   final Offset slideTo;
   final double fadeFrom;
   final double fadeTo;
-  final Function(AnimationController)? controllerProvider;
   final AnimationController? externalController;
   final bool manualTrigger;
   final bool animate;
-  final Function(AnimateDoDirection direction)? onFinish;
   final bool forceComplete;
+  final Function(AnimateDoDirection direction)? onFinish;
 
   const CoreFadeScaleSlide({
+    super.key,
     required this.child,
     required this.delay,
     required this.duration,
@@ -51,96 +51,90 @@ class CoreFadeScaleSlide extends StatefulWidget {
     required this.slideTo,
     required this.fadeFrom,
     required this.fadeTo,
-    this.controllerProvider,
     this.externalController,
     this.manualTrigger = false,
     this.animate = true,
     this.forceComplete = true,
     this.onFinish,
-    super.key,
   });
 
   @override
-  CoreFadeScaleSlideState createState() => CoreFadeScaleSlideState();
+  State<CoreFadeScaleSlide> createState() => _CoreFadeScaleSlideState();
 }
 
-class CoreFadeScaleSlideState extends State<CoreFadeScaleSlide>
-    with SingleTickerProviderStateMixin, AnimateDoState {
-    
-  late Animation<double> scale;
-  late Animation<Offset> slide;
-  late Animation<double> opacity;
-
-  Duration get delay {
-    return widget.delay ?? Duration.zero;
-  }
-
-  @override
-  void dispose() {
-    disposed = true;
-    if (widget.externalController == null) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
+class _CoreFadeScaleSlideState extends State<CoreFadeScaleSlide>
+    with SingleTickerProviderStateMixin, CoreAnimationMixin<CoreFadeScaleSlide> {
+  late final Animation<double> scale;
+  late final Animation<Offset> slide;
+  late final Animation<double> opacity;
 
   @override
   void initState() {
     super.initState();
 
-    controller = widget.externalController ??
-        AnimationController(
-          duration: widget.duration,
-          reverseDuration: widget.reverseDuration,
-          vsync: this,
-        );
+    initCoreAnimation(
+      duration: widget.duration,
+      reverseDuration: widget.reverseDuration,
+      externalController: widget.externalController,
+      onFinish: widget.onFinish,
+    );
 
-    scale = Tween<double>(begin: widget.scaleFrom, end: widget.scaleTo)
-        .animate(CurvedAnimation(
-      parent: controller,
-      curve: widget.scaleCurve,
-      reverseCurve: widget.scaleReverseCurve,
-    ));
+    scale = Tween<double>(
+      begin: widget.scaleFrom,
+      end: widget.scaleTo,
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: widget.scaleCurve,
+        reverseCurve: widget.scaleReverseCurve,
+      ),
+    );
 
-    slide = Tween<Offset>(begin: widget.slideFrom, end: widget.slideTo)
-        .animate(CurvedAnimation(
-      parent: controller,
-      curve: widget.slideCurve,
-      reverseCurve: widget.slideReverseCurve,
-    ));
+    slide = Tween<Offset>(
+      begin: widget.slideFrom,
+      end: widget.slideTo,
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: widget.slideCurve,
+        reverseCurve: widget.slideReverseCurve,
+      ),
+    );
 
-    opacity = Tween<double>(begin: widget.fadeFrom, end: widget.fadeTo)
-        .animate(CurvedAnimation(
-      parent: controller,
-      curve: widget.fadeCurve,
-      reverseCurve: widget.fadeReverseCurve,
-    ));
+    opacity = Tween<double>(
+      begin: widget.fadeFrom,
+      end: widget.fadeTo,
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: widget.fadeCurve,
+        reverseCurve: widget.fadeReverseCurve,
+      ),
+    );
 
-    configAnimation(
-      delay: delay,
+    startAnimationIfNeeded(
       animate: widget.animate,
       manualTrigger: widget.manualTrigger,
-      infinite: false,
-      onFinish: widget.onFinish,
-      controllerCallback: widget.controllerProvider,
+      delay: widget.delay,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant CoreFadeScaleSlide oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    handleAnimateUpdate(
+      oldAnimate: oldWidget.animate,
+      animate: widget.animate,
+      forceComplete: widget.forceComplete,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    buildAnimation(
-      delay: delay,
-      animate: widget.animate,
-      manualTrigger: widget.manualTrigger,
-      infinite: false,
-      onFinish: widget.onFinish,
-      controllerCallback: widget.controllerProvider,
-      forceComplete: widget.forceComplete,
-    );
-
     return AnimatedBuilder(
       animation: controller,
-      builder: (context, child) {
+      builder: (_, child) {
         return Transform.translate(
           offset: slide.value,
           child: Transform.scale(

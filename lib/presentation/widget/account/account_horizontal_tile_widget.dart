@@ -4,10 +4,10 @@ import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/inputs/app_switch_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -135,7 +135,7 @@ class AccountHorizontalTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      child: BounceTapFadeAnimation(
+      child: BounceTapAnimation(
         minScale: 0.96,
         onTap: onTap,
         child: Padding(
@@ -163,15 +163,17 @@ class AccountHorizontalTile extends StatelessWidget {
   Widget _buildRow(BuildContext context) {
     return Row(
       children: [
-        BackdropSurfaceContainer.ellipse(
+        SurfaceContainer.ellipse(
           color: Colors.grey.shade600.withValues(alpha: 0.1),
           borderRadius: const BorderRadius.all(Radius.circular(14)),
           borderColor: context.isLightTheme ? Colors.black12 : AppColors.white08,
           size: Size.square(defaultIconSize + 20),
-          child: CommonAppIcon(
-            path: iconPath,
-            size: defaultIconSize,
-            color: context.iconColorSecondary,
+          child: Center(
+            child: CommonAppIcon(
+              path: iconPath,
+              size: defaultIconSize,
+              color: context.iconColorSecondary,
+            ),
           ),
         ),
         12.horizontalSpace,

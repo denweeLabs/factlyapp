@@ -5,7 +5,7 @@ import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -32,7 +32,7 @@ class InterestPickTile extends StatelessWidget {
         : Colors.white12;
 
     return RepaintBoundary.wrap(
-      BackdropSurfaceContainer.ellipse(
+      SurfaceContainer.ellipse(
         onTap: () => onTap(interest),
         borderColor: borderColor,
         borderRadius: const BorderRadius.all(Radius.circular(100)),
@@ -51,7 +51,7 @@ class InterestPickTile extends StatelessWidget {
                   maxLines: 1,
                 ),
               ),
-              BackdropSurfaceContainer.circle(
+              SurfaceContainer.circle(
                 size: const Size.square(28),
                 color: context.theme.colorScheme.secondary.withValues(
                   alpha: isSelected ? 1.0 : 0.0,

@@ -1,6 +1,7 @@
-import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
+import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
+import 'package:denwee/presentation/widget/shared/misc/app_rounded_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,52 +10,40 @@ class ToastMessageSnackbar extends StatelessWidget {
 
   final String message;
 
+  static const shape = RoundedSuperellipseBorder(
+    borderRadius: BorderRadius.all(Radius.circular(24)),
+    side: BorderSide(color: AppColors.white06),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Material(
-        type: MaterialType.transparency,
-        child: Container(
-          width: 0.41.sw,
-          decoration: ShapeDecoration(
-            color: context.primaryContainer,
-            shape: const RoundedSuperellipseBorder(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-            ),
-            shadows: [
-              BoxShadow(
-                color: context.theme.colorScheme.primary,
-                offset: const Offset(0.0, 20.0),
-                spreadRadius: -25,
-                blurRadius: 30,
-              ),
-            ],
-          ),
+    return UnconstrainedBox(
+      child: PhysicalShape(
+        elevation: 10.0,
+        shadowColor: Colors.black87,
+        clipper: ShapeBorderClipper(shape: shape),
+        color: context.primaryContainer,
+        child: DecoratedBox(
+          decoration: ShapeDecoration(shape: shape),
           child: Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 18.h),
+              padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 18.w),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 24.w,
-                    height: 24.w,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          AppConstants.assets.images.appBackgroundIcon,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  const AppRoundedIcon(
+                    size: Size.square(26),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
-                  12.horizontalSpace,
-                  Text(
-                    message,
-                    style: h6.copyWith(color: context.textColor),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                  10.horizontalSpace,
+                  Material(
+                    type: MaterialType.transparency,
+                    child: Text(
+                      message,
+                      style: h6.copyWith(color: context.textColor),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
                   ),
                 ],
               ),

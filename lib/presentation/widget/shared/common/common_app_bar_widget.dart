@@ -1,9 +1,8 @@
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
-import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/buttons/back_button_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:utils/utils.dart';
@@ -35,39 +34,43 @@ class CommonAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topPadding = context.topPadding;
+    final effectiveBackgroundColor =
+        backgroundColor ?? context.theme.colorScheme.background;
 
-    return Container(
-      height: widgetHeight(context),
-      width: double.maxFinite,
-      padding: EdgeInsets.only(top: topPadding),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? context.theme.colorScheme.background,
-      ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          if (hasTitle)
-            Center(
-              child: BackdropSurfaceContainer.ellipse(
-                blur: 0.0,
-                color: context.isLightTheme ? context.lightPrimaryContainer : null,
-                borderColor: context.isLightTheme ? Colors.black12 : AppColors.white08,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-                  child: Text(
-                    title!,
-                    style: h5.copyWith(
-                      color: context.textColor,
-                      fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+    return SizedBox.fromSize(
+      size: Size.fromHeight(widgetHeight(context)),
+      child: ColoredBox(
+        color: effectiveBackgroundColor,
+        child: Padding(
+          padding: EdgeInsets.only(top: topPadding),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              if (hasTitle)
+                Center(
+                  child: SurfaceContainer.ellipse(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20.w,
+                        vertical: 8.h,
+                      ),
+                      child: Text(
+                        title!,
+                        style: h5.copyWith(
+                          color: context.textColor,
+                          fontFamily:
+                              AppConstants.style.textStyle.secondaryFontFamiliy,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-            ),
-          if (action != null) _buildAction(),
-          if (showBackButton) _buildBackButton(),
-        ],
+              if (action != null) _buildAction(),
+              if (showBackButton) _buildBackButton(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -83,9 +86,6 @@ class CommonAppBar extends StatelessWidget {
   }
 
   Widget _buildAction() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: action!,
-    );
+    return Align(alignment: Alignment.centerRight, child: action!);
   }
 }

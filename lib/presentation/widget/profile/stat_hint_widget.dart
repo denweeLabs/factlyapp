@@ -1,18 +1,17 @@
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_in.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/smiling_star_animated_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/fire_animatied_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/question_animated_icon_widget.dart';
-import 'package:denwee/presentation/widget/shared/animations/common_animations/common_animations.dart';
-import 'package:denwee/presentation/widget/shared/animations/constants/animation_bipos.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/animations/transitions/hero_transition.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_dismiss_ontap_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_pop_scope_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/presentation/widget/profile/profile_overlay_user_statistics_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -91,8 +90,7 @@ class _StatHintState extends State<StatHint> {
                   right: 0.0,
                   bottom: context.bottomPadding + 32.h,
                   child: Center(
-                    child: BackdropSurfaceContainer.circle(
-                      blur: 0.0,
+                    child: SurfaceContainer.circle(
                       onTap: Navigator.of(context).pop,
                       hoverColor: context.theme.colorScheme.primary,
                       borderColor: context.theme.dividerColor,
@@ -103,12 +101,7 @@ class _StatHintState extends State<StatHint> {
                           size: 22,
                         ),
                       ),
-                    ).fadeScaleRotation(
-                      fades: const BiPos(0.0, 1.0),
-                      scales: const BiPos(0.0, 1.0),
-                      rotations: const BiPos(1.0, 0.0),
-                      delay: const Duration(milliseconds: 1000)
-                    ),
+                    ).autoElasticIn(sequencePos: 3),
                   ),
                 ),
               ],

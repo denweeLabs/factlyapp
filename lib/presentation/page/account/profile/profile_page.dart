@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/auth/domain/entity/third_party_login_body.dart';
 import 'package:denwee/core/auth/domain/entity/username.dart';
@@ -13,8 +11,9 @@ import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/dialogs_util.dart';
 import 'package:denwee/presentation/shared/utils/haptic_util.dart';
 import 'package:denwee/presentation/shared/utils/launcher_util.dart';
-import 'package:denwee/presentation/widget/shared/animations/common_animations/common_animations.dart';
-import 'package:denwee/presentation/widget/shared/animations/constants/animation_bipos.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_in.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_text_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_app_bar_widget.dart';
@@ -22,7 +21,6 @@ import 'package:denwee/presentation/widget/shared/common/common_dismiss_ontap_wi
 import 'package:denwee/presentation/widget/shared/common/common_loading_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_pop_scope_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_scaffold_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
 import 'package:denwee/presentation/widget/shared/misc/onscreen_button_keyboard_dismisser_widget.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
@@ -32,6 +30,7 @@ import 'package:denwee/presentation/widget/profile/profile_more_card_widget.dart
 import 'package:denwee/presentation/widget/profile/profile_save_changes_button_widget.dart';
 import 'package:denwee/presentation/widget/profile/undercover_card_title_widget.dart';
 import 'package:denwee/presentation/widget/profile/subscription_card_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/solid_fading_edge_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +43,9 @@ class ProfilePage extends StatefulWidget {
   static const routeName = 'ProfilePage';
 
   static const hPadding = 24;
+  static final shape = RoundedSuperellipseBorder(
+    borderRadius: BorderRadius.all(AppConstants.style.radius.card),
+  );
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -80,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final profile = getIt<ProfileCubit>().state.profile.toNullable();
     final name = profile?.name.toNullable();
     final email = profile?.email.toNullable();
-    
+
     if (name != null) nameController.text = name.value;
     if (email != null) emailController.text = email.value;
   }
@@ -131,55 +133,20 @@ class _ProfilePageState extends State<ProfilePage> {
                     title: context.tr(LocaleKeys.account_section_profile_title),
                   ),
                   Expanded(
-                    child: FadingEdge(
-                      axis: Axis.vertical,
-                      enabled: Platform.isIOS,
-                      child: Builder(builder: (context) {
-                        final hasChanges = context.select<EditProfileCubit, bool>(
-                                (cubit) => cubit.state.hasChanges);
-
-                        final bottomPadding = _retrieveBottomPadding(
-                          hasChanges,
-                          bottomInset,
-                        );
-
-                        final listPadding = EdgeInsets.symmetric(horizontal: ProfilePage.hPadding.w)
-                            .copyWith(
-                          bottom: bottomPadding,
-                          top: 24.h,
-                        );
-
-                        return ListView(
-                          padding: listPadding,
-                          children: [
-                            _buildPersonalDetails(context).fadeSlide(
-                              fades: const BiPos(0.0, 1.0),
-                              offsets:
-                                  const BiPos(Offset(0.0, 0.1), Offset.zero),
-                              delay: const Duration(milliseconds: 200),
-                            ),
-                            34.verticalSpace,
-                            _buildMoreSection(context).fadeSlide(
-                              fades: const BiPos(0.0, 1.0),
-                              offsets:
-                                  const BiPos(Offset(0.0, 0.1), Offset.zero),
-                              delay: const Duration(milliseconds: 400),
-                            ),
-                            58.verticalSpace,
-                            _buildLogoutButton(context, hasChanges).fadeScale(
-                              fades: const BiPos(0.0, 1.0),
-                              scales: const BiPos(0.0, 1.0),
-                              delay: const Duration(milliseconds: 600),
-                            ),
-                            24.verticalSpace,
-                            _buildDeleteAccountButton(context).fade(
-                              fades: const BiPos(0.0, 1.0),
-                              delay: const Duration(milliseconds: 400),
-                            ),
-                          ],
-                        );
-                      }),
-                    ),
+                    child:
+                        BlocSelector<EditProfileCubit, EditProfileState, bool>(
+                          selector: (state) => state.hasChanges,
+                          builder: (context, hasChanges) {
+                            final bottomPadding = _retrieveBottomPadding(
+                              hasChanges,
+                              bottomInset,
+                            );
+                            return _buildScrollableBody(
+                              bottomPadding: bottomPadding,
+                              hasChanges: hasChanges,
+                            );
+                          },
+                        ),
                   ),
                 ],
               ),
@@ -190,25 +157,51 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildDeleteAccountButton(BuildContext context) {
-    return Builder(builder: (context) {
-      final isDeleting = context.select<EditProfileCubit, bool>(
-          (cubit) => cubit.state.isAccountDeleting);
+  Widget _buildScrollableBody({
+    required double bottomPadding,
+    required bool hasChanges,
+  }) {
+    final listPadding = EdgeInsets.fromLTRB(
+      ProfilePage.hPadding.w,
+      24.h,
+      ProfilePage.hPadding.w,
+      bottomPadding,
+    );
 
-      return AnimatedSwitcher(
+    return SolidVerticalFadingEdge(
+      size: const FadingEdges.bottom(120),
+      backgroundColor: context.theme.colorScheme.background,
+      child: ListView(
+        padding: listPadding,
+        children: [
+          _buildPersonalDetails(context).autoFadeInUp(sequencePos: 1),
+          34.verticalSpace,
+          _buildMoreSection(context).autoFadeInUp(sequencePos: 2),
+          58.verticalSpace,
+          _buildLogoutButton(context, hasChanges).autoElasticIn(sequencePos: 4),
+          24.verticalSpace,
+          _buildDeleteAccountButton(context).autoFadeIn(sequencePos: 4),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDeleteAccountButton(BuildContext context) {
+    return BlocSelector<EditProfileCubit, EditProfileState, bool>(
+      selector: (state) => state.isAccountDeleting,
+      builder: (context, isAccountDeleting) => AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
-        child: isDeleting
-            ? SizedBox(
-                height: 60.h,
-                child: const CommonLoading(),
-              )
+        child: isAccountDeleting
+            ? SizedBox(height: 60.h, child: const CommonLoading())
             : AppTextButton(
                 onTap: _onAccountDelete,
-                text: context.tr(LocaleKeys.button_delete_account).toUpperCase(),
+                text: context
+                    .tr(LocaleKeys.button_delete_account)
+                    .toUpperCase(),
                 textColor: context.textColor.withValues(alpha: 0.2),
               ),
-      );
-    });
+      ),
+    );
   }
 
   Widget _buildLogoutButton(BuildContext context, bool hasChanges) {
@@ -217,10 +210,9 @@ class _ProfilePageState extends State<ProfilePage> {
       child: AppSolidButton(
         text: context.tr(LocaleKeys.button_logout),
         onTap: getIt<AuthCubit>().setUnauthenticated,
-        backgroundColors: !hasChanges ? null : [
-          context.darkPrimaryContainer,
-          context.darkPrimaryContainer,
-        ],
+        backgroundColors: !hasChanges
+            ? null
+            : [context.darkPrimaryContainer, context.darkPrimaryContainer],
         hideShadow: hasChanges,
       ),
     );
@@ -229,66 +221,63 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildMoreSection(BuildContext context) {
     return UndercoverCardTitle(
       title: context.tr(LocaleKeys.account_profile_more_title),
-      child: GridView.count(
-        shrinkWrap: true,
-        crossAxisCount: 2,
-        physics: const NeverScrollableScrollPhysics(),
-        crossAxisSpacing: ProfilePage.hPadding.w / 1.7,
-        mainAxisSpacing: ProfilePage.hPadding.w / 1.7,
-        padding: EdgeInsets.zero,
-        childAspectRatio: 1.1,
-        children: [
-          ProfileMoreCard(
-            icon: AppConstants.assets.icons.lockLinear,
-            title: context.tr(LocaleKeys.account_profile_more_change_password),
-            onTap: _onChangePassword,
-          ),
-          ProfileMoreCard(
-            icon: AppConstants.assets.icons.messageQuestionLinear,
-            title: context.tr(LocaleKeys.account_profile_more_contact_support),
-            onTap: _onContactSupport,
-          ),
-        ],
+      child: SizedBox.fromSize(
+        size: Size.fromHeight(148.h),
+        child: Row(
+          children: [
+            Expanded(
+              child: ProfileMoreCard(
+                icon: AppConstants.assets.icons.lockLinear,
+                title: context.tr(LocaleKeys.account_profile_more_change_password),
+                onTap: _onChangePassword,
+              ),
+            ),
+            14.horizontalSpace,
+            Expanded(
+              child: ProfileMoreCard(
+                icon: AppConstants.assets.icons.messageQuestionLinear,
+                title: context.tr(LocaleKeys.account_profile_more_contact_support),
+                onTap: _onContactSupport,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildPersonalDetails(BuildContext context) {
-    final borderRadius = BorderRadius.all(AppConstants.style.radius.card);
-    final shape = RoundedSuperellipseBorder(borderRadius: borderRadius);
-    
     return UndercoverCardTitle(
       title: context.tr(LocaleKeys.account_profile_personal_title),
       child: RepaintBoundary(
-        child: DecoratedBox(
-          decoration: ShapeDecoration(
-            shape: shape,
-            color: context.primaryContainer,
-            shadows: [AppConstants.style.colors.commonShadow],
-          ),
+        child: PhysicalShape(
+          elevation: 6.0,
+          color: context.primaryContainer,
+          clipper: ShapeBorderClipper(shape: ProfilePage.shape),
+          shadowColor: AppConstants.style.colors.commonShadow.color,
           child: Column(
             children: [
               BlocBuilder<EditProfileCubit, EditProfileState>(
-                  builder: (context, state) {
-                return PersonalDetailsCard(
-                  // name
-                  nameController: nameController,
-                  nameFocusNode: nameFocusNode,
-                  onNameChanged: context.read<EditProfileCubit>().onNameChanged,
-                  nameInError: state.name
-                      .fold(() => false, (name) => !name.isPure && name.isNotValid),
-                  nameErrorMessage: state.name.toNullable()?.error?.errorName(context),
-                  // email
-                  emailController: emailController,
-                  emailFocusNode: emailFocusNode,
-                  onEmailChanged: context.read<EditProfileCubit>().onEmailChanged,
-                  emailInError: !state.email.isPure && state.email.isNotValid,
-                  emailErrorMessage: state.email.error?.errorName(context),
-                  // misc
-                  isFormValid: state.isValid,
-                  authProvider: authProvider,
-                );
-              }),
+                builder: (context, state) {
+                  return PersonalDetailsCard(
+                    // name
+                    nameController: nameController,
+                    nameFocusNode: nameFocusNode,
+                    onNameChanged: context.read<EditProfileCubit>().onNameChanged,
+                    nameInError: state.name.fold(() => false, (name) => !name.isPure && name.isNotValid),
+                    nameErrorMessage: state.name.toNullable()?.error?.errorName(context),
+                    // email
+                    emailController: emailController,
+                    emailFocusNode: emailFocusNode,
+                    onEmailChanged: context.read<EditProfileCubit>().onEmailChanged,
+                    emailInError: !state.email.isPure && state.email.isNotValid,
+                    emailErrorMessage: state.email.error?.errorName(context),
+                    // misc
+                    isFormValid: state.isValid,
+                    authProvider: authProvider,
+                  );
+                },
+              ),
               const SubscriptionCard(onlyBody: true),
             ],
           ),

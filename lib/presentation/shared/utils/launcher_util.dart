@@ -10,7 +10,6 @@ import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 enum LinkLaunchType { url, domain }
@@ -60,10 +59,7 @@ class LauncherUtil {
     return launchUrl(url);
   }
 
-  static Future<bool> launchSupportEmail(
-    BuildContext context, {
-    SnackBarPosition errorSnackbarPos = SnackBarPosition.top,
-  }) async {
+  static Future<bool> launchSupportEmail(BuildContext context) async {
     final isSuccess = await launchEmail(
       to: [AppConstants.config.supportEmail],
       subject: AppConstants.config.supportEmailSubject,
@@ -74,17 +70,13 @@ class LauncherUtil {
           LocaleKeys.error_message_email_failed_to_open_support,
           args: [AppConstants.config.supportEmail],
         ),
-        position: errorSnackbarPos,
       );
     }
     return isSuccess;
   }
 
   static Future<bool> launchTermsOfUse(BuildContext context) async {
-    return _launchDenweeLandingRes(
-      context,
-      AppConstants.config.termsOfUseUrl,
-    );
+    return _launchDenweeLandingRes(context, AppConstants.config.termsOfUseUrl);
   }
 
   static Future<bool> launchPrivacyPolicy(BuildContext context) async {
@@ -128,8 +120,10 @@ class LauncherUtil {
     required LinkLaunchType type,
   }) {
     switch (type) {
-      case LinkLaunchType.url: return url;
-      case LinkLaunchType.domain: return Uri.parse(url).origin;
+      case LinkLaunchType.url:
+        return url;
+      case LinkLaunchType.domain:
+        return Uri.parse(url).origin;
     }
   }
 

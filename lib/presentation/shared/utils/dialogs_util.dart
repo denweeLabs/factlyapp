@@ -1,7 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:async';
+
 import 'package:denwee/core/auth/domain/entity/email.dart';
 import 'package:denwee/core/misc/domain/service/app_review_service.dart';
 import 'package:denwee/core/notifications/domain/entity/push_notification.dart';
+import 'package:denwee/core/permissions/domain/entity/app_permission_status.dart';
 import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
+import 'package:denwee/core/permissions/domain/utils/permission_type_util.dart';
 import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/presentation/shared/router/page_routes_builders/fade_slideup_page_route_builder.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
@@ -29,59 +35,31 @@ import 'package:denwee/presentation/widget/shared/snackbars/notification_snackba
 import 'package:denwee/presentation/widget/shared/snackbars/toast_message_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:top_snackbar/top_snackbar.dart';
 import 'package:utils/utils.dart';
-
-extension SnackBarPositionX on SnackBarPosition {
-  List<DismissDirection> get dismissDirections {
-    switch (this) {
-      case SnackBarPosition.bottom:
-        return [DismissDirection.down, DismissDirection.horizontal];
-      case SnackBarPosition.top:
-        return [DismissDirection.up, DismissDirection.horizontal];
-    }
-  }
-
-  EdgeInsets get padding {
-    switch (this) {
-      case SnackBarPosition.bottom:
-        return EdgeInsets.symmetric(horizontal: 16.w).copyWith(bottom: 18.h);
-      case SnackBarPosition.top:
-        return EdgeInsets.symmetric(horizontal: 16.w).copyWith(top: 10.h);
-    }
-  }
-}
 
 class AppDialogs {
   static const snackbarDefaultAnimationDuration = Duration(milliseconds: 1500);
   static const snackbarDefaultDisplayDuration = Duration(milliseconds: 1200);
   static const snackbarSuccessDisplayDuration = Duration(milliseconds: 800);
   static const snackbarErrorDisplayDuration = Duration(milliseconds: 2200);
-  static const snackbarNotificationDisplayDuration = Duration(milliseconds: 2000);
+  static const snackbarNotificationDisplayDuration = Duration(
+    milliseconds: 2000,
+  );
   static const toastMessageDisplayDuration = Duration(milliseconds: 1000);
   static final dialogBarrierColor = Colors.black.withValues(alpha: 0.65);
 
-  static void showSuccessSnackbar({
-    String? title,
-    String? description,
-    SnackBarPosition position = SnackBarPosition.top,
-  }) {
+  static void showSuccessSnackbar({String? title, String? description}) {
     _showSnackbar(
       CommonSnackbar.success(title: title, description: description),
       displayDuration: snackbarSuccessDisplayDuration,
-      position: position,
     );
   }
 
-  static void showErrorSnackbar({
-    String? title,
-    String? description,
-    SnackBarPosition position = SnackBarPosition.top,
-  }) {
+  static void showErrorSnackbar({String? title, String? description}) {
     _showSnackbar(
       CommonSnackbar.error(title: title, description: description),
       displayDuration: snackbarErrorDisplayDuration,
-      position: position,
     );
   }
 
@@ -98,20 +76,18 @@ class AppDialogs {
     );
   }
 
-  static void showToastMessage(
-    String message, {
-    SnackBarPosition position = SnackBarPosition.top,
-    EdgeInsets? padding,
-  }) {
+  static void showToastMessage(String message, {EdgeInsets? padding}) {
     _showSnackbar(
       ToastMessageSnackbar(message),
       displayDuration: toastMessageDisplayDuration,
-      position: position,
       padding: padding,
     );
   }
 
-  static Future<void> showSessionExpiredDialog(BuildContext context, VoidCallback onDismiss) {
+  static Future<void> showSessionExpiredDialog(
+    BuildContext context,
+    VoidCallback onDismiss,
+  ) {
     return showDialog<void>(
       context,
       SessionExpiredDialog(onDismiss: onDismiss),
@@ -121,12 +97,16 @@ class AppDialogs {
     );
   }
 
-  static Future<bool?> showAccountDeleteConfirmationDialog(BuildContext context) {
+  static Future<bool?> showAccountDeleteConfirmationDialog(
+    BuildContext context,
+  ) {
     return showDialog<bool?>(
       context,
       const AccountDeleteConfirmationDialog(),
       barrierColor: AppDialogs.dialogBarrierColor,
-      settings: const RouteSettings(name: AccountDeleteConfirmationDialog.routeName),
+      settings: const RouteSettings(
+        name: AccountDeleteConfirmationDialog.routeName,
+      ),
     );
   }
 
@@ -144,21 +124,36 @@ class AppDialogs {
       context,
       const ResetPasswordLinkSentDialog(),
       barrierColor: AppDialogs.dialogBarrierColor,
-      settings: const RouteSettings(name: ResetPasswordLinkSentDialog.routeName),
+      settings: const RouteSettings(
+        name: ResetPasswordLinkSentDialog.routeName,
+      ),
     );
   }
 
-  static Future<bool?> showGrantPermissionDialog(
-    BuildContext context, {
-    required AppPermissionType type,
-    bool isForcedSettings = false,
-  }) {
-    return showDialog<bool?>(
+  static Future<AppPermissionStatus> checkPermissionDialog(
+    BuildContext context,
+    AppPermissionType type,
+  ) async {
+    final permissionStatus = await type.check();
+    if (permissionStatus.isAnyGranted) {
+      return permissionStatus;
+    }
+
+    final isForcedSettings = permissionStatus.isDeniedForever;
+    final result = await showDialog<bool?>(
       context,
       GrantPermissionDialog(type: type, isForcedSettings: isForcedSettings),
       barrierColor: AppDialogs.dialogBarrierColor,
       settings: const RouteSettings(name: GrantPermissionDialog.routeName),
     );
+    if (result != true) return permissionStatus;
+
+    if (!isForcedSettings) {
+      return type.request();
+    }
+
+    await type.openSettings();
+    return permissionStatus;
   }
 
   static Future<bool?> showAdvertismentAlertDialog(BuildContext context) {
@@ -170,25 +165,37 @@ class AppDialogs {
     );
   }
 
-  static Future<bool?> showFactExplanationUnlockMethodDialog(BuildContext context) {
+  static Future<bool?> showFactExplanationUnlockMethodDialog(
+    BuildContext context,
+  ) {
     return showDialog<bool?>(
       context,
       const FactExplanationUnlockMethodDialog(),
       barrierColor: context.darkPrimaryContainer.withValues(alpha: 0.97),
-      settings: const RouteSettings(name: FactExplanationUnlockMethodDialog.routeName),
+      settings: const RouteSettings(
+        name: FactExplanationUnlockMethodDialog.routeName,
+      ),
     );
   }
 
-  static Future<DateTime?> showSelectNotificationTimeDialog(BuildContext context, {DateTime? initialTime}) {
+  static Future<DateTime?> showSelectNotificationTimeDialog(
+    BuildContext context, {
+    DateTime? initialTime,
+  }) {
     return showDialog<DateTime?>(
       context,
       SelectNotificationTimeDialog(initialTime: initialTime),
       barrierColor: AppDialogs.dialogBarrierColor,
-      settings: const RouteSettings(name: SelectNotificationTimeDialog.routeName),
+      settings: const RouteSettings(
+        name: SelectNotificationTimeDialog.routeName,
+      ),
     );
   }
 
-  static Future<Email?> showEnterEmailPromptDialog(BuildContext context, {Email? initialEmail}) {
+  static Future<Email?> showEnterEmailPromptDialog(
+    BuildContext context, {
+    Email? initialEmail,
+  }) {
     return showDialog<Email?>(
       context,
       ResetPassEmailPromptDialog(initialEmail: initialEmail),
@@ -197,21 +204,30 @@ class AppDialogs {
     );
   }
 
-  static Future<void> showSubscriptionPurchaseSuccessDialog(BuildContext context, UserSubscription subscription) {
+  static Future<void> showSubscriptionPurchaseSuccessDialog(
+    BuildContext context,
+    UserSubscription subscription,
+  ) {
     return showDialog<void>(
       context,
       SubscriptionPurchaseSuccessDialog(subscription: subscription),
       barrierColor: AppDialogs.dialogBarrierColor,
-      settings: const RouteSettings(name: SubscriptionPurchaseSuccessDialog.routeName),
+      settings: const RouteSettings(
+        name: SubscriptionPurchaseSuccessDialog.routeName,
+      ),
     );
   }
 
-  static Future<bool?> showSubscriptionSwitchWarningDialog(BuildContext context) {
+  static Future<bool?> showSubscriptionSwitchWarningDialog(
+    BuildContext context,
+  ) {
     return showDialog<bool?>(
       context,
       const SubscriptionSwitchWarningDialog(),
       barrierColor: AppDialogs.dialogBarrierColor,
-      settings: const RouteSettings(name: SubscriptionSwitchWarningDialog.routeName),
+      settings: const RouteSettings(
+        name: SubscriptionSwitchWarningDialog.routeName,
+      ),
     );
   }
 
@@ -246,21 +262,31 @@ class AppDialogs {
     );
   }
 
-  static Future<bool?> showBackgroundUnlockConfirmationDialog(BuildContext context, int backgroundPrice) {
+  static Future<bool?> showBackgroundUnlockConfirmationDialog(
+    BuildContext context,
+    int backgroundPrice,
+  ) {
     return showDialog<bool?>(
       context,
       BackgroundUnlockConfirmationDialog(backgroundPrice: backgroundPrice),
       barrierColor: AppDialogs.dialogBarrierColor,
-      settings: const RouteSettings(name: BackgroundUnlockConfirmationDialog.routeName),
+      settings: const RouteSettings(
+        name: BackgroundUnlockConfirmationDialog.routeName,
+      ),
     );
   }
 
-  static Future<void> showBackgroundInsufficientBalanceDialog(BuildContext context, int starsLeftToUnlock) {
+  static Future<void> showBackgroundInsufficientBalanceDialog(
+    BuildContext context,
+    int starsLeftToUnlock,
+  ) {
     return showDialog<void>(
       context,
       BackgroundInsufficientBalanceDialog(starsLeftToUnlock: starsLeftToUnlock),
       barrierColor: AppDialogs.dialogBarrierColor,
-      settings: const RouteSettings(name: BackgroundInsufficientBalanceDialog.routeName),
+      settings: const RouteSettings(
+        name: BackgroundInsufficientBalanceDialog.routeName,
+      ),
     );
   }
 
@@ -273,12 +299,16 @@ class AppDialogs {
     );
   }
 
-  static Future<void> showSuccessSignupReviewEncourageDialog(BuildContext context) async {
+  static Future<void> showSuccessSignupReviewEncourageDialog(
+    BuildContext context,
+  ) async {
     final isOk = await showDialog<bool?>(
       context,
       const SuccessSignupReviewEncourageDialog(),
       barrierColor: AppDialogs.dialogBarrierColor,
-      settings: const RouteSettings(name: SuccessSignupReviewEncourageDialog.routeName),
+      settings: const RouteSettings(
+        name: SuccessSignupReviewEncourageDialog.routeName,
+      ),
     );
     if (isOk == true) {
       return AppReviewService.requestReview();
@@ -332,7 +362,6 @@ class AppDialogs {
   static void _showSnackbar(
     Widget snackbarWidget, {
     Duration? displayDuration,
-    SnackBarPosition position = SnackBarPosition.top,
     VoidCallback? onTap,
     Curve curve = Curves.elasticOut,
     EdgeInsets? padding,
@@ -348,10 +377,7 @@ class AppDialogs {
       displayDuration: displayDuration ?? snackbarDefaultDisplayDuration,
       reverseAnimationDuration: const Duration(milliseconds: 400),
       curve: curve,
-      snackBarPosition: position,
-      dismissDirection: position.dismissDirections,
-      padding: padding ?? position.padding,
-      dismissType: DismissType.onSwipe,
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w).copyWith(top: 10.h),
       onTap: onTap,
     );
   }

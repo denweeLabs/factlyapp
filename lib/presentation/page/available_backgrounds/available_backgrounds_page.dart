@@ -4,6 +4,7 @@ import 'package:denwee/core/backgrounds/domain/entity/background_selection_item.
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/presentation/bloc/backgrounds/available_backgrounds_cubit.dart';
 import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
+import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
 import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/router/root_router.dart';
@@ -60,22 +61,17 @@ class _AvailableBackgroundsPageState extends State<AvailableBackgroundsPage> {
   }
 
   void initItems() {
-    final cubitState = getIt<AvailableBackgroundsCubit>().state;
-    final backgrounds = cubitState.backgrounds;
-    if (backgrounds.isEmpty) return;
-
+    final backgrounds = getIt<AvailableBackgroundsCubit>().state.backgrounds;
     final selectedBackgroundId = getIt<UserPreferencesCubit>()
         .state
         .preferences
         .background
         .selectedBackgroundId;
-
-    final unlockedBackgroundIds =
-        getIt<ProfileCubit>().state.profile
-            .toNullable()
-            ?.unlockedBackgrounds
-            .toSet() ??
-        <UniqueId>{};
+    final unlockedBackgroundIds = getIt<ProfileCubit>().state.profile
+        .toNullable()!
+        .unlockedBackgrounds;
+    
+    if (backgrounds.isEmpty) return;
 
     // 1. Extract selected background
     final selectedBackground = backgrounds.firstWhereOrNull(
@@ -132,18 +128,7 @@ class _AvailableBackgroundsPageState extends State<AvailableBackgroundsPage> {
           body: Column(
             children: [
               _buildAppBar(),
-              Expanded(
-                child: CustomScrollView(
-                  slivers: [
-                    for (var i = 0; i < items.length; i++) ...[
-                      ..._buildCategoryGroup(
-                        entry: items.entries.toList()[i],
-                        isLastCategory: i == items.length - 1,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
+              Expanded(child: _buildScrollableGrid()),
             ],
           ),
         ),
@@ -156,8 +141,9 @@ class _AvailableBackgroundsPageState extends State<AvailableBackgroundsPage> {
       onBack: _goBack,
       backgroundColor: Colors.transparent,
       title: context.tr(LocaleKeys.account_section_background_title),
-      action: BackgroundSelectionUtil.isSubscribedProvider(
-        builder: (isSubscribed) => isSubscribed
+      action: BlocSelector<UserSubscriptionCubit, UserSubscriptionState, bool>(
+        selector: (state) => state.isSubscribed,
+        builder: (context, isSubscribed) => isSubscribed
             ? const SizedBox.shrink()
             : AppIconButton(
                 onTap: () => context.restorablePushNamedArgs(
@@ -172,22 +158,43 @@ class _AvailableBackgroundsPageState extends State<AvailableBackgroundsPage> {
     );
   }
 
+  Widget _buildScrollableGrid() {
+    final entries = items.entries.toList();
+    
+    return BackgroundCardSelectionProviders(
+      builder: (context, vm) => CustomScrollView(
+        slivers: [
+          for (var i = 0; i < entries.length; i++) ...[
+            ..._buildCategoryGroup(
+              entry: entries[i],
+              isLastCategory: i == entries.length - 1,
+              vm: vm,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   List<Widget> _buildCategoryGroup({
     required MapEntry<BackgroundCategory, List<BackgroundSelectionItem>> entry,
     required bool isLastCategory,
+    required BackgroundCardSelectionVM vm,
   }) {
     return [
       const SliverToBoxAdapter(child: SizedBox(height: 16)),
       
       SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18.w),
-          child: Text(
-            entry.key.title,
-            style: h2.copyWith(
-              color: context.textColor,
-              fontWeight: FontWeight.w700,
-              fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+        child: RepaintBoundary(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 18.w),
+            child: Text(
+              entry.key.title,
+              style: h2.copyWith(
+                color: context.textColor,
+                fontWeight: FontWeight.w700,
+                fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
+              ),
             ),
           ),
         ),
@@ -201,9 +208,8 @@ class _AvailableBackgroundsPageState extends State<AvailableBackgroundsPage> {
           gridDelegate: gridDelegate,
           delegate: SliverChildBuilderDelegate((context, index) {
             final item = entry.value[index];
-            return BackgroundSelectionUtil.isBackgroundItemSelected(
-              item: item,
-              builder: (isSelected) => _buildGridItem(item, isSelected),
+            return RepaintBoundary(
+              child: _buildGridItem(item: item, vm: vm),
             );
           }, childCount: entry.value.length),
         ),
@@ -214,14 +220,25 @@ class _AvailableBackgroundsPageState extends State<AvailableBackgroundsPage> {
     ];
   }
 
-  Widget _buildGridItem(BackgroundSelectionItem item, bool isSelected) {
+  Widget _buildGridItem({
+    required BackgroundSelectionItem item,
+    required BackgroundCardSelectionVM vm
+  }) {
+    final isSelected = item.isSelected(vm.selectedId);
+    final isApplying = item.id == vm.applyingId;
+    
     return item.when(
-      defaultBackground: () =>
-          DefaultBackgroundSelectionCard(isSelected: isSelected),
+      defaultBackground: () => DefaultBackgroundSelectionCard(
+        isSelected: isSelected,
+        isApplying: isApplying,
+      ),
       availableBackground: (background) => BackgroundSelectionCard(
         forceOpenEdit: true,
         isSelected: isSelected,
+        isApplying: isApplying,
         background: background,
+        isSubscribed: vm.hasPremiumSubscription,
+        isUnlocked: vm.unlockedIds.contains(background.id),
       ),
     );
   }

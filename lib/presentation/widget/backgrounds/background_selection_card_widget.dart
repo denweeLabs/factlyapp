@@ -5,10 +5,9 @@ import 'package:denwee/presentation/shared/router/root_router.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/smiling_star_animated_icon_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
-import 'package:denwee/presentation/page/available_backgrounds/util/background_selection_util.dart';
 import 'package:denwee/presentation/widget/backgrounds/background_preview_content_widget.dart';
 import 'package:denwee/presentation/widget/backgrounds/background_selection_card_body_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,53 +19,45 @@ class BackgroundSelectionCard extends StatelessWidget {
     super.key,
     required this.isSelected,
     required this.background,
+    required this.isSubscribed,
+    required this.isUnlocked,
+    required this.isApplying,
     this.forceOpenEdit = false,
   });
 
   final bool isSelected;
   final bool forceOpenEdit;
+  final bool isSubscribed;
+  final bool isUnlocked;
+  final bool isApplying;
   final AvailableBackground background;
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundSelectionUtil.isSubscribedProvider(
-      builder: (isSubscribed) =>
-          BackgroundSelectionUtil.isBackgroundUnlockedProvider(
-            backgroundId: background.id,
-            builder: (isUnlocked) {
-              final hideBadge = background.isFree || isUnlocked || isSubscribed;
+    final hideBadge = background.isFree || isUnlocked || isSubscribed;
 
-              return BackgroundSelectionCardBody(
-                id: background.id,
-                lettersStyle: background.style.asTextStyle,
-                onTap: () => _onTap(
-                  context: context,
-                  isSubscribed: isSubscribed,
-                  isUnlocked: isUnlocked,
-                ),
-                onLongTap: () => _openBackgroundEdit(context),
-                isSelected: isSelected,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    _buildContent(),
-                    if (!hideBadge) _buildBadge(context),
-                  ],
-                ),
-              );
-            },
-          ),
+    return BackgroundSelectionCardBody(
+      isApplying: isApplying,
+      lettersStyle: background.style.asTextStyle,
+      onTap: () => _onTap(
+        context: context,
+        isSubscribed: isSubscribed,
+        isUnlocked: isUnlocked,
+      ),
+      onLongTap: () => _openBackgroundEdit(context),
+      isSelected: isSelected,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [_buildContent(), if (!hideBadge) _buildBadge(context)],
+      ),
     );
   }
 
   Widget _buildContent() {
-    return BackgroundSelectionUtil.isBackgroundApplyingProvider(
-      backgroundId: background.id,
-      builder: (isApplying) => BackgroundPreviewContent(
-        asset: background.asset,
-        foregroundColor: isApplying ? Colors.black45 : null,
-        volume: 0.0,
-      ),
+    return BackgroundPreviewContent(
+      asset: background.asset,
+      foregroundColor: isApplying ? Colors.black45 : null,
+      volume: 0.0,
     );
   }
 
@@ -76,7 +67,7 @@ class BackgroundSelectionCard extends StatelessWidget {
       right: 0.0,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: BackdropSurfaceContainer.ellipse(
+        child: SurfaceContainer.ellipse(
           color: context.lightPrimaryContainer,
           borderColor: Colors.black12,
           child: Padding(

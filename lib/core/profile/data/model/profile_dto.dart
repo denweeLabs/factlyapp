@@ -82,7 +82,7 @@ class ProfileDto {
       ),
       createdAt: optionOf(createdAt),
       isAnonymous: isAnonymous,
-      unlockedBackgrounds: unlockedBackgrounds.map(UniqueId.fromValue).toList(),
+      unlockedBackgrounds: unlockedBackgrounds.map(UniqueId.fromValue).toSet(),
       authProvider: AppSupportedAuthProvider.fromString(authProvider),
     );
   }

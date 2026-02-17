@@ -1,7 +1,7 @@
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,7 +15,7 @@ class StoriesScrollupButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: BackdropSurfaceContainer.circle(
+      child: SurfaceContainer.circle(
         onTap: onTap,
         size: Size.square(size),
         color: context.lightPrimaryContainer,

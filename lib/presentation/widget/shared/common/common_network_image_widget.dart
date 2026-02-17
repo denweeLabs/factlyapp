@@ -6,13 +6,15 @@ class CommonNetworkImage extends StatelessWidget {
   final String url;
   final BoxFit? fit;
 
-  static const kTransparentPlaceholder = 'assets/images/transparent_1024.png';
+  static const transparentPlaceholder = AssetImage(
+    'assets/images/transparent_1024.png',
+  );
   static const fadeDuration = Duration(milliseconds: 300);
 
   @override
   Widget build(BuildContext context) {
     return FadeInImage(
-      placeholder: const AssetImage(kTransparentPlaceholder),
+      placeholder: transparentPlaceholder,
       image: NetworkImage(url),
       fit: fit ?? BoxFit.cover,
       fadeInDuration: fadeDuration,

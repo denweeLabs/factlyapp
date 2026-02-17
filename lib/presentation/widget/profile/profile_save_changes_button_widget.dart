@@ -1,10 +1,9 @@
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
-import 'package:denwee/presentation/widget/shared/animations/common_animations/common_animations.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
-import 'package:denwee/presentation/widget/shared/animations/constants/animation_bipos.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/tap_fade_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_loading_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
@@ -32,9 +31,8 @@ class ProfileSaveChangesButton extends StatelessWidget {
     return RepaintBoundary(
       child: IgnorePointer(
         ignoring: !isVisible,
-        child: BounceTapFadeAnimation(
+        child: TapFadeAnimation(
           onTap: onTap,
-          minScale: 1.0,
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: AppConstants.style.colors.commonColoredGradient(context),
@@ -71,14 +69,11 @@ class ProfileSaveChangesButton extends StatelessWidget {
               ),
             ),
           ),
-        ).fadeSlide(
+        ).autoFadeInUp(
           animate: isVisible,
-          fades: const BiPos(1.0, 1.0),
-          offsets: const BiPos(Offset(0.0, 1.0), Offset.zero),
-          duration: CustomAnimationDurations.lowMedium,
-          offsetCurve: isVisible
-              ? const Interval(0.2, 1.0, curve: Curves.fastEaseInToSlowEaseOut)
-              : const Interval(0.0, 0.5, curve: Curves.fastEaseInToSlowEaseOut),
+          slideCurve: const Interval(0.2, 1.0, curve: Curves.fastEaseInToSlowEaseOut),
+          slideReverseCurve: const Interval(0.0, 0.5, curve: Curves.fastEaseInToSlowEaseOut),
+          duration: CustomAnimationDurations.low,
         ),
       ),
     );

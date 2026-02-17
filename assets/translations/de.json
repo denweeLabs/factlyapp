@@ -201,6 +201,25 @@
     },
 
 
+    "fact_share": {
+        "more": "Mehr",
+        "hide_watermark": "Wasserzeichen ausblenden",
+        "archive": {
+            "archive": "Archivieren",
+            "unarchive": "Aus Archiv entfernen"
+        },
+        "copy": {
+            "copy": "Kopieren",
+            "copied": "Kopiert"
+        },
+        "download": {
+            "download": "Herunterladen",
+            "saved": "Gespeichert"
+        },
+        "resource": "Quelle"
+    },
+
+
     "validation": {
         "email": {
             "empty": "Bitte gib eine E-Mail ein",
@@ -357,8 +376,7 @@
             "daily_facts": "Noch keine täglichen Fakten... Schau später wieder vorbei für Neues!",
             "facts_archive": "Dein Archiv ist leer — speichere ein paar Fakten und sie werden hier angezeigt!"
         },
-        "agreeing_to_terms": "Wenn du fortfährst, akzeptierst du unsere\n<terms>AGB</terms> und den <privacy>Datenschutz</privacy>",
-        "copied_to_clipboard": "Kopiert"
+        "agreeing_to_terms": "Wenn du fortfährst, akzeptierst du unsere\n<terms>AGB</terms> und den <privacy>Datenschutz</privacy>"
     },
 
 
@@ -377,6 +395,20 @@
                 "subtitle": {
                     "basic": "Um Benachrichtigungen zu erhalten, erlaube den Zugriff für diese App",
                     "in_settings": "Um Benachrichtigungen zu erhalten, erlaube den Zugriff für diese App in den Systemeinstellungen"
+                }
+            },
+            "photosAdd": {
+                "title": "Erlaubnis",
+                "subtitle": {
+                    "basic": "Um Dateien zu speichern und zu teilen, erlaube bitte den Speicherzugriff für diese App",
+                    "in_settings": "Um Dateien zu speichern und zu teilen, erlaube bitte den Speicherzugriff für diese App in den Systemeinstellungen"
+                }
+            },
+            "photosFull": {
+                "title": "Erlaubnis",
+                "subtitle": {
+                    "basic": "Um Dateien zu speichern und zu teilen, erlauben Sie dieser App den Zugriff auf Fotos",
+                    "in_settings": "Um Dateien zu speichern und zu teilen, erlauben Sie dieser App den Zugriff auf Fotos in den Systemeinstellungen"
                 }
             }
         },

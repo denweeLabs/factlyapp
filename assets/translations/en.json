@@ -201,6 +201,25 @@
     },
 
 
+    "fact_share": {
+        "more": "More",
+        "hide_watermark": "Hide watermark",
+        "archive": {
+            "archive": "Archive",
+            "unarchive": "Unarchive"
+        },
+        "copy": {
+            "copy": "Copy",
+            "copied": "Copied"
+        },
+        "download": {
+            "download": "Download",
+            "saved": "Saved"
+        },
+        "resource": "Resource"
+    },
+
+
     "validation": {
         "email": {
             "empty": "Please provide an email",
@@ -357,8 +376,7 @@
             "daily_facts": "No daily facts yet... Check back later for something new!",
             "facts_archive": "Your archive is empty — save some facts and they’ll show up here!"
         },
-        "agreeing_to_terms": "By continuing, you agree to our\n<terms>Terms</terms> and <privacy>Privacy</privacy>",
-        "copied_to_clipboard": "Copied"
+        "agreeing_to_terms": "By continuing, you agree to our\n<terms>Terms</terms> and <privacy>Privacy</privacy>"
     },
 
 
@@ -377,6 +395,20 @@
                 "subtitle": {
                     "basic": "To receive notifications, make sure to allow permission for this app",
                     "in_settings": "To receive notifications, make sure to allow permission for this app in the system settings"
+                }
+            },
+            "photosAdd": {
+                "title": "Permission",
+                "subtitle": {
+                    "basic": "To save and share files, please allow storage access for this app",
+                    "in_settings": "To save and share files, please allow storage access for this app in the system settings"
+                }
+            },
+            "photosFull": {
+                "title": "Permission",
+                "subtitle": {
+                    "basic": "To save and share files, please allow photos access for this app",
+                    "in_settings": "To save and share files, please allow photos access for this app in the system settings"
                 }
             }
         },

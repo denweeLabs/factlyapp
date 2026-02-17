@@ -4,12 +4,11 @@ import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/widgets_util.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_app_bar_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_scaffold_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -36,35 +35,30 @@ class ChangeLanguagePage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: FadingEdge(
-              axis: Axis.vertical,
-              stops: const [0.0, 0.03, 0.9, 1.0],
-              child: ListView.separated(
-                itemCount: context.supportedLocales.length,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 24.w,
-                ).copyWith(bottom: context.bottomPadding + 24.h, top: 28.h),
-                separatorBuilder: (_, _) => Padding(
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  child: const Divider(height: 0.0),
-                ),
-                itemBuilder: (_, index) {
-                  final locale = context.supportedLocales[index];
-                  final language = AppConstants.config.languages
-                      .firstWhereOrNull(
-                        (language) => language.locale == locale,
-                      );
-                  final isSelected = locale == context.locale;
-
-                  if (language == null) return const SizedBox.shrink();
-
-                  return _buildItem(
-                    context: context,
-                    language: language,
-                    isSelected: isSelected,
-                  );
-                },
+            child: ListView.separated(
+              itemCount: context.supportedLocales.length,
+              padding: EdgeInsets.symmetric(
+                horizontal: 24.w,
+              ).copyWith(bottom: context.bottomPadding + 24.h, top: 28.h),
+              separatorBuilder: (_, _) => Padding(
+                padding: EdgeInsets.symmetric(vertical: 14.h),
+                child: const Divider(height: 0.0),
               ),
+              itemBuilder: (_, index) {
+                final locale = context.supportedLocales[index];
+                final language = AppConstants.config.languages.firstWhereOrNull(
+                  (language) => language.locale == locale,
+                );
+                final isSelected = locale == context.locale;
+
+                if (language == null) return const SizedBox.shrink();
+
+                return _buildItem(
+                  context: context,
+                  language: language,
+                  isSelected: isSelected,
+                );
+              },
             ),
           ),
         ],
@@ -77,7 +71,7 @@ class ChangeLanguagePage extends StatelessWidget {
     required AppLanguage language,
     required bool isSelected,
   }) {
-    return BounceTapFadeAnimation(
+    return BounceTapAnimation(
       minScale: 0.96,
       onTap: () => getIt<UserPreferencesCubit>().changeLanguage(language.locale),
       child: Row(
@@ -105,7 +99,7 @@ class ChangeLanguagePage extends StatelessWidget {
             state: isSelected
                 ? CrossFadeState.showFirst
                 : CrossFadeState.showSecond,
-            firstChild: BackdropSurfaceContainer.circle(
+            firstChild: SurfaceContainer.circle(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CommonAppIcon(

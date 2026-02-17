@@ -32,4 +32,40 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     debugPrint('Permission: notifications $status');
     return status;
   }
+
+  // Photos add
+  FutureOr<AppPermissionStatus> retrieveOrCheckPhotosAdd() async =>
+      state.photosAddPermission.toNullable() ??
+      await forceCheckPhotosAdd();
+
+  Future<AppPermissionStatus> forceCheckPhotosAdd({bool request = false}) async {
+    emit(state.copyWith(checkingPhotosAddPermission: true));
+    final status = request
+        ? await AppPermission.photosAdd.request()
+        : await AppPermission.photosAdd.status();
+    emit(state.copyWith(
+      photosAddPermission: some(status),
+      checkingPhotosAddPermission: false,
+    ));
+    debugPrint('Permission: photos add $status');
+    return status;
+  }
+
+  // Photos full
+  FutureOr<AppPermissionStatus> retrieveOrCheckPhotosFull() async =>
+      state.photosFullPermission.toNullable() ??
+      await forceCheckPhotosFull();
+
+  Future<AppPermissionStatus> forceCheckPhotosFull({bool request = false}) async {
+    emit(state.copyWith(checkingPhotosFullPermission: true));
+    final status = request
+        ? await AppPermission.photosFull.request()
+        : await AppPermission.photosFull.status();
+    emit(state.copyWith(
+      photosFullPermission: some(status),
+      checkingPhotosFullPermission: false,
+    ));
+    debugPrint('Permission: photos full $status');
+    return status;
+  }
 }

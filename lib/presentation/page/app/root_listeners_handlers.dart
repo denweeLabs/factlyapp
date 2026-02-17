@@ -23,13 +23,18 @@ mixin RootBlocListenersHandlers {
   var isErrorSnackbarDisplayed = false;
 
   void processAppResume() {
-    getIt<PermissionsCubit>().forceCheckNotifications();
+    Future.microtask(
+      () => getIt<PermissionsCubit>()
+        ..forceCheckNotifications()
+        ..forceCheckPhotosAdd()
+        ..forceCheckPhotosFull(),
+    );
   }
 
   void processLoggedOutUser() {
     getIt<OnLogoutUseCase>().execute();
     Navigator.of(getIt<RootRouterData>().context, rootNavigator: true)
-        .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => true);
+        .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => false);
   }
 
   Future<void> processPurchasedSubscriptionPackage(PremiumPackage package) async {

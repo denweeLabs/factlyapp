@@ -165,8 +165,7 @@ class _AppInputState extends State<AppInput> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding: widget.padding ?? EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+          DecoratedBox(
             decoration: BoxDecoration(
               color: widget.backgroundColor ?? context.theme.colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(widget.borderRadius.r),
@@ -180,16 +179,19 @@ class _AppInputState extends State<AppInput> {
                 ),
               ],
             ),
-            child: Row(
-              children: [
-                Expanded(child: _buildInputField()),
-                if (widget.customPasswordVisibilityIcon != null)
-                  BounceTapAnimation(
-                    onTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-                    child: widget.customPasswordVisibilityIcon!(_isPasswordVisible),
-                  ),
-                ?widget.innerTrailingWidget,
-              ],
+            child: Padding(
+              padding: widget.padding ?? EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+              child: Row(
+                children: [
+                  Expanded(child: _buildInputField()),
+                  if (widget.customPasswordVisibilityIcon != null)
+                    BounceTapAnimation(
+                      onTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                      child: widget.customPasswordVisibilityIcon!(_isPasswordVisible),
+                    ),
+                  ?widget.innerTrailingWidget,
+                ],
+              ),
             ),
           ),
           SizedBox(

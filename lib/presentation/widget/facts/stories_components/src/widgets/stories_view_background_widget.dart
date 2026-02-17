@@ -9,7 +9,6 @@ import 'package:denwee/presentation/bloc/backgrounds/active_background_cubit.dar
 import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +28,6 @@ class StoriesViewBackground extends StatelessWidget {
   final bool isDefaultStaticImage;
   final int defaultPageIndex;
 
-  static final _topFadeHeight = 0.25.sh;
   static final _screenSize = Size(1.sw, 1.sh);
 
   static const _defaultMinFade = 0.70;
@@ -37,38 +35,15 @@ class StoriesViewBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserPreferencesCubit, UserPreferencesState>(
-      builder: (_, preferencesState) {
-        return BlocBuilder<ActiveBackgroundCubit, ActiveBackgroundState>(
-          builder: (_, backgroundState) {
-            return ValueListenableBuilder<double>(
-              valueListenable: scrollFraction,
-              builder: (_, scroll, child) => DecoratedBox(
-                position: DecorationPosition.foreground,
-                decoration: BoxDecoration(
-                  color: _foregroundColor(
-                    context: context,
-                    backgroundState: backgroundState,
-                    scrollFraction: scroll,
-                  ),
-                ),
-                child: child!,
-              ),
-              child: _buildStack(
-                context: context,
-                preferences: preferencesState,
-                backgroundState: backgroundState,
-              ),
-            );
-          },
-        );
+    return BlocBuilder<ActiveBackgroundCubit, ActiveBackgroundState>(
+      builder: (_, backgroundState) {
+        return _buildStack(context: context, backgroundState: backgroundState);
       },
     );
   }
 
   Widget _buildStack({
     required BuildContext context,
-    required UserPreferencesState preferences,
     required ActiveBackgroundState backgroundState,
   }) {
     return Stack(
@@ -81,22 +56,26 @@ class StoriesViewBackground extends StatelessWidget {
               alignment: Alignment.center,
               children: [...previousChildren, ?currentChild],
             ),
-            child: backgroundState.maybeWhen(
-              applied: _buildCustomBackground,
-              orElse: () =>
-                  _buildDefaultBackground(preferences.preferences.interests),
+            child: KeyedSubtree(
+              key: ValueKey(backgroundState.selectedId),
+              child: backgroundState.maybeWhen(
+                applied: _buildCustomBackground,
+                orElse: _buildDefaultBackground,
+              ),
             ),
           ),
         ),
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          height: _topFadeHeight,
-          child: const IgnorePointer(
-            child: FadingSingleEdge(
-              axis: Axis.vertical,
-              child: ColoredBox(color: Colors.black12),
+        Positioned.fill(
+          child: RepaintBoundary(
+            child: ValueListenableBuilder(
+              valueListenable: scrollFraction,
+              builder: (context, scrollFraction, _) => ColoredBox(
+                color: _foregroundColor(
+                  context: context,
+                  backgroundState: backgroundState,
+                  scrollFraction: scrollFraction,
+                ),
+              ),
             ),
           ),
         ),
@@ -104,16 +83,35 @@ class StoriesViewBackground extends StatelessWidget {
     );
   }
 
-  Widget _buildDefaultBackground(List<UserInterest> interests) {
-    final imagePath = isDefaultStaticImage
-        ? interests.first.imagePath
-        : defaultCustomImagePath ?? interests[defaultPageIndex].imagePath;
-    final key = ValueKey(imagePath);
-
-    return StoriesInterestBackgroundAnimatedImage(
-      key: key,
-      path: imagePath,
-      size: _screenSize,
+  Widget _buildDefaultBackground() {
+    return RepaintBoundary(
+      child: BlocSelector<
+        UserPreferencesCubit,
+        UserPreferencesState,
+        List<UserInterest>
+      >(
+        selector: (state) => state.preferences.interests,
+        builder: (context, interests) {
+          final imagePath = isDefaultStaticImage
+              ? interests.first.imagePath
+              : defaultCustomImagePath ?? interests[defaultPageIndex].imagePath;
+          final key = ValueKey(imagePath);
+      
+          return AnimatedSwitcher(
+            duration: CustomAnimationDurations.low,
+            layoutBuilder: (currentChild, previousChildren) => Stack(
+              fit: StackFit.expand,
+              alignment: Alignment.center,
+              children: [...previousChildren, ?currentChild],
+            ),
+            child: StoriesInterestBackgroundAnimatedImage(
+              key: key,
+              path: imagePath,
+              size: _screenSize,
+            ),
+          );
+        },
+      ),
     );
   }
 
