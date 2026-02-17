@@ -97,6 +97,8 @@
 		<string>Denwee needs access to your photo library to save and share your facts and visuals.</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
 		<string>Denwee needs permission to save photos and videos to your library.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Camera access may be used for optional features such as facts media sharing.</string>
 		<key>SKAdNetworkItems</key>
 		<array>
 			<dict>
