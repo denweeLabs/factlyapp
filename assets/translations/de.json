@@ -295,6 +295,21 @@
     },
 
 
+    "error_generic_titles": {
+        "title1": "Ups!",
+        "title2": "Oh-oh!",
+        "title3": "Hoppla!",
+        "title4": "Oh nein!",
+        "title5": "Hm...",
+        "title6": "Nicht jetzt 😔",
+        "title7": "Auweia!",
+        "title8": "Upssi!",
+        "title9": "Kleiner Hänger!",
+        "title10": "Mini-Fehler!",
+        "title11": "Hat nicht geklappt 🥺"
+    },
+
+
     "error_message": {
         "login": {
             "invalid_email": "Diese E-Mail sieht nicht richtig aus... Kannst du sie bitte überprüfen? 😉",
@@ -331,7 +346,7 @@
         "facts": {
             "explanation_reward_missing": "Ups! Etwas ist passiert... Wir konnten nicht bestätigen, dass die Anzeige abgeschlossen wurde. Bitte versuche es erneut 🙏",
             "explanation_insufficient_stars": "Du hast nicht genug Sterne, um diesen Fakt freizuschalten... Sieh dir eine Anzeige an, um mehr zu bekommen 😔",
-            "archive_limit_reached": ":( Du hast das Limit an archivierten Fakten erreicht... Entferne ein paar, bevor du neue hinzufügst 📚",
+            "archive_limit_reached": "Du hast das Archivlimit erreicht... Entferne einige Einträge oder wechsle zu Premium für unbegrenzte Speicherungen 📚",
             "internal_server": "Ups! Auf unserer Seite ist etwas schiefgelaufen... Wir beheben es! ⚙️",
             "connection_timeout": "Verbindung nicht möglich... Überprüfe dein Internet und versuche es erneut 📶",
             "unexpected": "Ein unerwartetes Problem ist aufgetreten... Wir prüfen es! 🚨",
