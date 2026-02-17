@@ -150,6 +150,7 @@
         "premium_plan": "Premium",
         "active_plan": "当前方案",
         "upgrade_cta": "升级",
+        "trial_cta": "免费试用",
         "paywall": {
             "title": "从每一个事实中获得更多，无限探索",
             "benefits": {
@@ -161,13 +162,18 @@
                 }
             },
             "package": {
+                "weekly": {
+                    "title": "3天试用",
+                    "price_string": "之后每周{}"
+                },
                 "monthly": {
                     "title": "每月",
-                    "per_period": "月"
+                    "price_string": "每月{}"
                 },
                 "yearly": {
                     "title": "每年",
-                    "per_period": "年"
+                    "price_string": "每年{}",
+                    "discount_badge": "省{}%"
                 }
             },
             "footer": {

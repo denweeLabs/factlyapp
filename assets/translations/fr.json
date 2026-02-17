@@ -150,6 +150,7 @@
         "premium_plan": "Premium",
         "active_plan": "Forfait actif",
         "upgrade_cta": "Passer",
+        "trial_cta": "Essai gratuit",
         "paywall": {
             "title": "Profitez de chaque fait sans aucune limite",
             "benefits": {
@@ -162,13 +163,18 @@
                 }
             },
             "package": {
+                "weekly": {
+                    "title": "Essai de 3 jours",
+                    "price_string": "puis {} par semaine"
+                },
                 "monthly": {
                     "title": "Mensuel",
-                    "per_period": "mois"
+                    "price_string": "{} par mois"
                 },
                 "yearly": {
                     "title": "Annuel",
-                    "per_period": "an"
+                    "price_string": "{} par an",
+                    "discount_badge": "Réduc. {}%"
                 }
             },
             "footer": {

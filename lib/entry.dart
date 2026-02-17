@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:denwee/core/user_preferences/domain/repo/user_preferences_repo.dart';
 import 'package:denwee/presentation/shared/localization/codegen_loader.g.dart';
 import 'package:denwee/presentation/page/app/app.dart';
@@ -38,10 +37,6 @@ void run(String env) {
         debugPrint('Ads: Adapter status for $key: ${value.description}');
       });
     });
-
-
-    // === Subscriptions ==========================================================
-    await getIt<SubscriptionsRepo>().init();
 
 
     // === Localization ===========================================================

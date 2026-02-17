@@ -26,7 +26,6 @@ class SubscriptionOfferingsCubit extends Cubit<SubscriptionOfferingsState> {
     this._authCubit,
   ) : super(SubscriptionOfferingsState.initial()) {
     getPackages();
-    checkLogin();
   }
 
   Future<void> getPackages() async {
@@ -39,6 +38,9 @@ class SubscriptionOfferingsCubit extends Cubit<SubscriptionOfferingsState> {
       isGettingPackages: true,
     ));
     final failureOrSuccess = await _subscriptionsRepo.getPackages();
+
+    checkLogin(); // ensure backend knows valid user id
+
     return emit(failureOrSuccess.fold(
       (failure) => state.copyWith(isGettingPackages: false, failure: Some(failure)),
       (success) => state.copyWith(isGettingPackages: false, packages: Some(success)),
