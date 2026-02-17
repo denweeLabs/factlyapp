@@ -295,6 +295,21 @@
     },
 
 
+    "error_generic_titles": {
+        "title1": "Ops!",
+        "title2": "Oh-oh!",
+        "title3": "Oops!",
+        "title4": "Oh no!",
+        "title5": "Mmm...",
+        "title6": "Non ora 😔",
+        "title7": "Accidenti!",
+        "title8": "Opss!",
+        "title9": "Piccolo intoppo!",
+        "title10": "Mini errore!",
+        "title11": "Non è andata 🥺"
+    },
+
+
     "error_message": {
         "login": {
             "invalid_email": "Quell'email non sembra corretta... Puoi ricontrollarla? 😉",
@@ -331,7 +346,7 @@
         "facts": {
             "explanation_reward_missing": "Ops! Qualcosa è successo... Non siamo riusciti a verificare che l'annuncio sia stato completato. Riprova 🙏",
             "explanation_insufficient_stars": "Non hai abbastanza stelle per sbloccare questo fatto... Guarda un annuncio per guadagnarne altre 😔",
-            "archive_limit_reached": ":( Hai raggiunto il limite di fatti archiviati... rimuovine qualcuno prima di aggiungerne di nuovi 📚",
+            "archive_limit_reached": "Hai raggiunto il limite dell’archivio... Rimuovi alcuni contenuti o passa a Premium per salvataggi illimitati 📚",
             "internal_server": "Ops! Qualcosa è andato storto da parte nostra... Stiamo sistemando! ⚙️",
             "connection_timeout": "Non siamo riusciti a connetterci... Controlla la tua rete e riprova 📶",
             "unexpected": "Si è verificato un problema imprevisto... Lo stiamo controllando! 🚨",

@@ -31,13 +31,7 @@ void run(String env) {
 
 
     // === Ads ====================================================================
-    await GmaMediationUnity().setGDPRConsent(true);
-    await GmaMediationUnity().setCCPAConsent(true);
-    await MobileAds.instance.initialize().then((initializationStatus) {
-      initializationStatus.adapterStatuses.forEach((key, value) {
-        debugPrint('Ads: Adapter status for $key: ${value.description}');
-      });
-    });
+    unawaited(_initAds());
 
 
     // === Localization ===========================================================
@@ -94,4 +88,35 @@ bool _recordZoneError(Object error, StackTrace? stack) {
   log('Uncaught error', error: error, stackTrace: stack);
   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   return true;
+}
+
+bool _adsInitialized = false;
+bool _adsInitRetried = false;
+
+Future<void> _initAds() async {
+  if (_adsInitialized) return;
+
+  try {
+    await GmaMediationUnity().setGDPRConsent(true);
+    await GmaMediationUnity().setCCPAConsent(true);
+
+    final status = await MobileAds.instance.initialize().timeout(
+      const Duration(seconds: 5),
+    );
+
+    status.adapterStatuses.forEach((key, value) {
+      debugPrint('Ads: Adapter status for $key: ${value.description}');
+    });
+
+    _adsInitialized = status.adapterStatuses.values.any(
+      (adapter) => adapter.state == AdapterInitializationState.ready,
+    );
+  } catch (error) {
+    if (_adsInitRetried) return;
+    _adsInitRetried = true;
+
+    // Delay before retry
+    await Future.delayed(const Duration(seconds: 2));
+    await _initAds();
+  }
 }

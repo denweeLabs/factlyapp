@@ -7,6 +7,7 @@ import 'package:denwee/presentation/widget/shared/animations/constants/common_an
 import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_wheel_listview_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/solid_fading_edge_widget.dart';
 import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -122,34 +123,38 @@ class _NotificationTimeSelectorState extends State<NotificationTimeSelector> {
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            12.horizontalSpace,
-            SurfaceContainer.circle(
-              color: context.theme.colorScheme.primary,
-              size: const Size.square(38),
-              child: Center(
-                child: CommonAppIcon(
-                  path: AppConstants.assets.icons.clockLinear,
-                  color: context.lightIconColor,
-                  size: 18,
+        SolidVerticalFadingEdge(
+          size: const FadingEdges.symmetric(50),
+          backgroundColor: context.theme.colorScheme.background,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              12.horizontalSpace,
+              SurfaceContainer.circle(
+                color: context.theme.colorScheme.primary,
+                size: const Size.square(38),
+                child: Center(
+                  child: CommonAppIcon(
+                    path: AppConstants.assets.icons.clockLinear,
+                    color: context.lightIconColor,
+                    size: 18,
+                  ),
                 ),
               ),
-            ),
-            8.horizontalSpace,
-            Expanded(
-              child: Text(
-                context.tr(LocaleKeys.onboarding_select_notification_time_time_selection_title),
-                style: bodyL.copyWith(color: context.textColor),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
+              8.horizontalSpace,
+              Expanded(
+                child: Text(
+                  context.tr(LocaleKeys.onboarding_select_notification_time_time_selection_title),
+                  style: bodyL.copyWith(color: context.textColor),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ),
-            ),
-            SizedBox(width: 64.w, child: _buildHoursWheel()),
-            Text(':', style: h2.copyWith(color: context.textColor)),
-            SizedBox(width: 64.w, child: _buildMinutesWheel()),
-          ],
+              SizedBox(width: 64.w, child: _buildHoursWheel()),
+              Text(':', style: h2.copyWith(color: context.textColor)),
+              SizedBox(width: 64.w, child: _buildMinutesWheel()),
+            ],
+          ),
         ),
       ],
     );
