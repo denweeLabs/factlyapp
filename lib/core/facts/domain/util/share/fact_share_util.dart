@@ -47,8 +47,10 @@ class FactShareUtil {
   }
 
   Future<void> _processInstagramShare(BuildContext context, File file) async {
-    final permissionStatus = await AppDialogs.checkPermissionDialog(context, AppPermissionType.photosFull);
-    if (permissionStatus.isAnyDenied) return;
+    if (Platform.isIOS) {
+      final permissionStatus = await AppDialogs.checkPermissionDialog(context, AppPermissionType.photosFull);
+      if (permissionStatus.isAnyDenied) return;
+    }
     
     return _shareService.shareToInstagram(file.path);
   }
