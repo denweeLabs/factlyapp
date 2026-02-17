@@ -34,13 +34,15 @@ class AvailableBackgroundsCubit extends Cubit<AvailableBackgroundsState> {
   }
 
   Future<void> checkBackgrounds() async {
-    emit(const AvailableBackgroundsState.loading());
+    if (state.backgrounds.isEmpty) {
+      emit(const AvailableBackgroundsState.loading());
+    }
 
     final failureOrSuccess = await _getAvailableBackgroundsUseCase.execute();
 
     emit(failureOrSuccess.fold(
-      AvailableBackgroundsState.failure,
-      (success) => AvailableBackgroundsState.success(success.$2),
+      (failure) => state.backgrounds.isNotEmpty ? state : AvailableBackgroundsState.failure(failure),
+      (success) => AvailableBackgroundsState.success(success),
     ));
   }
 
