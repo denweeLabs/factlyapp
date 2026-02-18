@@ -113,7 +113,7 @@ class _SelectThemeColorationPageState extends State<SelectThemeColorationPage> {
                         textAlign: TextAlign.center,
                       )
                       .autoFadeInUp(sequencePos: 1)
-                      .routeAwareFadeOutUp(
+                      .ecFadeOutUp(
                         controller: controller,
                         sequencePos: 0,
                         sequenceTotal: 3,
@@ -134,7 +134,7 @@ class _SelectThemeColorationPageState extends State<SelectThemeColorationPage> {
                   ),
                 )
                 .autoFadeInUp(sequencePos: 2)
-                .routeAwareFadeOutUp(
+                .ecFadeOutUp(
                   controller: controller,
                   sequencePos: 1,
                   sequenceTotal: 3,
@@ -173,7 +173,7 @@ class _SelectThemeColorationPageState extends State<SelectThemeColorationPage> {
                             ),
                       );
                     },
-                  ).routeAwareFadeOutUp(
+                  ).ecFadeOutUp(
                     controller: controller,
                     sequencePos: 2,
                     sequenceTotal: 3,
@@ -199,7 +199,7 @@ class _SelectThemeColorationPageState extends State<SelectThemeColorationPage> {
                         ),
                       )
                       .autoFadeIn(sequencePos: 4)
-                      .routeAwareFadeOutUp(
+                      .ecFadeOutUp(
                         controller: controller,
                         sequencePos: 2,
                         sequenceTotal: 3,

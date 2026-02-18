@@ -22,6 +22,7 @@ class DeviceInfoRepoImpl implements DeviceInfoRepo {
         operatingSystem: Platform.operatingSystem,
         operatingSystemVersion: Platform.operatingSystemVersion,
         osVersionValue: info.systemVersion,
+        androidSdkInt: null,
         appInfo: AppInfo(
           packageName: _packageInfo.packageName,
           buildNumber: _packageInfo.buildNumber,
@@ -38,6 +39,7 @@ class DeviceInfoRepoImpl implements DeviceInfoRepo {
         operatingSystem: Platform.operatingSystem,
         operatingSystemVersion: Platform.operatingSystemVersion,
         osVersionValue: info.version.release,
+        androidSdkInt: info.version.sdkInt,
         appInfo: AppInfo(
           packageName: _packageInfo.packageName,
           buildNumber: _packageInfo.buildNumber,

@@ -53,51 +53,53 @@ class _CommonKeyboardPaddedBodyState extends State<CommonKeyboardPaddedBody> {
   Widget build(BuildContext context) {
     _bottomSectionPadding ??= widget.bottomSectionPadding;
 
-    return CommonDismissOnTap(
-      dismiss: widget.keyboardDismissAction,
-      child: OnscreenButtonKeyboardDismisser(
-        color: widget.keyboardDismissButtonColor,
-        hoverColor: widget.keyboardDismissButtonHoverColor,
-        customDismissAction: widget.keyboardDismissAction,
-        builder: (context, isKeyboardVisible, bottomInset) {
-
-          if (widget.showBackButton) {
-            return CommonTopBackButtonBody(
-              onBack: widget.onBack,
-              hideBackButton: isKeyboardVisible,
-              iconColor: context.lightIconColor,
-              body: Stack(
-                children: [
-                  _buildBody(
-                    context: context,
-                    isKeyboardVisible: isKeyboardVisible,
-                    bottomInset: bottomInset,
-                  ),
-                  if (widget.bottomSection != null &&
-                      widget.bottomSectionPadding != null)
-                    _buildBottomSection(
+    return RepaintBoundary(
+      child: CommonDismissOnTap(
+        dismiss: widget.keyboardDismissAction,
+        child: OnscreenButtonKeyboardDismisser(
+          color: widget.keyboardDismissButtonColor,
+          hoverColor: widget.keyboardDismissButtonHoverColor,
+          customDismissAction: widget.keyboardDismissAction,
+          builder: (context, isKeyboardVisible, bottomInset) {
+      
+            if (widget.showBackButton) {
+              return CommonTopBackButtonBody(
+                onBack: widget.onBack,
+                hideBackButton: isKeyboardVisible,
+                iconColor: context.lightIconColor,
+                body: Stack(
+                  children: [
+                    _buildBody(
+                      context: context,
                       isKeyboardVisible: isKeyboardVisible,
+                      bottomInset: bottomInset,
                     ),
-                ],
-              ),
-            );
-          }
-
-          return Stack(
-            children: [
-              _buildBody(
-                context: context,
-                isKeyboardVisible: isKeyboardVisible,
-                bottomInset: bottomInset,
-              ),
-              if (widget.bottomSection != null &&
-                  widget.bottomSectionPadding != null)
-                _buildBottomSection(
-                  isKeyboardVisible: isKeyboardVisible,
+                    if (widget.bottomSection != null &&
+                        widget.bottomSectionPadding != null)
+                      _buildBottomSection(
+                        isKeyboardVisible: isKeyboardVisible,
+                      ),
+                  ],
                 ),
-            ],
-          );
-        },
+              );
+            }
+      
+            return Stack(
+              children: [
+                _buildBody(
+                  context: context,
+                  isKeyboardVisible: isKeyboardVisible,
+                  bottomInset: bottomInset,
+                ),
+                if (widget.bottomSection != null &&
+                    widget.bottomSectionPadding != null)
+                  _buildBottomSection(
+                    isKeyboardVisible: isKeyboardVisible,
+                  ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

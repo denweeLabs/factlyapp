@@ -4,6 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:denwee/core/permissions/domain/entity/app_permission_status.dart' as pm_status;
 
 class AppNotificationsPermission implements AppPermission {
+  const AppNotificationsPermission();
+  
   @override
   AppPermissionType get type => AppPermissionType.notifications;
   

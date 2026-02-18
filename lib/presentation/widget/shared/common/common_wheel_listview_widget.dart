@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:denwee/presentation/shared/utils/haptic_util.dart';
-import 'package:denwee/presentation/widget/shared/misc/fading_edge_widget.dart';
 import 'package:flutter/material.dart';
 
 class CommonWheelListView<T> extends StatefulWidget {
@@ -39,36 +38,32 @@ class _CommonWheelListViewState<T> extends State<CommonWheelListView<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return FadingEdge(
-      axis: Axis.vertical,
-      stops: const [0.0, 0.4, 0.75, 1.0],
-      child: ListWheelScrollView.useDelegate(
-        controller: widget.controller,
-        itemExtent: widget.itemExtent,
-        perspective: 0.0001,
-        diameterRatio: 1.2,
-        squeeze: 1.2,
-        overAndUnderCenterOpacity: 0.3,
-        physics: const FixedExtentScrollPhysics(),
-        childDelegate: widget.isLooping
-            ? ListWheelChildLoopingListDelegate(
-                children: widget.items
-                    .map((item) => widget.builder(context, item))
-                    .toList(),
-              )
-            : ListWheelChildBuilderDelegate(
-                childCount: widget.items.length,
-                builder: (context, index) {
-                  final item = widget.items[index];
-                  return widget.builder(context, item);
-                },
-              ),
-        onSelectedItemChanged: (item) {
-          hapticThresholdTimer?.cancel();
-          hapticThresholdTimer = Timer(hapticsThreshold, HapticUtil.light);
-          widget.onChanged(widget.items[item]);
-        },
-      ),
+    return ListWheelScrollView.useDelegate(
+      controller: widget.controller,
+      itemExtent: widget.itemExtent,
+      perspective: 0.0001,
+      diameterRatio: 1.2,
+      squeeze: 1.2,
+      overAndUnderCenterOpacity: 0.3,
+      physics: const FixedExtentScrollPhysics(),
+      childDelegate: widget.isLooping
+          ? ListWheelChildLoopingListDelegate(
+              children: widget.items
+                  .map((item) => widget.builder(context, item))
+                  .toList(),
+            )
+          : ListWheelChildBuilderDelegate(
+              childCount: widget.items.length,
+              builder: (context, index) {
+                final item = widget.items[index];
+                return widget.builder(context, item);
+              },
+            ),
+      onSelectedItemChanged: (item) {
+        hapticThresholdTimer?.cancel();
+        hapticThresholdTimer = Timer(hapticsThreshold, HapticUtil.light);
+        widget.onChanged(widget.items[item]);
+      },
     );
   }
 }

@@ -1,16 +1,14 @@
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/network/domain/entity/network_link.dart';
+import 'package:denwee/di/di.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
+import 'package:denwee/presentation/shared/router/root_router.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
-import 'package:denwee/presentation/shared/utils/dialogs_util.dart';
 import 'package:denwee/presentation/shared/utils/launcher_util.dart';
 import 'package:denwee/presentation/widget/shared/buttons/archive_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_button_widget.dart';
-import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:denwee/presentation/widget/shared/sheets/fact_share/fact_share_bottom_sheet_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:utils/utils.dart';
 
 class StoriesFactActionButtons extends StatelessWidget {
   const StoriesFactActionButtons({
@@ -19,12 +17,16 @@ class StoriesFactActionButtons extends StatelessWidget {
     required this.factId,
     required this.factContent,
     this.iconColor,
+    this.onShare,
+    this.onShareFinished,
   });
 
   final NetworkLink? website;
   final UniqueId factId;
   final String factContent;
   final Color? iconColor;
+  final VoidCallback? onShare;
+  final VoidCallback? onShareFinished;
 
   static const iconPadding = EdgeInsets.all(24);
   static const iconSize = 28.0;
@@ -48,13 +50,7 @@ class StoriesFactActionButtons extends StatelessWidget {
           ),
         _buildButton(
           iconPath: AppConstants.assets.icons.sendSqaureLinearLinear,
-          onTap: () async {
-            copyToClipboard(factContent.replaceAll('*', ''));
-            AppDialogs.showToastMessage(
-              context.tr(LocaleKeys.info_message_copied_to_clipboard),
-              padding: EdgeInsets.only(top: 38.h),
-            );
-          },
+          onTap: _shareFact,
           context: context,
         ),
         AppArchiveButton(
@@ -79,5 +75,17 @@ class StoriesFactActionButtons extends StatelessWidget {
       color: effectiveIconColor(context),
       size: iconSize,
     );
+  }
+
+  Future<void> _shareFact() async {
+    onShare?.call();
+    final context = getIt<RootRouterData>().context;
+    await FactShareBottomSheet.show(
+      context,
+      factId: factId,
+      website: website,
+      factContent: factContent,
+    );
+    onShareFinished?.call();
   }
 }

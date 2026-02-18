@@ -3,9 +3,8 @@ import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
-import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
 import 'package:denwee/presentation/widget/shared/animations/bubbles_animation_widget.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/tap_fade_animation.dart';
 import 'package:denwee/presentation/widget/shared/misc/seal_in_circle_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:denwee/presentation/widget/profile/profile_overlay_user_statistics_widget.dart';
@@ -28,55 +27,44 @@ class ProfileOverlayCard extends StatelessWidget {
   final String userName;
 
   static final cardHeight = 108.h;
-  static const minScale = 0.99;
+  static final shape = RoundedSuperellipseBorder(
+    borderRadius: BorderRadius.all(AppConstants.style.radius.card),
+  );
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.all(AppConstants.style.radius.card);
-    final shape = RoundedSuperellipseBorder(borderRadius: borderRadius);
-
-    return DecoratedBox(
-      decoration: ShapeDecoration(
-        shape: shape,
-        color: context.primaryContainer,
-        shadows: [AppConstants.style.colors.commonShadow],
-      ),
+    final shadowColor = context.theme.colorScheme.primary.withValues(alpha: 0.4);
+    
+    return PhysicalShape(
+      elevation: 10.0,
+      shadowColor: Colors.black38,
+      clipper: ShapeBorderClipper(shape: shape),
+      color: context.primaryContainer,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox.fromSize(
-            size: Size.fromHeight(ProfileOverlayCard.cardHeight),
-            child: RepaintBoundary(
-              child: BounceTapAnimation(
-                minScale: ProfileOverlayCard.minScale,
-                onTap: onTap,
-                alignment: Alignment.bottomCenter,
-                child: DecoratedBox(
-                  decoration: ShapeDecoration(
-                    shape: shape,
-                    gradient: AppConstants.style.colors.commonColoredGradient(context),
-                    shadows: [AppConstants.style.colors.commonColoredShadow(context)],
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: ClipRRect(
-                          borderRadius: borderRadius,
-                          child: const BubblesAnimation(bubblesCount: 10, opacity: 25),
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: AnimatedSwitcher(
-                          duration: CustomAnimationDurations.low,
-                          switchInCurve: Curves.easeInOutSine,
-                          switchOutCurve: Curves.easeInOutSine,
-                          child: _buildBody(
-                            context: context,
-                            key: ValueKey(isAuthenticated),
-                          ),
-                        ),
-                      ),
-                    ],
+          RepaintBoundary(
+            child: TapFadeAnimation(
+              onTap: onTap,
+              child: SizedBox.fromSize(
+                size: Size.fromHeight(ProfileOverlayCard.cardHeight),
+                child: PhysicalShape(
+                  elevation: 8.0,
+                  shadowColor: shadowColor,
+                  clipBehavior: Clip.hardEdge,
+                  clipper: ShapeBorderClipper(shape: shape),
+                  color: Colors.transparent,
+                  child: DecoratedBox(
+                    decoration: ShapeDecoration(
+                      shape: shape,
+                      gradient: AppConstants.style.colors.commonColoredGradient(context),
+                    ),
+                    child: Stack(
+                      children: [
+                        const Positioned.fill(child: BubblesAnimation()),
+                        Positioned.fill(child: _buildBody(context)),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -91,10 +79,7 @@ class ProfileOverlayCard extends StatelessWidget {
     );
   }
 
-  Widget _buildBody({
-    required BuildContext context,
-    required Key key,
-  }) {
+  Widget _buildBody(BuildContext context) {
     final title = isAuthenticated
         ? userName
         : context.tr(LocaleKeys.label_create_an_account);
@@ -104,16 +89,11 @@ class ProfileOverlayCard extends StatelessWidget {
         : context.tr(LocaleKeys.account_profile_register_encourage_msg);
 
     return Center(
-      key: key,
       child: Padding(
         padding: EdgeInsets.only(left: 18.w, right: 24.w),
         child: Row(
           children: [
-            SealInCircle(
-              size: 30,
-              onTap: onTap,
-              padding: EdgeInsets.all(16.w).copyWith(left: 18.w),
-            ),
+            const SealInCircle(),
             18.horizontalSpace,
             Expanded(
               child: Column(

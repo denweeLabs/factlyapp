@@ -29,6 +29,24 @@ class CommonAppIcon extends ImplicitlyAnimatedWidget {
 class _CommonIconState extends AnimatedWidgetBaseState<CommonAppIcon> {
   ColorTween? _iconColor;
 
+  late Widget _cachedSvg;
+
+  @override
+  void initState() {
+    super.initState();
+    _cacheSvg();
+  }
+
+  @override
+  void didUpdateWidget(CommonAppIcon oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.path != widget.path ||
+        oldWidget.size != widget.size) {
+      _cacheSvg();
+    }
+  }
+
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
     _iconColor = visitor(
@@ -38,47 +56,47 @@ class _CommonIconState extends AnimatedWidgetBaseState<CommonAppIcon> {
     ) as ColorTween?;
   }
 
+  void _cacheSvg() {
+    final wh = widget.size.w;
+
+    _cachedSvg = SvgPicture.asset(
+      widget.path,
+      height: wh, 
+      width: wh,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (!widget.useTransition) {
-      return _buildIcon(context);
-    }
+    final icon = _buildAnimatedIcon(context);
+
+    if (!widget.useTransition) return icon;
 
     return AnimatedSwitcherPlus.flipY(
       duration: CustomAnimationDurations.ultraLow,
       switchInCurve: Curves.easeInOutSine,
       switchOutCurve: Curves.easeInOutSine,
-      child: _buildIcon(context),
+      child: KeyedSubtree(key: ValueKey(widget.path), child: icon),
     );
   }
 
-  Widget _buildIcon(BuildContext context) {
-    final wh = widget.size.w;
-
+  Widget _buildAnimatedIcon(BuildContext context) {
     if (widget.ignoreIconColor) {
-      return SvgPicture.asset(
-        widget.path,
-        height: wh,
-        width: wh,
-        key: ValueKey(widget.path),
-        colorFilter: null,
-      );
+      return _cachedSvg;
     }
 
-    final Animation<double> animation = this.animation;
+    final animation = this.animation;
 
     return AnimatedBuilder(
       animation: animation,
-      key: ValueKey(widget.path),
-      builder: (_, _) => SvgPicture.asset(
-        widget.path,
-        height: wh,
-        width: wh,
-        colorFilter: ColorFilter.mode(
-          _iconColor?.evaluate(animation) ?? context.iconColor,
-          BlendMode.srcIn,
-        ),
-      ),
+      builder: (_, __) {
+        final color = _iconColor?.evaluate(animation) ?? context.iconColor;
+
+        return ColorFiltered(
+          colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+          child: _cachedSvg,
+        );
+      },
     );
   }
 }

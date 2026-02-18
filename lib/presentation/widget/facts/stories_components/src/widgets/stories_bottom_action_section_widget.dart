@@ -4,7 +4,7 @@ import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/common/common_skeleton_item_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +88,7 @@ class StoriesBottomActionSection extends StatelessWidget {
     final iconColor = backgroundStyle?.textColor ?? context.lightIconColor;
 
     return RepaintBoundary(
-      child: BackdropSurfaceContainer.circle(
+      child: SurfaceContainer.circle(
         onTap: onTap,
         borderColor: borderColor,
         size: Size.square(StoriesBottomActionSection.buttonsHeight),

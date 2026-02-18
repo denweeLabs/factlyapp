@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
-import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
 import 'package:denwee/core/backgrounds/domain/entity/background_failure.dart';
 import 'package:denwee/core/backgrounds/domain/repo/backgrounds_repo.dart';
 import 'package:denwee/presentation/bloc/backgrounds/active_background_cubit.dart';
@@ -22,27 +21,29 @@ class GetAvailableBackgroundsUseCase {
     this._activeBackgroundCubit,
   );
 
-  Future<Either<BackgroundFailure, (Option<ResolvedBackgroundAsset>, List<AvailableBackground>)>> execute() async {
+  Future<Either<BackgroundFailure, List<AvailableBackground>>> execute() async {
     final languageCode = _preferencesCubit.state.preferences.language.languageCode;
     final failureOrSuccess = await _backgroundsRepo.getBackgroundsRemote(
       languageCode: languageCode,
     );
-    final entries = failureOrSuccess.getEntries();
-    final activeBackground = entries.$2?.$1.toNullable();
-    final availableBackgrounds = entries.$2?.$2 ?? const <AvailableBackground>[];
+    final (failure, (tuple)) = failureOrSuccess.getEntries();
+    final activeBackground = tuple?.$1.toNullable();
+    final availableBackgrounds = tuple?.$2 ?? const <AvailableBackground>[];
     
-    if (activeBackground != null) {
-      unawaited(_activeBackgroundCubit.setCustomBackground(activeBackground));
-      unawaited(_backgroundsRepo.storeBackgroundAssetLocal(activeBackground));
-    } else {
-      unawaited(_activeBackgroundCubit.clearState());
-      unawaited(_backgroundsRepo.deleteBackgroundAssetLocal());
+    if (failure == null) {
+      if (activeBackground != null) {
+        unawaited(_activeBackgroundCubit.setCustomBackground(activeBackground));
+        unawaited(_backgroundsRepo.storeBackgroundAssetLocal(activeBackground));
+      } else {
+        unawaited(_activeBackgroundCubit.clearState());
+        unawaited(_backgroundsRepo.deleteBackgroundAssetLocal());
+      }
     }
 
     if (availableBackgrounds.isNotEmpty) {
       unawaited(_backgroundsRepo.storeBackgroundsLocal(availableBackgrounds));
     }
 
-    return failureOrSuccess;
+    return failureOrSuccess.map((data) => data.$2);
   }
 }

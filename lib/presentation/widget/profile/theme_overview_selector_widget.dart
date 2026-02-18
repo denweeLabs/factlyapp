@@ -10,132 +10,115 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-extension ThemeModeX on ThemeMode {
-  LinearGradient bubbleGradient(BuildContext context) {
-    switch (this) {
-      case ThemeMode.system:
-        return LinearGradient(
-          colors: [
-            AppColors.primaryBackground[ThemeType.light]!,
-            AppColors.primaryBackground[ThemeType.dark]!,
-          ],
-          stops: const [0.5, 0.5],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-
-      case ThemeMode.light:
-        return LinearGradient(
-          colors: [
-            AppColors.primaryBackground[ThemeType.light]!,
-            AppColors.secondaryBackground[ThemeType.light]!,
-          ],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-        );
-
-      case ThemeMode.dark:
-        return LinearGradient(
-          colors: [
-            AppColors.primaryBackground[ThemeType.dark]!,
-            AppColors.secondaryBackground[ThemeType.dark]!,
-          ],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-        );
-    }
-  }
-
-  String displayName(BuildContext context) {
-    switch (this) {
-      case ThemeMode.system:
-        return context.tr(LocaleKeys.account_section_theme_items_system);
-      case ThemeMode.light:
-        return context.tr(LocaleKeys.account_section_theme_items_light);
-      case ThemeMode.dark:
-        return context.tr(LocaleKeys.account_section_theme_items_dark);
-    }
-  }
-}
-
 class ThemeModeOverviewSelector extends StatelessWidget {
   const ThemeModeOverviewSelector({super.key});
 
-  static final bubbleSize = 64.r;
+  static final _bubbleSize = 64.r;
+  static const _bubbleBorderWidth = 4.0;
 
   @override
   Widget build(BuildContext context) {
+    final currentMode = context.select<UserPreferencesCubit, ThemeMode>(
+      (cubit) => cubit.state.preferences.theme.mode,
+    );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: ThemeMode.values
-          .map((mode) => _buildModeBubble(
-                context: context,
-                mode: mode,
-                currentThemeMode:
-                    context.watch<UserPreferencesCubit>().state.preferences.theme.mode,
-              ))
-          .toList(),
+      children: [
+        _ThemeBubble(
+          mode: ThemeMode.system,
+          currentMode: currentMode,
+          label: context.tr(LocaleKeys.account_section_theme_items_system),
+          gradient: LinearGradient(
+            colors: [
+              AppColors.primaryBackground[ThemeType.light]!,
+              AppColors.primaryBackground[ThemeType.dark]!,
+            ],
+            stops: const [0.5, 0.5],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        _ThemeBubble(
+          mode: ThemeMode.light,
+          currentMode: currentMode,
+          label: context.tr(LocaleKeys.account_section_theme_items_light),
+          color: AppColors.primaryBackground[ThemeType.light]!,
+        ),
+        _ThemeBubble(
+          mode: ThemeMode.dark,
+          currentMode: currentMode,
+          label: context.tr(LocaleKeys.account_section_theme_items_dark),
+          color: AppColors.primaryBackground[ThemeType.dark]!,
+        ),
+      ],
     );
   }
 }
 
-Widget _buildModeBubble({
-  required BuildContext context,
-  required ThemeMode mode,
-  required ThemeMode currentThemeMode,
-}) {
-  final isSelected = currentThemeMode == mode;
+class _ThemeBubble extends StatelessWidget {
+  const _ThemeBubble({
+    required this.mode,
+    required this.currentMode,
+    required this.label,
+    this.color,
+    this.gradient,
+  });
 
-  buildBubble({
-    required LinearGradient gradient,
-    required Color borderColor,
-  }) {
-    return SizedBox.square(
-      dimension: ThemeModeOverviewSelector.bubbleSize,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: borderColor, width: 5.0),
-          gradient: gradient,
-        ),
-      ),
-    );
-  }
+  final ThemeMode mode;
+  final ThemeMode currentMode;
+  final String label;
+  final Color? color;
+  final Gradient? gradient;
 
-  return RepaintBoundary(
-    child: Column(
+  @override
+  Widget build(BuildContext context) {
+    final isSelected = currentMode == mode;
+
+    final borderColor = _getBorderColor(context, isSelected, mode);
+
+    return Column(
       children: [
         BounceTapAnimation(
           minScale: 1.06,
-          onTap: () => context.read<UserPreferencesCubit>().changeThemeMode(mode),
-          child: buildBubble(
-            gradient: mode.bubbleGradient(context),
-            borderColor: _getBorderColor(context, isSelected, mode),
+          onTap: () =>
+              context.read<UserPreferencesCubit>().changeThemeMode(mode),
+          child: SizedBox.square(
+            dimension: ThemeModeOverviewSelector._bubbleSize,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color,
+                gradient: gradient,
+                border: Border.all(
+                  color: borderColor,
+                  width: ThemeModeOverviewSelector._bubbleBorderWidth,
+                ),
+              ),
+            ),
           ),
         ),
         6.verticalSpace,
         Text(
-          mode.displayName(context),
+          label,
           style: bodyS.copyWith(
             color: context.textColorSecondary,
             fontFamily: AppConstants.style.textStyle.secondaryFontFamiliy,
           ),
         ),
       ],
-    ),
-  );
+    );
+  }
 }
 
-Color _getBorderColor(
-  BuildContext context,
-  bool isSelected,
-  ThemeMode forMode,
-) {
-  if (isSelected) return context.theme.colorScheme.secondary;
-  if (context.isLightTheme) {
-    return forMode == ThemeMode.dark
-        ? Colors.grey.shade500
-        : Colors.grey.shade600;
+Color _getBorderColor(BuildContext context, bool isSelected, ThemeMode mode) {
+  if (isSelected) {
+    return context.theme.colorScheme.secondary;
   }
-  return Colors.grey.shade800;
+
+  if (!context.isLightTheme) {
+    return Colors.grey.shade800;
+  }
+
+  return mode == ThemeMode.dark ? Colors.grey.shade500 : Colors.grey.shade600;
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:denwee/core/subscriptions/domain/repo/subscriptions_repo.dart';
 import 'package:denwee/core/user_preferences/domain/repo/user_preferences_repo.dart';
 import 'package:denwee/presentation/shared/localization/codegen_loader.g.dart';
 import 'package:denwee/presentation/page/app/app.dart';
@@ -12,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gma_mediation_unity/gma_mediation_unity.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -31,17 +31,7 @@ void run(String env) {
 
 
     // === Ads ====================================================================
-    await GmaMediationUnity().setGDPRConsent(true);
-    await GmaMediationUnity().setCCPAConsent(true);
-    await MobileAds.instance.initialize().then((initializationStatus) {
-      initializationStatus.adapterStatuses.forEach((key, value) {
-        debugPrint('Ads: Adapter status for $key: ${value.description}');
-      });
-    });
-
-
-    // === Subscriptions ==========================================================
-    await getIt<SubscriptionsRepo>().init();
+    unawaited(_initAds());
 
 
     // === Localization ===========================================================
@@ -98,4 +88,35 @@ bool _recordZoneError(Object error, StackTrace? stack) {
   log('Uncaught error', error: error, stackTrace: stack);
   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   return true;
+}
+
+bool _adsInitialized = false;
+bool _adsInitRetried = false;
+
+Future<void> _initAds() async {
+  if (_adsInitialized) return;
+
+  try {
+    await GmaMediationUnity().setGDPRConsent(true);
+    await GmaMediationUnity().setCCPAConsent(true);
+
+    final status = await MobileAds.instance.initialize().timeout(
+      const Duration(seconds: 5),
+    );
+
+    status.adapterStatuses.forEach((key, value) {
+      debugPrint('Ads: Adapter status for $key: ${value.description}');
+    });
+
+    _adsInitialized = status.adapterStatuses.values.any(
+      (adapter) => adapter.state == AdapterInitializationState.ready,
+    );
+  } catch (error) {
+    if (_adsInitRetried) return;
+    _adsInitRetried = true;
+
+    // Delay before retry
+    await Future.delayed(const Duration(seconds: 2));
+    await _initAds();
+  }
 }

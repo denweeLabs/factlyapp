@@ -7,18 +7,23 @@ import 'package:denwee/presentation/widget/backgrounds/background_selection_card
 import 'package:flutter/material.dart';
 
 class DefaultBackgroundSelectionCard extends StatelessWidget {
-  const DefaultBackgroundSelectionCard({super.key, required this.isSelected});
+  const DefaultBackgroundSelectionCard({
+    super.key,
+    required this.isSelected,
+    required this.isApplying,
+  });
 
   static const imageCacheWidth = 100;
 
   final bool isSelected;
+  final bool isApplying;
 
   @override
   Widget build(BuildContext context) {
     return BackgroundSelectionCardBody(
       onTap: _onCardTap,
       onLongTap: () {},
-      id: AppConstants.config.defaultBackgroundId,
+      isApplying: isApplying,
       lettersStyle: factShortContent.copyWith(color: context.lightTextColor),
       isSelected: isSelected,
       child: GridView(

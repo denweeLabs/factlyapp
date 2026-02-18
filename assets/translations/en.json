@@ -150,6 +150,7 @@
         "premium_plan": "Premium",
         "active_plan": "Active plan",
         "upgrade_cta": "Upgrade",
+        "trial_cta": "Try for free",
         "paywall": {
             "title": "Get more from every fact & explore without limits",
             "benefits": {
@@ -162,13 +163,18 @@
                 }
             },
             "package": {
+                "weekly": {
+                    "title": "3-Day Trial",
+                    "price_string": "then {} per week"
+                },
                 "monthly": {
                     "title": "Monthly Plan",
-                    "per_period": "month"
+                    "price_string": "{} per month"
                 },
                 "yearly": {
                     "title": "Annual Plan",
-                    "per_period": "year"
+                    "price_string": "{} per year",
+                    "discount_badge": "Save {}%"
                 }
             },
             "footer": {
@@ -192,6 +198,25 @@
         "title": "Your daily facts will be shown here.",
         "subtitle": "Swipe left or right to explore!",
         "button": "Ok :)"
+    },
+
+
+    "fact_share": {
+        "more": "More",
+        "hide_watermark": "Hide watermark",
+        "archive": {
+            "archive": "Archive",
+            "unarchive": "Unarchive"
+        },
+        "copy": {
+            "copy": "Copy",
+            "copied": "Copied"
+        },
+        "download": {
+            "download": "Download",
+            "saved": "Saved"
+        },
+        "resource": "Resource"
     },
 
 
@@ -270,6 +295,21 @@
     },
 
 
+    "error_generic_titles": {
+        "title1": "Oops!",
+        "title2": "Uh-oh!",
+        "title3": "Whoops!",
+        "title4": "Oh no!",
+        "title5": "Hmm...",
+        "title6": "Not now 😔",
+        "title7": "Yikes!",
+        "title8": "Oopsie!",
+        "title9": "Tiny hiccup!",
+        "title10": "Small glitch!",
+        "title11": "Didn’t work 🥺"
+    },
+    
+
     "error_message": {
         "login": {
             "invalid_email": "That email doesn't look right... Could you please double-check it? 😉",
@@ -306,7 +346,7 @@
         "facts": {
             "explanation_reward_missing": "Oops! Something happened here... We couldn’t verify that the ad was completed. Please try again 🙏",
             "explanation_insufficient_stars": "You don't have enough stars on your balance to unlock this fact... Watch an ad to earn more 😔",
-            "archive_limit_reached": ":( You’ve reached the limit of archived facts... please remove a few before adding new ones 📚",
+            "archive_limit_reached": "You’ve reached the archive limit... Remove some facts or upgrade to Premium for unlimited saves 📚",
             "internal_server": "Oops! Something went wrong on our end... We're fixing it! ⚙️",
             "connection_timeout": "We couldn't connect... Please check your internet and try again 📶",
             "unexpected": "An unexpected issue occurred... We're looking into it! 🚨",
@@ -351,8 +391,7 @@
             "daily_facts": "No daily facts yet... Check back later for something new!",
             "facts_archive": "Your archive is empty — save some facts and they’ll show up here!"
         },
-        "agreeing_to_terms": "By continuing, you agree to our\n<terms>Terms</terms> and <privacy>Privacy</privacy>",
-        "copied_to_clipboard": "Copied"
+        "agreeing_to_terms": "By continuing, you agree to our\n<terms>Terms</terms> and <privacy>Privacy</privacy>"
     },
 
 
@@ -371,6 +410,20 @@
                 "subtitle": {
                     "basic": "To receive notifications, make sure to allow permission for this app",
                     "in_settings": "To receive notifications, make sure to allow permission for this app in the system settings"
+                }
+            },
+            "photosAdd": {
+                "title": "Permission",
+                "subtitle": {
+                    "basic": "To save and share files, please allow storage access for this app",
+                    "in_settings": "To save and share files, please allow storage access for this app in the system settings"
+                }
+            },
+            "photosFull": {
+                "title": "Permission",
+                "subtitle": {
+                    "basic": "To save and share files, please allow photos access for this app",
+                    "in_settings": "To save and share files, please allow photos access for this app in the system settings"
                 }
             }
         },

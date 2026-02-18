@@ -150,6 +150,7 @@
         "premium_plan": "Premium",
         "active_plan": "Aktiver Tarif",
         "upgrade_cta": "Upgrade",
+        "trial_cta": "Gratis testen",
         "paywall": {
             "title": "Mehr aus jedem Fakt herausholen – ohne Grenzen",
             "benefits": {
@@ -162,13 +163,18 @@
                 }
             },
             "package": {
+                "weekly": {
+                    "title": "3 Tage testen",
+                    "price_string": "danach {} pro Woche"
+                },
                 "monthly": {
                     "title": "Monatlich",
-                    "per_period": "Monat"
+                    "price_string": "{} pro Monat"
                 },
                 "yearly": {
                     "title": "Jährlich",
-                    "per_period": "Jahr"
+                    "price_string": "{} pro Jahr",
+                    "discount_badge": "{}% sparen"
                 }
             },
             "footer": {
@@ -192,6 +198,25 @@
         "title": "Deine täglichen Fakten werden hier angezeigt.",
         "subtitle": "Wische nach links oder rechts, um zu erkunden!",
         "button": "Ok :)"
+    },
+
+
+    "fact_share": {
+        "more": "Mehr",
+        "hide_watermark": "Wasserzeichen ausblenden",
+        "archive": {
+            "archive": "Archivieren",
+            "unarchive": "Aus Archiv entfernen"
+        },
+        "copy": {
+            "copy": "Kopieren",
+            "copied": "Kopiert"
+        },
+        "download": {
+            "download": "Herunterladen",
+            "saved": "Gespeichert"
+        },
+        "resource": "Quelle"
     },
 
 
@@ -270,6 +295,21 @@
     },
 
 
+    "error_generic_titles": {
+        "title1": "Ups!",
+        "title2": "Oh-oh!",
+        "title3": "Hoppla!",
+        "title4": "Oh nein!",
+        "title5": "Hm...",
+        "title6": "Nicht jetzt 😔",
+        "title7": "Auweia!",
+        "title8": "Upssi!",
+        "title9": "Kleiner Hänger!",
+        "title10": "Mini-Fehler!",
+        "title11": "Hat nicht geklappt 🥺"
+    },
+
+
     "error_message": {
         "login": {
             "invalid_email": "Diese E-Mail sieht nicht richtig aus... Kannst du sie bitte überprüfen? 😉",
@@ -306,7 +346,7 @@
         "facts": {
             "explanation_reward_missing": "Ups! Etwas ist passiert... Wir konnten nicht bestätigen, dass die Anzeige abgeschlossen wurde. Bitte versuche es erneut 🙏",
             "explanation_insufficient_stars": "Du hast nicht genug Sterne, um diesen Fakt freizuschalten... Sieh dir eine Anzeige an, um mehr zu bekommen 😔",
-            "archive_limit_reached": ":( Du hast das Limit an archivierten Fakten erreicht... Entferne ein paar, bevor du neue hinzufügst 📚",
+            "archive_limit_reached": "Du hast das Archivlimit erreicht... Entferne einige Einträge oder wechsle zu Premium für unbegrenzte Speicherungen 📚",
             "internal_server": "Ups! Auf unserer Seite ist etwas schiefgelaufen... Wir beheben es! ⚙️",
             "connection_timeout": "Verbindung nicht möglich... Überprüfe dein Internet und versuche es erneut 📶",
             "unexpected": "Ein unerwartetes Problem ist aufgetreten... Wir prüfen es! 🚨",
@@ -351,8 +391,7 @@
             "daily_facts": "Noch keine täglichen Fakten... Schau später wieder vorbei für Neues!",
             "facts_archive": "Dein Archiv ist leer — speichere ein paar Fakten und sie werden hier angezeigt!"
         },
-        "agreeing_to_terms": "Wenn du fortfährst, akzeptierst du unsere\n<terms>AGB</terms> und den <privacy>Datenschutz</privacy>",
-        "copied_to_clipboard": "Kopiert"
+        "agreeing_to_terms": "Wenn du fortfährst, akzeptierst du unsere\n<terms>AGB</terms> und den <privacy>Datenschutz</privacy>"
     },
 
 
@@ -371,6 +410,20 @@
                 "subtitle": {
                     "basic": "Um Benachrichtigungen zu erhalten, erlaube den Zugriff für diese App",
                     "in_settings": "Um Benachrichtigungen zu erhalten, erlaube den Zugriff für diese App in den Systemeinstellungen"
+                }
+            },
+            "photosAdd": {
+                "title": "Erlaubnis",
+                "subtitle": {
+                    "basic": "Um Dateien zu speichern und zu teilen, erlaube bitte den Speicherzugriff für diese App",
+                    "in_settings": "Um Dateien zu speichern und zu teilen, erlaube bitte den Speicherzugriff für diese App in den Systemeinstellungen"
+                }
+            },
+            "photosFull": {
+                "title": "Erlaubnis",
+                "subtitle": {
+                    "basic": "Um Dateien zu speichern und zu teilen, erlauben Sie dieser App den Zugriff auf Fotos",
+                    "in_settings": "Um Dateien zu speichern und zu teilen, erlauben Sie dieser App den Zugriff auf Fotos in den Systemeinstellungen"
                 }
             }
         },

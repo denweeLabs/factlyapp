@@ -12,61 +12,36 @@ enum CommonBackgroundStyle {
   colored,
   coloredReversed,
   themeBased,
-  solid,
-  ofDarkTheme,
-  ofLightTheme,
 }
 
 extension _CommonBackgroundStyleX on CommonBackgroundStyle {
   LinearGradient? gradient(BuildContext context) {
     switch (this) {
       case CommonBackgroundStyle.themeBased:
-        return AppConstants.style.colors.commonBackgroundGradient(context);
+        return null;
       case CommonBackgroundStyle.colored:
         return AppConstants.style.colors.commonColoredGradient(context);
       case CommonBackgroundStyle.coloredReversed:
         return AppConstants.style.colors.commonColoredGradientReversed(context);
-      case CommonBackgroundStyle.solid:
-        return null;
-      case CommonBackgroundStyle.ofDarkTheme:
-        return AppConstants.style.colors.commonBackgroundGradient(
-          context,
-          color1: AppColors.primaryBackground[ThemeType.dark],
-          color2: AppColors.secondaryBackground[ThemeType.dark],
-        );
-      case CommonBackgroundStyle.ofLightTheme:
-        return AppConstants.style.colors.commonBackgroundGradient(
-          context,
-          color1: AppColors.primaryBackground[ThemeType.light],
-          color2: AppColors.secondaryBackground[ThemeType.light],
-        );
     }
   }
 
   Color? color(BuildContext context) {
     switch (this) {
       case CommonBackgroundStyle.themeBased:
+        return context.theme.colorScheme.background;
       case CommonBackgroundStyle.colored:
       case CommonBackgroundStyle.coloredReversed:
-      case CommonBackgroundStyle.ofDarkTheme:
-      case CommonBackgroundStyle.ofLightTheme:
         return null;
-      case CommonBackgroundStyle.solid:
-        return context.theme.colorScheme.background;
     }
   }
 
   Color decorationIconColor(BuildContext context) {
     switch (this) {
       case CommonBackgroundStyle.themeBased:
-      case CommonBackgroundStyle.solid:
         return context.isLightTheme ? AppColors.black02 : AppColors.white01;
       case CommonBackgroundStyle.colored:
       case CommonBackgroundStyle.coloredReversed:
-        return AppColors.icon[ThemeType.light]!.withValues(alpha: 0.04);
-      case CommonBackgroundStyle.ofDarkTheme:
-        return AppColors.icon[ThemeType.dark]!.withValues(alpha: 0.04);
-      case CommonBackgroundStyle.ofLightTheme:
         return AppColors.icon[ThemeType.light]!.withValues(alpha: 0.04);
     }
   }
@@ -79,13 +54,7 @@ extension _CommonBackgroundStyleX on CommonBackgroundStyle {
       case CommonBackgroundStyle.colored:
         return context.theme.colorScheme.secondary;
       case CommonBackgroundStyle.coloredReversed:
-        return context.theme.colorScheme.primary;
-      case CommonBackgroundStyle.solid:
         return null;
-      case CommonBackgroundStyle.ofDarkTheme:
-        return AppColors.primaryBackground[ThemeType.dark];
-      case CommonBackgroundStyle.ofLightTheme:
-        return AppColors.primaryBackground[ThemeType.light];
     }
   }
 }
@@ -100,6 +69,7 @@ class CommonScaffold extends StatelessWidget {
     this.iconAppearDelay = CustomAnimationDurations.ultraLow,
     this.overlappedWidget,
     this.navigationBarColor,
+    this.backgroundColor,
     this.systemNavigationBarContrastEnforced = true,
   });
 
@@ -110,49 +80,82 @@ class CommonScaffold extends StatelessWidget {
   final Duration iconAppearDelay;
   final Widget? overlappedWidget;
   final Color? navigationBarColor;
+  final Color? backgroundColor;
   final bool systemNavigationBarContrastEnforced;
 
   @override
   Widget build(BuildContext context) {
     final gradient = style.gradient(context);
-    final color = style.color(context);
+    final color = backgroundColor ?? style.color(context) ?? Colors.transparent;
     final decorationIconColor = style.decorationIconColor(context);
+
+    final content = gradient == null
+        ? _buildWithScaffold(
+            context: context,
+            color: color,
+            decorationIconColor: decorationIconColor,
+          )
+        : _buildWithGradient(
+            context: context,
+            gradient: gradient,
+            decorationIconColor: decorationIconColor,
+          );
 
     return SystemOverlayRestyle(
       customType: systemOverlayType,
-      navigationBarColor:
-          navigationBarColor ?? style.navigationBarColor(context),
+      navigationBarColor: navigationBarColor ?? style.navigationBarColor(context),
       systemNavigationBarContrastEnforced: systemNavigationBarContrastEnforced,
-      child: _buildParentBody(
-        context: context,
-        gradient: gradient,
-        color: color,
-        decorationIconColor: decorationIconColor,
+      child: content,
+    );
+  }
+
+  Widget _buildWithScaffold({
+    required BuildContext context,
+    required Color color,
+    required Color decorationIconColor,
+  }) {
+    return Scaffold(
+      backgroundColor: color,
+      body: Stack(
+        children: [
+          _buildIcon(
+            context: context,
+            decorationIconColor: decorationIconColor,
+          ),
+          RepaintBoundary(child: body),
+          if (overlappedWidget != null) overlappedWidget!,
+        ],
       ),
     );
   }
 
-  Widget _buildParentBody({
+  Widget _buildWithGradient({
     required BuildContext context,
-    required LinearGradient? gradient,
-    required Color? color,
+    required LinearGradient gradient,
     required Color decorationIconColor,
   }) {
-    return DecoratedBox(
-      decoration: BoxDecoration(gradient: gradient, color: color),
-      child: Material(
-        type: MaterialType.transparency,
-        child: Stack(
-          children: [
-            _buildIcon(
-              context: context,
-              decorationIconColor: decorationIconColor,
-            ),
-            body,
-            if (overlappedWidget != null) overlappedWidget!,
-          ],
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        RepaintBoundary(
+          child: DecoratedBox(
+            decoration: BoxDecoration(gradient: gradient),
+          ),
         ),
-      ),
+        Material(
+          type: MaterialType.transparency,
+          child: Stack(
+            children: [
+              _buildIcon(
+                context: context,
+                decorationIconColor: decorationIconColor,
+              ),
+              RepaintBoundary(child: body),
+              if (overlappedWidget != null) overlappedWidget!,
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -160,21 +163,25 @@ class CommonScaffold extends StatelessWidget {
     required BuildContext context,
     required Color decorationIconColor,
   }) {
-    final hasIcon = iconPath != null && iconPath!.isNotEmpty;
+    if (iconPath == null || iconPath!.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Positioned(
       right: -108.w,
       bottom: -28.h,
-      child: AnimatedSwitcher(
-        duration: CustomAnimationDurations.low,
-        child: !hasIcon
-            ? const SizedBox.shrink(key: ValueKey(false))
-            : CommonAppIcon(
-                key: ValueKey(iconPath!),
-                path: iconPath!,
-                color: decorationIconColor,
-                size: 282.r,
-              ).autoFadeInUp(delay: iconAppearDelay),
+      child: RepaintBoundary(
+        child: AnimatedSwitcher(
+          duration: CustomAnimationDurations.low,
+          child: KeyedSubtree(
+            key: ValueKey(iconPath!),
+            child: CommonAppIcon(
+              path: iconPath!,
+              color: decorationIconColor,
+              size: 282.r,
+            ).autoFadeInUp(delay: iconAppearDelay),
+          ),
+        ),
       ),
     );
   }

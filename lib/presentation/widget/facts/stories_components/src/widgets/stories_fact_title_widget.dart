@@ -7,7 +7,7 @@ import 'package:denwee/presentation/widget/shared/animations/constants/animated_
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/buttons/archive_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/back_button_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -96,7 +96,7 @@ class _TitleBar extends StatelessWidget {
           child: ConstrainedBox(
             key: UniqueKey(),
             constraints: BoxConstraints(maxWidth: 0.65.sw),
-            child: BackdropSurfaceContainer.ellipse(
+            child: SurfaceContainer.ellipse(
               borderColor: color.withValues(alpha: .15),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 10.h),

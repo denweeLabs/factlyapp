@@ -150,6 +150,7 @@
         "premium_plan": "Premium",
         "active_plan": "Forfait actif",
         "upgrade_cta": "Passer",
+        "trial_cta": "Essai gratuit",
         "paywall": {
             "title": "Profitez de chaque fait sans aucune limite",
             "benefits": {
@@ -162,13 +163,18 @@
                 }
             },
             "package": {
+                "weekly": {
+                    "title": "Essai de 3 jours",
+                    "price_string": "puis {} par semaine"
+                },
                 "monthly": {
                     "title": "Mensuel",
-                    "per_period": "mois"
+                    "price_string": "{} par mois"
                 },
                 "yearly": {
                     "title": "Annuel",
-                    "per_period": "an"
+                    "price_string": "{} par an",
+                    "discount_badge": "Réduc. {}%"
                 }
             },
             "footer": {
@@ -192,6 +198,25 @@
         "title": "Vos faits quotidiens s'afficheront ici.",
         "subtitle": "Glissez à gauche ou à droite pour explorer !",
         "button": "Ok :)"
+    },
+
+
+    "fact_share": {
+        "more": "Plus",
+        "hide_watermark": "Masquer le filigrane",
+        "archive": {
+            "archive": "Archiver",
+            "unarchive": "Désarchiver"
+        },
+        "copy": {
+            "copy": "Copier",
+            "copied": "Copié"
+        },
+        "download": {
+            "download": "Télécharger",
+            "saved": "Enregistré"
+        },
+        "resource": "Ressource"
     },
 
 
@@ -270,6 +295,21 @@
     },
 
 
+    "error_generic_titles": {
+        "title1": "Oups !",
+        "title2": "Oh-oh !",
+        "title3": "Oops !",
+        "title4": "Oh non !",
+        "title5": "Hmm...",
+        "title6": "Pas maintenant 😔",
+        "title7": "Aïe !",
+        "title8": "Oupsy !",
+        "title9": "Petit souci !",
+        "title10": "Mini bug !",
+        "title11": "Ça n’a pas marché 🥺"
+    },
+
+
     "error_message": {
         "login": {
             "invalid_email": "Cet e-mail ne semble pas correct... Pouvez-vous le vérifier ? 😉",
@@ -306,7 +346,7 @@
         "facts": {
             "explanation_reward_missing": "Oups ! Quelque chose s'est produit ici... Nous n'avons pas pu vérifier que la publicité était terminée. Veuillez réessayer 🙏",
             "explanation_insufficient_stars": "Vous n'avez pas assez d'étoiles pour débloquer ce fait... Regardez une annonce pour en obtenir plus 😔",
-            "archive_limit_reached": ":( Vous avez atteint la limite des faits archivés... veuillez en supprimer quelques-uns avant d'en ajouter de nouveaux 📚",
+            "archive_limit_reached": "Vous avez atteint la limite d’archivage... Supprimez quelques éléments ou passez à Premium pour des sauvegardes illimitées 📚",
             "internal_server": "Oups ! Quelque chose s'est mal passé de notre côté... Nous réparons ça ! ⚙️",
             "connection_timeout": "Impossible de se connecter... Vérifiez votre Internet et réessayez 📶",
             "unexpected": "Un problème inattendu est survenu... Nous examinons cela ! 🚨",
@@ -351,8 +391,7 @@
             "daily_facts": "Pas encore de faits quotidiens... Revenez plus tard pour découvrir quelque chose de nouveau !",
             "facts_archive": "Votre archive est vide — enregistrez quelques faits et ils apparaîtront ici !"
         },
-        "agreeing_to_terms": "En continuant, vous acceptez nos\n<terms>Conditions</terms> et notre <privacy>Confidentialité</privacy>",
-        "copied_to_clipboard": "Copié"
+        "agreeing_to_terms": "En continuant, vous acceptez nos\n<terms>Conditions</terms> et notre <privacy>Confidentialité</privacy>"
     },
 
 
@@ -371,6 +410,20 @@
                 "subtitle": {
                     "basic": "Pour recevoir des notifications, assurez-vous d'autoriser cette application",
                     "in_settings": "Pour recevoir des notifications, assurez-vous d'autoriser cette application dans les paramètres du système"
+                }
+            },
+            "photosAdd": {
+                "title": "Autorisation",
+                "subtitle": {
+                    "basic": "Pour enregistrer et partager des fichiers, veuillez autoriser l’accès au stockage pour cette application",
+                    "in_settings": "Pour enregistrer et partager des fichiers, veuillez autoriser l’accès au stockage pour cette application dans les paramètres système"
+                }
+            },
+            "photosFull": {
+                "title": "Autorisation",
+                "subtitle": {
+                    "basic": "Pour enregistrer et partager des fichiers, veuillez autoriser l’accès aux photos pour cette application",
+                    "in_settings": "Pour enregistrer et partager des fichiers, veuillez autoriser l’accès aux photos pour cette application dans les paramètres système"
                 }
             }
         },

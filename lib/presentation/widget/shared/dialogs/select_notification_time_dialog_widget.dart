@@ -1,8 +1,9 @@
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
+import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
-import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/solid_fading_edge_widget.dart';
 import 'package:denwee/presentation/widget/shared/misc/wheel_time_selector_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,6 +17,10 @@ class SelectNotificationTimeDialog extends StatefulWidget {
 
   static const routeName = 'SelectNotificationTimeDialog';
 
+  static final shape = RoundedSuperellipseBorder(
+    borderRadius: BorderRadius.all(AppConstants.style.radius.dialog),
+  );
+
   @override
   State<SelectNotificationTimeDialog> createState() =>
       _SelectNotificationTimeDialogState();
@@ -23,136 +28,64 @@ class SelectNotificationTimeDialog extends StatefulWidget {
 
 class _SelectNotificationTimeDialogState
     extends State<SelectNotificationTimeDialog> {
-  late final FixedExtentScrollController hoursController;
-  late final FixedExtentScrollController minutesController;
+  late final FixedExtentScrollController _hoursController;
+  late final FixedExtentScrollController _minutesController;
 
-  late final List<int> hours;
-  late final List<int> minutes;
+  late final List<int> _hours;
+  late final List<int> _minutes;
 
-  late DateTime selectedTime = widget.initialTime ?? DateTime(0);
+  late DateTime _selectedTime = widget.initialTime ?? DateTime(0);
 
   @override
   void initState() {
-    hours = _generateHours();
-    minutes = _generateMinutes();
+    super.initState();
+
+    _hours = List<int>.generate(24, (i) => i);
+    _minutes = [0, AppConstants.config.notificationTimeSelectionStepMin];
 
     final initHour = widget.initialTime != null
-        ? hours.indexOf(widget.initialTime!.hour)
-        : hours.indexOf(1);
+        ? _hours.indexOf(widget.initialTime!.hour)
+        : _hours.indexOf(1);
 
     final initMinute = widget.initialTime != null
-        ? minutes.indexOf(widget.initialTime!.minute)
+        ? _minutes.indexOf(widget.initialTime!.minute)
         : 0;
 
-    hoursController = FixedExtentScrollController(initialItem: initHour);
-    minutesController = FixedExtentScrollController(initialItem: initMinute);
-
-    super.initState();
+    _hoursController = FixedExtentScrollController(initialItem: initHour);
+    _minutesController = FixedExtentScrollController(initialItem: initMinute);
   }
 
   @override
   void dispose() {
-    hoursController.dispose();
-    minutesController.dispose();
+    _hoursController.dispose();
+    _minutesController.dispose();
     super.dispose();
-  }
-
-  List<int> _generateHours() {
-    final items = <int>[];
-    final totalHours = 24;
-    for (var i = 0; i < totalHours; i++) {
-      items.add(i);
-    }
-    return items;
-  }
-
-  List<int> _generateMinutes() {
-    return [0, AppConstants.config.notificationTimeSelectionStepMin];
   }
 
   @override
   Widget build(BuildContext context) {
+    final primaryContainer = context.primaryContainer;
+
     return Padding(
       padding: EdgeInsets.only(top: AppSolidButton.defaultHeight / 2),
       child: FractionallySizedBox(
         widthFactor: 0.74,
-        heightFactor: 0.46,
+        heightFactor: 0.38,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Container(
-              margin: EdgeInsets.only(bottom: AppSolidButton.defaultHeight / 2),
-              decoration: ShapeDecoration(
-                shape: RoundedSuperellipseBorder(
-                  borderRadius: BorderRadius.all(
-                    AppConstants.style.radius.dialog,
-                  ),
-                ),
-                color: context.primaryContainer,
-                shadows: [AppConstants.style.colors.dialogShadow],
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    right: -24.w,
-                    bottom: -24.h,
-                    child: CommonAppIcon(
-                      path: AppConstants.assets.icons.clockLinear,
-                      color: context.iconColor.withValues(alpha: 0.03),
-                      size: 138,
-                    ),
-                  ),
-                ],
-              ),
+            Positioned.fill(child: _Background(primaryContainer: primaryContainer)),
+        
+            _Content(
+              primaryContainer: primaryContainer,
+              hoursController: _hoursController,
+              minutesController: _minutesController,
+              hours: _hours,
+              minutes: _minutes,
+              onChanged: (time) => _selectedTime = time,
             ),
-            Positioned.fill(
-              top: 32.h,
-              bottom: AppSolidButton.defaultHeight + 18.h,
-              child: Column(
-                children: [
-                  Text(
-                    context
-                        .tr(LocaleKeys.dialog_select_notification_time_title)
-                        .toUpperCase(),
-                    style: textButton.copyWith(
-                      color: context.textColor,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                  18.verticalSpace,
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: WheelTimeSelector(
-                        hoursController: hoursController,
-                        minutesController: minutesController,
-                        onChanged: (time) => selectedTime = time,
-                        hoursGenerator: () => hours,
-                        minutesGenerator: () => minutes,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              left: 0.0,
-              right: 0.0,
-              bottom: 0.0,
-              child: Center(
-                child: LayoutBuilder(
-                  builder: (context, constraints) => SizedBox(
-                    width: constraints.maxWidth * 0.5,
-                    child: AppSolidButton(
-                      onTap: _submit,
-                      text: context.tr(
-                        LocaleKeys.dialog_select_notification_time_button,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+        
+            _SubmitButton(onSubmit: _submit),
           ],
         ),
       ),
@@ -160,6 +93,119 @@ class _SelectNotificationTimeDialogState
   }
 
   void _submit() {
-    Navigator.of(context).pop(selectedTime);
+    Navigator.of(context).pop(_selectedTime);
+  }
+}
+
+class _Background extends StatelessWidget {
+  const _Background({
+    required this.primaryContainer,
+  });
+
+  final Color primaryContainer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: AppSolidButton.defaultHeight / 2),
+      child: PhysicalShape(
+        elevation: 10.0,
+        clipper: ShapeBorderClipper(shape: SelectNotificationTimeDialog.shape),
+        color: context.primaryContainer,
+        shadowColor: AppColors.dialogShadow,
+        child: const SizedBox.shrink(),
+      ),
+    );
+  }
+}
+
+class _Content extends StatelessWidget {
+  const _Content({
+    required this.primaryContainer,
+    required this.hoursController,
+    required this.minutesController,
+    required this.hours,
+    required this.minutes,
+    required this.onChanged,
+  });
+
+  final Color primaryContainer;
+
+  final FixedExtentScrollController hoursController;
+  final FixedExtentScrollController minutesController;
+
+  final List<int> hours;
+  final List<int> minutes;
+
+  final ValueChanged<DateTime> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      top: 32.h,
+      bottom: AppSolidButton.defaultHeight + 18.h,
+      child: Column(
+        children: [
+          Text(
+            context
+                .tr(LocaleKeys.dialog_select_notification_time_title)
+                .toUpperCase(),
+            style: textButton.copyWith(
+              color: context.textColor,
+              fontSize: 16.sp,
+            ),
+          ),
+          18.verticalSpace,
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: RepaintBoundary(
+                child: SolidVerticalFadingEdge(
+                  size: const FadingEdges.symmetric(40),
+                  backgroundColor: primaryContainer,
+                  child: WheelTimeSelector(
+                    hoursController: hoursController,
+                    minutesController: minutesController,
+                    onChanged: onChanged,
+                    hoursGenerator: () => hours,
+                    minutesGenerator: () => minutes,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SubmitButton extends StatelessWidget {
+  const _SubmitButton({
+    required this.onSubmit,
+  });
+
+  final VoidCallback onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Center(
+        child: FractionallySizedBox(
+          widthFactor: 0.5,
+          child: RepaintBoundary(
+            child: AppSolidButton(
+              onTap: onSubmit,
+              text: context.tr(
+                LocaleKeys.dialog_select_notification_time_button,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

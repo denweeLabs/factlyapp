@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:denwee/core/facts/domain/util/share/fact_shares_storage.dart';
 import 'package:denwee/core/misc/data/storage/common_storage.dart';
 import 'package:denwee/presentation/bloc/auth/auth_cubit.dart';
 import 'package:denwee/presentation/bloc/permissions/permissions_cubit.dart';
@@ -74,6 +75,9 @@ class _DenweeAppWrapperState extends State<DenweeAppWrapper> {
         context.pushNamedArgs(Routes.authentication, args: args.toJson(), rootNavigator: true);
       });
     }
+
+    // cleanup old temporary fact shares
+    getIt<FactSharesStorage>().clear();
   }
 
   @override

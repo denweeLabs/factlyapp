@@ -150,6 +150,7 @@
         "premium_plan": "Premium",
         "active_plan": "当前方案",
         "upgrade_cta": "升级",
+        "trial_cta": "免费试用",
         "paywall": {
             "title": "从每一个事实中获得更多，无限探索",
             "benefits": {
@@ -161,13 +162,18 @@
                 }
             },
             "package": {
+                "weekly": {
+                    "title": "3天试用",
+                    "price_string": "之后每周{}"
+                },
                 "monthly": {
                     "title": "每月",
-                    "per_period": "月"
+                    "price_string": "每月{}"
                 },
                 "yearly": {
                     "title": "每年",
-                    "per_period": "年"
+                    "price_string": "每年{}",
+                    "discount_badge": "省{}%"
                 }
             },
             "footer": {
@@ -191,6 +197,25 @@
         "title": "你的每日趣闻将在这里显示。",
         "subtitle": "左右滑动探索更多！",
         "button": "好的 :)"
+    },
+
+
+    "fact_share": {
+        "more": "更多",
+        "hide_watermark": "隐藏水印",
+        "archive": {
+            "archive": "存档",
+            "unarchive": "取消存档"
+        },
+        "copy": {
+            "copy": "复制",
+            "copied": "已复制"
+        },
+        "download": {
+            "download": "下载",
+            "saved": "已保存"
+        },
+        "resource": "来源"
     },
 
 
@@ -269,6 +294,21 @@
     },
 
 
+    "error_generic_titles": {
+        "title1": "哎呀！",
+        "title2": "糟了！",
+        "title3": "哎哟！",
+        "title4": "不好了！",
+        "title5": "嗯…",
+        "title6": "现在不行 😔",
+        "title7": "天啊！",
+        "title8": "小失误！",
+        "title9": "小卡顿！",
+        "title10": "小故障！",
+        "title11": "没成功 🥺"
+    },
+
+
     "error_message": {
         "login": {
             "invalid_email": "这个邮箱似乎不对…请再次检查 😉",
@@ -305,7 +345,7 @@
         "facts": {
             "explanation_reward_missing": "哎呀！出现了问题…我们无法验证广告完成情况，请重试 🙏",
             "explanation_insufficient_stars": "你的星星不足以解锁此趣闻…观看广告获取更多 😔",
-            "archive_limit_reached": ":( 你已达到存档趣闻上限…请先删除一些再添加 📚",
+            "archive_limit_reached": "已达到存档上限… 删除部分内容，或升级至 Premium 以获得无限保存 📚",
             "internal_server": "哎呀！服务器出错…我们正在修复 ⚙️",
             "connection_timeout": "无法连接…请检查网络 📶",
             "unexpected": "发生了意外问题…我们正在处理 🚨",
@@ -350,8 +390,7 @@
             "daily_facts": "还没有每日趣闻…稍后再来看看新内容！",
             "facts_archive": "你的存档是空的 — 保存一些趣闻，它们会显示在这里！"
         },
-        "agreeing_to_terms": "继续操作即表示你同意我们的\n<terms>条款</terms>和<privacy>隐私</privacy>",
-        "copied_to_clipboard": "已复制"
+        "agreeing_to_terms": "继续操作即表示你同意我们的\n<terms>条款</terms>和<privacy>隐私</privacy>"
     },
 
 
@@ -370,6 +409,20 @@
                 "subtitle": {
                     "basic": "要接收通知，请确保允许此应用权限",
                     "in_settings": "要接收通知，请确保在系统设置中允许此应用权限"
+                }
+            },
+            "photosAdd": {
+                "title": "权限",
+                "subtitle": {
+                    "basic": "为了保存和分享文件，请允许此应用访问存储空间",
+                    "in_settings": "为了保存和分享文件，请在系统设置中允许此应用访问存储空间"
+                }
+            },
+            "photosFull": {
+                "title": "权限",
+                "subtitle": {
+                    "basic": "要保存和分享文件，请允许此应用访问照片",
+                    "in_settings": "要保存和分享文件，请在系统设置中允许此应用访问照片"
                 }
             }
         },

@@ -1,7 +1,7 @@
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
-import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
+import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_fade_animation.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,64 +22,59 @@ class PaywallFooterLinks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = context.lightTextColor.withValues(alpha: 0.8);
-    final decorationColor = context.lightTextColorSecondary;
-    
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 8.w,
       children: [
-        BounceTapFadeAnimation(
+        _buildLink(
+          context: context,
+          text: context.tr(LocaleKeys.subscription_paywall_footer_restore),
           onTap: onRestore,
-          child: Text(
-            context.tr(LocaleKeys.subscription_paywall_footer_restore),
-            style: bodyM.copyWith(
-              color: textColor,
-              decorationColor: decorationColor,
-              fontWeight: FontWeight.w700,
-              decoration: TextDecoration.underline,
-            ),
-          ),
         ),
         Text(
           bulletPoint,
           style: bodyM.copyWith(
-            color: textColor,
+            color: context.lightTextColorSecondary,
             fontWeight: FontWeight.w700,
           ),
         ),
-        BounceTapFadeAnimation(
+        _buildLink(
+          context: context,
+          text: context.tr(LocaleKeys.subscription_paywall_footer_privacy),
           onTap: onPrivacy,
-          child: Text(
-            context.tr(LocaleKeys.subscription_paywall_footer_privacy),
-            style: bodyM.copyWith(
-              color: textColor,
-              decorationColor: decorationColor,
-              fontWeight: FontWeight.w700,
-              decoration: TextDecoration.underline,
-            ),
-          ),
         ),
         Text(
           bulletPoint,
           style: bodyM.copyWith(
-            color: textColor,
+            color: context.lightTextColorSecondary,
             fontWeight: FontWeight.w700,
           ),
         ),
-        BounceTapFadeAnimation(
+        _buildLink(
+          context: context,
+          text: context.tr(LocaleKeys.subscription_paywall_footer_terms),
           onTap: onTerms,
-          child: Text(
-            context.tr(LocaleKeys.subscription_paywall_footer_terms),
-            style: bodyM.copyWith(
-              color: textColor,
-              decorationColor: decorationColor,
-              fontWeight: FontWeight.w700,
-              decoration: TextDecoration.underline,
-            ),
-          ),
         ),
       ],
+    );
+  }
+
+  Widget _buildLink({
+    required BuildContext context,
+    required VoidCallback onTap,
+    required String text,
+  }) {
+    return BounceTapFadeAnimation(
+      onTap: onTap,
+      child: Text(
+        text,
+        style: bodyM.copyWith(
+          color: context.lightTextColorSecondary,
+          decorationColor: context.lightTextColorSecondary,
+          fontWeight: FontWeight.w700,
+          decoration: TextDecoration.underline,
+        ),
+      ),
     );
   }
 }

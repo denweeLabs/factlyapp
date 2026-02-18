@@ -1,9 +1,8 @@
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
-import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
-import 'package:denwee/presentation/widget/shared/buttons/back_button_widget.dart';
-import 'package:denwee/presentation/widget/shared/buttons/icon_button_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
+import 'package:denwee/presentation/widget/shared/dialogs/core/core_dialog_body_widget.dart';
+import 'package:denwee/presentation/widget/shared/dialogs/core/core_dialog_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -148,51 +147,20 @@ class CoreDialog extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Container(
-              decoration: ShapeDecoration(
-                shape: RoundedSuperellipseBorder(
-                  borderRadius: BorderRadius.all(
-                    AppConstants.style.radius.dialog,
-                  ),
-                ),
-                color: context.theme.colorScheme.primaryContainer,
-                shadows: [AppConstants.style.colors.dialogShadow],
-              ),
-              child: Stack(
+            CoreDialogContainer(
+              horizontalPadding: horizontalPadding,
+              bodyTopOffset: bodyTopOffset,
+              backgroundDecorationIcon: backgroundDecorationIcon,
+              backgroundDecorationEmoji: backgroundDecorationEmoji,
+              decorationIcon: decorationIcon,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Positioned(
-                    right: backgroundDecorationEmoji != null ? -32.w : -42.w,
-                    top: 0.0,
-                    bottom: 0.0,
-                    child: backgroundDecorationEmoji != null
-                        ? Center(
-                            child: Text(
-                              backgroundDecorationEmoji!,
-                              style: TextStyle(
-                                color: Colors.white24,
-                                fontSize: 92,
-                              ),
-                            ),
-                          )
-                        : CommonAppIcon(
-                            path: backgroundDecorationIcon ?? decorationIcon,
-                            color: context.iconColor.withValues(alpha: 0.03),
-                            size: 128,
-                          ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: horizontalPadding.w,
-                      right: horizontalPadding.w,
-                      top: bodyTopOffset,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        customBody ?? _buildBody(context),
-                        _buildButtonsBlock(context),
-                      ],
-                    ),
+                  customBody ?? CoreDialogBody(title, subtitle),
+                  CoreDialogButtons(
+                    type: type,
+                    okButton: okButton,
+                    cancelButton: cancelButton,
                   ),
                 ],
               ),
@@ -201,147 +169,66 @@ class CoreDialog extends StatelessWidget {
               left: topIconOffset.dx,
               right: topIconOffset.dx,
               top: topIconOffset.dy,
-              child: _buildTopIcon(context),
+              child: _TopIcon(
+                icon: decorationIcon,
+                shimmer: isIconShimmering,
+              ),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildBody(BuildContext context) {
-    assert(title != null && subtitle != null);
+class _TopIcon extends StatelessWidget {
+  const _TopIcon({required this.icon, required this.shimmer});
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.w),
-      child: Column(
-        children: [
-          Text(
-            title!,
-            style: dialogTitle.copyWith(color: context.textColor),
-            textAlign: TextAlign.center,
-          ),
-          12.verticalSpace,
-          Text(
-            subtitle!,
-            style: dialogSubtitle.copyWith(color: context.textColorSecondary),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
+  final String icon;
+  final bool shimmer;
 
-  Widget _buildButtonsBlock(BuildContext context) {
-    switch (type) {
-      case CoreDialogType.info:
-        if (okButton == null) return const SizedBox.shrink();
-        return _buildIconButton(
-          context: context,
-          button: okButton!,
-          padding: EdgeInsets.symmetric(
-            vertical: buttonsVerticalPadding,
-            horizontal: 64.w,
-          ),
-        );
+  static const shape = RoundedSuperellipseBorder(
+    borderRadius: BorderRadius.all(Radius.circular(26)),
+  );
 
-      case CoreDialogType.confirmation:
-        return Row(
-          children: [
-            if (cancelButton != null)
-              Expanded(
-                child: cancelButton!.isCross
-                    ? Center(
-                        child: AppBackButton(
-                          size: 20,
-                          type: AppBackButtonType.cross,
-                          padding: EdgeInsets.symmetric(
-                            vertical: buttonsVerticalPadding,
-                            horizontal: 24.w,
-                          ),
-                          onTap: cancelButton!.onTap,
-                          color:
-                              cancelButton?.color ?? context.iconColorSecondary,
-                        ),
-                      )
-                    : _buildIconButton(
-                        context: context,
-                        button: cancelButton!,
-                        padding: EdgeInsets.symmetric(
-                          vertical: buttonsVerticalPadding,
-                          horizontal: 24.w,
-                        ),
-                      ),
-              ),
-            if (okButton != null)
-              Expanded(
-                child: _buildIconButton(
-                  context: context,
-                  button: okButton!,
-                  padding: EdgeInsets.symmetric(
-                    vertical: buttonsVerticalPadding,
-                    horizontal: 24.w,
-                  ),
-                ),
-              ),
-          ],
-        );
-    }
-  }
-
-  Widget _buildIconButton({
-    required BuildContext context,
-    required CoreDialogButton button,
-    required EdgeInsets padding,
-  }) {
+  @override
+  Widget build(BuildContext context) {
     return Center(
-      child: AppIconButton(
-        size: button.size,
-        onTap: button.onTap,
-        padding: padding,
-        color: button.color ?? context.theme.colorScheme.secondary,
-        iconPath: button.icon,
-      ),
-    );
-  }
-
-  Widget _buildTopIcon(BuildContext context) {
-    return Center(
-      child: ClipRSuperellipse(
-        borderRadius: const BorderRadius.all(Radius.circular(26.0)),
+      child: PhysicalShape(
+        elevation: 4,
+        clipper: ShapeBorderClipper(shape: shape),
+        clipBehavior: Clip.antiAlias,
+        color: Colors.transparent,
+        shadowColor: Colors.black26,
         child: Stack(
           children: [
             Container(
-              width: topIconSize,
-              height: topIconSize,
+              width: CoreDialog.topIconSize,
+              height: CoreDialog.topIconSize,
               decoration: ShapeDecoration(
-                shape: RoundedSuperellipseBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(26.0)),
-                  side: BorderSide(color: context.primaryContainer, width: 4.0),
-                ),
-                gradient: AppConstants.style.colors.commonColoredGradient(
-                  context,
-                ),
+                shape: shape,
+                gradient: AppConstants.style.colors.commonColoredGradient(context),
               ),
               child: Center(
                 child: CommonAppIcon(
-                  path: decorationIcon,
+                  path: icon,
                   color: context.lightIconColor,
                   size: 26,
                 ),
               ),
             ),
-            SizedBox.square(
-              dimension: topIconSize,
-              child: Shimmer(
-                enabled: isIconShimmering,
-                colorOpacity: 0.4,
-                color: Colors.white,
-                duration: const Duration(milliseconds: 2400),
-                interval: const Duration(milliseconds: 5000),
-                child: const SizedBox.shrink(),
+            if (shimmer)
+              SizedBox.square(
+                dimension: CoreDialog.topIconSize,
+                child: Shimmer(
+                  enabled: true,
+                  colorOpacity: 0.4,
+                  color: Colors.white,
+                  duration: const Duration(milliseconds: 2400),
+                  interval: const Duration(milliseconds: 5000),
+                  child: const SizedBox.shrink(),
+                ),
               ),
-            ),
           ],
         ),
       ),

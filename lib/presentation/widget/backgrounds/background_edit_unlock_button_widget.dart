@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
-import 'package:denwee/core/backgrounds/domain/entity/background_selection_item.dart';
+import 'package:denwee/presentation/bloc/user_statistics/user_statistics_cubit.dart';
 import 'package:denwee/presentation/page/available_backgrounds/util/background_selection_util.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
@@ -9,9 +9,10 @@ import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/smiling_star_animated_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animated_icons/sparkles_animated_icon_widget.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
-import 'package:denwee/presentation/widget/shared/misc/backdrop_surface_container_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_animations/animation_builder/custom_animation_builder.dart';
 
@@ -34,77 +35,40 @@ class BackgroundEditUnlockButton extends StatelessWidget {
   final AvailableBackground background;
   final void Function(BackgroundUnlockButtonState) onTap;
 
-  Widget _stateProvider({
-    required Widget Function(
-      bool isSubscribed,
-      bool isUnlocked,
-      bool isSelected,
-      int starsBalance,
-      bool isApplying,
-    )
-    builder,
-  }) {
-    // whether background is selected
-    return BackgroundSelectionUtil.isBackgroundItemSelected(
-      item: BackgroundSelectionItem.availableBackground(background),
-      builder: (isSelected) {
-        // subscription state
-        return BackgroundSelectionUtil.isSubscribedProvider(
-          builder: (isSubscribed) {
-            // is background unlocked state
-            return BackgroundSelectionUtil.isBackgroundUnlockedProvider(
-              backgroundId: background.id,
-              builder: (isUnlocked) {
-                // stars balance state
-                return BackgroundSelectionUtil.starsBalanceProvider(
-                  builder: (starsBalance) {
-                    // is background applying state
-                    return BackgroundSelectionUtil.isBackgroundApplyingProvider(
-                      backgroundId: background.id,
-                      builder: (isApplying) => builder(
-                        isSubscribed,
-                        isUnlocked,
-                        isSelected,
-                        starsBalance,
-                        isApplying,
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return _stateProvider(
-      builder:
-          (isSubscribed, isUnlocked, isSelected, starsBalance, isApplying) {
-            final state = _resolveButtonState(
-              isSubscribed: isSubscribed,
-              isUnlocked: isUnlocked,
-              starsBalance: starsBalance,
-            );
+    return RepaintBoundary(
+      child: BlocSelector<UserStatisticsCubit, UserStatisticsState, int>(
+        selector: (state) => state.statistics.stars,
+        builder: (context, starsBalance) {
+          return BackgroundCardSelectionProviders(
+            builder: (context, vm) {
+              final isApplying = vm.applyingId == background.id;
+              
+              final state = _resolveButtonState(
+                isSubscribed: vm.hasPremiumSubscription,
+                isUnlocked: vm.unlockedIds.contains(background.id),
+                starsBalance: starsBalance,
+              );
 
-            final text = _resolveButtonText(
-              context: context,
-              state: state,
-              isSelected: isSelected,
-            );
+              final text = _resolveButtonText(
+                context: context,
+                state: state,
+                isSelected: vm.selectedId == background.id,
+              );
 
-            return AppSolidButton(
-              text: text,
-              displayWidget: _buildBodyForState(context, state),
-              onTap: isApplying ? null : () => onTap(state),
-              textColor: context.lightTextColor,
-              hideShadow: true,
-              isBusy: isApplying,
-            );
-          },
+              return AppSolidButton(
+                text: text,
+                displayWidget: _buildBodyForState(context, state),
+                onTap: isApplying ? null : () => onTap(state),
+                textColor: context.lightTextColor,
+                hideShadow: true,
+                isBusy: isApplying,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -175,7 +139,7 @@ class BackgroundEditUnlockButton extends StatelessWidget {
             style: solidButton.copyWith(color: context.lightTextColor),
           ),
           8.horizontalSpace,
-          BackdropSurfaceContainer.ellipse(
+          SurfaceContainer.ellipse(
             color: context.darkPrimaryContainer,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

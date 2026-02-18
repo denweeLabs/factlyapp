@@ -19,20 +19,6 @@ class _TextStylesConstants {
 class _ColorsConstants {
   const _ColorsConstants();
 
-  LinearGradient commonBackgroundGradient(
-    BuildContext context, {
-    Color? color1,
-    Color? color2,
-  }) =>
-      LinearGradient(
-        colors: [
-          color1 ?? context.theme.colorScheme.background,
-          color2 ?? context.theme.colorScheme.onBackground,
-        ],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
-
   LinearGradient commonColoredGradient(
     BuildContext context, {
     Color? color1,
@@ -58,18 +44,11 @@ class _ColorsConstants {
       );
 
   final commonShadow = const BoxShadow(
-    color: Colors.black38,
+    color: Colors.black26,
     offset: Offset(0.0, 6.0),
     spreadRadius: -10.0,
     blurRadius: 16,
   );
-
-  BoxShadow commonColoredShadow(BuildContext context) => BoxShadow(
-        color: context.theme.colorScheme.primary,
-        offset: const Offset(0.0, 8.0),
-        spreadRadius: -14.0,
-        blurRadius: 24.0,
-      );
 
   final dialogShadow = const BoxShadow(
     color: Colors.black54,

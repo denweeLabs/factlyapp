@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:denwee/core/auth/domain/use_case/on_logout_use_case.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:denwee/core/subscriptions/domain/entity/subscriptions_failure.dart';
@@ -23,13 +25,18 @@ mixin RootBlocListenersHandlers {
   var isErrorSnackbarDisplayed = false;
 
   void processAppResume() {
-    getIt<PermissionsCubit>().forceCheckNotifications();
+    Future.microtask(
+      () => getIt<PermissionsCubit>()
+        ..forceCheckNotifications()
+        ..forceCheckPhotosAdd()
+        ..forceCheckPhotosFull(),
+    );
   }
 
   void processLoggedOutUser() {
     getIt<OnLogoutUseCase>().execute();
     Navigator.of(getIt<RootRouterData>().context, rootNavigator: true)
-        .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => true);
+        .restorablePushNamedAndRemoveUntil(Routes.welcome, (_) => false);
   }
 
   Future<void> processPurchasedSubscriptionPackage(PremiumPackage package) async {
@@ -142,7 +149,7 @@ mixin RootBlocListenersHandlers {
     final context = getIt<RootRouterData>().context;
     HapticUtil.medium();
     AppDialogs.showErrorSnackbar(
-      title: context.tr(LocaleKeys.label_oops),
+      title: getRandomErrorTitle(context),
       description: messageProvider(context),
     );
 
@@ -150,5 +157,26 @@ mixin RootBlocListenersHandlers {
     Future.delayed(AppDialogs.snackbarErrorDisplayDuration, () {
       isErrorSnackbarDisplayed = false;
     });
+  }
+
+  String getRandomErrorTitle(BuildContext context) {
+    final titles = [
+      LocaleKeys.error_generic_titles_title1,
+      LocaleKeys.error_generic_titles_title2,
+      LocaleKeys.error_generic_titles_title3,
+      LocaleKeys.error_generic_titles_title4,
+      LocaleKeys.error_generic_titles_title5,
+      LocaleKeys.error_generic_titles_title6,
+      LocaleKeys.error_generic_titles_title7,
+      LocaleKeys.error_generic_titles_title8,
+      LocaleKeys.error_generic_titles_title9,
+      LocaleKeys.error_generic_titles_title10,
+      LocaleKeys.error_generic_titles_title11,
+    ];
+
+    final random = Random();
+    final key = titles[random.nextInt(titles.length)];
+
+    return context.tr(key);
   }
 }

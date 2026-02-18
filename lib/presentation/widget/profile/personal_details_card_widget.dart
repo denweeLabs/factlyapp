@@ -43,105 +43,114 @@ class PersonalDetailsCard extends StatelessWidget {
   final AppSupportedAuthProvider authProvider;
   final bool isFormValid;
 
+  static final shape = RoundedSuperellipseBorder(
+    borderRadius: BorderRadius.all(AppConstants.style.radius.card),
+  );
+
   @override
   Widget build(BuildContext context) {
+    final shadowColor = context.theme.colorScheme.primary.withValues(alpha: 0.4);
     final decorationIcon = (nameInError || emailInError) && !isFormValid
         ? AppConstants.assets.icons.alertLinear
         : AppConstants.assets.icons.editBoxLinear;
 
-    return DecoratedBox(
-      decoration: ShapeDecoration(
-        gradient: AppConstants.style.colors.commonColoredGradient(context),
-        shadows: [AppConstants.style.colors.commonColoredShadow(context)],
-        shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.all(AppConstants.style.radius.card),
-          side: const BorderSide(color: Colors.white12),
+    return PhysicalShape(
+      elevation: 10.0,
+      shadowColor: shadowColor,
+      color: Colors.transparent,
+      clipper: ShapeBorderClipper(shape: shape),
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          gradient: AppConstants.style.colors.commonColoredGradient(context),
+          shape: shape,
         ),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -12.w,
-            bottom: -16.h,
-            child: AnimatedSwitcherPlus.zoomIn(
-              duration: CustomAnimationDurations.lowMedium,
-              switchInCurve: Curves.easeInOutSine,
-              switchOutCurve: Curves.easeInOutSine,
-              child: CommonAppIcon(
-                path: decorationIcon,
-                key: ValueKey(decorationIcon),
-                color: context.darkIconColor.withValues(alpha: .08),
-                size: 98,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppInput(
-                  hintStyle: textFieldHint.copyWith(color: context.lightTextColor),
-                  focusNode: nameFocusNode,
-                  controller: nameController,
-                  hint: context.tr(LocaleKeys.account_profile_default_username),
-                  prefixIcon: AppConstants.assets.icons.userSquareLinear,
-                  primaryDetailsColor: context.lightTextColor,
-                  cursorColor: context.lightTextColor,
-                  textInputAction: TextInputAction.next,
-                  textInputType: TextInputType.name,
-                  onChanged: onNameChanged,
-                  onlyInputField: true,
-                ),
-                6.verticalSpace,
-                Container(
-                  height: 0.8,
-                  width: double.maxFinite,
-                  margin: EdgeInsets.symmetric(horizontal: 14.w),
-                  color: context.lightIconColor.withValues(alpha: 0.15),
-                ),
-                6.verticalSpace,
-                AppInput(
-                  isEnabled: isEmailFieldEnabled,
-                  hintStyle: textFieldHint.copyWith(color: context.lightTextColor),
-                  focusNode: emailFocusNode,
-                  controller: emailController,
-                  hint: context.tr(LocaleKeys.input_field_hint_email),
-                  prefixIcon: emailPrefixIcon,
-                  primaryDetailsColor: context.lightTextColor,
-                  cursorColor: context.lightTextColor,
-                  textInputAction: TextInputAction.done,
-                  textInputType: TextInputType.emailAddress,
-                  onChanged: onEmailChanged,
-                  onlyInputField: true,
-                  inputFormatters: [spaceDenyInputFormatter, emojiDenyInputFormatter],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 14.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppInput.buildErrorMessage(
-                        context,
-                        nameInError,
-                        '• ${nameErrorMessage ?? ''}',
-                        padding: EdgeInsets.only(top: 8.h, bottom: 4.h),
-                        forcedColor: context.lightTextColor,
-                      ),
-                      AppInput.buildErrorMessage(
-                        context,
-                        emailInError,
-                        '• ${emailErrorMessage ?? ''}',
-                        padding: EdgeInsets.only(top: 8.h, bottom: 4.h),
-                        forcedColor: context.lightTextColor,
-                      ),
-                    ],
+        child: Stack(
+          children: [
+            Positioned(
+              right: -14.w,
+              bottom: -16.h,
+              child: RepaintBoundary(
+                child: AnimatedSwitcherPlus.zoomIn(
+                  duration: CustomAnimationDurations.lowMedium,
+                  switchInCurve: Curves.easeInOutSine,
+                  switchOutCurve: Curves.easeInOutSine,
+                  child: CommonAppIcon(
+                    path: decorationIcon,
+                    key: ValueKey(decorationIcon),
+                    color: context.darkIconColor.withValues(alpha: .08),
+                    size: 98,
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 10.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppInput(
+                    hintStyle: textFieldHint.copyWith(color: context.lightTextColor),
+                    focusNode: nameFocusNode,
+                    controller: nameController,
+                    hint: context.tr(LocaleKeys.account_profile_default_username),
+                    prefixIcon: AppConstants.assets.icons.userSquareLinear,
+                    primaryDetailsColor: context.lightTextColor,
+                    cursorColor: context.lightTextColor,
+                    textInputAction: TextInputAction.next,
+                    textInputType: TextInputType.name,
+                    onChanged: onNameChanged,
+                    onlyInputField: true,
+                  ),
+                  6.verticalSpace,
+                  Container(
+                    height: 0.8,
+                    width: double.maxFinite,
+                    margin: EdgeInsets.symmetric(horizontal: 14.w),
+                    color: context.lightIconColor.withValues(alpha: 0.15),
+                  ),
+                  6.verticalSpace,
+                  AppInput(
+                    isEnabled: isEmailFieldEnabled,
+                    hintStyle: textFieldHint.copyWith(color: context.lightTextColor),
+                    focusNode: emailFocusNode,
+                    controller: emailController,
+                    hint: context.tr(LocaleKeys.input_field_hint_email),
+                    prefixIcon: emailPrefixIcon,
+                    primaryDetailsColor: context.lightTextColor,
+                    cursorColor: context.lightTextColor,
+                    textInputAction: TextInputAction.done,
+                    textInputType: TextInputType.emailAddress,
+                    onChanged: onEmailChanged,
+                    onlyInputField: true,
+                    inputFormatters: [spaceDenyInputFormatter, emojiDenyInputFormatter],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 14.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppInput.buildErrorMessage(
+                          context,
+                          nameInError,
+                          '• ${nameErrorMessage ?? ''}',
+                          padding: EdgeInsets.only(top: 8.h, bottom: 4.h),
+                          forcedColor: context.lightTextColor,
+                        ),
+                        AppInput.buildErrorMessage(
+                          context,
+                          emailInError,
+                          '• ${emailErrorMessage ?? ''}',
+                          padding: EdgeInsets.only(top: 8.h, bottom: 4.h),
+                          forcedColor: context.lightTextColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

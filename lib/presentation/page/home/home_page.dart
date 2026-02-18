@@ -6,6 +6,7 @@ import 'package:denwee/presentation/bloc/backgrounds/available_backgrounds_cubit
 import 'package:denwee/presentation/bloc/facts/daily_facts_cubit.dart';
 import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:denwee/presentation/shared/router/root_router.dart';
+import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/common/common_scaffold_widget.dart';
 import 'package:denwee/di/di.dart';
@@ -83,8 +84,8 @@ class _HomePageState extends State<HomePage> {
 
         return CommonScaffold(
           systemOverlayType: systemOverlayType,
-          style: CommonBackgroundStyle.ofDarkTheme,
           systemNavigationBarContrastEnforced: false,
+          backgroundColor: AppColors.primaryBackground[ThemeType.dark],
           body: StoriesDailyFactsBody(
             isLoading: state.isFetching,
             dailyFacts: state.bucket.toNullable()?.facts ?? const <DailyFact>[],

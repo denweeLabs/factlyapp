@@ -14,7 +14,8 @@ class SelectedInterestsList extends StatelessWidget {
   final List<UserInterest> interests;
   final VoidCallback onEdit;
 
-  static final height = 146.h;
+  // static final height = 146.h;
+  static final height = 150.w;
 
   @override
   Widget build(BuildContext context) {

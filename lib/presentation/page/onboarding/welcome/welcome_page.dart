@@ -72,8 +72,8 @@ class _WelcomePageState extends State<WelcomePage> with RestorationMixin {
         ),
         child: Column(
           children: [
-            Center(
-              child: RepaintBoundary(
+            RepaintBoundary(
+              child: Center(
                 child: const SealInSquare().autoElasticIn(
                   sequencePos: 1,
                   scaleCurve: Curves.easeOutBack,
@@ -81,49 +81,57 @@ class _WelcomePageState extends State<WelcomePage> with RestorationMixin {
               ),
             ),
             32.verticalSpace,
-            Text(
-              context.tr(LocaleKeys.welcome_title),
-              style: h0.copyWith(
-                color: context.textColor,
-                fontFamily: AppConstants.style.textStyle.primaryFontFamily,
-              ),
-              textAlign: TextAlign.center,
-            ).autoFadeIn(sequencePos: 6),
-            18.verticalSpace,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
+            RepaintBoundary(
               child: Text(
-                context.tr(LocaleKeys.welcome_subtitle),
-                style: bodyL.copyWith(
-                  color: context.textColorTernary,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
-                    en: () => AppConstants.style.textStyle.primaryFontFamily,
-                    ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
-                  ),
+                context.tr(LocaleKeys.welcome_title),
+                style: h0.copyWith(
+                  color: context.textColor,
+                  fontFamily: AppConstants.style.textStyle.primaryFontFamily,
                 ),
                 textAlign: TextAlign.center,
-              ).autoFadeIn(sequencePos: 8),
+              ).autoFadeIn(sequencePos: 6),
+            ),
+            18.verticalSpace,
+            RepaintBoundary(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Text(
+                  context.tr(LocaleKeys.welcome_subtitle),
+                  style: bodyL.copyWith(
+                    color: context.textColorTernary,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
+                      en: () => AppConstants.style.textStyle.primaryFontFamily,
+                      ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
+                ).autoFadeIn(sequencePos: 8),
+              ),
             ),
             const Spacer(),
-            FractionallySizedBox(
-              widthFactor: 0.6,
-              child: AppSolidButton(
-                onTap: _onBegin,
-                text: context.tr(LocaleKeys.welcome_begin_cta),
-                buttonHeight: 66.h,
-                isShimmering: true,
-                isBubbles: true,
-              ).autoElasticIn(sequencePos: 9),
+            RepaintBoundary(
+              child: FractionallySizedBox(
+                widthFactor: 0.6,
+                child: AppSolidButton(
+                  onTap: _onBegin,
+                  text: context.tr(LocaleKeys.welcome_begin_cta),
+                  buttonHeight: 66.h,
+                  isShimmering: true,
+                  isBubbles: true,
+                ).autoElasticIn(sequencePos: 9),
+              ),
             ),
             24.verticalSpace,
-            AppTextButton(
-              onTap: _onHaveAnAccount,
-              text: context
-                  .tr(LocaleKeys.welcome_have_an_account)
-                  .toUpperCase(),
-              textColor: context.textColor.withValues(alpha: 0.2),
-            ).autoElasticIn(sequencePos: 10),
+            RepaintBoundary(
+              child: AppTextButton(
+                onTap: _onHaveAnAccount,
+                text: context
+                    .tr(LocaleKeys.welcome_have_an_account)
+                    .toUpperCase(),
+                textColor: context.textColor.withValues(alpha: 0.2),
+              ).autoElasticIn(sequencePos: 10),
+            ),
           ],
         ),
       ),

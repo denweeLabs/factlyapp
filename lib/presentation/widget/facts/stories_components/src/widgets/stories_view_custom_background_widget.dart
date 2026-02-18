@@ -13,14 +13,18 @@ class StoriesViewCustomBackground extends StatelessWidget {
     switch (asset.background.asset.type) {
       // image
       case AvailableBackgroundType.image:
-        return Image.file(asset.visualFile, fit: BoxFit.cover);
+        return RepaintBoundary(
+          child: Image.file(asset.visualFile, fit: BoxFit.cover),
+        );
 
       // video
       case AvailableBackgroundType.video:
-        return CommonVideoAudioMixed.file(
-          visualPath: asset.visualFile.path,
-          audioPath: asset.audioFile.toNullable()?.path,
-          volume: 1.0,
+        return RepaintBoundary(
+          child: CommonVideoAudioMixed.file(
+            visualPath: asset.visualFile.path,
+            audioPath: asset.audioFile.toNullable()?.path,
+            volume: 1.0,
+          ),
         );
     }
   }

@@ -1,9 +1,8 @@
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/utils/haptic_util.dart';
+import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_in.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_out_up.dart';
-import 'package:denwee/presentation/widget/shared/animations/common_animations/common_animations.dart';
-import 'package:denwee/presentation/widget/shared/animations/constants/animation_bipos.dart';
 import 'package:denwee/presentation/widget/shared/animations/misc/route_aware_animated.dart';
 import 'package:denwee/presentation/widget/shared/animations/misc/route_observer_scope.dart';
 import 'package:denwee/presentation/widget/shared/buttons/back_button_widget.dart';
@@ -52,21 +51,21 @@ class SelectInterestsPage extends StatelessWidget {
                 child: InterestsContent(
                   titleWrapper: (child) => child
                       .autoFadeInUp(sequencePos: 1)
-                      .routeAwareFadeOutUp(
+                      .ecFadeOutUp(
                         controller: controller,
                         sequencePos: 0,
                         sequenceTotal: 3,
                       ),
                   subtitleWrapper: (child) => child
                       .autoFadeInUp(sequencePos: 2)
-                      .routeAwareFadeOutUp(
+                      .ecFadeOutUp(
                         controller: controller,
                         sequencePos: 1,
                         sequenceTotal: 3,
                       ),
                   tilesWrapper: (child) => child
                       .autoFadeInUp(sequencePos: 3)
-                      .routeAwareFadeOutUp(
+                      .ecFadeOutUp(
                         controller: controller,
                         sequencePos: 2,
                         sequenceTotal: 3,
@@ -114,11 +113,7 @@ class SelectInterestsPage extends StatelessWidget {
                 iconSize: 32,
                 onTap: () => _onConfirmInterests(context),
                 iconPath: AppConstants.assets.icons.checkmarkLinear,
-              ).fadeScale(
-                fades: const BiPos(1.0, 1.0),
-                scales: const BiPos(0.0, 1.0),
-                delay: const Duration(milliseconds: 200),
-              ),
+              ).autoElasticIn(sequencePos: 1),
             ),
           ],
         ),

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+
+    <!-- App cache -->
+    <cache-path
+        name="cache"
+        path="." />
+
+    <!-- External files -->
+    <external-path
+        name="external_files"
+        path="." />
+
+    <!-- Internal files -->
+    <files-path
+        name="files"
+        path="." />
+
+</paths>

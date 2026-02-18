@@ -50,7 +50,7 @@ class SelectNotificationTimePage extends StatelessWidget {
                         textAlign: TextAlign.center,
                       )
                       .autoFadeInUp(sequencePos: 1)
-                      .routeAwareFadeOutUp(
+                      .ecFadeOutUp(
                         controller: controller,
                         sequencePos: 0,
                         sequenceTotal: 3,
@@ -69,7 +69,7 @@ class SelectNotificationTimePage extends StatelessWidget {
                   ),
                 )
                 .autoFadeInUp(sequencePos: 2)
-                .routeAwareFadeOutUp(
+                .ecFadeOutUp(
                   controller: controller,
                   sequencePos: 1,
                   sequenceTotal: 3,
@@ -79,12 +79,14 @@ class SelectNotificationTimePage extends StatelessWidget {
                 builder: (context, constraints) => Column(
                   children: [
                     SizedBox(height: constraints.maxHeight * 0.2),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.w),
-                      child: _buildNotificationTiles(context).routeAwareFadeOutUp(
-                        controller: controller,
-                        sequencePos: 2,
-                        sequenceTotal: 3,
+                    RepaintBoundary(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 22.w),
+                        child: _buildNotificationTiles(context).ecFadeOutUp(
+                          controller: controller,
+                          sequencePos: 2,
+                          sequenceTotal: 3,
+                        ),
                       ),
                     ),
                     32.verticalSpace,
@@ -102,7 +104,7 @@ class SelectNotificationTimePage extends StatelessWidget {
                                       .changeTime,
                                 )
                                 .autoFadeIn(sequencePos: 7)
-                                .routeAwareFadeOutUp(
+                                .ecFadeOutUp(
                                   controller: controller,
                                   sequencePos: 2,
                                   sequenceTotal: 3,
@@ -135,10 +137,7 @@ class SelectNotificationTimePage extends StatelessWidget {
             child: Center(
               child: SizedBox(
                 width: constraints.maxWidth * 0.88,
-                child: const DummyNotificationTile(
-                  isFront: false,
-                )
-                    .autoFadeIn(sequencePos: 7),
+                child: const DummyNotificationTile().autoFadeIn(sequencePos: 7),
               ),
             ),
           ),
