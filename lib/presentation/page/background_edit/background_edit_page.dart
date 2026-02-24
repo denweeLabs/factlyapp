@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:denwee/core/backgrounds/domain/entity/apply_background_body.dart';
 import 'package:denwee/core/backgrounds/domain/entity/available_background.dart';
+import 'package:denwee/presentation/shared/theme/app_colors.dart';
 import 'package:denwee/presentation/widget/backgrounds/background_edit_action_slider_widget.dart';
 import 'package:denwee/presentation/widget/backgrounds/background_edit_color_bubbles_list_widget.dart';
 import 'package:denwee/presentation/widget/backgrounds/background_edit_mode_selector_widget.dart';
@@ -87,6 +88,8 @@ class _BackgroundEditPageState extends State<BackgroundEditPage> {
       child: CommonPopScope(
         onWillPop: _goBack,
         child: CommonScaffold(
+          systemNavigationBarContrastEnforced: false,
+          backgroundColor: AppColors.primaryBackground[ThemeType.dark],
           systemOverlayType: ThemeType.dark,
           body: Stack(
             fit: StackFit.expand,
