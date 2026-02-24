@@ -8,4 +8,6 @@ abstract class AnalyticsRepo {
   Future<void> logSignUp();
   Future<void> logSubscriptionRestore();
   Future<void> logSubscriptionPurchase(PremiumPackage package);
+  Future<void> logBackgroundPurchase();
+  Future<void> logBackgroundApply();
 }

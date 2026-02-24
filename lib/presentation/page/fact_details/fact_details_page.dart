@@ -2,8 +2,10 @@
 
 import 'dart:io';
 
+import 'package:denwee/core/backgrounds/domain/entity/background_style.dart';
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
+import 'package:denwee/presentation/bloc/backgrounds/active_background_cubit.dart';
 import 'package:denwee/presentation/bloc/facts/fact_share_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:denwee/presentation/shared/router/root_router.dart';
@@ -86,10 +88,24 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final backgroundStyle = context
+        .read<ActiveBackgroundCubit>()
+        .state
+        .appliedBackground
+        .toNullable()
+        ?.background
+        .style;
+
+    final backgroundBrightness = backgroundStyle?.brightness ?? Brightness.dark;
+    final systemOverlayType = backgroundBrightness == Brightness.light
+        ? ThemeType.light
+        : ThemeType.dark;
+    
     return CommonPopScope(
       onWillPop: Navigator.of(context).pop,
       child: CommonScaffold(
-        systemOverlayType: ThemeType.dark,
+        systemOverlayType: systemOverlayType,
+        systemNavigationBarContrastEnforced: false,
         backgroundColor: AppColors.primaryBackground[ThemeType.dark],
         body: StoriesFactCapture(
           builder: (context, captureArea, isWatermark, factOverlayKey) {
@@ -109,9 +125,15 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
                   showWatermark: isWatermark,
                   isCapturing: captureArea != null,
                   overlayKey: factOverlayKey,
+                  brightness: backgroundBrightness,
+                  backgroundStyle: backgroundStyle,
                 ),
-                _ifVisible(_buildAppBar),
-                _ifVisible(_buildBottomSection),
+                _ifVisible(() => _buildAppBar(
+                  backgroundStyle: backgroundStyle,
+                )),
+                _ifVisible(() => _buildBottomSection(
+                  backgroundStyle: backgroundStyle,
+                )),
               ],
             );
           },
@@ -131,6 +153,8 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
     required bool showWatermark,
     required bool isCapturing,
     required GlobalKey overlayKey,
+    required Brightness brightness,
+    required BackgroundStyle? backgroundStyle,
   }) {
     return Positioned.fill(
       child: RepaintBoundary(
@@ -154,12 +178,16 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
                 StoriesScrollupButton.size +
                 42.h,
           ),
+          backgroundBrightness: brightness,
+          backgroundStyle: backgroundStyle,
         ),
       ),
     );
   }
 
-  Widget _buildBottomSection() {
+  Widget _buildBottomSection({
+    required BackgroundStyle? backgroundStyle,
+  }) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
@@ -190,6 +218,7 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
                 scrollToExplanationCallback: () =>
                     pageKey.currentState?.scrollPageTo(pageSafeHeight),
               ),
+              backgroundStyle: backgroundStyle,
             ),
           ),
         ),
@@ -197,18 +226,22 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar({
+    required BackgroundStyle? backgroundStyle,
+  }) {
+    final bubbleBorderColor = backgroundStyle?.textColor ?? Colors.white;
+    
     return Padding(
       padding: EdgeInsets.only(top: context.topPadding + 20.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           AppBackButton(
-            color: context.lightIconColor,
+            color: backgroundStyle?.textColor ?? context.lightIconColor,
             padding: EdgeInsets.symmetric(horizontal: 20.w),
           ),
           SurfaceContainer.ellipse(
-            borderColor: Colors.white12,
+            borderColor: bubbleBorderColor.withValues(alpha: 0.12),
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 18.w,
@@ -217,7 +250,7 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
               child: Text(
                 widget.fact.interest.tryTranslate(context) ?? '',
                 style: h6.copyWith(
-                  color: context.lightTextColor,
+                  color: backgroundStyle?.textColor ?? context.lightTextColor,
                   fontWeight: FontWeight.w700,
                 ),
                 textAlign: TextAlign.center,
@@ -228,6 +261,7 @@ class _FactDetailsPageState extends State<FactDetailsPage> {
           ),
           AppArchiveButton(
             factId: widget.fact.id,
+            iconColor: backgroundStyle?.textColor,
             iconPadding: EdgeInsets.symmetric(horizontal: 20.w),
           ),
         ],
