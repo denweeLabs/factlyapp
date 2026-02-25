@@ -100,6 +100,10 @@ class _WelcomePageState extends State<WelcomePage> with RestorationMixin {
                   style: bodyL.copyWith(
                     color: context.textColorTernary,
                     fontWeight: FontWeight.w700,
+                    letterSpacing: getIt<UserPreferencesCubit>().state.whenLanguage(
+                      en: () => -0.1,
+                      ru: () => 0.15,
+                    ),
                     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
                       en: () => AppConstants.style.textStyle.primaryFontFamily,
                       ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,

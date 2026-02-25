@@ -54,11 +54,8 @@ class BackgroundSelectionCardBody extends StatelessWidget {
               DecoratedBox(
                 decoration: ShapeDecoration(
                   shape: RoundedSuperellipseBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(28.r)),
-                    side: BorderSide(
-                      color: context.iconColorTernary,
-                      width: 1.5,
-                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(28)),
+                    side: BorderSide(color: context.iconColorTernary, width: 1.5),
                   ),
                 ),
               ),
