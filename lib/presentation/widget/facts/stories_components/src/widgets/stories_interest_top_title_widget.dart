@@ -12,6 +12,7 @@ import 'package:denwee/presentation/widget/shared/common/common_skeleton_item_wi
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:marquee_widget/marquee_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class StoriesInterestTopTitle extends StatelessWidget {
@@ -125,6 +126,7 @@ class _Title extends StatelessWidget {
                     color: suffixColor,
                     iconPath: AppConstants.assets.icons.locationLinear,
                     info: region!,
+                    marquee: true,
                   ),
                 ] else if (region == null && date != null) ...[
                   const Spacer(),
@@ -133,6 +135,7 @@ class _Title extends StatelessWidget {
                     color: suffixColor,
                     iconPath: AppConstants.assets.icons.clockLinear,
                     info: date!,
+                    marquee: false,
                   ),
                 ],
               ],
@@ -148,16 +151,35 @@ class _Title extends StatelessWidget {
     required String iconPath,
     required String info,
     required Color color,
+    required bool marquee,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Transform.translate(
-          offset: const Offset(0.0, 1.0),
-          child: CommonAppIcon(path: iconPath, color: color, size: 13),
-        ),
+        CommonAppIcon(path: iconPath, color: color, size: 13),
         6.horizontalSpace,
-        Text(info, style: h6.copyWith(color: color, height: 0.0)),
+        if (marquee)
+          LimitedBox(
+            maxWidth: 0.4.sw,
+            child: Marquee(
+              animationDuration: const Duration(milliseconds: 10000),
+              pauseDuration: CustomAnimationDurations.medium,
+              forwardAnimation: Curves.ease,
+              backwardAnimation: Curves.ease,
+              child: Text(
+                info,
+                style: h6.copyWith(color: color, height: 0.0),
+                maxLines: 1,
+              ),
+            ),
+          )
+        else
+          Text(
+            info,
+            style: h6.copyWith(color: color, height: 0.0),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
       ],
     );
   }

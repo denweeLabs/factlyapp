@@ -2,6 +2,7 @@ import 'package:denwee/core/notifications/domain/entity/push_notification.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
+import 'package:denwee/presentation/widget/shared/snackbars/core_global_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -18,12 +19,11 @@ class NotificationSnackbar extends StatelessWidget {
 
     return Material(
       type: MaterialType.transparency,
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.primaryContainer,
-          borderRadius: BorderRadius.all(Radius.circular(24.r)),
-          boxShadow: [AppConstants.style.colors.commonShadow],
-        ),
+      child: PhysicalShape(
+        clipper: CoreSnackbar.clipper,
+        color: context.primaryContainer,
+        shadowColor: Colors.black54,
+        elevation: 6.0,
         child: Center(
           child: Padding(
             padding: EdgeInsets.fromLTRB(14.w, 8.h, 18.w, 8.h),

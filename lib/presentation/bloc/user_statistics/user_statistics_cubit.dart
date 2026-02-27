@@ -39,19 +39,27 @@ class UserStatisticsCubit extends Cubit<UserStatisticsState> {
       failure: optionOf(statistics.$1),
       statistics: statistics.$2 ?? state.statistics,
     ));
-    await Future<void>.delayed(const Duration(milliseconds: 25));
-    emit(state.copyWith(isInitiallyLoaded: true));
+    _checkInitFlag();
   }
 
   Future<void> updateStarsBalance(int value) async {
     final newStats = state.statistics.copyWith(stars: value);
     emit(state.copyWith(statistics: newStats));
     await _statisticsRepo.storeStatisticsLocal(newStats);
+    _checkInitFlag();
   }
 
   Future<void> emitPreserveStatistics(UserStatistics data) async {
     emit(state.copyWith(statistics: data));
     await _statisticsRepo.storeStatisticsLocal(data);
+    _checkInitFlag();
+  }
+
+  void _checkInitFlag() {
+    if (state.isInitiallyLoaded) return;
+    Future.delayed(const Duration(milliseconds: 25), () {
+      emit(state.copyWith(isInitiallyLoaded: true));
+    });
   }
 
   void clearState() {

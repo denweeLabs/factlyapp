@@ -23,7 +23,7 @@ class CommonAppBar extends StatelessWidget {
   final Color? backgroundColor;
   final bool showBackButton;
 
-  static final _basicHeight = 72.h;
+  static final _basicHeight = 78.h;
 
   static double widgetHeight(BuildContext context) {
     return context.topPadding + _basicHeight;
@@ -52,7 +52,7 @@ class CommonAppBar extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: 20.w,
-                        vertical: 8.h,
+                        vertical: 12.h,
                       ),
                       child: Text(
                         title!,

@@ -68,7 +68,7 @@ class _ColorationOverviewSelectorState extends State<ColorationOverviewSelector>
           decoration: ShapeDecoration(
             gradient: AppConstants.style.colors.commonColoredGradient(context),
             shape: const RoundedSuperellipseBorder(
-              borderRadius: BorderRadius.all(Radius.circular(28)),
+              borderRadius: BorderRadius.all(Radius.circular(30)),
             ),
             shadows: [
               BoxShadow(

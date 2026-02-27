@@ -11,7 +11,7 @@ import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/shared/utils/dialogs_util.dart';
 import 'package:denwee/presentation/shared/utils/haptic_util.dart';
 import 'package:denwee/presentation/shared/utils/launcher_util.dart';
-import 'package:denwee/presentation/widget/shared/animations/animate_do/elastic_in.dart';
+import 'package:denwee/presentation/widget/backgrounds/backgrounds_overview_list_widget.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in.dart';
 import 'package:denwee/presentation/widget/shared/animations/animate_do/fade_in_up.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
@@ -42,7 +42,7 @@ class ProfilePage extends StatefulWidget {
 
   static const routeName = 'ProfilePage';
 
-  static const hPadding = 24;
+  static const hPadding = 26.0;
   static final shape = RoundedSuperellipseBorder(
     borderRadius: BorderRadius.all(AppConstants.style.radius.card),
   );
@@ -162,9 +162,9 @@ class _ProfilePageState extends State<ProfilePage> {
     required bool hasChanges,
   }) {
     final listPadding = EdgeInsets.fromLTRB(
-      ProfilePage.hPadding.w,
+      ProfilePage.hPadding,
       24.h,
-      ProfilePage.hPadding.w,
+      ProfilePage.hPadding,
       bottomPadding,
     );
 
@@ -175,12 +175,14 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: listPadding,
         children: [
           _buildPersonalDetails(context).autoFadeInUp(sequencePos: 1),
+          30.verticalSpace,
+          _buildBackgrounds(context).autoFadeInUp(sequencePos: 2),
           34.verticalSpace,
-          _buildMoreSection(context).autoFadeInUp(sequencePos: 2),
-          58.verticalSpace,
-          _buildLogoutButton(context, hasChanges).autoElasticIn(sequencePos: 4),
+          _buildMoreSection(context).autoFadeInUp(sequencePos: 3),
+          62.verticalSpace,
+          _buildLogoutButton(context, hasChanges).autoFadeInUp(sequencePos: 4),
           24.verticalSpace,
-          _buildDeleteAccountButton(context).autoFadeIn(sequencePos: 4),
+          _buildDeleteAccountButton(context).autoFadeIn(sequencePos: 6),
         ],
       ),
     );
@@ -206,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildLogoutButton(BuildContext context, bool hasChanges) {
     return FractionallySizedBox(
-      widthFactor: 0.58,
+      widthFactor: 0.56,
       child: AppSolidButton(
         text: context.tr(LocaleKeys.button_logout),
         onTap: getIt<AuthCubit>().setUnauthenticated,
@@ -218,11 +220,25 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Widget _buildBackgrounds(BuildContext context) {
+    return UndercoverCardTitle(
+      title: context.tr(LocaleKeys.account_section_background_title),
+      child: const BackgroundsOverviewList(
+        size: Size(128, 170),
+        clipBorderRadius: BorderRadius.all(Radius.circular(30)),
+        padding: EdgeInsets.zero,
+        onlyUnlockedBackgrounds: true,
+        maxVisibleCount: 500,
+        viewAllCardVisible: true,
+      ),
+    );
+  }
+
   Widget _buildMoreSection(BuildContext context) {
     return UndercoverCardTitle(
       title: context.tr(LocaleKeys.account_profile_more_title),
       child: SizedBox.fromSize(
-        size: Size.fromHeight(148.h),
+        size: Size.fromHeight(154.h),
         child: Row(
           children: [
             Expanded(

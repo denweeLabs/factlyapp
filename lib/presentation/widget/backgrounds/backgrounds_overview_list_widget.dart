@@ -6,21 +6,47 @@ import 'package:denwee/presentation/bloc/backgrounds/available_backgrounds_cubit
 import 'package:denwee/presentation/bloc/profile/profile_cubit.dart';
 import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
+import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
 import 'package:denwee/presentation/shared/router/root_router.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/presentation/page/available_backgrounds/util/background_selection_util.dart';
+import 'package:denwee/presentation/shared/theme/app_theme.dart';
+import 'package:denwee/presentation/shared/theme/text_styles.dart';
+import 'package:denwee/presentation/widget/backgrounds/background_selection_card_body_widget.dart';
 import 'package:denwee/presentation/widget/backgrounds/background_selection_card_widget.dart';
 import 'package:denwee/presentation/widget/backgrounds/default_background_selection_card_widget.dart';
+import 'package:denwee/presentation/widget/shared/buttons/icon_widget.dart';
+import 'package:denwee/presentation/widget/shared/misc/surface_container_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:utils/utils.dart';
 
 class BackgroundsOverviewList extends StatefulWidget {
-  const BackgroundsOverviewList({super.key});
+  const BackgroundsOverviewList({
+    super.key,
+    this.padding,
+    this.clipBorderRadius = const BorderRadius.horizontal(
+      right: Radius.circular(30),
+    ),
+    this.size = defaultSize,
+    this.onlyUnlockedBackgrounds = false,
+    this.maxVisibleCount = 15,
+    this.viewAllCardVisible = false,
+  });
 
-  static final height = 160.w;
-  static const maxVisibleCount = 15;
+  final EdgeInsets? padding;
+  final BorderRadius clipBorderRadius;
+  final bool onlyUnlockedBackgrounds;
+  final int maxVisibleCount;
+  final bool viewAllCardVisible;
+  final Size size;
+
+  static const defaultSize = Size(
+    BackgroundSelectionCardBody.defaultWidth,
+    160,
+  );
 
   @override
   State<BackgroundsOverviewList> createState() =>
@@ -95,11 +121,9 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
         listener: (_, __) {},
         listenWhen: _backgroundsListener,
         child: SizedBox.fromSize(
-          size: Size.fromHeight(BackgroundsOverviewList.height),
+          size: Size.fromHeight(widget.size.height),
           child: ClipRSuperellipse(
-            borderRadius: BorderRadius.horizontal(
-              right: AppConstants.style.radius.cardMedium,
-            ),
+            borderRadius: widget.clipBorderRadius,
             child: _buildScrollableList(),
           ),
         ),
@@ -108,12 +132,18 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
   }
 
   Widget _buildScrollableList() {
+    final length = widget.viewAllCardVisible ? items.length + 1 : items.length;
+    
     return BackgroundCardSelectionProviders(
       builder: (context, vm) => ListView.builder(
-        itemCount: items.length,
-        padding: EdgeInsets.only(left: 18.w),
+        itemCount: length,
+        padding: widget.padding ?? EdgeInsets.only(left: 18.w),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
+          if (widget.viewAllCardVisible && index == length - 1) {
+            return _buildViewAllCard();
+          }
+          
           final item = items[index];
 
           return RepaintBoundary(
@@ -135,6 +165,7 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
       defaultBackground: () => DefaultBackgroundSelectionCard(
         isSelected: isSelected,
         isApplying: isApplying,
+        width: widget.size.width,
       ),
       availableBackground: (background) => BackgroundSelectionCard(
         background: background,
@@ -142,6 +173,42 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
         isApplying: isApplying,
         isSubscribed: vm.hasPremiumSubscription,
         isUnlocked: vm.unlockedIds.contains(background.id),
+        width: widget.size.width,
+      ),
+    );
+  }
+
+  Widget _buildViewAllCard() {
+    return SizedBox.fromSize(
+      size: Size.fromWidth(widget.size.width),
+      child: Padding(
+        padding: BackgroundSelectionCardBody.padding,
+        child: SurfaceContainer.ellipse(
+          onTap: () => context.restorablePushNamedArgs(
+            Routes.availableBackgrounds,
+            rootNavigator: true,
+          ),
+          color: context.primaryContainer,
+          hoverColor: context.primaryContainer,
+          borderColor: context.theme.dividerColor,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CommonAppIcon(
+                  path: AppConstants.assets.icons.arrowRightAndroid,
+                  color: context.iconColorSecondary,
+                  size: 24,
+                ),
+                4.verticalSpace,
+                Text(
+                  context.tr(LocaleKeys.account_section_background_more),
+                  style: h6.copyWith(color: context.textColorSecondary),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -204,13 +271,15 @@ class _BackgroundsOverviewListState extends State<BackgroundsOverviewList> {
     }
 
     // 5. Rest backgrounds (everything else)
-    for (final bg in backgrounds) {
-      if (addedIds.contains(bg.id)) continue;
+    if (!widget.onlyUnlockedBackgrounds) {
+      for (final bg in backgrounds) {
+        if (addedIds.contains(bg.id)) continue;
 
-      ordered.add(BackgroundSelectionItem.availableBackground(bg));
+        ordered.add(BackgroundSelectionItem.availableBackground(bg));
+      }
     }
 
     // return ordered backgrounds
-    return ordered.take(BackgroundsOverviewList.maxVisibleCount).toList();
+    return ordered.take(widget.maxVisibleCount).toList();
   }
 }

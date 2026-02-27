@@ -37,10 +37,7 @@ class InterestPickTile extends StatelessWidget {
         borderColor: borderColor,
         borderRadius: const BorderRadius.all(Radius.circular(100)),
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 22.h,
-            horizontal: 18.w,
-          ).copyWith(left: 24.w),
+          padding: EdgeInsets.fromLTRB(24.w, 22.h, 18.w, 22.h),
           child: Row(
             children: [
               Expanded(

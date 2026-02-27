@@ -11,42 +11,51 @@ class DefaultBackgroundSelectionCard extends StatelessWidget {
     super.key,
     required this.isSelected,
     required this.isApplying,
+    this.width = BackgroundSelectionCardBody.defaultWidth,
   });
 
   static const imageCacheWidth = 100;
 
   final bool isSelected;
   final bool isApplying;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
     return BackgroundSelectionCardBody(
+      width: width,
       onTap: _onCardTap,
       onLongTap: () {},
       isApplying: isApplying,
       lettersStyle: factShortContent.copyWith(color: context.lightTextColor),
       isSelected: isSelected,
-      child: GridView(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          mainAxisSpacing: 1,
-          crossAxisSpacing: 1,
-        ),
-        padding: EdgeInsets.zero,
-        physics: const NeverScrollableScrollPhysics(),
+      child: Column(
         children: [
-          _buildImage(AppConstants.assets.images.interest(11)),
-          _buildImage(AppConstants.assets.images.interest(3)),
-          _buildImage(AppConstants.assets.images.interest(4)),
-          _buildImage(AppConstants.assets.images.interest(1)),
+          Expanded(
+            child: Row(
+              children: [
+                _buildImage(AppConstants.assets.images.interest(11)),
+                _buildImage(AppConstants.assets.images.interest(3)),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                _buildImage(AppConstants.assets.images.interest(6)),
+                _buildImage(AppConstants.assets.images.interest(1)),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildImage(String path) {
-    return Image.asset(path, cacheWidth: imageCacheWidth, fit: BoxFit.cover);
+    return Expanded(
+      child: Image.asset(path, cacheWidth: imageCacheWidth, fit: BoxFit.cover),
+    );
   }
 
   void _onCardTap() {

@@ -19,7 +19,7 @@ class WidgetHoverAnimationProvider extends StatefulWidget {
 
   bool get isTappable => onTap != null;
 
-  static const duration = Duration(milliseconds: 200);
+  static const duration = Duration(milliseconds: 160);
 
   @override
   State<WidgetHoverAnimationProvider> createState() =>

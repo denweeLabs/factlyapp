@@ -107,6 +107,7 @@ class _CoreFadeSlideState extends State<CoreFadeSlide>
       oldAnimate: oldWidget.animate,
       animate: widget.animate,
       forceComplete: widget.forceComplete,
+      delay: widget.delay,
     );
   }
 
