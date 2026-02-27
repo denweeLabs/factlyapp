@@ -7,6 +7,7 @@ import 'package:denwee/presentation/widget/shared/animations/animated_icons/swip
 import 'package:denwee/presentation/widget/shared/animations/constants/common_animation_values.dart';
 import 'package:denwee/presentation/widget/shared/buttons/app_solid_button_widget.dart';
 import 'package:denwee/presentation/shared/localization/locale_keys.g.dart';
+import 'package:denwee/presentation/widget/shared/common/common_swipe_detector_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,28 +31,33 @@ class StoriesViewShowcase extends StatelessWidget {
   Widget build(BuildContext context) {
     return Offstage(
       offstage: !isEnabled,
-      child: AnimatedOpacity(
-        opacity: isDismissed ? 0.0 : 1.0,
-        duration: CustomAnimationDurations.ultraLow,
-        onEnd: onFinished,
-        child: Stack(
-          children: [
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildSwipeAnimation(context),
-                  _buildTitleAndSubtitle(context),
-                ],
+      child: CommonSwipeDetector(
+        onLeft: onDismiss,
+        onRight: onDismiss,
+        child: AnimatedOpacity(
+          opacity: isDismissed ? 0.0 : 1.0,
+          duration: CustomAnimationDurations.ultraLow,
+          onEnd: onFinished,
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildSwipeAnimation(context),
+                    _buildTitleAndSubtitle(context),
+                    SizedBox(height: 0.08.sh),
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              left: 0.0,
-              right: 0.0,
-              bottom: context.bottomPadding + 48.h,
-              child: _buildDismissButton(context),
-            ),
-          ],
+              Positioned(
+                left: 0.0,
+                right: 0.0,
+                bottom: context.bottomPadding + 42.h,
+                child: _buildDismissButton(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -60,55 +66,54 @@ class StoriesViewShowcase extends StatelessWidget {
   Widget _buildSwipeAnimation(BuildContext context) {
     return RotatedBox(
       quarterTurns: -1,
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 1),
-        child: isEnabled
-            ? SwipeGestureAnimation(delay: const Duration(milliseconds: 1200))
-            : const SizedBox.shrink(),
-      ),
+      child: isEnabled
+          ? SwipeGestureAnimation(delay: const Duration(milliseconds: 700))
+          : const SizedBox.shrink(),
     );
   }
 
   Widget _buildTitleAndSubtitle(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 42.w),
-          child: Text(
-            context.tr(LocaleKeys.showcase_title),
-            style: h5.copyWith(
-              color: context.lightTextColor,
-              fontWeight: FontWeight.w700,
-            ),
-            textAlign: TextAlign.center,
-          ).autoFadeInUp(sequencePos: 4, animate: isEnabled),
+    return SizedBox(
+      width: 0.67.sw,
+      child: Text(
+        context.tr(LocaleKeys.showcase_title),
+        style: h3.copyWith(
+          color: context.lightTextColor,
+          fontWeight: FontWeight.w700,
         ),
-        2.verticalSpace,
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Text(
-            context.tr(LocaleKeys.showcase_subtitle),
-            style: h5.copyWith(color: context.lightTextColorSecondary),
-            textAlign: TextAlign.center,
-          ).autoFadeIn(sequencePos: 6, animate: isEnabled),
-        ),
-      ],
+        textAlign: TextAlign.center,
+      ).autoFadeInUp(sequencePos: 3, animate: isEnabled),
     );
   }
 
   Widget _buildDismissButton(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.48,
-      child: AppSolidButton(
-        onTap: onDismiss,
-        shadowColor: Colors.black,
-        text: context.tr(LocaleKeys.showcase_button),
-        backgroundColors: [
-          context.lightPrimaryContainer,
-          context.lightPrimaryContainer,
-        ],
-        textColor: context.theme.colorScheme.primary,
-      ).autoElasticIn(sequencePos: 6, animate: isEnabled),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: 0.58.sw,
+          child: AppSolidButton(
+            buttonHeight: 66.h,
+            onTap: onDismiss,
+            shadowColor: Colors.black,
+            text: context.tr(LocaleKeys.showcase_button),
+            backgroundColors: [
+              context.lightPrimaryContainer,
+              context.lightPrimaryContainer,
+            ],
+            textColor: context.theme.colorScheme.primary,
+          ).autoElasticIn(sequencePos: 6, animate: isEnabled),
+        ),
+        28.verticalSpace,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Text(
+            context.tr(LocaleKeys.showcase_subtitle),
+            style: h6.copyWith(color: context.lightTextColorTernary),
+            textAlign: TextAlign.center,
+          ).autoFadeIn(sequencePos: 7, animate: isEnabled),
+        ),
+      ],
     );
   }
 }

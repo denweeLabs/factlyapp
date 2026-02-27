@@ -22,7 +22,7 @@ class ProfileMoreCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SurfaceContainer.ellipse(
       onTap: onTap,
-      elevation: 6.0,
+      elevation: 8.0,
       color: context.primaryContainer,
       hoverColor: context.primaryContainer,
       borderColor: context.theme.dividerColor,

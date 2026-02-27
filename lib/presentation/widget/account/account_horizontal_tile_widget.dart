@@ -164,7 +164,7 @@ class AccountHorizontalTile extends StatelessWidget {
     return Row(
       children: [
         SurfaceContainer.ellipse(
-          color: Colors.grey.shade600.withValues(alpha: 0.1),
+          color: context.primaryContainer,
           borderRadius: const BorderRadius.all(Radius.circular(14)),
           borderColor: context.isLightTheme ? Colors.black12 : AppColors.white08,
           size: Size.square(defaultIconSize + 20),

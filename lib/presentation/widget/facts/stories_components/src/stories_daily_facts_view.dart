@@ -469,11 +469,13 @@ class _StoriesDailyFactsViewState extends State<StoriesDailyFactsView>
   }
 
   Widget _buildShowcase() {
-    return StoriesViewShowcase(
-      isEnabled: isShowcase,
-      isDismissed: isShowcaseDismissed,
-      onDismiss: dismissShowcase,
-      onFinished: () => setState(() => isShowcase = false),
+    return Positioned.fill(
+      child: StoriesViewShowcase(
+        isEnabled: isShowcase,
+        isDismissed: isShowcaseDismissed,
+        onDismiss: dismissShowcase,
+        onFinished: () => setState(() => isShowcase = false),
+      ),
     );
   }
 

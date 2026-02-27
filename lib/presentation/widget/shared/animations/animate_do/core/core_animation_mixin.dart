@@ -62,13 +62,23 @@ mixin CoreAnimationMixin<T extends StatefulWidget>
     required bool oldAnimate,
     required bool animate,
     required bool forceComplete,
+    required Duration? delay,
   }) {
     if (_isExternal) return;
     
     if (oldAnimate == animate) return;
 
+    final hasDelay = delay != null && delay > Duration.zero;
+
     if (animate) {
-      controller.forward();
+      if (hasDelay) {
+        Future.delayed(delay, () {
+          if (!mounted || controller.isAnimating) return;
+          controller.forward();
+        });
+      } else {
+        controller.forward();
+      }
       return;
     }
 

@@ -255,7 +255,7 @@ class _BackgroundEditPageState extends State<BackgroundEditPage> {
             child: BlocSelector<BackgroundEditCubit, BackgroundEditState, bool>(
               selector: (state) => state.hasChanges,
               builder: (context, hasChanges) => SizedBox(
-                width: 0.6.sw,
+                width: 0.55.sw,
                 child: BackgroundEditUnlockButton(
                   hasChanges: hasChanges,
                   background: widget.background,

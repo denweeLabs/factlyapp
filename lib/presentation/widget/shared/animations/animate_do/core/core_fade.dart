@@ -87,6 +87,7 @@ class _CoreFadeState extends State<CoreFade>
       oldAnimate: oldWidget.animate,
       animate: widget.animate,
       forceComplete: widget.forceComplete,
+      delay: widget.delay,
     );
   }
 

@@ -10,7 +10,7 @@ ThemeData darkTheme(ThemeColoration coloration) {
     ),
     colorScheme: const ColorScheme.dark().copyWith(
       background: AppColors.primaryBackground[ThemeType.dark],
-      onBackground: AppColors.secondaryBackground[ThemeType.dark],
+      // onBackground: AppColors.secondaryBackground[ThemeType.dark],
       primary: coloration.primary,
       secondary: coloration.secondary,
       error: AppColors.lightRed,
