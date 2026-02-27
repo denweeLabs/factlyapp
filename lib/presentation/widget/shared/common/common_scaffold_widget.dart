@@ -39,7 +39,9 @@ extension _CommonBackgroundStyleX on CommonBackgroundStyle {
   Color decorationIconColor(BuildContext context) {
     switch (this) {
       case CommonBackgroundStyle.themeBased:
-        return context.isLightTheme ? AppColors.black02 : AppColors.white01;
+        return context.isLightTheme
+            ? context.darkPrimaryContainer.withValues(alpha: 0.03)
+            : context.darkPrimaryContainer.withValues(alpha: 0.3);
       case CommonBackgroundStyle.colored:
       case CommonBackgroundStyle.coloredReversed:
         return AppColors.icon[ThemeType.light]!.withValues(alpha: 0.04);
@@ -178,7 +180,7 @@ class CommonScaffold extends StatelessWidget {
             child: CommonAppIcon(
               path: iconPath!,
               color: decorationIconColor,
-              size: 282.r,
+              size: 296.r,
             ).autoFadeInUp(delay: iconAppearDelay),
           ),
         ),

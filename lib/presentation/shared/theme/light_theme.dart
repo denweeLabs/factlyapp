@@ -11,7 +11,7 @@ ThemeData lightTheme(ThemeColoration coloration) {
     ),
     colorScheme: const ColorScheme.light().copyWith(
       background: AppColors.primaryBackground[ThemeType.light],
-      onBackground: AppColors.secondaryBackground[ThemeType.light],
+      // onBackground: AppColors.secondaryBackground[ThemeType.light],
       primary: coloration.primary,
       secondary: coloration.secondary,
       error: AppColors.lightRed,

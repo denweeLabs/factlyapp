@@ -18,6 +18,13 @@ class StarsChangeOverlayAnimation extends StatefulWidget {
 }
 
 class _StarsChangeOverlayAnimationState extends State<StarsChangeOverlayAnimation> {
+  static const _clipper = ShapeBorderClipper(
+    shape: RoundedSuperellipseBorder(
+      borderRadius: BorderRadius.horizontal(right: Radius.circular(14)),
+      side: BorderSide(color: Colors.white24),
+    ),
+  );
+  
   late int _lastStarsCount;
   late int _changedStarsCount;
   late bool _isAnimate;
@@ -112,40 +119,38 @@ class _StarsChangeOverlayAnimationState extends State<StarsChangeOverlayAnimatio
         offset: Offset(overlayTranslate.from(value), 0.0),
         child: Opacity(opacity: overlayFade.from(value), child: child!),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.darkPrimaryContainer,
-          borderRadius: const BorderRadius.horizontal(
-            right: Radius.circular(16),
+      child: PhysicalShape(
+        clipper: _clipper,
+        color: context.darkPrimaryContainer,
+        shadowColor: Colors.black,
+        elevation: 6,
+        child: DecoratedBox(
+          decoration: ShapeDecoration(shape: _clipper.shape),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(10.w, 10.h, 14.w, 10.h),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomAnimationBuilder<Movie>(
+                  tween: starMovieTween,
+                  duration: starMovieTween.duration,
+                  control: _isAnimate ? Control.playFromStart : Control.stop,
+                  builder: (context, value, child) => Transform.rotate(
+                    angle: starRotation.from(value),
+                    child: child!,
+                  ),
+                  child: const SmilingStarAnimatedIcon(animate: true, size: 16),
+                ),
+                4.horizontalSpace,
+                Text(
+                  _isEarned ? '+$_changedStarsCount' : '-$_changedStarsCount',
+                  style: bodyS.copyWith(
+                    color: _isEarned ? AppColors.lightGreen : AppColors.lightRed,
+                  ),
+                ),
+              ],
+            ),
           ),
-          boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 10)],
-          border: Border.all(color: Colors.white24),
-        ),
-        padding: EdgeInsets.symmetric(
-          vertical: 10.h,
-          horizontal: 10.w,
-        ).copyWith(right: 14.w),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomAnimationBuilder<Movie>(
-              tween: starMovieTween,
-              duration: starMovieTween.duration,
-              control: _isAnimate ? Control.playFromStart : Control.stop,
-              builder: (context, value, child) => Transform.rotate(
-                angle: starRotation.from(value),
-                child: child!,
-              ),
-              child: const SmilingStarAnimatedIcon(animate: true, size: 16),
-            ),
-            4.horizontalSpace,
-            Text(
-              _isEarned ? '+$_changedStarsCount' : '-$_changedStarsCount',
-              style: bodyS.copyWith(
-                color: _isEarned ? AppColors.lightGreen : AppColors.lightRed,
-              ),
-            ),
-          ],
         ),
       ),
     );

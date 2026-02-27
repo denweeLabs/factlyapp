@@ -14,6 +14,7 @@ class BackgroundSelectionCardBody extends StatelessWidget {
     required this.lettersStyle,
     required this.isApplying,
     required this.child,
+    this.width = defaultWidth,
   });
 
   final bool isSelected;
@@ -21,13 +22,15 @@ class BackgroundSelectionCardBody extends StatelessWidget {
   final VoidCallback onLongTap;
   final TextStyle lettersStyle;
   final bool isApplying;
+  final double width;
   final Widget child;
 
-  static final width = 124.w;
+  static const defaultWidth = 124.0;
+  static const padding = EdgeInsets.all(5.0);
+  static const borderRadius = BorderRadius.all(Radius.circular(24));
+  static const selectedBorderRadius = BorderRadius.all(Radius.circular(28));
   static const clipper = ShapeBorderClipper(
-    shape: RoundedSuperellipseBorder(
-      borderRadius: BorderRadius.all(Radius.circular(24)),
-    ),
+    shape: RoundedSuperellipseBorder(borderRadius: borderRadius),
   );
 
   @override
@@ -36,12 +39,12 @@ class BackgroundSelectionCardBody extends StatelessWidget {
       onTap: onTap,
       onLongTap: onLongTap,
       child: SizedBox.fromSize(
-        size: Size.fromWidth(width),
+        size: Size.fromWidth(width.w),
         child: Stack(
           fit: StackFit.expand,
           children: [
             Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: padding,
               child: PhysicalShape(
                 elevation: 0.0,
                 clipper: clipper,
@@ -54,8 +57,11 @@ class BackgroundSelectionCardBody extends StatelessWidget {
               DecoratedBox(
                 decoration: ShapeDecoration(
                   shape: RoundedSuperellipseBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(28)),
-                    side: BorderSide(color: context.iconColorTernary, width: 1.5),
+                    borderRadius: selectedBorderRadius,
+                    side: BorderSide(
+                      color: context.iconColorTernary,
+                      width: 1.5,
+                    ),
                   ),
                 ),
               ),

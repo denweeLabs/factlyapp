@@ -22,6 +22,7 @@ class BackgroundSelectionCard extends StatelessWidget {
     required this.isSubscribed,
     required this.isUnlocked,
     required this.isApplying,
+    this.width = BackgroundSelectionCardBody.defaultWidth,
     this.forceOpenEdit = false,
   });
 
@@ -31,12 +32,14 @@ class BackgroundSelectionCard extends StatelessWidget {
   final bool isUnlocked;
   final bool isApplying;
   final AvailableBackground background;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
     final hideBadge = background.isFree || isUnlocked || isSubscribed;
 
     return BackgroundSelectionCardBody(
+      width: width,
       isApplying: isApplying,
       lettersStyle: background.style.asTextStyle,
       onTap: () => _onTap(

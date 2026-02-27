@@ -69,8 +69,8 @@ class _SelectNotificationTimeDialogState
     return Padding(
       padding: EdgeInsets.only(top: AppSolidButton.defaultHeight / 2),
       child: FractionallySizedBox(
-        widthFactor: 0.74,
-        heightFactor: 0.38,
+        widthFactor: 0.70,
+        heightFactor: 0.42,
         child: Stack(
           clipBehavior: Clip.none,
           children: [

@@ -10,11 +10,7 @@ class AppColors {
   // ---------------------------
   static const Map<ThemeType, Color> primaryBackground = {
     ThemeType.light: Color(0xFFF6F5FA),
-    ThemeType.dark: Color(0xFF070C13),
-  };
-  static const Map<ThemeType, Color> secondaryBackground = {
-    ThemeType.light: Color(0xFFE8E8F0),
-    ThemeType.dark: Color(0xFF111319),
+    ThemeType.dark: Color(0xFF13131E),
   };
 
 
@@ -57,7 +53,7 @@ class AppColors {
   // ---------------------------
   static const Map<ThemeType, Color> primaryContainer = {
     ThemeType.light: Color(0xFFF3F4F9),
-    ThemeType.dark: Color(0xFF161A25),
+    ThemeType.dark: Color(0xFF1C1D31),
   };
   static const Map<ThemeType, Color> secondaryContainer = {
     ThemeType.light: Color(0xFFE9E9E9),

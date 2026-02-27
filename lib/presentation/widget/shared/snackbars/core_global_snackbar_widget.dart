@@ -41,14 +41,18 @@ class CoreSnackbar extends StatelessWidget {
     this.description,
     this.iconPath,
     this.backgroundColor,
-    // this.secondaryBackgroundColor,
   });
 
   final String? title;
   final String? description;
   final String? iconPath;
   final Color? backgroundColor;
-  // final Color? secondaryBackgroundColor;
+
+  static const clipper = ShapeBorderClipper(
+    shape: RoundedSuperellipseBorder(
+      borderRadius: BorderRadius.all(Radius.circular(24)),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -56,18 +60,11 @@ class CoreSnackbar extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(24.r),
-          boxShadow: [
-            BoxShadow(
-              color: context.theme.shadowColor,
-              offset: const Offset(0.0, 4.0),
-              blurRadius: 8.0,
-            ),
-          ],
-        ),
+      child: PhysicalShape(
+        color: color,
+        clipper: clipper,
+        shadowColor: Colors.black54,
+        elevation: 6.0,
         child: Stack(
           children: [
             if (iconPath != null)
