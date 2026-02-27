@@ -14,6 +14,8 @@ enum AnalyticsEvent {
   signUp,
   subscriptionPurchase,
   subscriptionRestore,
+  backgroundPurchase,
+  backgroundApply,
 }
 
 extension AnalyticsEventX on AnalyticsEvent {
@@ -33,6 +35,10 @@ extension AnalyticsEventX on AnalyticsEvent {
         return 'purchase';
       case AnalyticsEvent.subscriptionRestore:
         return 'subscription_restore';
+      case AnalyticsEvent.backgroundPurchase:
+        return 'background_purchase';
+      case AnalyticsEvent.backgroundApply:
+        return 'background_apply';
     }
   }
 }
@@ -71,6 +77,16 @@ class AnalyticsRepoImpl implements AnalyticsRepo {
   @override
   Future<void> logSubscriptionRestore() {
     return _logEvent(AnalyticsEvent.subscriptionRestore.eventName);
+  }
+
+  @override
+  Future<void> logBackgroundPurchase() {
+    return _logEvent(AnalyticsEvent.backgroundPurchase.eventName);
+  }
+
+  @override
+  Future<void> logBackgroundApply() {
+    return _logEvent(AnalyticsEvent.backgroundApply.eventName);
   }
 
   @override

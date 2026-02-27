@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/backgrounds/domain/entity/apply_background_body.dart';
 import 'package:denwee/core/backgrounds/domain/entity/apply_background_result.dart';
 import 'package:denwee/core/backgrounds/domain/entity/resolved_background_asset.dart';
@@ -18,12 +19,14 @@ class ApplyCustomBackgroundUseCase {
   final UserPreferencesCubit _preferencesCubit;
   final UserStatisticsCubit _statisticsCubit;
   final ProfileCubit _profileCubit;
+  final AnalyticsRepo _analyticsRepo;
 
   const ApplyCustomBackgroundUseCase(
     this._backgroundsRepo,
     this._preferencesCubit,
     this._statisticsCubit,
     this._profileCubit,
+    this._analyticsRepo,
   );
 
   Future<Either<BackgroundFailure, (ResolvedBackgroundAsset, ApplyBackgroundResult)>> execute(ApplyBackgroundBody data) async {
@@ -35,6 +38,10 @@ class ApplyCustomBackgroundUseCase {
       unawaited(_profileCubit.updateUnlockedBackgroundIds(submittedData.$2.unlockedBackgroundIds));
       unawaited(_preferencesCubit.updateSelectedBackgroundId(submittedData.$2.activeBackground.id));
       unawaited(_statisticsCubit.updateStarsBalance(submittedData.$2.starsBalance));
+
+      submittedData.$2.isPurchased
+          ? unawaited(_analyticsRepo.logBackgroundPurchase())
+          : unawaited(_analyticsRepo.logBackgroundApply());
     }
 
     return failureOrSuccess;

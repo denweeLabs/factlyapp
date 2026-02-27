@@ -137,18 +137,11 @@ class _MyArchivePageState extends State<MyArchivePage> {
     return SliverStickyHeader.builder(
       builder: (context, state) {
         final backgroundColor = _getHeaderBackgroundColor(state.isPinned);
-        final shadowColor = state.isPinned ? Colors.black12 : Colors.transparent;
-        final shadow = BoxShadow(
-          color: shadowColor,
-          offset: const Offset(0.0, 4.0),
-          blurRadius: 4.0,
-        );
-
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            boxShadow: [shadow],
-          ),
+        
+        return PhysicalModel(
+          color: backgroundColor,
+          elevation: state.isPinned ? 4.0 : 0.0,
+          shadowColor: Colors.black26,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 16.h),
             child: Center(

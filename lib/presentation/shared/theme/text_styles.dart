@@ -133,7 +133,10 @@ TextStyle get textButton {
     height: 0.0,
     fontSize: 14.sp,
     fontWeight: FontWeight.w900,
-    letterSpacing: 0.9,
+    letterSpacing: getIt<UserPreferencesCubit>().state.whenLanguage(
+      en: () => 0.9,
+      ru: () => 0.5,
+    ),
     fontFamily: getIt<UserPreferencesCubit>().state.whenLanguage(
       en: () => AppConstants.style.textStyle.primaryFontFamily,
       ru: () => AppConstants.style.textStyle.secondaryFontFamiliy,
