@@ -1,5 +1,4 @@
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
-import 'package:denwee/core/network/domain/entity/network_link.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/router/root_router.dart';
@@ -13,7 +12,7 @@ import 'package:flutter/material.dart';
 class StoriesFactActionButtons extends StatelessWidget {
   const StoriesFactActionButtons({
     super.key,
-    required this.website,
+    required this.source,
     required this.factId,
     required this.factContent,
     this.iconColor,
@@ -21,7 +20,7 @@ class StoriesFactActionButtons extends StatelessWidget {
     this.onShareFinished,
   });
 
-  final NetworkLink? website;
+  final String? source;
   final UniqueId factId;
   final String factContent;
   final Color? iconColor;
@@ -39,13 +38,10 @@ class StoriesFactActionButtons extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (website != null)
+        if (source != null)
           _buildButton(
-            iconPath: AppConstants.assets.icons.globeLinear,
-            onTap: () => LauncherUtil.launchUrl(
-              website!.value,
-              linkType: LinkLaunchType.domain,
-            ),
+            iconPath: AppConstants.assets.icons.searchLinear,
+            onTap: () => LauncherUtil.launchFactSource(source!),
             context: context,
           ),
         _buildButton(
@@ -83,7 +79,7 @@ class StoriesFactActionButtons extends StatelessWidget {
     await FactShareBottomSheet.show(
       context,
       factId: factId,
-      website: website,
+      source: source,
       factContent: factContent,
     );
     onShareFinished?.call();

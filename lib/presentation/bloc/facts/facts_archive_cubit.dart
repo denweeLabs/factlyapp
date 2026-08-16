@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:denwee/core/ads/domain/use_case/show_add_to_archive_ad_use_case.dart';
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/facts/data/source/remote/facts_api.dart';
 import 'package:denwee/core/facts/domain/entity/archived_fact.dart';
 import 'package:denwee/core/facts/domain/entity/facts_failure.dart';
@@ -23,11 +24,13 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
   final FactsArchiveRepo _archiveRepo;
   final ShowAddToArchiveAdUseCase _showAddToArchiveAdUseCase;
   final HandleFactsArchiveUseCase _handleFactsArchiveUseCase;
+  final AnalyticsRepo _analyticsRepo;
 
   FactsArchiveCubit(
     this._archiveRepo,
     this._showAddToArchiveAdUseCase,
     this._handleFactsArchiveUseCase,
+    this._analyticsRepo,
   ) : super(FactsArchiveState.initial(_archiveRepo.getArchiveIdsLocal()));
 
   var _itemsTotalCount = 0;
@@ -131,6 +134,7 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
         ));
       },
       (success) {
+        unawaited(_analyticsRepo.logFactArchived());
         unawaited(_showAddToArchiveAdUseCase.executeIfEligible());
       },
     );
@@ -149,7 +153,9 @@ class FactsArchiveCubit extends Cubit<FactsArchiveState> {
     failureOrSuccess.fold((failure) {
       final revertedArchive = Set<UniqueId>.from(state.archiveIds)..add(id);
       emit(state.copyWith(archiveIds: revertedArchive, failure: Some(failure)));
-    }, (_) {});
+    }, (_) {
+      unawaited(_analyticsRepo.logFactUnarchived());
+    });
   }
 
   Future<void> emitPreserveArchivedIds(List<UniqueId> data) async {

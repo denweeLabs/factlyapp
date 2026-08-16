@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-enum LinkLaunchType { url, domain }
-
 class LauncherUtil {
+  static final _urlRegExp = RegExp(r'^https?://');
+
   static Future<bool> processGenericLink(String link) async {
     if (link.startsWith(RedirectUtil.scheme)) return launchDeeplink(link);
     return launchUrl(link);
@@ -26,13 +26,21 @@ class LauncherUtil {
 
   static Future<bool> launchUrl(
     String url, {
-    LinkLaunchType linkType = LinkLaunchType.url,
     LaunchMode mode = LaunchMode.externalApplication,
   }) async {
-    final processedLink = _retrieveLink(url: url, type: linkType);
-    final canLaunch = await _isUrlLaunchable(processedLink);
+    final canLaunch = await _isUrlLaunchable(url);
     if (!canLaunch) return false;
-    return launchUrlString(processedLink, mode: mode);
+    return launchUrlString(url, mode: mode);
+  }
+
+  static Future<bool> launchFactSource(String source) async {
+    if (_urlRegExp.hasMatch(source)) return launchUrl(source);
+    return launchWebSearch(source);
+  }
+
+  static Future<bool> launchWebSearch(String query) async {
+    final url = Uri.https('www.google.com', '/search', {'q': query}).toString();
+    return launchUrl(url);
   }
 
   static Future<bool> launchPlaceOnMap(String name) async {
@@ -113,18 +121,6 @@ class LauncherUtil {
       );
     }
     return isSuccess;
-  }
-
-  static String _retrieveLink({
-    required String url,
-    required LinkLaunchType type,
-  }) {
-    switch (type) {
-      case LinkLaunchType.url:
-        return url;
-      case LinkLaunchType.domain:
-        return Uri.parse(url).origin;
-    }
   }
 
   static Future<bool> _isUrlLaunchable(String url) {

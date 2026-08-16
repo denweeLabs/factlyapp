@@ -19,6 +19,7 @@ class SurfaceContainer extends StatelessWidget {
     this.onTap,
     this.onLongTap,
     this.color,
+    this.gradient,
     this.hoverColor,
     this.borderColor,
     this.size,
@@ -34,6 +35,7 @@ class SurfaceContainer extends StatelessWidget {
     this.onLongTap,
     this.borderRadius,
     this.color,
+    this.gradient,
     this.hoverColor,
     this.borderColor,
     this.size,
@@ -46,6 +48,7 @@ class SurfaceContainer extends StatelessWidget {
   final BorderRadius? borderRadius;
   final Size? size;
   final Color? color;
+  final Gradient? gradient;
   final Color? hoverColor;
   final Color? borderColor;
   final bool isShimmering;
@@ -104,6 +107,13 @@ class SurfaceContainer extends StatelessWidget {
         child: AnimatedBuilder(
           animation: animation,
           builder: (context, child) {
+            if (gradient != null) {
+              return DecoratedBox(
+                decoration: ShapeDecoration(shape: shape, gradient: gradient),
+                child: child,
+              );
+            }
+
             final animationValue = const Interval(0.5, 1.0).transform(animation.value);
             final backgroundColor = Color.lerp(baseColor, hoverColor, animationValue)!;
 

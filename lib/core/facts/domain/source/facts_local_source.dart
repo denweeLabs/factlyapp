@@ -15,6 +15,14 @@ abstract class FactsLocalSource {
   Future<void> deleteDailyBucket();
 
   ///
+  /// Get daily bucket fetch day
+  String? getDailyBucketFetchDay();
+
+  ///
+  /// Store daily bucket fetch day
+  Future<void> storeDailyBucketFetchDay(String day);
+
+  ///
   /// Get fact details
   Future<FactExplanationDto?> getFactExplanation(int id);
 

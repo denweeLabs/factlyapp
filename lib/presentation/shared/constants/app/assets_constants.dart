@@ -24,6 +24,7 @@ class _IconsAssets {
   final notificationsLinear = '${_folderPath}notification_linear.svg';
   final logoutLinear = '${_folderPath}logout_linear.svg';
   final globeLinear = '${_folderPath}globe_linear.svg';
+  final searchLinear = '${_folderPath}search_linear.svg';
   final brushLinear = '${_folderPath}brush_linear.svg';
   final infoLinear = '${_folderPath}info_linear.svg';
   final alertLinear = '${_folderPath}alert_linear.svg';

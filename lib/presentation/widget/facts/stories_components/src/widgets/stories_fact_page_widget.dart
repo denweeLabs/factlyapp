@@ -205,7 +205,7 @@ class StoriesFactPageState extends State<StoriesFactPage> with SingleTickerProvi
                         : CrossFadeState.showFirst,
                     duration: FactShareCubit.layoutPrepareDuration,
                     firstChild: StoriesFactActionButtons(
-                      website: widget.fact.source.toNullable(),
+                      source: widget.fact.source.toNullable(),
                       factId: widget.fact.id,
                       factContent: widget.fact.content,
                       iconColor: widget.backgroundStyle?.textColor,

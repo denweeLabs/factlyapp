@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/network/domain/entity/common_api_failure.dart';
 import 'package:denwee/core/notifications/domain/entity/push_notification.dart';
 import 'package:denwee/core/notifications/domain/repo/push_notifications_repo.dart';
@@ -20,6 +21,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   final AuthCubit _authCubit;
   final PushNotificationsRepo _pushNotificationsRepo;
   final FirebaseMessaging _messaging;
+  final AnalyticsRepo _analyticsRepo;
 
   StreamSubscription<RemoteMessage>? _foregroundNotificationsSub;
   StreamSubscription<RemoteMessage>? _backgroundNotificationsSub;
@@ -30,6 +32,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     this._authCubit,
     this._pushNotificationsRepo,
     this._messaging,
+    this._analyticsRepo,
   )
     : super(NotificationsState.initial()) {
     setup();
@@ -61,6 +64,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   void getInitialMessage() {
     _messaging.getInitialMessage().then((remoteMessage) {
       if (remoteMessage != null) {
+        unawaited(_analyticsRepo.logPushOpened());
         Future.delayed(CustomAnimationDurations.lowMedium, () {
           final notification = PushNotification.fromRemoteMessage(remoteMessage);
           emit(state.copyWith(notification: Some(notification), showSnackbar: false));
@@ -73,6 +77,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     _foregroundNotificationsSub = FirebaseMessaging.onMessage.listen((
       remoteMessage,
     ) {
+      unawaited(_analyticsRepo.logPushReceivedForeground());
       final notification = PushNotification.fromRemoteMessage(remoteMessage);
       emit(state.copyWith(notification: Some(notification), showSnackbar: true));
     });
@@ -82,6 +87,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     _backgroundNotificationsSub = FirebaseMessaging.onMessageOpenedApp.listen((
       remoteMessage,
     ) {
+      unawaited(_analyticsRepo.logPushOpened());
       final notification = PushNotification.fromRemoteMessage(remoteMessage);
       emit(state.copyWith(notification: Some(notification), showSnackbar: false));
     });

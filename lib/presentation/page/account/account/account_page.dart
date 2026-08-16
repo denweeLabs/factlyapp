@@ -43,6 +43,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:snap_scroll_physics/snap_scroll_physics.dart';
 import 'package:utils/utils.dart';
+import 'package:denwee/presentation/shared/theme/app_gradients.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -134,6 +135,7 @@ class _AccountPageState extends State<AccountPage> {
             iconPath: AppConstants.assets.icons.notificationsLinear,
             title: context.tr(LocaleKeys.account_section_daily_facts_items_receive_notification),
             switchValue: isNotificationsEnabled,
+            gradient: AppTileGradient.red,
             onTap: () => _onToggleNotificationsEnabled(context),
           ),
         ),
@@ -142,6 +144,7 @@ class _AccountPageState extends State<AccountPage> {
           onTap: _onChangeNotificationTime,
           iconPath: AppConstants.assets.icons.clockLinear,
           title: context.tr(LocaleKeys.account_section_daily_facts_items_notification_time),
+          gradient: AppTileGradient.emerald,
           widget: BlocSelector<UserPreferencesCubit, UserPreferencesState, DateTime>(
             selector: (state) => state.preferences.notifications.time,
             builder: (context, notificationsTime) {
@@ -176,6 +179,7 @@ class _AccountPageState extends State<AccountPage> {
         AccountHorizontalTile.more(
           iconPath: AppConstants.assets.icons.archiveTickLinear,
           title: context.tr(LocaleKeys.account_section_daily_facts_items_archive),
+          gradient: AppTileGradient.amber,
           onTap: () => context.restorablePushNamedArgs(AccountRoutes.myArchive),
         ),
       ],
@@ -219,6 +223,7 @@ class _AccountPageState extends State<AccountPage> {
         AccountHorizontalTile.valueMore(
           iconPath: AppConstants.assets.icons.globeLinear,
           title: context.tr(LocaleKeys.account_section_preferences_items_language),
+          gradient: AppTileGradient.blue,
           onTap: () => _onChangeLanguageTap(context),
           value: selectedLanguageName ?? context.locale.toString(),
         ),
@@ -230,6 +235,7 @@ class _AccountPageState extends State<AccountPage> {
                 .tr(LocaleKeys.account_section_preferences_items_haptics),
             onTap: context.read<UserPreferencesCubit>().toggleIsHapticsEnabled,
             switchValue: isHapticsEnabled,
+            gradient: AppTileGradient.purple,
           ),
         ),
       ].insertBetween(const AccountItemsDivider()),
@@ -245,16 +251,19 @@ class _AccountPageState extends State<AccountPage> {
           onTap: () => _onAboutAppTap(context),
           iconPath: AppConstants.assets.icons.mobileLinear,
           title: context.tr(LocaleKeys.account_section_more_items_about_app),
+          gradient: AppTileGradient.graphite,
         ),
         AccountHorizontalTile.more(
           onTap: () => LauncherUtil.launchDenweeLanding(context),
           iconPath: AppConstants.assets.icons.noteLinear,
           title: context.tr(LocaleKeys.account_section_more_items_privacy_terms),
+          gradient: AppTileGradient.indigo,
         ),
         AccountHorizontalTile.more(
           onTap: () => LauncherUtil.launchSupportEmail(context),
           iconPath: AppConstants.assets.icons.messageQuestionLinear,
           title: context.tr(LocaleKeys.account_section_more_items_contact_support),
+          gradient: AppTileGradient.green,
         ),
       ].insertBetween(const AccountItemsDivider()),
     );

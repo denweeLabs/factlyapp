@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:denwee/core/analytics/domain/entity/paywall_source.dart';
 import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -16,6 +17,13 @@ enum AnalyticsEvent {
   subscriptionRestore,
   backgroundPurchase,
   backgroundApply,
+  paywallShown,
+  notificationPermissionGranted,
+  notificationPermissionDenied,
+  pushOpened,
+  pushReceivedForeground,
+  factArchived,
+  factUnarchived,
 }
 
 extension AnalyticsEventX on AnalyticsEvent {
@@ -39,6 +47,20 @@ extension AnalyticsEventX on AnalyticsEvent {
         return 'background_purchase';
       case AnalyticsEvent.backgroundApply:
         return 'background_apply';
+      case AnalyticsEvent.paywallShown:
+        return 'paywall_shown';
+      case AnalyticsEvent.notificationPermissionGranted:
+        return 'notification_permission_granted';
+      case AnalyticsEvent.notificationPermissionDenied:
+        return 'notification_permission_denied';
+      case AnalyticsEvent.pushOpened:
+        return 'push_opened';
+      case AnalyticsEvent.pushReceivedForeground:
+        return 'push_received_foreground';
+      case AnalyticsEvent.factArchived:
+        return 'fact_archived';
+      case AnalyticsEvent.factUnarchived:
+        return 'fact_unarchived';
     }
   }
 }
@@ -105,6 +127,40 @@ class AnalyticsRepoImpl implements AnalyticsRepo {
         ),
       ],
     );
+  }
+
+  @override
+  Future<void> logPaywallShown(PaywallSource? source) {
+    final base = AnalyticsEvent.paywallShown.eventName;
+    return _logEvent(source == null ? base : '${base}_${source.eventSuffix}');
+  }
+
+  @override
+  Future<void> logNotificationPermission({required bool isGranted}) {
+    final event = isGranted
+        ? AnalyticsEvent.notificationPermissionGranted
+        : AnalyticsEvent.notificationPermissionDenied;
+    return _logEvent(event.eventName);
+  }
+
+  @override
+  Future<void> logPushOpened() {
+    return _logEvent(AnalyticsEvent.pushOpened.eventName);
+  }
+
+  @override
+  Future<void> logPushReceivedForeground() {
+    return _logEvent(AnalyticsEvent.pushReceivedForeground.eventName);
+  }
+
+  @override
+  Future<void> logFactArchived() {
+    return _logEvent(AnalyticsEvent.factArchived.eventName);
+  }
+
+  @override
+  Future<void> logFactUnarchived() {
+    return _logEvent(AnalyticsEvent.factUnarchived.eventName);
   }
 
   Future<void> _logEvent(String name, {Map<String, Object>? params}) {

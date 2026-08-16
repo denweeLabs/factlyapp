@@ -2,6 +2,7 @@
 
 import 'package:denwee/presentation/shared/constants/app/app_constants.dart';
 import 'package:denwee/presentation/shared/theme/app_colors.dart';
+import 'package:denwee/presentation/shared/theme/app_gradients.dart';
 import 'package:denwee/presentation/shared/theme/text_styles.dart';
 import 'package:denwee/presentation/shared/theme/app_theme.dart';
 import 'package:denwee/presentation/widget/shared/animations/tap_animations/bounce_tap_animation.dart';
@@ -29,6 +30,7 @@ class AccountHorizontalTile extends StatelessWidget {
     required this.title,
     required this.onTap,
     required this.type,
+    this.gradient,
     this.value,
     this.widget,
     this.switchValue,
@@ -39,6 +41,7 @@ class AccountHorizontalTile extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;
   final _AccountHorizontalTileType type;
+  final AppTileGradient? gradient;
   final String? value;
   final Widget? widget;
   final bool? switchValue;
@@ -50,11 +53,13 @@ class AccountHorizontalTile extends StatelessWidget {
     required String title,
     required VoidCallback? onTap,
     required String value,
+    AppTileGradient? gradient,
   }) : this._(
           key: key,
           iconPath: iconPath,
           title: title,
           onTap: onTap,
+          gradient: gradient,
           value: value,
           type: _AccountHorizontalTileType.value,
         );
@@ -65,11 +70,13 @@ class AccountHorizontalTile extends StatelessWidget {
     required String title,
     required VoidCallback onTap,
     required Widget widget,
+    AppTileGradient? gradient,
   }) : this._(
           key: key,
           iconPath: iconPath,
           title: title,
           onTap: onTap,
+          gradient: gradient,
           widget: widget,
           type: _AccountHorizontalTileType.widget,
         );
@@ -80,11 +87,13 @@ class AccountHorizontalTile extends StatelessWidget {
     required String title,
     required VoidCallback? onTap,
     required bool switchValue,
+    AppTileGradient? gradient,
   }) : this._(
           key: key,
           iconPath: iconPath,
           title: title,
           onTap: onTap,
+          gradient: gradient,
           switchValue: switchValue,
           type: _AccountHorizontalTileType.sSwitch,
         );
@@ -95,11 +104,13 @@ class AccountHorizontalTile extends StatelessWidget {
     required String title,
     required VoidCallback onTap,
     required Widget column,
+    AppTileGradient? gradient,
   }) : this._(
           key: key,
           iconPath: iconPath,
           title: title,
           onTap: onTap,
+          gradient: gradient,
           column: column,
           type: _AccountHorizontalTileType.column,
         );
@@ -110,12 +121,14 @@ class AccountHorizontalTile extends StatelessWidget {
     required String title,
     required String value,
     required VoidCallback onTap,
+    AppTileGradient? gradient,
   }) : this._(
           key: key,
           iconPath: iconPath,
           title: title,
           value: value,
           onTap: onTap,
+          gradient: gradient,
           type: _AccountHorizontalTileType.valueMore,
         );
 
@@ -124,11 +137,13 @@ class AccountHorizontalTile extends StatelessWidget {
     required String iconPath,
     required String title,
     required VoidCallback onTap,
+    AppTileGradient? gradient,
   }) : this._(
           key: key,
           iconPath: iconPath,
           title: title,
           onTap: onTap,
+          gradient: gradient,
           type: _AccountHorizontalTileType.more,
         );
 
@@ -164,15 +179,18 @@ class AccountHorizontalTile extends StatelessWidget {
     return Row(
       children: [
         SurfaceContainer.ellipse(
-          color: context.primaryContainer,
+          color: gradient == null ? context.primaryContainer : null,
+          gradient: gradient?.gradient,
           borderRadius: const BorderRadius.all(Radius.circular(14)),
-          borderColor: context.isLightTheme ? Colors.black12 : AppColors.white08,
+          borderColor: gradient != null
+              ? Colors.transparent
+              : (context.isLightTheme ? Colors.black12 : AppColors.white08),
           size: Size.square(defaultIconSize + 20),
           child: Center(
             child: CommonAppIcon(
               path: iconPath,
               size: defaultIconSize,
-              color: context.iconColorSecondary,
+              color: gradient != null ? Colors.white : context.iconColorSecondary,
             ),
           ),
         ),
