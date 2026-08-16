@@ -20,6 +20,7 @@ class FactsLocalSourceImpl implements FactsLocalSource {
   );
 
   String get _dailyFactsBucketKey => '${_envPrefix}DAILY_FACTS_BUCKET';
+  String get _dailyFactsBucketFetchDayKey => '${_envPrefix}DAILY_FACTS_BUCKET_FETCH_DAY';
   String get _archivedFactsKey => '${_envPrefix}ARCHIVED_FACTS';
 
   @override
@@ -41,6 +42,18 @@ class FactsLocalSourceImpl implements FactsLocalSource {
   @override
   Future<void> deleteDailyBucket() async {
     await _localStorage.remove(key: _dailyFactsBucketKey);
+    await _localStorage.remove(key: _dailyFactsBucketFetchDayKey);
+  }
+
+  @override
+  String? getDailyBucketFetchDay() {
+    final day = _localStorage.getString(key: _dailyFactsBucketFetchDayKey);
+    return (day != null && day.isNotEmpty) ? day : null;
+  }
+
+  @override
+  Future<void> storeDailyBucketFetchDay(String day) async {
+    await _localStorage.putString(key: _dailyFactsBucketFetchDayKey, value: day);
   }
 
   @override

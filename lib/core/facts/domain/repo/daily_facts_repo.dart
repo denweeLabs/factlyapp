@@ -9,6 +9,8 @@ abstract class DailyFactsRepo {
   Option<DailyFactsBucket> getBucketLocal();
   Future<Unit> storeBucketLocal(DailyFactsBucket bucket);
   Future<Unit> deleteBucketLocal();
+  Option<DateTime> getBucketFetchDayLocal();
+  Future<Unit> storeBucketFetchDayLocal(DateTime day);
 
   // Remote
   Future<Either<FactsFailure, DailyFactsBucket>> getBucketRemote({String? languageCode, List<String>? interests});

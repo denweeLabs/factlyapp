@@ -7,6 +7,7 @@ import 'package:denwee/core/facts/domain/entity/facts_failure.dart';
 import 'package:denwee/core/facts/domain/repo/daily_facts_repo.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
 import 'package:denwee/core/network/data/model/app_exception.dart';
+import 'package:denwee/presentation/shared/constants/formatters/date_formatters.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
@@ -36,6 +37,18 @@ class DailyFactsRepoImpl implements DailyFactsRepo {
   @override
   Future<Unit> deleteBucketLocal() async {
     await _localSource.deleteDailyBucket();
+    return unit;
+  }
+
+  @override
+  Option<DateTime> getBucketFetchDayLocal() {
+    final day = _localSource.getDailyBucketFetchDay();
+    return optionOf(day != null ? yyyy_MM_dd.tryParse(day) : null);
+  }
+
+  @override
+  Future<Unit> storeBucketFetchDayLocal(DateTime day) async {
+    await _localSource.storeDailyBucketFetchDay(yyyy_MM_dd.format(day));
     return unit;
   }
 

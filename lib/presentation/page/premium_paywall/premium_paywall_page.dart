@@ -1,3 +1,5 @@
+import 'package:denwee/core/analytics/domain/entity/paywall_source.dart';
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:denwee/core/subscriptions/domain/entity/user_subscription.dart';
 import 'package:denwee/presentation/bloc/subscriptions/subscription_offerings_cubit.dart';
@@ -41,9 +43,20 @@ part 'plans/monthly_plan_tile_widget.dart';
 part 'plans/yearly_plan_tile_widget.dart';
 
 class PremiumPaywallPage extends StatefulWidget {
-  const PremiumPaywallPage({super.key});
+  const PremiumPaywallPage({super.key, this.source});
+
+  final PaywallSource? source;
 
   static const routeName = 'PremiumPaywallPage';
+
+  static Map<String, dynamic> args(PaywallSource source) {
+    return {'source': source.eventSuffix};
+  }
+
+  static PaywallSource? sourceFromArgs(Object? arguments) {
+    if (arguments is! Map) return null;
+    return PaywallSource.fromEventSuffix(arguments['source'] as String?);
+  }
 
   @override
   State<PremiumPaywallPage> createState() => _PremiumPaywallPageState();
@@ -56,6 +69,7 @@ class _PremiumPaywallPageState extends State<PremiumPaywallPage> {
   void initState() {
     super.initState();
     initPackagesData();
+    getIt<AnalyticsRepo>().logPaywallShown(widget.source);
   }
 
   @override

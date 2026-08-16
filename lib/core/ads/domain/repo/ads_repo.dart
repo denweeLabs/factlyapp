@@ -14,8 +14,8 @@ abstract class AdsRepo {
   // =========================
   // Get ad if preloaded or load
   // =========================
-  FutureOr<Either<AppAdFailure, RewardedAd>> getOrLoadFactExplanationAd();
-  FutureOr<Either<AppAdFailure, InterstitialAd>> getOrLoadAddToArchiveAd();
+  FutureOr<Either<AppAdFailure, RewardedAd>> getOrLoadFactExplanationAd({bool logError = true});
+  FutureOr<Either<AppAdFailure, InterstitialAd>> getOrLoadAddToArchiveAd({bool logError = true});
 
   // =========================
   // Show ads

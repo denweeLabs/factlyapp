@@ -181,7 +181,9 @@ final RouteFactory rootRouteFactory = (RouteSettings settings) {
     case Routes.premiumPaywall:
       return FadeSlideupPageRouteBuilder(
         settings: settings,
-        builder: (_) => const PremiumPaywallPage(),
+        builder: (_) => PremiumPaywallPage(
+          source: PremiumPaywallPage.sourceFromArgs(settings.arguments),
+        ),
       );
 
     case Routes.backgroundEdit:

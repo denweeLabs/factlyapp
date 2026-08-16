@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:denwee/core/facts/domain/util/share/fact_share_util.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
-import 'package:denwee/core/network/domain/entity/network_link.dart';
 import 'package:denwee/di/di.dart';
 import 'package:denwee/presentation/bloc/facts/fact_share_cubit.dart';
 import 'package:denwee/presentation/bloc/facts/facts_archive_cubit.dart';
@@ -23,6 +22,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_sheets/smooth_sheets.dart';
 import 'package:utils/utils.dart';
+import 'package:denwee/core/analytics/domain/entity/paywall_source.dart';
+import 'package:denwee/presentation/page/premium_paywall/premium_paywall_page.dart';
 
 enum FactShareSupportedTarget {
   instagramStories,
@@ -39,12 +40,12 @@ enum FactShareSupportedTarget {
 class FactShareBottomSheet extends StatefulWidget {
   const FactShareBottomSheet({
     super.key,
-    required this.website,
+    required this.source,
     required this.factId,
     required this.factContent,
   });
 
-  final NetworkLink? website;
+  final String? source;
   final UniqueId factId;
   final String factContent;
 
@@ -52,7 +53,7 @@ class FactShareBottomSheet extends StatefulWidget {
 
   static Future<void> show(
     BuildContext context, {
-    required NetworkLink? website,
+    required String? source,
     required UniqueId factId,
     required String factContent,
   }) async {
@@ -65,7 +66,7 @@ class FactShareBottomSheet extends StatefulWidget {
       routeSettings: const RouteSettings(name: FactShareBottomSheet.routeName),
       builder: (_) => FactShareBottomSheet(
         factId: factId,
-        website: website,
+        source: source,
         factContent: factContent,
       ),
     );
@@ -279,6 +280,8 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
               onTap: () => context.restorablePushNamedArgs(
                 Routes.premiumPaywall,
                 rootNavigator: true,
+                argsToJson: () =>
+                    PremiumPaywallPage.args(PaywallSource.shareWatermark),
               ),
               label: context.tr(LocaleKeys.fact_share_hide_watermark),
               child: CommonAppIcon(
@@ -317,15 +320,12 @@ class _FactShareBottomSheetState extends State<FactShareBottomSheet> {
             size: 20,
           ),
         ),
-        if (widget.website != null)
+        if (widget.source != null)
           FactShareButton(
-            onTap: () => LauncherUtil.launchUrl(
-              widget.website!.value,
-              linkType: LinkLaunchType.domain,
-            ),
+            onTap: () => LauncherUtil.launchFactSource(widget.source!),
             label: context.tr(LocaleKeys.fact_share_resource),
             child: CommonAppIcon(
-              path: AppConstants.assets.icons.globeLinear,
+              path: AppConstants.assets.icons.searchLinear,
               size: 20,
             ),
           ),

@@ -39,9 +39,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getIt<DailyFactsCubit>().checkBucket();
-    getIt<AdsRepo>()
-      ..loadFactExplanationAd(logError: false)
-      ..loadAddToArchiveAd(logError: false);
+    getIt<AdsRepo>().getOrLoadFactExplanationAd(logError: false);
     Future.delayed(checkUserStatusDelay, () {
       checkSystemHealth();
     });

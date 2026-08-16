@@ -34,11 +34,10 @@ class StoriesFactTagsList extends StatelessWidget {
           if (fact.source.isSome()) ...[
             _buildListTile(
               context: context,
-              text: _extractSourceDomain().capitalizeFirstLetter,
-              iconPath: AppConstants.assets.icons.globeLinear,
-              onTap: () => LauncherUtil.launchUrl(
-                fact.source.toNullable()!.value,
-                linkType: LinkLaunchType.domain,
+              text: _sourceLabel(),
+              iconPath: AppConstants.assets.icons.searchLinear,
+              onTap: () => LauncherUtil.launchFactSource(
+                fact.source.toNullable()!,
               ),
             ),
           ],
@@ -113,9 +112,10 @@ class StoriesFactTagsList extends StatelessWidget {
     );
   }
 
-  String _extractSourceDomain() {
-    final url = fact.source.toNullable()!.value;
-    final uri = Uri.parse(url);
-    return uri.host.replaceAll('www.', '');
+  String _sourceLabel() {
+    final source = fact.source.toNullable()!;
+    if (!source.startsWith('http')) return source.capitalizeFirstLetter;
+    final host = Uri.tryParse(source)?.host.replaceAll('www.', '') ?? '';
+    return host.capitalizeFirstLetter;
   }
 }
