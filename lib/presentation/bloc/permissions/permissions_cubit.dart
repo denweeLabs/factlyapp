@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:denwee/core/analytics/domain/repo/analytics_repo.dart';
 import 'package:denwee/core/permissions/domain/repo/app_permission.dart';
 import 'package:denwee/core/permissions/domain/entity/app_permission_status.dart';
 import 'package:dartz/dartz.dart';
@@ -13,7 +14,9 @@ part 'permissions_cubit.freezed.dart';
 
 @LazySingleton()
 class PermissionsCubit extends Cubit<PermissionsState> {
-  PermissionsCubit() : super(PermissionsState.initial());
+  PermissionsCubit(this._analyticsRepo) : super(PermissionsState.initial());
+
+  final AnalyticsRepo _analyticsRepo;
 
   // Notifications
   FutureOr<AppPermissionStatus> retrieveOrCheckNotifications() async =>
@@ -21,6 +24,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       await forceCheckNotifications();
 
   Future<AppPermissionStatus> forceCheckNotifications({bool request = false}) async {
+    final previousStatus = state.notificationsPermission.toNullable();
     emit(state.copyWith(checkingNotificationsPermission: true));
     final status = request
         ? await AppPermission.notifications.request()
@@ -30,6 +34,10 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       checkingNotificationsPermission: false,
     ));
     debugPrint('Permission: notifications $status');
+    if (request && status != previousStatus) {
+      unawaited(_analyticsRepo.logNotificationPermission(isGranted: status.isAnyGranted));
+    }
+
     return status;
   }
 

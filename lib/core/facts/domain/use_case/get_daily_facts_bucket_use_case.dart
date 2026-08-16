@@ -32,6 +32,7 @@ class GetDailyFactsBucketUseCase {
 
     if (bucket != null) {
       await _dailyFactsRepo.storeBucketLocal(bucket);
+      await _dailyFactsRepo.storeBucketFetchDayLocal(DateTime.now());
     }
 
     return failureOrSuccess.map((bucket) => bucket.normalized());

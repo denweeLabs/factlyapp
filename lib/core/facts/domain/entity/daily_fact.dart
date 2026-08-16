@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:denwee/core/facts/domain/entity/user_interest.dart';
 import 'package:denwee/core/misc/domain/entity/i_entity.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
-import 'package:denwee/core/network/domain/entity/network_link.dart';
 import 'package:denwee/presentation/bloc/user_preferences/user_preferences_cubit.dart';
 import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:denwee/presentation/shared/constants/formatters/date_formatters.dart';
@@ -28,7 +27,7 @@ abstract class DailyFact with _$DailyFact implements IEntity {
     required String content,
     required String title,
     required Locale language,
-    required Option<NetworkLink> source,
+    required Option<String> source,
     required Option<DateTime> date,
     required Option<String> region,
     required Option<List<String>> relatedTopics,
@@ -41,7 +40,7 @@ abstract class DailyFact with _$DailyFact implements IEntity {
       content: DailyFact.dummyFactContent,
       title: DailyFact.dummyFactTitle,
       language: const Locale('en'),
-      source: const Some(NetworkLink.pure()),
+      source: const None(),
       date: const None(),
       region: const None(),
       relatedTopics: const None(),

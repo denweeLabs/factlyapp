@@ -6,6 +6,7 @@ import 'package:denwee/core/auth/domain/use_case/on_logout_use_case.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 import 'package:denwee/core/subscriptions/domain/entity/subscriptions_failure.dart';
 import 'package:denwee/presentation/bloc/auth/auth_cubit.dart';
+import 'package:denwee/presentation/bloc/facts/daily_facts_cubit.dart';
 import 'package:denwee/presentation/bloc/permissions/permissions_cubit.dart';
 import 'package:denwee/presentation/bloc/subscriptions/user_subscription_cubit.dart';
 import 'package:denwee/presentation/shared/router/root_router.dart';
@@ -31,6 +32,9 @@ mixin RootBlocListenersHandlers {
         ..forceCheckPhotosAdd()
         ..forceCheckPhotosFull(),
     );
+    // An app left open across local midnight never re-enters HomePage.initState,
+    // so this is the only thing that rotates its facts.
+    // getIt<DailyFactsCubit>().checkBucket();
   }
 
   void processLoggedOutUser() {

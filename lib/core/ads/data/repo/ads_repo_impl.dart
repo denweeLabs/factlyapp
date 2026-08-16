@@ -11,43 +11,72 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:injectable/injectable.dart';
 
+class _AdSlot<T> {
+  T? ad;
+  DateTime? loadedAt;
+  Future<Either<AppAdFailure, T>>? pendingRequest;
+
+  bool isFresh(Duration maxAge) {
+    final ad = this.ad;
+    final loadedAt = this.loadedAt;
+    if (ad == null || loadedAt == null) return false;
+    return DateTime.now().difference(loadedAt) < maxAge;
+  }
+
+  void store(T ad) {
+    this.ad = ad;
+    loadedAt = DateTime.now();
+  }
+
+  void clear() {
+    ad = null;
+    loadedAt = null;
+  }
+}
+
 @LazySingleton(as: AdsRepo)
 class AdsRepoImpl implements AdsRepo {
   AdsRepoImpl(this._adViewsDao);
 
   final AdViewsDao _adViewsDao;
 
-  Option<RewardedAd> factExplanationAd = const None();
-  Option<InterstitialAd> addToArchiveAd = const None();
+  static const adFreshness = Duration(minutes: 50);
+
+  final _factExplanationSlot = _AdSlot<RewardedAd>();
+  final _addToArchiveSlot = _AdSlot<InterstitialAd>();
 
   @override
-  Future<Either<AppAdFailure, RewardedAd>> loadFactExplanationAd({bool logError = true}) async {
+  Future<Either<AppAdFailure, RewardedAd>> loadFactExplanationAd({bool logError = true}) {
     return _loadAd<RewardedAd>(
+      slot: _factExplanationSlot,
       logError: logError,
-      currentAd: factExplanationAd,
       adLoader: AppAd.factExplanation.load,
       location: AppAdLocation.factExplanation,
-      onSuccess: (ad) => factExplanationAd = Some(ad),
-      disposeAd: (ad) async {
-        await ad.dispose();
-        factExplanationAd = const None();
-      },
     );
   }
 
   @override
-  Future<Either<AppAdFailure, InterstitialAd>> loadAddToArchiveAd({bool logError = true}) async {
+  Future<Either<AppAdFailure, InterstitialAd>> loadAddToArchiveAd({bool logError = true}) {
     return _loadAd<InterstitialAd>(
+      slot: _addToArchiveSlot,
       logError: logError,
-      currentAd: addToArchiveAd,
       adLoader: AppAd.addToArchive.load,
       location: AppAdLocation.addToArchive,
-      onSuccess: (ad) => addToArchiveAd = Some(ad),
-      disposeAd: (ad) async {
-        await ad.dispose();
-        addToArchiveAd = const None();
-      },
     );
+  }
+
+  @override
+  FutureOr<Either<AppAdFailure, RewardedAd>> getOrLoadFactExplanationAd({bool logError = true}) {
+    final ad = _factExplanationSlot.ad;
+    if (ad != null && _factExplanationSlot.isFresh(adFreshness)) return right(ad);
+    return loadFactExplanationAd(logError: logError);
+  }
+
+  @override
+  FutureOr<Either<AppAdFailure, InterstitialAd>> getOrLoadAddToArchiveAd({bool logError = true}) {
+    final ad = _addToArchiveSlot.ad;
+    if (ad != null && _addToArchiveSlot.isFresh(adFreshness)) return right(ad);
+    return loadAddToArchiveAd(logError: logError);
   }
 
   @override
@@ -57,8 +86,9 @@ class AdsRepoImpl implements AdsRepo {
   }) async {
     return _showAd<RewardedAd>(
       ad: ad,
+      slot: _factExplanationSlot,
       location: AppAdLocation.factExplanation,
-      preloadNextAd: loadFactExplanationAd,
+      preloadNextAd: () => loadFactExplanationAd(logError: false),
       showProvider: () => AppAd.factExplanation.show(
         ssv: ServerSideVerificationOptions(userId: profileId, customData: factId),
         ad: ad,
@@ -70,20 +100,10 @@ class AdsRepoImpl implements AdsRepo {
   Future<Either<AppAdFailure, Unit>> showAddToArchiveAd(InterstitialAd ad) async {
     return _showAd<InterstitialAd>(
       ad: ad,
+      slot: _addToArchiveSlot,
       location: AppAdLocation.addToArchive,
-      preloadNextAd: loadAddToArchiveAd,
       showProvider: () => AppAd.addToArchive.show(ad: ad),
     );
-  }
-
-  @override
-  FutureOr<Either<AppAdFailure, RewardedAd>> getOrLoadFactExplanationAd() {
-    return factExplanationAd.fold(loadFactExplanationAd, (ad) => right(ad));
-  }
-
-  @override
-  FutureOr<Either<AppAdFailure, InterstitialAd>> getOrLoadAddToArchiveAd() {
-    return addToArchiveAd.fold(loadAddToArchiveAd, (ad) => right(ad));
   }
 
   @override
@@ -124,38 +144,68 @@ class AdsRepoImpl implements AdsRepo {
   }
 
   Future<Either<AppAdFailure, T>> _loadAd<T>({
-    required Option<T> currentAd,
+    required _AdSlot<T> slot,
     required Future<Either<AppAdFailure, dynamic>> Function() adLoader,
-    required void Function(T ad) onSuccess,
-    required Future<void> Function(T ad) disposeAd,
     required AppAdLocation location,
     bool logError = true,
-  }) async {
-    final ad = currentAd.toNullable();
-    if (ad != null) {
-      await disposeAd(ad);
-    }
-    final result = await adLoader();
-    return result.fold(
-      (failure) {
-        if (logError) _logAdFailure(location, failure.logMessage);
-        return left(failure);
-      },
-      (ad) {
-        onSuccess(ad);
-        return right(ad);
-      },
+  }) {
+    final pendingRequest = slot.pendingRequest;
+    if (pendingRequest != null) return pendingRequest;
+
+    final request = _performLoad<T>(
+      slot: slot,
+      adLoader: adLoader,
+      location: location,
+      logError: logError,
     );
+    slot.pendingRequest = request;
+    return request;
+  }
+
+  Future<Either<AppAdFailure, T>> _performLoad<T>({
+    required _AdSlot<T> slot,
+    required Future<Either<AppAdFailure, dynamic>> Function() adLoader,
+    required AppAdLocation location,
+    required bool logError,
+  }) async {
+    try {
+      final staleAd = slot.ad;
+      if (staleAd != null) {
+        slot.clear();
+        await _disposeAd(staleAd);
+      }
+
+      final result = await adLoader();
+
+      return result.fold(
+        (failure) {
+          if (logError) _logAdFailure(location, failure.logMessage);
+          return left(failure);
+        },
+        (ad) {
+          final typedAd = ad as T;
+          slot.store(typedAd);
+          return right(typedAd);
+        },
+      );
+    } finally {
+      slot.pendingRequest = null;
+    }
   }
 
   Future<Either<AppAdFailure, Unit>> _showAd<T>({
     required T ad,
+    required _AdSlot<T> slot,
     required AppAdLocation location,
     required Future<Either<AppAdFailure, dynamic>> Function() showProvider,
-    required Future<Either<AppAdFailure, T>> Function() preloadNextAd,
+    Future<Either<AppAdFailure, T>> Function()? preloadNextAd,
   }) async {
     final failureOrSuccess = await showProvider();
-    preloadNextAd();  // preload next ad in advance
+
+    if (identical(slot.ad, ad)) slot.clear();
+
+    preloadNextAd?.call();
+
     return failureOrSuccess.fold(
       (failure) {
         _logAdFailure(location, failure.logMessage);
@@ -165,6 +215,11 @@ class AdsRepoImpl implements AdsRepo {
         return right(unit);
       },
     );
+  }
+
+  Future<void> _disposeAd(Object ad) async {
+    if (ad is RewardedAd) return ad.dispose();
+    if (ad is InterstitialAd) return ad.dispose();
   }
 
   void _logAdFailure(AppAdLocation location, String message) {

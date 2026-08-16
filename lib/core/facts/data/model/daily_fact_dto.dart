@@ -1,6 +1,5 @@
 import 'package:denwee/core/facts/domain/entity/daily_fact.dart';
 import 'package:denwee/core/misc/domain/entity/unique_id.dart';
-import 'package:denwee/core/network/domain/entity/network_link.dart';
 import 'package:denwee/presentation/shared/constants/formatters/date_formatters.dart';
 import 'package:denwee/presentation/shared/constants/app/user_interests.dart';
 import 'package:dartz/dartz.dart';
@@ -43,7 +42,7 @@ class DailyFactDto {
       content: domain.content,
       title: domain.title,
       language: domain.language.toString(),
-      source: domain.source.toNullable()?.value,
+      source: domain.source.toNullable(),
       historicalDate: domain.date.fold(() => null, (date) => yyyy_MM_dd.format(date)),
       factRegion: domain.region.toNullable(),
       relatedTopics: domain.relatedTopics.toNullable(),
@@ -69,10 +68,8 @@ class DailyFactDto {
 
   Map<String, dynamic> toJson() => _$DailyFactDtoToJson(this);
 
-  static Option<NetworkLink> _validateSource(String? string) {
-    final value = _filterRawString(string);
-    if (value == null) return const None();
-    return Some(NetworkLink.pure(value));
+  static Option<String> _validateSource(String? string) {
+    return optionOf(_filterRawString(string));
   }
 
   static Option<DateTime> _validateDate(String? string) {

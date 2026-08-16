@@ -25,7 +25,8 @@ class DailyFactsCubit extends Cubit<DailyFactsState> {
     List<String>? interests,
   }) async {
     final localBucket = _repo.getBucketLocal().toNullable();
-    final isForcedFetch = localBucket == null || languageCode != null || interests != null;
+    final lastFetchDay = _repo.getBucketFetchDayLocal().toNullable();
+    final isForcedFetch = localBucket == null || lastFetchDay == null || languageCode != null || interests != null;
 
     if (isForcedFetch) {
       return _fetchRemoteBucket(
@@ -34,9 +35,7 @@ class DailyFactsCubit extends Cubit<DailyFactsState> {
       );
     }
 
-    final nowDate = DateTime.now();
-    final lastBucketDate = localBucket.date;
-    final isBucketOutdated = (nowDate.toUtc()).isDayAfter(lastBucketDate);
+    final isBucketOutdated = DateTime.now().isDayAfter(lastFetchDay);
     if (isBucketOutdated) {
       await _fetchRemoteBucket();
     }

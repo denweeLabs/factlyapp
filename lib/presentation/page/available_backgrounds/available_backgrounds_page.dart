@@ -25,6 +25,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
 import 'package:utils/utils.dart';
+import 'package:denwee/core/analytics/domain/entity/paywall_source.dart';
+import 'package:denwee/presentation/page/premium_paywall/premium_paywall_page.dart';
 
 class AvailableBackgroundsPage extends StatefulWidget {
   const AvailableBackgroundsPage({super.key, this.popToHome = false});
@@ -149,6 +151,8 @@ class _AvailableBackgroundsPageState extends State<AvailableBackgroundsPage> {
                 onTap: () => context.restorablePushNamedArgs(
                   Routes.premiumPaywall,
                   rootNavigator: true,
+                  argsToJson: () =>
+                      PremiumPaywallPage.args(PaywallSource.backgroundsList),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 22.w),
                 iconPath: AppConstants.assets.icons.unlockLinear,

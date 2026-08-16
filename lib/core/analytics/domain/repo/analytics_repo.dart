@@ -1,3 +1,4 @@
+import 'package:denwee/core/analytics/domain/entity/paywall_source.dart';
 import 'package:denwee/core/subscriptions/domain/entity/premium_packages.dart';
 
 abstract class AnalyticsRepo {
@@ -10,4 +11,11 @@ abstract class AnalyticsRepo {
   Future<void> logSubscriptionPurchase(PremiumPackage package);
   Future<void> logBackgroundPurchase();
   Future<void> logBackgroundApply();
+
+  Future<void> logPaywallShown(PaywallSource? source);
+  Future<void> logNotificationPermission({required bool isGranted});
+  Future<void> logPushOpened();
+  Future<void> logPushReceivedForeground();
+  Future<void> logFactArchived();
+  Future<void> logFactUnarchived();
 }

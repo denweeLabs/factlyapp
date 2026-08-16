@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:utils/utils.dart';
+import 'package:denwee/core/analytics/domain/entity/paywall_source.dart';
+import 'package:denwee/presentation/page/premium_paywall/premium_paywall_page.dart';
 
 class SubscriptionCard extends StatelessWidget {
   const SubscriptionCard({super.key, this.onlyBody = false});
@@ -170,6 +172,10 @@ class SubscriptionCard extends StatelessWidget {
   }
 
   void _onTap(BuildContext context) {
-    context.restorablePushNamedArgs(Routes.premiumPaywall, rootNavigator: true);
+    context.restorablePushNamedArgs(
+      Routes.premiumPaywall,
+      rootNavigator: true,
+      argsToJson: () => PremiumPaywallPage.args(PaywallSource.subscriptionCard),
+    );
   }
 }
