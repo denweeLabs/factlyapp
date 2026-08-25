@@ -8,9 +8,6 @@
 .buildlog/
 .history
 .svn/
-*.freezed.dart
-*.g.dart
-*.config.dart
 .gradle/
 gradle/
 gradlew
@@ -31,7 +28,6 @@ local.properties
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
-ios/Podfile.lock
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -48,7 +44,6 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
-pubspec.lock
 
 pubspec_overrides.yaml
 
