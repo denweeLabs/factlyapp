@@ -50,3 +50,6 @@ pubspec_overrides.yaml
 **/.DS_Store
 
 lib/localization/
+
+# Backend lives in its own repository
+/backend/
